@@ -1,0 +1,184 @@
+@if(formConfig().length>0 && formGroup()){
+<form
+  #formNativeElement
+  [class]="styleClasses()"
+  [formGroup]="formGroup()!"
+  [autocomplete]="autoComplete()"
+  [ariaAutoComplete]="autoComplete()"
+  (ngSubmit)="ngSubmit.emit($event)"
+>
+  @for(conf of formConfig(); track $index){
+    @if(!conf.DoNotshowInHtml){
+      <!--  -->
+      @if( !['g','a'].includes(conf.controlType ?? 'c') ){
+
+      <!--  -->
+      @if(!['checkbox-group','checkbox'].includes(conf?.type!)){
+      <ks-input
+        #ksInput
+        [id]="conf?.id!"
+        [appearance]="conf?.appearance ?? appearance()"
+        [autocomplete]="conf?.autocomplete ?? 'off'"
+        [disable]="conf?.disabled ?? null"
+        [color]="conf?.color ?? color()"
+        [errorMessages]="conf?.errorMessages ?? []"
+        [errorStateMatcher]="conf?.errorStateMatcher ?? errorStateMatcher()"
+        [formControlName]="conf?.formControlName!"
+        [label]="conf.label ?? ''"
+        [maxlength]="conf?.maxLength ?? null"
+        [max]="conf?.max ?? null"
+        [minlength]="conf?.minLength ?? null"
+        [min]="conf?.min ?? null"
+        [pattern]="conf?.pattern ?? ''"
+        [placeholder]="conf?.placeholder ?? null"
+        [readonly]="conf?.readonly ?? false"
+        [required]="conf?.required ?? false"
+        [size]="conf?.size ?? size()"
+        [type]="conf?.type ?? 'text'"
+        [autocomplete]="conf?.autocomplete ?? 'off'"
+        [name]="conf?.name ?? null"
+        [ariaAutoComplete]="conf?.autocomplete ?? 'off'"
+      >
+        @if(conf.iconLeft ){
+        <span
+          ksPrefix
+          [ksIcon]="conf.iconLeft.name"
+          [iconType]="conf.iconLeft.type"
+          (click)="conf.iconLeft.onClick?.({event: $event, input: ksInput, icon: conf.iconLeft})"
+          (keydown.space)="conf.iconLeft.onKeyDown?.({event: $event, input: ksInput, icon: conf.iconLeft})"
+          (keydown.enter)="conf.iconLeft.onKeyDown?.({event: $event, input: ksInput, icon: conf.iconLeft})"
+          (mouseenter)="conf.iconLeft.onHover?.({event: $event, input: ksInput, icon: conf.iconLeft})"
+        >
+          @if(conf?.iconLeft?.type && conf?.iconLeft?.type ==='google'){
+          {{ conf?.iconLeft?.name }}
+          }
+        </span>
+
+        } @if(conf.iconRight ){
+        <span
+          ksSuffix
+          [ksIcon]="conf.iconRight.name"
+          [iconType]="conf.iconRight.type"
+          (click)="conf.iconRight.onClick?.({event: $event, input: ksInput, icon: conf.iconRight})"
+          (keydown.space)="conf.iconRight.onKeyDown?.({event: $event, input: ksInput, icon: conf.iconRight})"
+          (keydown.enter)="conf.iconRight.onKeyDown?.({event: $event, input: ksInput, icon: conf.iconRight})"
+          (mouseenter)="conf.iconRight.onHover?.({event: $event, input: ksInput, icon: conf.iconRight})"
+        >
+          @if(conf?.iconRight?.type && conf?.iconRight?.type ==='google'){
+          {{ conf?.iconLeft?.name }}
+          }
+        </span>
+        }
+      </ks-input>
+      }@else {
+
+      <!-- Checkbox -->
+       @if(conf?.type === 'checkbox'){
+      <ks-checkbox
+        [label]="conf?.checkboxConfig?.label!"
+        [id]="conf.id!"
+        [checked]="conf?.checkboxConfig?.checked!"
+        [triState]="conf?.checkboxConfig?.triState ?? false"
+        [color]="color()"
+        [required]="conf?.required ?? false"
+        [formControlName]="conf?.formControlName!"
+        [indeterminate]="conf?.checkboxConfig?.indeterminate!"
+      ></ks-checkbox>
+       }@else {
+        <ng-content select="ks-checkbox-group"></ng-content>
+       }
+      } }<!-- End !['g', 'a'].includes(conf.controlType ?? 'c') -->
+      @else if(conf.controlType === 'g'){
+
+      <!-- Internal Form Group -->
+      @if(conf.internalFormGroup){
+      <!-- If template -->
+      @if(!conf.template){
+      <!-- If htmlSeparator -->
+      @if(conf.htmlSeparator){
+      <div class="d-contents" [innerHTML]="conf.htmlSeparator!"></div>
+      <ng-container [formGroupName]="conf.formGroupName!">
+        <ks-form
+          [color]="color()"
+          [size]="size()"
+          [errorStateMatcher]="errorStateMatcher()"
+          [appearance]="conf?.appearance ?? appearance()"
+          [formGroup]="getFormRecord(conf.formGroupName!)"
+          [formConfig]="conf.internalFormGroup!"
+        ></ks-form>
+      </ng-container>
+      }@else if(conf.fieldSetLegend){
+      <fieldset class="p-5 br-r-3">
+        <legend>{{ conf.fieldSetLegend }}</legend>
+        <ng-container [formGroupName]="conf.formGroupName!">
+          <ks-form
+            [color]="color()"
+            [size]="size()"
+            [errorStateMatcher]="errorStateMatcher()"
+            [appearance]="conf?.appearance ?? appearance()"
+            [formGroup]="getFormRecord(conf.formGroupName!)"
+            [formConfig]="conf.internalFormGroup!"
+          ></ks-form>
+        </ng-container>
+      </fieldset>
+      }@else {
+      <ng-container [formGroupName]="conf.formGroupName!">
+        <ks-form
+          [color]="color()"
+          [size]="size()"
+          [errorStateMatcher]="errorStateMatcher()"
+          [appearance]="conf?.appearance ?? appearance()"
+          [formGroup]="getFormRecord(conf.formGroupName!)"
+          [formConfig]="conf.internalFormGroup!"
+        ></ks-form>
+      </ng-container>
+      } }<!-- End !conf.template -->
+      @else {
+      <ng-container [ngTemplateOutlet]="conf.template"></ng-container>
+
+      }<!-- If template -->
+      }<!-- End conf.internalFormGroup -->
+      } @else{
+      <!--  -->
+      @if(conf.htmlSeparator){
+      <div class="d-contents" [innerHTML]="conf.htmlSeparator!"></div>
+      }
+      <!--  -->
+      @if(conf.template){
+      <ng-container [ngTemplateOutlet]="conf.template"></ng-container>
+      }@else {
+      <ng-container [formArrayName]="conf.formArrayName!">
+        @let formArray = getFormArrray(conf.formArrayName!);
+
+        <!-- formArray loop -->
+        @for(c of formArray.controls; track $index; let i = $index){
+        <ng-container [formGroupName]="i">
+          <ks-form
+            [color]="color()"
+            [size]="size()"
+            [errorStateMatcher]="errorStateMatcher()"
+            [appearance]="conf?.appearance ?? appearance()"
+            [formGroup]="getFormRecordByIndexFromFormArray(conf.formArrayName!, i)"
+            [formConfig]="conf.internalFormGroup!"
+          ></ks-form>
+        </ng-container>
+        }
+      </ng-container>
+
+      }
+      <!--  -->
+      }
+      <!--  -->
+      }
+    }
+
+  <!-- End !['g', 'a'].includes(conf.controlType ?? 'c') -->
+  @if(submitButton()){
+
+  <ng-template [ngTemplateOutlet]="submitButton()"> </ng-template>
+  }
+</form>
+
+}@else {
+<ng-content select="ks-input, ks-checkbox"></ng-content>
+}

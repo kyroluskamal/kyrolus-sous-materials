@@ -1,0 +1,290 @@
+@use "sass:color";
+// Elevation shadows
+$elevation-0: none;
+$elevation-1: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.24);
+$elevation-2: 0px 2px 4px rgba(0, 0, 0, 0.14), 0px 2px 3px rgba(0, 0, 0, 0.2);
+$elevation-3: 0px 3px 6px rgba(0, 0, 0, 0.16), 0px 3px 5px rgba(0, 0, 0, 0.18);
+$elevation-4: 0px 4px 8px rgba(0, 0, 0, 0.18), 0px 4px 6px rgba(0, 0, 0, 0.16);
+$elevation-5: 0px 5px 10px rgba(0, 0, 0, 0.2), 0px 5px 8px rgba(0, 0, 0, 0.14);
+$elevation-6: 0px 6px 12px rgba(0, 0, 0, 0.22), 0px 6px 10px rgba(0, 0, 0, 0.12);
+$elevation-7: 0px 7px 14px rgba(0, 0, 0, 0.24), 0px 7px 12px rgba(0, 0, 0, 0.1);
+$elevation-8: 0px 8px 16px rgba(0, 0, 0, 0.26), 0px 8px 14px rgba(0, 0, 0, 0.08);
+$elevation-9: 0px 9px 18px rgba(0, 0, 0, 0.28), 0px 9px 16px rgba(0, 0, 0, 0.06);
+$elevation-10: 0px 10px 20px rgba(0, 0, 0, 0.3),
+  0px 10px 18px rgba(0, 0, 0, 0.04);
+$elevation-11: 0px 11px 22px rgba(0, 0, 0, 0.32),
+  0px 11px 20px rgba(0, 0, 0, 0.02);
+$elevation-12: 0px 12px 24px rgba(0, 0, 0, 0.34),
+  0px 12px 22px rgba(0, 0, 0, 0.01);
+$elevation-13: 0px 13px 26px rgba(0, 0, 0, 0.36),
+  0px 13px 24px rgba(0, 0, 0, 0.009);
+$elevation-14: 0px 14px 28px rgba(0, 0, 0, 0.38),
+  0px 14px 26px rgba(0, 0, 0, 0.008);
+$elevation-15: 0px 15px 30px rgba(0, 0, 0, 0.4),
+  0px 15px 28px rgba(0, 0, 0, 0.007);
+$elevation-16: 0px 16px 32px rgba(0, 0, 0, 0.42),
+  0px 16px 30px rgba(0, 0, 0, 0.006);
+$elevation-17: 0px 17px 34px rgba(0, 0, 0, 0.44),
+  0px 17px 32px rgba(0, 0, 0, 0.005);
+$elevation-18: 0px 18px 36px rgba(0, 0, 0, 0.46),
+  0px 18px 34px rgba(0, 0, 0, 0.004);
+$elevation-19: 0px 19px 38px rgba(0, 0, 0, 0.48),
+  0px 19px 36px rgba(0, 0, 0, 0.003);
+$elevation-20: 0px 20px 40px rgba(0, 0, 0, 0.5),
+  0px 20px 38px rgba(0, 0, 0, 0.002);
+$elevation-21: 0px 21px 42px rgba(0, 0, 0, 0.52),
+  0px 21px 40px rgba(0, 0, 0, 0.001);
+$elevation-22: 0px 22px 44px rgba(0, 0, 0, 0.54),
+  0px 22px 42px rgba(0, 0, 0, 0.0009);
+$elevation-23: 0px 23px 46px rgba(0, 0, 0, 0.56),
+  0px 23px 44px rgba(0, 0, 0, 0.0008);
+$elevation-24: 0px 24px 48px rgba(0, 0, 0, 0.58),
+  0px 24px 46px rgba(0, 0, 0, 0.0007);
+
+// _variables.scss
+
+$display-values: (
+  none: none,
+  block: block,
+  inline: inline,
+  inline-block: inline-block,
+  flex: flex,
+  inline-flex: inline-flex,
+  grid: grid,
+  inline-grid: inline-grid,
+  table: table,
+  table-row: table-row,
+  table-cell: table-cell,
+  list-item: list-item,
+  contents: contents,
+);
+$hover-darken: -20%;
+$active-darken: -40%;
+
+$primay-color: #2563eb;
+$secondary-color: #9db44f;
+$success-color: #10b981;
+$danger-color: #dc2626;
+$warning-color: #facc15;
+$info-color: #3b82f6;
+$dark-color: #1d201f;
+$grey-color: #66686c;
+$white: #ffffff;
+$orange: #f66b0e;
+$tertiary: color.change(#7c3aed, $lightness: 20%);
+
+// الألوان الرئيسية والثانوية والرسائل
+$colors: (
+  "primary": $primay-color,
+  "secondary": $secondary-color,
+  "success": $success-color,
+  "danger": $danger-color,
+  "warning": $warning-color,
+  "info": $info-color,
+  "neutral-light": #cfcbc2,
+  "grey": $grey-color,
+  "tertiary": $tertiary,
+  "dark": $dark-color,
+  "orange": $orange,
+);
+:root {
+  --primary-color: #{$primay-color};
+  --secondary-color: #{$secondary-color};
+  --success-color: #{$success-color};
+  --danger-color: #{$danger-color};
+  --warning-color: #{$warning-color};
+  --info-color: #{$info-color};
+  --dark-color: #{$dark-color};
+  --grey-color: #{$grey-color};
+  --white: #{$white};
+  --orange: #{$orange};
+  --tertiary: #{$tertiary};
+}
+// _variables.scss (continued)
+
+$breakpoints: (
+  xs: 0,
+  // Extra small devices (portrait phones)
+  sm: 576px,
+  // Small devices (landscape phones)
+  md: 768px,
+  // Medium devices (tablets)
+  lg: 992px,
+  // Large devices (desktops)
+  xl: 1200px,
+  // Extra large devices (large desktops)
+  xxl: 1400px,
+  // Extra extra large devices
+);
+
+//##########################################################################
+//###################       region Flexbox         #########################
+//##########################################################################
+$flex-direction-values: (
+  row: row,
+  row-reverse: row-reverse,
+  column: column,
+  column-reverse: column-reverse,
+);
+$flex-wrap-values: (
+  nowrap: nowrap,
+  wrap: wrap,
+  wrap-reverse: wrap-reverse,
+);
+
+$align-items-values: (
+  start: flex-start,
+  end: flex-end,
+  center: center,
+  baseline: baseline,
+  stretch: stretch,
+);
+$flex-justify-content-values: (
+  flex-start: flex-start,
+  flex-end: flex-end,
+  center: center,
+  between: space-between,
+  around: space-around,
+  evenly: space-evenly,
+  start: start,
+  end: end,
+  left: left,
+  right: right,
+);
+$flex-align-content-values: (
+  flex-start: flex-start,
+  flex-end: flex-end,
+  center: center,
+  space-between: space-between,
+  space-around: space-around,
+  stretch: stretch,
+);
+$flex-align-self-values: (
+  auto: auto,
+  flex-start: flex-start,
+  flex-end: flex-end,
+  center: center,
+  baseline: baseline,
+  stretch: stretch,
+);
+$order-values: (
+  n1: -1,
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+);
+$flex-grow-values: (
+  0: 0,
+  1: 1,
+);
+
+$flex-shrink-values: (
+  0: 0,
+  1: 1,
+);
+$flex-basis-values: (
+  auto: auto,
+  0: 0,
+  "25": 25%,
+  "50": 50%,
+  "75": 75%,
+  "100": 100%,
+);
+$flex-values: (
+  "1": 1 1 0%,
+  auto: 1 1 auto,
+  initial: 0 1 auto,
+  none: 0 0 auto,
+);
+
+//##########################################################################
+//###################    width and hieght             ######################
+//##########################################################################
+// _variables.scss
+
+$sizes: (
+  0: 0,
+  1: 1,
+  2: 2,
+  5: 5,
+  10: 10,
+  15: 15,
+  20: 20,
+  25: 25,
+  30: 30,
+  33: 33.3333,
+  // One-third
+  40: 40,
+  50: 50,
+  60: 60,
+  66: 66.6667,
+  // Two-thirds
+  70: 70,
+  75: 75,
+  80: 80,
+  90: 90,
+  95: 95,
+  100: 100,
+  auto: auto,
+);
+$units: (
+  "": "%",
+  // Empty string for percentage
+  "px": "px",
+  "em": "em",
+  "rem": "rem",
+  "vw": "vw",
+  "vh": "vh",
+  "vmin": "vmin",
+  "vmax": "vmax",
+);
+/* Font size*/
+$default-font-size: 1rem;
+$font-size-sm: $default-font-size * 0.75;
+$font-size-lg: $default-font-size * 1.5;
+$font-size-xl: $default-font-size * 2;
+$font-size-xxl: $default-font-size * 3;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$default-font-family: "Roboto", sans-serif;
+$default-line-height: 1.5;
+
+:root {
+  --elevation-0: #{$elevation-0};
+  --elevation-1: #{$elevation-1};
+  --elevation-2: #{$elevation-2};
+  --elevation-3: #{$elevation-3};
+  --elevation-4: #{$elevation-4};
+  --elevation-5: #{$elevation-5};
+  --elevation-6: #{$elevation-6};
+  --elevation-7: #{$elevation-7};
+  --elevation-8: #{$elevation-8};
+  --elevation-9: #{$elevation-9};
+  --elevation-10: #{$elevation-10};
+  --elevation-11: #{$elevation-11};
+  --elevation-12: #{$elevation-12};
+  --elevation-13: #{$elevation-13};
+  --elevation-14: #{$elevation-14};
+  --elevation-15: #{$elevation-15};
+  --elevation-16: #{$elevation-16};
+  --elevation-17: #{$elevation-17};
+  --elevation-18: #{$elevation-18};
+  --elevation-19: #{$elevation-19};
+  --elevation-20: #{$elevation-20};
+  --elevation-21: #{$elevation-21};
+  --elevation-22: #{$elevation-22};
+  --elevation-23: #{$elevation-23};
+  --elevation-24: #{$elevation-24};
+  --default-font-size: #{$default-font-size};
+  --font-size-sm: #{$default-font-size * 0.75};
+  --font-size-lg: #{$default-font-size * 1.5};
+  --font-size-xl: #{$default-font-size * 2};
+  --font-size-xxl: #{$default-font-size * 3};
+  --default-font-family: #{$default-font-family};
+  @each $name, $color in $colors {
+    --#{$name}-color: #{$color};
+  }
+}

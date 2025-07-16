@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'BloggerSans';
+    src: url('BloggerSans-BoldItalic.eot');
+    src: url('BloggerSans-BoldItalic.eot?#iefix') format('embedded-opentype'),
+         url('BloggerSans-BoldItalic.woff') format('woff'),
+         url('BloggerSans-BoldItalic.ttf') format('truetype'),
+         url('BloggerSans-BoldItalic.svg#BloggerSans-BoldItalic') format('svg');
+    font-style: italic;
+    font-weight: bold;
+    text-rendering: optimizeLegibility;
+}
+

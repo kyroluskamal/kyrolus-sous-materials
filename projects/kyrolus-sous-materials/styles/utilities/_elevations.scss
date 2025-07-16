@@ -1,0 +1,32 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/maps" as *;
+@use "../abstracts/mixins" as *;
+@use "sass:map";
+
+@each $level in map.keys($elevations) {
+  .elevation-#{$level} {
+    @include elevation($level);
+  }
+}
+@each $level in map.keys($elevations) {
+  $next-level: $level + 1;
+  @if map.has-key($elevations, $next-level) {
+    .elevation-hover-#{$level} {
+      transition: box-shadow 0.3s ease;
+      &:hover {
+        @include elevation($next-level);
+      }
+    }
+  }
+}
+// _interactions.scss
+
+@each $level in map.keys($elevations) {
+  $next-level: if($level < 24, $level + 1, 24);
+  .elevation-hover-#{$level} {
+    transition: box-shadow 0.3s ease;
+    &:hover {
+      @include elevation($next-level);
+    }
+  }
+}

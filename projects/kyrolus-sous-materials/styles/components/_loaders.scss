@@ -1,0 +1,253 @@
+// Spinner loader
+.loader-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: rotate 1s linear infinite;
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Dots loader
+.loader-dots {
+  display: flex;
+  gap: 0.5rem;
+
+  &::before,
+  &::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: currentColor;
+    animation: dots 1s infinite ease-in-out;
+  }
+
+  &::after {
+    animation-delay: 0.5s;
+  }
+}
+
+@keyframes dots {
+  0%,
+  100% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+
+// Pulse loader
+.loader-pulse {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #3498db;
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+}
+
+// Bar loader
+.loader-bar {
+  width: 200px;
+  height: 4px;
+  background-color: #f3f3f3;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 40%;
+    height: 100%;
+    background-color: #3498db;
+    animation: bar 1s infinite linear;
+  }
+}
+
+@keyframes bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+// Circle loader
+.loader-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #3498db;
+  border-right-color: #3498db;
+  animation: circle 0.8s linear infinite;
+}
+
+@keyframes circle {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Square loader
+.loader-square {
+  width: 40px;
+  height: 40px;
+  background-color: #3498db;
+  animation: square 1s infinite ease;
+}
+
+@keyframes square {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Ripple loader
+.loader-ripple {
+  width: 40px;
+  height: 40px;
+  position: relative;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    border: 4px solid #3498db;
+    border-radius: 50%;
+    animation: ripple 1s ease-out infinite;
+  }
+
+  &::after {
+    animation-delay: 0.5s;
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+// Hourglass loader
+.loader-hourglass {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 35px solid #3498db;
+  animation: hourglass 1s infinite;
+}
+
+@keyframes hourglass {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Wave loader
+.loader-wave {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  span {
+    width: 4px;
+    height: 25px;
+    background-color: #3498db;
+    animation: wave 1s infinite ease-in-out;
+
+    @for $i from 1 through 5 {
+      &:nth-child(#{$i}) {
+        animation-delay: $i * 0.1s;
+      }
+    }
+  }
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+// Cube loader
+.loader-cube {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: cube 2s infinite;
+
+  div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #3498db;
+    opacity: 0.8;
+  }
+}
+
+@keyframes cube {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+  100% {
+    transform: rotateX(360deg) rotateY(360deg);
+  }
+}

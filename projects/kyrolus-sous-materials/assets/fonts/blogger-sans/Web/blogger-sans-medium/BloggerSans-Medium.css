@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'BloggerSansMedium';
+    src: url('BloggerSans-Medium.eot');
+    src: url('BloggerSans-Medium.eot?#iefix') format('embedded-opentype'),
+         url('BloggerSans-Medium.woff') format('woff'),
+         url('BloggerSans-Medium.ttf') format('truetype'),
+         url('BloggerSans-Medium.svg#BloggerSans-Medium') format('svg');
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+

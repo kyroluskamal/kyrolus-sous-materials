@@ -1,0 +1,55 @@
+<label
+  class="checkbox-container"
+  [class.disabled]="disable()"
+  [class.required]="isRequired()"
+>
+  @if(label() &&labelPosition() === 'before'){
+  <ng-container
+    *ngTemplateOutlet="labelTemplate() || defaultLabel"
+  ></ng-container>
+  }
+   <input
+    type="checkbox"
+    [class.checked]="checked()"
+    [attr.aria-checked]="ariaChecked()"
+    [attr.aria-disabled]="disable()"
+    [attr.aria-required]="isRequired()"
+    [attr.aria-labeledby]="label()"
+    [attr.aria-]="label()"
+    [checked]="checked()"
+    [disabled]="disable()"
+    [required]="isRequired()"
+    [attr.id]="id() === undefined ? null : id()"
+        [attr.aria-describedby]="aria_describedby()"
+
+    (click)="toggle()"
+    (keydown.space)="onSpaceKey($event)"
+    (keydown.enter)="onEnterKey($event)"
+    #input
+  />
+  <div
+    class="checkbox"
+    [class]="'br-' + color()"
+    [class]="checked() || indeterminate() ? 'bg-' + color() : ''"
+    [class.checked]="checked()"
+    [class.indeterminate]="indeterminate()"
+  >
+    <div class="checkbox-frame"></div>
+    <div class="checkbox-background">
+      <svg class="checkbox-checkmark" viewBox="0 0 24 24">
+        <path class="checkbox-path" d="M4.1,12.7 9,17.6 20.3,6.3"></path>
+      </svg>
+      <div class="checkbox-mixedmark"></div>
+    </div>
+  </div>
+
+  @if(label() &&labelPosition() === 'after'){
+  <ng-container
+    *ngTemplateOutlet="labelTemplate() || defaultLabel"
+  ></ng-container>
+  }
+</label>
+<ng-template #defaultLabel>
+  <span class="checkbox-label" >{{ label() }}</span>
+</ng-template>
+
