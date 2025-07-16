@@ -1,0 +1,82 @@
+ks-accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-in-out;
+  &.opened {
+    max-height: 500px;
+  }
+  a {
+    text-decoration: none;
+    color: initial;
+  }
+  ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+
+    li {
+      position: relative;
+
+      a {
+        cursor: pointer;
+        &:hover,
+        &.active-menu {
+          color: var(--primary-color);
+
+          &::before {
+            content: "";
+            width: 3px;
+            height: 25px;
+            background-color: var(--primary-color);
+            border-radius: 0.5rem;
+            inset-inline-start: -24px;
+            position: absolute;
+            box-shadow: 0px 0px 0px 3px rgba(115, 93, 255, 0.1);
+          }
+        }
+      }
+    }
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 2px;
+    background-color: #e6e4ed;
+    border-radius: 5px;
+    inset-inline-start: 16px;
+  }
+}
+ks-accordion-header {
+  transition: margin-bottom 0.2s ease-in-out;
+  margin-bottom: 0rem;
+  &:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  div:last-child {
+    transition: transform 0.2s ease-in-out;
+  }
+  &.opened {
+    margin-bottom: 0.5rem;
+    div:last-child {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+ks-accordion-item[disabled="true"] ks-accordion-header {
+  background-color: #f5f5f5;
+  color: #b3b3b3;
+  cursor: not-allowed;
+}
+
+.accordtion-active {
+  background-color: var(--primary-color) !important;
+  color: white;
+  div:last-child {
+    transform: rotate(90deg);
+  }
+}

@@ -1,0 +1,150 @@
+@font-face {
+  font-family: "Material Icons";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../../assets/fonts/google-icons/MaterialIcons-Regular.eot"),
+    url("../../assets/fonts/google-icons/MaterialIcons-Regular.woff2")
+      format("woff2"),
+    url("../../assets/fonts/google-icons/MaterialIcons-Regular.woff")
+      format("woff"),
+    url("../../assets/fonts/google-icons/MaterialIcons-Regular.ttf")
+      format("truetype");
+}
+
+@font-face {
+  font-family: "Material Icons Round";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../../assets/fonts/google-icons/MaterialIconsRound-Regular.eot"),
+    url("../../assets/fonts/google-icons/MaterialIconsRound-Regular.woff2")
+      format("woff2"),
+    url("../../assets/fonts/google-icons/MaterialIconsRound-Regular.woff")
+      format("woff"),
+    url("../../assets/fonts/google-icons/MaterialIconsRound-Regular.ttf")
+      format("truetype");
+}
+
+@font-face {
+  font-family: "Material Icons Outlined";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../../assets/fonts/google-icons/MaterialIconsOutlined-Regular.eot"),
+    url("../../assets/fonts/google-icons/MaterialIconsOutlined-Regular.woff2")
+      format("woff2"),
+    url("../../assets/fonts/google-icons/MaterialIconsOutlined-Regular.woff")
+      format("woff"),
+    url("../../assets/fonts/google-icons/MaterialIconsOutlined-Regular.ttf")
+      format("truetype");
+}
+
+@font-face {
+  font-family: "Material Icons Sharp";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../../assets/fonts/google-icons/MaterialIconsSharp-Regular.eot"),
+    url("../../assets/fonts/google-icons/MaterialIconsSharp-Regular.woff2")
+      format("woff2"),
+    url("../../assets/fonts/google-icons/MaterialIconsSharp-Regular.woff")
+      format("woff"),
+    url("../../assets/fonts/google-icons/MaterialIconsSharp-Regular.ttf")
+      format("truetype");
+}
+@font-face {
+  font-family: "Material Icons Two Tone";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../../assets/fonts/google-icons/MaterialIconsTwoTone-Regular.eot"),
+    url("../../assets/fonts/google-icons/MaterialIconsTwoTone-Regular.woff2")
+      format("woff2"),
+    url("../../assets/fonts/google-icons/MaterialIconsTwoTone-Regular.woff")
+      format("woff"),
+    url("../../assets/fonts/google-icons/MaterialIconsTwoTone-Regular.ttf")
+      format("truetype");
+}
+
+.material-icons {
+  font-family: "Material Icons", sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  -webkit-font-smoothing: antialiased;
+
+  text-rendering: optimizeLegibility;
+
+  -moz-osx-font-smoothing: grayscale;
+
+  font-feature-settings: "liga";
+}
+
+.material-icons.md-18 {
+  font-size: 18px;
+}
+
+.material-icons.md-24 {
+  font-size: 24px;
+}
+
+.material-icons.md-36 {
+  font-size: 36px;
+}
+
+.material-icons.md-12 {
+  font-size: 12px;
+}
+.material-icons.md-14 {
+  font-size: 14px;
+}
+
+.material-icons.md-16 {
+  font-size: 16px;
+}
+
+.material-icons.filled {
+  font-family: "Material Icons", sans-serif;
+}
+.material-icons.rounded {
+  font-family: "Material Icons Round", sans-serif;
+}
+
+.material-icons.outlined {
+  font-family: "Material Icons Outlined", sans-serif;
+}
+
+.material-icons.sharp {
+  font-family: "Material Icons Sharp", sans-serif;
+}
+
+.material-icons.two-tone {
+  font-family: "Material Icons Two Tone", sans-serif;
+}
+
+body {
+  --google-font-color-materialiconstwotone: none;
+}
+.g-icon-material-icons {
+  font-family: "Material Icons", sans-serif;
+}
+
+.g-icon-material-icons-round {
+  font-family: "Material Icons Round", sans-serif;
+}
+
+.g-icon-material-icons-outlined {
+  font-family: "Material Icons Outlined", sans-serif;
+}
+
+.g-icon-material-icons-sharp {
+  font-family: "Material Icons Sharp", sans-serif;
+}
+
+.g-icon-material-icons-two-tone {
+  font-family: "Material Icons Two Tone", sans-serif;
+}

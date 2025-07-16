@@ -1,0 +1,128 @@
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 350px;
+}
+.toast-body {
+  width: 100%;
+}
+.toast {
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  gap: 12px;
+  .toast-icon {
+    font-size: 20px;
+
+    &.success {
+      color: var(--success-color, #4caf50);
+    }
+
+    &.error {
+      color: var(--danger-color, #f44336);
+    }
+
+    &.info {
+      color: var(--info-color, #2196f3);
+    }
+
+    &.warning {
+      color: var(--secondary-color, #ff9800);
+    }
+  }
+}
+
+.toast.success {
+  border-left: 4px solid var(--success-color, #4caf50);
+}
+.toast.error {
+  border-left: 4px solid var(--danger-color, #f44336);
+}
+.toast.info {
+  border-left: 4px solid var(--info-color, #2196f3);
+}
+.toast.warning {
+  border-left: 4px solid var(--secondary-color, #ff9800);
+}
+
+.toast-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.toast-title {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 4px;
+  color: #666;
+}
+
+.toast-content {
+  margin-bottom: 12px;
+}
+
+.action-button {
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: #ddd;
+  width: 100%;
+  animation: progress linear forwards;
+
+  &.success {
+    background: var(--success-color, #4caf50);
+  }
+
+  &.error {
+    background: var(--danger-color, #f44336);
+  }
+
+  &.info {
+    background: var(--info-color, #2196f3);
+  }
+
+  &.warning {
+    background: var(--secondary-color, #ff9800);
+  }
+}
+
+.progress-bar.paused {
+  animation-play-state: paused;
+}
+
+@keyframes progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}

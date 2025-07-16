@@ -1,0 +1,188 @@
+@use "sass:color";
+
+ks-dialog {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  .fullscreen {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0% !important;
+
+    left: 0 !important;
+    top: 0 !important;
+    transform: translate(0, 0) !important;
+  }
+  &.center {
+    align-items: center;
+    justify-content: center;
+  }
+
+  &.top-left {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  &.top {
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  &.top-right {
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+
+  &.right {
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  &.left {
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &.bottom-left {
+    align-items: flex-end;
+    justify-content: flex-start;
+  }
+
+  &.bottom {
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  &.bottom-right {
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+  &:has(dialog.minimized) {
+    height: 50px;
+    width: fit-content;
+    top: auto;
+    bottom: 0;
+    left: auto;
+    right: 10%;
+    .backdrop-show {
+      display: none;
+    }
+  }
+  .dialog-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    min-width: 300px;
+    min-height: 200px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    z-index: 1000;
+    border: none;
+    transition: all 0.3s ease-in-out; /* Transition on all properties */
+    transition-property: top, left, bottom, position; /* Exclude right explicitly */
+    &.minimized {
+      ks-dialog-content,
+      ks-dialog-actions {
+        display: none;
+      }
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3) !important;
+      position: absolute;
+      width: fit-content !important; /* Full-width when minimized */
+      height: 50px !important; /* Only show header */
+      min-height: 50px !important; /* Only show header */
+      top: auto; /* Align to the bottom */
+      bottom: 0 !important; /* Docked at the bottom of the screen */
+      left: auto;
+      right: 10%;
+      border-bottom-right-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+      transform: translate(0, 0) !important;
+      max-width: 200px;
+      .minimized-title {
+        max-width: 70%;
+        font-size: 1rem;
+        font-weight: 400;
+        margin: auto 15px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+  .dialog-header {
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .dialog-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
+  .btn-custom {
+    background: none;
+    transition: background 0.2s;
+    color: var(--danger-color);
+    font-weight: 500;
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+      background: rgba(0, 0, 0, 0.2);
+    }
+  }
+  .dialog-content {
+    padding: 16px;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dialog-actions {
+    padding: 16px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+}
+.dialog-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+  button {
+    margin-left: 0.3rem;
+    display: inherit;
+    align-items: center;
+    cursor: pointer;
+    background: none;
+    border: none;
+    &.draggable {
+      cursor: move;
+    }
+
+    &.bi-x {
+      color: red;
+      font-size: large;
+      display: flex;
+      align-items: center;
+    }
+  }
+}

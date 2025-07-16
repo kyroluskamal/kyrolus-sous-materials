@@ -1,0 +1,225 @@
+<div
+  class="advanced-table"
+  [class]="options().theme"
+  [class]="options().layout"
+>
+  <!-- Table Header -->
+  <div class="table-header">
+    <div  class="table-header-actions">
+      <ng-container #tableActions></ng-container>
+
+    </div>
+  </div>
+
+  <!-- Main Table -->
+  <table [class]="tableClasses()" [style]="tableStyle()">
+    <thead>
+      <tr>
+        <!-- Selection Column -->
+        @if(options().selectable){
+        <th
+          [class]="gridStyle()"
+          id="selection-column"
+          class="selection-column"
+        >
+          <input
+            type="checkbox"
+            [checked]="state().selectedRows.length === displayData().length"
+            (change)="selectRow($event)"
+          />
+        </th>
+        }
+
+        <!-- Expansion Column -->
+        @if(options().expandable){
+        <th
+          [class]="gridStyle()"
+          id="expansion-column"
+          class="expansion-column"
+        ></th>
+        }
+
+        <!-- Data Columns -->
+        @for(col of columns(); track col){
+        <th
+          [class]="gridStyle()"
+          [id]="col.key"
+          (keydown)="sort(col)"
+          [style.width]="col.options?.width"
+          [class.sortable]="col.options?.sortable"
+          (click)="sort(col)"
+        >
+          {{ col.label }}
+          @if(col.options?.sortable){
+          <span ksIcon="sort-alpha-down" class="sort-icon"> </span>
+          }
+        </th>
+        }
+        @if(options().useActionColumn){
+        <th
+          #actionColumnHeader
+          [class]="gridStyle()"
+          id="action-column"
+          class="action-column"
+        >
+          Actions
+        </th>
+        }
+      </tr>
+      <!-- Filter Row -->
+      @if(options().filterable){
+      <tr>
+        <!-- Selection Column -->
+        @if(options().selectable){
+        <th id="selection-column" class="selection-column"></th>
+        }
+
+        <!-- Expansion Column -->
+        @if(options().expandable){
+        <th id="expansion-column" class="expansion-column"></th>
+        }
+
+        <!-- Data Columns -->
+        @for(col of columns(); track col){ @if(col.options?.filterable){
+        <th id="filter-column">
+          <input
+            type="text"
+            [placeholder]="'Filter ' + col.label"
+            (input)="filter(col, $any($event.target).value!)"
+          />
+        </th>
+        @if(options().useActionColumn){
+        <th
+          #actionColumnHeader
+          [class]="gridStyle()"
+          id="action-column"
+          class="action-column"
+        >
+        </th>
+        }
+        } }
+      </tr>
+      }
+    </thead>
+
+    <tbody>
+      @for (row of data(); track row) {
+      <!-- Main Row -->
+      <tr
+        [class.selected]="state().selectedRows.includes(row)"
+        [class]="isRowHover() || isRowColumnHover() ? hoverColor() : ''"
+        [class.dark-white-text]="isRowHover() && isDarkhoverStyle()"
+      >
+        @if(options().selectable){
+        <td
+          [ksTableColumnHover]="
+            isRowColumnHover() || isColumnHover()
+              ? hoverColor().replace('hover-', '')
+              : ''
+          "
+          [colorStyle]="hoverColorStyle()!"
+          [class]="tdStyle()"
+        >
+          <input
+            type="checkbox"
+            [checked]="state().selectedRows.includes(row)"
+            (change)="selectRow(row)"
+          />
+        </td>
+        } @if(options().expandable){
+        <td
+          [ksTableColumnHover]="
+            isRowColumnHover() || isColumnHover()
+              ? hoverColor().replace('hover-', '')
+              : ''
+          "
+          [colorStyle]="hoverColorStyle()!"
+          [class]="tdStyle()"
+        >
+          <button (click)="toggleExpand(row)">
+            {{ state().expandedRows.includes(row) ? "−" : "+" }}
+          </button>
+        </td>
+        } @for (col of columns(); track col) {
+        <td
+          [ksTableColumnHover]="
+            isRowColumnHover() || isColumnHover()
+              ? hoverColor().replace('hover-', '')
+              : ''
+          "
+          [colorStyle]="hoverColorStyle()!"
+          [class]="tdStyle()"
+        >
+          <ng-container
+            *ngTemplateOutlet="
+              col.options?.template || defaultCell;
+              context: { $implicit: row[col.key], row: row, col: col }
+            "
+          ></ng-container>
+        </td>
+        } @if(options().useActionColumn){
+        <ng-container *ngTemplateOutlet="columnActionCell; context: { row: row }"></ng-container>
+        }
+      </tr>
+      @if (options().expandable && state().expandedRows.includes(row)) {
+      <!-- Expanded Row -->
+      <tr [class]="isRowHover() || isRowColumnHover() ? hoverColor() : ''">
+        <td
+          [ksTableColumnHover]="
+            isRowColumnHover() || isColumnHover()
+              ? hoverColor().replace('hover-', '')
+              : ''
+          "
+          [colorStyle]="hoverColorStyle()!"
+          [attr.colspan]="columns().length + 2"
+          class="expanded-content"
+          [class]="tdStyle()"
+        >
+          <!-- Expanded content here -->
+        </td>
+        @if(options().useActionColumn){
+        <ng-container *ngTemplateOutlet="columnActionCell ; context: { row: row }"></ng-container>
+        }
+      </tr>
+      } } @empty {
+      <tr>
+        <td
+          [ksTableColumnHover]="
+            isRowColumnHover() || isColumnHover()
+              ? hoverColor().replace('hover-', '')
+              : ''
+          "
+          [colorStyle]="hoverColorStyle()!"
+          [class]="tdStyle()"
+          [attr.colspan]="columns().length + 2"
+          class="empty-content"
+        >
+          No data available
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <!-- Paginator -->
+  @if(options().pageable){
+  <ks-paginator
+    [state]="paginatorState()"
+    [options]="{ theme: options().theme }"
+    (pageChange)="onPageChange($event)"
+  >
+  </ks-paginator>
+  }
+
+  <!-- Default Cell Template -->
+  <ng-template #defaultCell let-value>
+    {{ value }}
+  </ng-template>
+</div>
+<ng-template #columnActionCell let-row="row">
+  <td  [class]="tdStyle()">
+    <div class="col-actions">
+      <ng-container #columnActions></ng-container>
+    </div>
+  </td>
+</ng-template>

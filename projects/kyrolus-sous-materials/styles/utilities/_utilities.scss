@@ -1,0 +1,656 @@
+@use "sass:map";
+@use "sass:meta";
+@use "../abstracts/variables" as *;
+// _variables.scss
+
+$position-values: (
+  static: static,
+  relative: relative,
+  absolute: absolute,
+  fixed: fixed,
+  sticky: sticky,
+);
+
+$z-index-values: (
+  auto: auto,
+  0: 0,
+  1: 1,
+  10: 10,
+  100: 100,
+  1000: 1000,
+);
+$overflow-values: (
+  visible: visible,
+  hidden: hidden,
+  scroll: scroll,
+  auto: auto,
+);
+
+$overflow-x-values: (
+  visible: visible,
+  hidden: hidden,
+  scroll: scroll,
+  auto: auto,
+);
+
+$overflow-y-values: (
+  visible: visible,
+  hidden: hidden,
+  scroll: scroll,
+  auto: auto,
+);
+$position-offsets: (
+  0: 0,
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 1rem,
+  4: 1.5rem,
+  5: 3rem,
+  full: 100%,
+  auto: auto,
+);
+// _mixins.scss
+
+@mixin generate-position-classes {
+  @each $name, $value in $position-values {
+    .position-#{$name} {
+      position: #{$value} !important;
+    }
+  }
+}
+@mixin generate-position-offset-classes {
+  @each $direction in top, right, bottom, left {
+    @each $size-name, $size-value in $position-offsets {
+      .#{$direction}-#{$size-name} {
+        #{$direction}: #{$size-value} !important;
+      }
+    }
+  }
+}
+@mixin generate-z-index-classes {
+  @each $name, $value in $z-index-values {
+    .z-#{$name} {
+      z-index: #{$value} !important;
+    }
+  }
+}
+@mixin generate-overflow-classes {
+  @each $name, $value in $overflow-values {
+    .overflow-#{$name} {
+      overflow: #{$value} !important;
+    }
+  }
+}
+@mixin generate-overflow-axis-classes {
+  @each $axis, $values in (x: $overflow-x-values, y: $overflow-y-values) {
+    @each $name, $value in $values {
+      .overflow-#{$axis}-#{$name} {
+        overflow-#{$axis}: #{$value} !important;
+      }
+    }
+  }
+}
+@each $breakpoint, $breakpoint-value in $breakpoints {
+  @media (min-width: #{$breakpoint-value}) {
+    @each $name, $value in $position-values {
+      .position-#{$breakpoint}-#{$name} {
+        position: #{$value} !important;
+      }
+    }
+    @each $direction in top, right, bottom, left {
+      @each $size-name, $size-value in $position-offsets {
+        .#{$direction}-#{$breakpoint}-#{$size-name} {
+          #{$direction}: #{$size-value} !important;
+        }
+      }
+    }
+    @each $name, $value in $z-index-values {
+      .z-#{$breakpoint}#{$name} {
+        z-index: #{$value} !important;
+      }
+    }
+    @each $name, $value in $overflow-values {
+      .overflow-#{$breakpoint}-#{$name} {
+        overflow: #{$value} !important;
+      }
+    }
+    @each $axis, $values in (x: $overflow-x-values, y: $overflow-y-values) {
+      @each $name, $value in $values {
+        .overflow-#{$breakpoint}-#{$axis}-#{$name} {
+          overflow-#{$axis}: #{$value} !important;
+        }
+      }
+    }
+  }
+}
+@each $name, $value in $position-values {
+  .position-#{$name} {
+    position: #{$value} !important;
+  }
+}
+@each $direction in top, right, bottom, left {
+  @each $size-name, $size-value in $position-offsets {
+    .#{$direction}-#{$size-name} {
+      #{$direction}: #{$size-value} !important;
+    }
+  }
+}
+@each $name, $value in $z-index-values {
+  .z-#{$name} {
+    z-index: #{$value} !important;
+  }
+}
+@each $name, $value in $overflow-values {
+  .overflow-#{$name} {
+    overflow: #{$value} !important;
+  }
+}
+@each $axis, $values in (x: $overflow-x-values, y: $overflow-y-values) {
+  @each $name, $value in $values {
+    .overflow-#{$axis}-#{$name} {
+      overflow-#{$axis}: #{$value} !important;
+    }
+  }
+}
+
+.w-fit-content {
+  width: fit-content !important;
+}
+.h-fit-content {
+  height: fit-content !important;
+}
+
+$utilities: (
+  "border": (
+    "prefix": "br",
+    "values": (
+      "none": none,
+    ),
+  ),
+  "border-radius": (
+    "prefix": "br",
+    "values": (
+      "pill": 50rem,
+      "full": 50%,
+    ),
+  ),
+  "border-top-left-radius": (
+    "prefix": "br-tl",
+    "values": (
+      "pill": 50rem,
+      "full": 50%,
+    ),
+  ),
+  "border-bottom-left-radius": (
+    "prefix": "br-bl",
+    "values": (
+      "pill": 50rem,
+      "full": 50%,
+    ),
+  ),
+  "border-bottom-right-radius": (
+    "prefix": "br-br",
+    "values": (
+      "pill": 50rem,
+      "full": 50%,
+    ),
+  ),
+  "border-top-right-radius": (
+    "prefix": "br-tr",
+    "values": (
+      "pill": 50rem,
+      "full": 50%,
+    ),
+  ),
+  "border-style": (
+    "prefix": "br-s",
+    "values": (
+      "solid": solid,
+      "dashed": dashed,
+      "dotted": dotted,
+      "double": double,
+      "none": none,
+    ),
+  ),
+
+  "border-bottom-style": (
+    "prefix": "bs-b",
+    "values": (
+      "solid": solid,
+      "dashed": dashed,
+      "dotted": dotted,
+      "double": double,
+      "none": none,
+    ),
+  ),
+  "border-top-style": (
+    "prefix": "bs-t",
+    "values": (
+      "solid": solid,
+      "dashed": dashed,
+      "dotted": dotted,
+      "double": double,
+      "none": none,
+    ),
+  ),
+  "border-left-style": (
+    "prefix": "bs-l",
+    "values": (
+      "solid": solid,
+      "dashed": dashed,
+      "dotted": dotted,
+      "double": double,
+      "none": none,
+    ),
+  ),
+  "border-right-style": (
+    "prefix": "bs-r",
+    "values": (
+      "solid": solid,
+      "dashed": dashed,
+      "dotted": dotted,
+      "double": double,
+      "none": none,
+    ),
+  ),
+
+  "font-weight": (
+    "prefix": "fw",
+    "values": (
+      "100": 100,
+      "200": 200,
+      "300": 300,
+      "400": 400,
+      "500": 500,
+      "600": 600,
+      "700": 700,
+      "800": 800,
+      "900": 900,
+      "bold": bold,
+      "bolder": bolder,
+      "lighter": lighter,
+      "normal": normal,
+    ),
+  ),
+  "font-style": (
+    "prefix": "f-style",
+    "values": (
+      "italic": italic,
+      "normal": normal,
+    ),
+  ),
+  "text-align": (
+    "prefix": "text",
+    "values": (
+      "left": left,
+      "right": right,
+      "center": center,
+      "justify": justify,
+    ),
+  ),
+  "text-decoration": (
+    "prefix": "text-decoration",
+    "values": (
+      "underline": underline,
+      "line-through": line-through,
+      "none": none,
+    ),
+  ),
+  "text-transform": (
+    "prefix": "text-transform",
+    "values": (
+      "uppercase": uppercase,
+      "lowercase": lowercase,
+      "capitalize": capitalize,
+      "none": none,
+    ),
+  ),
+  "text-overflow": (
+    "prefix": "text-overflow",
+    "values": (
+      "clip": clip,
+      "ellipsis": ellipsis,
+    ),
+  ),
+  "white-space": (
+    "prefix": "white-space",
+    "values": (
+      "normal": normal,
+      "nowrap": nowrap,
+      "pre": pre,
+      "pre-line": pre-line,
+      "pre-wrap": pre-wrap,
+    ),
+  ),
+  "outline-offset": (
+    "prefix": "out-off",
+    "values": (
+      "0": 0,
+      "1": 1px,
+      "2": 2px,
+      "3": 3px,
+      "4": 4px,
+    ),
+  ),
+  "outline-style": (
+    "prefix": "out-s",
+    "values": (
+      "solid": solid,
+      "dashed": dashed,
+      "dotted": dotted,
+      "double": double,
+      "none": none,
+    ),
+  ),
+  "cursor": (
+    "prefix": "cursor",
+    "values": (
+      "pointer": pointer,
+      "default": default,
+      "help": help,
+      "move": move,
+      "progress": progress,
+      "wait": wait,
+      "text": text,
+      "crosshair": crosshair,
+      "not-allowed": not-allowed,
+      "grab": grab,
+      "grabbing": grabbing,
+      "zoom-in": zoom-in,
+      "zoom-out": zoom-out,
+      "auto": auto,
+    ),
+  ),
+  "pointer-events": (
+    "prefix": "pointer-events",
+    "values": (
+      "none": none,
+      "auto": auto,
+      "visiblePainted": visiblePainted,
+      "visibleFill": visibleFill,
+      "visibleStroke": visibleStroke,
+      "visible": visible,
+      "painted": painted,
+      "fill": fill,
+      "stroke": stroke,
+      "all": all,
+      "inherit": inherit,
+      "initial": initial,
+      "unset": unset,
+      "revert": revert,
+      "revert-layer": revert,
+    ),
+  ),
+);
+.outline-none {
+  outline: none;
+}
+// // generate utility classes
+@each $property, $map in $utilities {
+  $prefix: map.get($map, "prefix");
+  $values: map.get($map, "values");
+
+  @each $k, $v in $values {
+    .#{$prefix}-#{$k} {
+      #{$property}: $v;
+    }
+  }
+}
+
+@for $i from 1 through 10 {
+  .h-#{$i*10}px {
+    height: #{$i * 10}px;
+  }
+}
+
+@for $i from 1 through 10 {
+  .h-#{($i*10) + 5}px {
+    height: #{($i * 10) + 5}px;
+  }
+}
+
+@each $break-point, $break-point-value in $breakpoints {
+  @media screen and (min-width: $break-point-value) {
+    @each $property, $map in $utilities {
+      $prefix: map.get($map, "prefix");
+      $values: map.get($map, "values");
+
+      @each $k, $v in $values {
+        .#{$prefix}-#{$break-point}-#{$k} {
+          #{$property}: $v;
+        }
+      }
+    }
+  }
+}
+$sides: (
+  t: border-top,
+  r: border-right,
+  b: border-bottom,
+  l: border-left,
+  x: (
+    border-left,
+    border-right,
+  ),
+  y: (
+    border-top,
+    border-bottom,
+  ),
+);
+
+@each $side, $property in $sides {
+  .br-#{$side}-only {
+    border-width: 0; // اخفاء كل الجوانب
+
+    @if meta.type-of($property) == list {
+      @each $prop in $property {
+        #{$prop}-width: initial; // إظهار الجوانب المدمجة (x أو y)
+      }
+    } @else {
+      #{$property}-width: initial; // إظهار الجانب الفردي
+    }
+  }
+}
+$border-sizes: (
+  1: 0.05rem,
+  2: 0.1rem,
+  3: 0.15rem,
+  4: 0.2rem,
+  5: 0.25rem,
+  6: 0.5rem,
+  7: 1rem,
+  8: 1.5rem,
+);
+
+$sides: (
+  t: border-top,
+  r: border-right,
+  b: border-bottom,
+  l: border-left,
+  x: (
+    border-left,
+    border-right,
+  ),
+  y: (
+    border-top,
+    border-bottom,
+  ),
+);
+
+@each $size, $value in $border-sizes {
+  // للجوانب كلها
+  .br-w-#{$size} {
+    border-width: $value;
+  }
+  .outline-w-#{$size} {
+    outline-width: $value;
+  }
+  // للجوانب الفردية
+  @each $side, $property in $sides {
+    .br-w-#{$side}-#{$size} {
+      @if meta.type-of($property) == list {
+        @each $prop in $property {
+          #{$prop}-width: $value;
+        }
+      } @else {
+        #{$property}-width: $value;
+      }
+    }
+  }
+}
+$border-radius: (
+  0: 0,
+  1: 0.125rem,
+  2: 0.25rem,
+  3: 0.5rem,
+  4: 0.75rem,
+  5: 1rem,
+  6: 1.5rem,
+  7: 2rem,
+  8: 3rem,
+  9: 4rem,
+  10: 6rem,
+  11: 8rem,
+  12: 12rem,
+  13: 16rem,
+  14: 24rem,
+  15: 32rem,
+  16: 48rem,
+  17: 64rem,
+  18: 96rem,
+  19: 128rem,
+  20: 192rem,
+);
+
+$border-radius-sides: (
+  tl: border-top-left-radius,
+  tr: border-top-right-radius,
+  bl: border-bottom-left-radius,
+  br: border-bottom-right-radius,
+);
+
+@each $size, $value in $border-radius {
+  .br-r-#{$size} {
+    border-radius: $value;
+  }
+
+  @each $side, $property in $border-radius-sides {
+    .br-r-#{$side}-#{$size} {
+      #{$property}: $value;
+    }
+  }
+}
+
+.top-0 {
+  top: 0;
+}
+
+.left-0 {
+  left: 0;
+}
+
+.right-0 {
+  right: 0;
+}
+
+.bottom-0 {
+  bottom: 0;
+}
+
+.placeholder-transparent {
+  &::-webkit-input-placeholder {
+    color: transparent;
+  }
+
+  &:-moz-placeholder {
+    color: transparent;
+  }
+
+  &::-moz-placeholder {
+    color: transparent;
+  }
+
+  &:-ms-input-placeholder {
+    color: transparent;
+  }
+
+  &::-ms-input-placeholder {
+    color: transparent;
+  }
+
+  &::placeholder {
+    color: transparent;
+  }
+}
+
+.form-field-height {
+  height: 28px;
+}
+
+.br-r-0 {
+  border-radius: 0;
+}
+$object-fit-values: (
+  contain: contain,
+  cover: cover,
+  fill: fill,
+  none: none,
+  scale-down: scale-down,
+);
+
+@each $name, $value in $object-fit-values {
+  .obj-fit-#{$name} {
+    object-fit: $value;
+  }
+}
+
+$background-size-values: (
+  auto: auto,
+  cover: cover,
+  contain: contain,
+);
+
+@each $name, $value in $background-size-values {
+  .bg-size-#{$name} {
+    background-size: $value;
+  }
+}
+
+$background-position-values: (
+  top: top,
+  right: right,
+  bottom: bottom,
+  left: left,
+  center: center,
+);
+
+@each $name, $value in $background-position-values {
+  .bg-position-#{$name} {
+    background-position: $value;
+  }
+}
+
+$background-repeat-values: (
+  repeat: repeat,
+  repeat-x: repeat-x,
+  repeat-y: repeat-y,
+  no-repeat: no-repeat,
+);
+
+@each $name, $value in $background-repeat-values {
+  .bg-repeat-#{$name} {
+    background-repeat: $value;
+  }
+}
+
+$background-origin-values: (
+  border-box: border-box,
+  padding-box: padding-box,
+  content-box: content-box,
+);
+
+@each $name, $value in $background-origin-values {
+  .bg-origin-#{$name} {
+    background-origin: $value;
+  }
+}

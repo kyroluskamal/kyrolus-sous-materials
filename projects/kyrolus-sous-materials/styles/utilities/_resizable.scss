@@ -1,0 +1,78 @@
+.resize-handle {
+  position: absolute;
+  background: transparent;
+  z-index: 1000;
+}
+
+/* Corner handles */
+.resize-handle-nw,
+.resize-handle-ne,
+.resize-handle-sw,
+.resize-handle-se {
+  width: 10px;
+  height: 10px;
+}
+
+/* Edge handles */
+.resize-handle-n,
+.resize-handle-s {
+  height: 6px;
+  left: 10px;
+  right: 10px;
+  cursor: ns-resize;
+}
+
+.resize-handle-e,
+.resize-handle-w {
+  width: 6px;
+  top: 10px;
+  bottom: 10px;
+  cursor: ew-resize;
+}
+
+/* Position and cursors for all handles */
+.resize-handle-n {
+  top: -3px;
+  cursor: n-resize;
+}
+.resize-handle-s {
+  bottom: -3px;
+  cursor: s-resize;
+}
+.resize-handle-e {
+  right: -3px;
+  cursor: e-resize;
+}
+.resize-handle-w {
+  left: -3px;
+  cursor: w-resize;
+}
+.resize-handle-ne {
+  top: -5px;
+  right: -5px;
+  cursor: ne-resize;
+}
+.resize-handle-nw {
+  top: -5px;
+  left: -5px;
+  cursor: nw-resize;
+}
+.resize-handle-se {
+  bottom: -5px;
+  right: -5px;
+  cursor: se-resize;
+}
+.resize-handle-sw {
+  bottom: -5px;
+  left: -5px;
+  cursor: sw-resize;
+}
+
+/* Visual indicators on hover */
+.resize-handle:hover::after {
+  content: "";
+  position: absolute;
+  background: rgba(0, 120, 255, 0.3);
+  border: 1px solid rgba(0, 120, 255, 0.8);
+  inset: 0;
+}

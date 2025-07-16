@@ -1,0 +1,345 @@
+@use "../abstracts/variables" as *;
+$grid-columns: 1 to 12; // Adjust as needed
+$grid-rows: 1 to 12; // Adjust as needed
+$grid-gaps: (
+  0: 0,
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 1rem,
+  4: 1.5rem,
+  5: 3rem,
+);
+$grid-align-items-values: (
+  start: start,
+  end: end,
+  center: center,
+  baseline: baseline,
+  stretch: stretch,
+);
+$justify-align-content-values: (
+  start: start,
+  end: end,
+  center: center,
+  stretch: stretch,
+  between: space-between,
+  around: space-around,
+  evenly: space-evenly,
+);
+$grid-auto-flow-values: (
+  row: row,
+  column: column,
+  dense: dense,
+  "row-dense": row dense,
+  "column-dense": column dense,
+);
+$grid-justify-content-values: (
+  start: start,
+  end: end,
+  center: center,
+  stretch: stretch,
+  between: space-between,
+  around: space-around,
+  evenly: space-evenly,
+);
+$grid-align-self-values: (
+  auto: auto,
+  start: start,
+  end: end,
+  center: center,
+  baseline: baseline,
+  stretch: stretch,
+  safe: safe,
+  unsafe: unsafe,
+);
+@mixin generate-grid-template-columns-classes {
+  @for $i from 1 through 12 {
+    .g-cols-#{$i} {
+      grid-template-columns: repeat(#{$i}, 1fr) !important;
+    }
+  }
+}
+@mixin generate-grid-template-rows-classes {
+  @for $i from 1 through 12 {
+    .g-rows-#{$i} {
+      grid-template-rows: repeat(#{$i}, 1fr);
+    }
+  }
+}
+@mixin generate-grid-gap-classes {
+  @each $gap-name, $gap-size in $grid-gaps {
+    .gap-#{$gap-name} {
+      gap: $gap-size;
+    }
+    .row-gap-#{$gap-name} {
+      row-gap: $gap-size;
+    }
+    .col-gap-#{$gap-name} {
+      column-gap: $gap-size;
+    }
+  }
+}
+@mixin generate-grid-auto-flow-classes {
+  @each $name, $value in $grid-auto-flow-values {
+    .grid-auto-flow-#{$name} {
+      grid-auto-flow: $value;
+    }
+  }
+}
+@mixin generate-grid-column-row-classes {
+  @for $i from 1 through 13 {
+    // Assuming 12 columns/rows
+    .col-start-#{$i} {
+      grid-column-start: #{$i};
+    }
+    .col-end-#{$i} {
+      grid-column-end: #{$i};
+    }
+    .row-start-#{$i} {
+      grid-row-start: #{$i};
+    }
+    .row-end-#{$i} {
+      grid-row-end: #{$i};
+    }
+  }
+}
+@mixin generate-grid-column-row-span-classes {
+  @for $i from 1 through 12 {
+    .col-span-#{$i} {
+      grid-column: span #{$i} / span #{$i};
+    }
+    .row-span-#{$i} {
+      grid-row: span #{$i} / span #{$i};
+    }
+  }
+}
+@mixin generate-justify-items-classes($responsive: true) {
+  @each $name, $value in $grid-align-items-values {
+    @if $responsive {
+      @each $breakpoint, $breakpoint-value in $breakpoints {
+        @media (min-width: $breakpoint-value) {
+          .g-justify-items-#{$breakpoint}-#{$name} {
+            justify-items: #{$value} !important;
+          }
+        }
+      }
+    } @else {
+      .g-justify-items-#{$name} {
+        justify-items: #{$value} !important;
+      }
+    }
+  }
+}
+@mixin generate-grid-align-items-classes($responsive: true) {
+  @each $name, $value in $grid-align-items-values {
+    @if $responsive {
+      @each $breakpoint, $breakpoint-value in $breakpoints {
+        @media (min-width: $breakpoint-value) {
+          .g-align-items-#{$breakpoint}-#{$name} {
+            align-items: #{$value} !important;
+          }
+        }
+      }
+    } @else {
+      .g-align-items-#{$name} {
+        align-items: #{$value} !important;
+      }
+    }
+  }
+}
+@mixin generate-grid-justify-content-classes($responsive: true) {
+  @each $name, $value in $grid-justify-content-values {
+    @if $responsive {
+      @each $breakpoint, $breakpoint-value in $breakpoints {
+        @media (min-width: $breakpoint-value) {
+          .g-justify-content-#{$breakpoint}-#{$name} {
+            justify-content: #{$value} !important;
+          }
+        }
+      }
+    } @else {
+      .g-justify-content-#{$name} {
+        justify-content: #{$value} !important;
+      }
+    }
+  }
+}
+
+@mixin generate-align-content-classes {
+  @each $name, $value in $justify-align-content-values {
+    .g-align-content-#{$name} {
+      align-content: $value !important;
+    }
+  }
+}
+@mixin generate-justify-self-classes {
+  @each $name, $value in $grid-align-items-values {
+    .g-justify-self-#{$name} {
+      justify-self: $value !important;
+    }
+  }
+}
+@mixin generate-grid-align-self-classes($responsive: false) {
+  @each $name, $value in $grid-align-self-values {
+    @if $responsive {
+      @each $breakpoint, $breakpoint-value in $breakpoints {
+        @media (min-width: #{$breakpoint-value}) {
+          .g-align-self-#{$breakpoint}-#{$name} {
+            align-self: #{$value} !important;
+          }
+        }
+      }
+    } @else {
+      .g-align-self-#{$name} {
+        align-self: #{$value} !important;
+      }
+    }
+  }
+}
+@mixin generate-grid-template-columns-classes-responsive {
+  @each $breakpoint, $breakpoint-value in $breakpoints {
+    @media (min-width: #{$breakpoint-value}) {
+      @for $i from 1 through 12 {
+        .g-cols-#{$breakpoint}-#{$i} {
+          grid-template-columns: repeat(#{$i}, 1fr) !important;
+        }
+      }
+    }
+  }
+}
+
+@mixin generate-grid-template-rows-classes-responsive {
+  @each $breakpoint, $breakpoint-value in $breakpoints {
+    @media (min-width: #{$breakpoint-value}) {
+      @for $i from 1 through 12 {
+        .grid-rows-#{$breakpoint}-#{$i} {
+          grid-template-rows: repeat(#{$i}, 1fr) !important;
+        }
+      }
+    }
+  }
+}
+
+@mixin generate-grid-gap-classes-responsive {
+  @each $breakpoint, $breakpoint-value in $breakpoints {
+    @media (min-width: #{$breakpoint-value}) {
+      @each $gap-name, $gap-size in $grid-gaps {
+        .grid-#{$breakpoint}-gap-#{$gap-name} {
+          gap: #{$gap-size} !important;
+        }
+        .grid-#{$breakpoint}-row-gap-#{$gap-name} {
+          row-gap: #{$gap-size} !important;
+        }
+        .grid-#{$breakpoint}-col-gap-#{$gap-name} {
+          column-gap: #{$gap-size} !important;
+        }
+      }
+    }
+  }
+}
+
+@mixin generate-grid-auto-flow-classes-responsive {
+  @each $breakpoint, $breakpoint-value in $breakpoints {
+    @media (min-width: #{$breakpoint-value}) {
+      @each $name, $value in $grid-auto-flow-values {
+        .grid-#{$breakpoint}-auto-flow-#{$name} {
+          grid-auto-flow: #{$value} !important;
+        }
+      }
+    }
+  }
+}
+
+@mixin generate-grid-column-row-classes-responsive {
+  @each $breakpoint, $breakpoint-value in $breakpoints {
+    @media (min-width: #{$breakpoint-value}) {
+      @for $i from 1 through 13 {
+        .grid-#{$breakpoint}-col-start-#{$i} {
+          grid-column-start: #{$i} !important;
+        }
+        .grid-#{$breakpoint}-col-end-#{$i} {
+          grid-column-end: #{$i} !important;
+        }
+        .grid-#{$breakpoint}-row-start-#{$i} {
+          grid-row-start: #{$i} !important;
+        }
+        .grid-#{$breakpoint}-row-end-#{$i} {
+          grid-row-end: #{$i} !important;
+        }
+      }
+    }
+  }
+}
+
+@mixin generate-grid-column-row-span-classes-responsive {
+  @each $breakpoint, $breakpoint-value in $breakpoints {
+    @media (min-width: #{$breakpoint-value}) {
+      @for $i from 1 through 12 {
+        .grid-#{$breakpoint}-col-span-#{$i} {
+          grid-column: span #{$i} / span #{$i} !important;
+        }
+        .grid-#{$breakpoint}-row-span-#{$i} {
+          grid-row: span #{$i} / span #{$i} !important;
+        }
+      }
+    }
+  }
+}
+
+@mixin generate-align-content-classes-responsive {
+  @each $breakpoint, $breakpoint-value in $breakpoints {
+    @media (min-width: #{$breakpoint-value}) {
+      @each $name, $value in $justify-align-content-values {
+        .g-align-content-#{$breakpoint}-#{$name} {
+          align-content: #{$value} !important;
+        }
+      }
+    }
+  }
+}
+
+@mixin generate-justify-self-classes-responsive {
+  @each $breakpoint, $breakpoint-value in $breakpoints {
+    @media (min-width: #{$breakpoint-value}) {
+      @each $name, $value in $grid-align-items-values {
+        .g-justify-self-#{$breakpoint}-#{$name} {
+          justify-self: #{$value} !important;
+        }
+      }
+    }
+  }
+}
+
+// توليد فئات Grid غير الاستجابية
+@include generate-grid-template-columns-classes;
+@include generate-grid-template-rows-classes;
+@include generate-grid-gap-classes;
+@include generate-grid-auto-flow-classes;
+@include generate-grid-column-row-classes;
+@include generate-grid-column-row-span-classes;
+@include generate-align-content-classes;
+@include generate-justify-self-classes;
+@include generate-grid-align-self-classes;
+// توليد فئات Grid الاستجابية
+@include generate-grid-template-columns-classes-responsive;
+@include generate-grid-template-rows-classes-responsive;
+@include generate-grid-gap-classes-responsive;
+@include generate-grid-auto-flow-classes-responsive;
+@include generate-grid-column-row-classes-responsive;
+@include generate-grid-column-row-span-classes-responsive;
+@include generate-align-content-classes-responsive;
+@include generate-justify-self-classes-responsive;
+
+// Grid Templates
+
+// Grid Gaps
+
+// Grid Auto Flow
+
+// Grid Column/Row Span
+
+// Alignment
+@include generate-justify-items-classes(true);
+@include generate-grid-align-items-classes(true);
+@include generate-grid-justify-content-classes(true);
+@include generate-align-content-classes;
+@include generate-justify-self-classes;

@@ -1,0 +1,221 @@
+@use "sass:map";
+@use "sass:string";
+@use "maps" as *;
+@use "variables" as *;
+@mixin elevation($level) {
+  @if map.has-key($elevations, $level) {
+    box-shadow: map.get($elevations, $level);
+  } @else {
+    @warn "Elevation level #{$level} is not defined.";
+  }
+}
+//display property classes
+@mixin generate-display-classes {
+  @each $name, $value in $display-values {
+    .d-#{$name} {
+      display: $value;
+    }
+  }
+}
+@mixin generate-responsive-display-classes {
+  @each $breakpoint, $breakpoint-value in $breakpoints {
+    @media (max-width: $breakpoint-value) {
+      @each $name, $value in $display-values {
+        .d-#{$breakpoint}-#{$name} {
+          display: $value;
+        }
+      }
+    }
+  }
+}
+
+//##########################################################################
+//###################       region Flexbox         #########################
+//##########################################################################
+@each $breakpoint, $breakpoint-value in $breakpoints {
+  @media (max-width: $breakpoint-value) {
+    @each $name, $value in $flex-direction-values {
+      .flex-#{$breakpoint}-#{$name} {
+        flex-direction: $value;
+      }
+    }
+    @each $name, $value in $flex-wrap-values {
+      .flex-wrap-#{$breakpoint}-#{$name} {
+        flex-wrap: $value;
+      }
+    }
+    @each $name, $value in $flex-justify-content-values {
+      .f-justify-content-#{$breakpoint}-#{$name} {
+        justify-content: #{$value} !important;
+      }
+    }
+    @each $name, $value in $align-items-values {
+      .f-align-items-#{$breakpoint}-#{$name} {
+        align-items: $value;
+      }
+    }
+    @each $name, $value in $flex-align-content-values {
+      .f-align-content-#{$breakpoint}-#{$name} {
+        align-content: #{$value} !important;
+      }
+    }
+    @each $name, $value in $order-values {
+      .order-#{$breakpoint}-#{$name} {
+        order: $value;
+      }
+    }
+    @each $name, $value in $flex-grow-values {
+      .flex-grow-#{$breakpoint}-#{$name} {
+        flex-grow: $value;
+      }
+    }
+    @each $name, $value in $flex-shrink-values {
+      .flex-shrink-#{$breakpoint}-#{$name} {
+        flex-shrink: $value;
+      }
+    }
+    @each $name, $value in $flex-basis-values {
+      .flex-basis-#{$breakpoint}-#{$name} {
+        flex-basis: $value;
+      }
+    }
+    @each $name, $value in $flex-values {
+      .flex-#{$breakpoint}-#{$name} {
+        flex: $value;
+      }
+    }
+    @each $name, $value in $flex-align-self-values {
+      .f-align-self-#{$breakpoint}-#{$name} {
+        align-self: #{$value} !important;
+      }
+    }
+  }
+}
+@each $name, $value in $flex-align-self-values {
+  .f-align-self-#{$name} {
+    align-self: #{$value} !important;
+  }
+}
+@each $name, $value in $flex-values {
+  .flex-#{$name} {
+    flex: $value;
+  }
+}
+@each $name, $value in $flex-basis-values {
+  .flex-basis-#{$name} {
+    flex-basis: $value;
+  }
+}
+@each $name, $value in $flex-shrink-values {
+  .flex-shrink-#{$name} {
+    flex-shrink: $value;
+  }
+}
+@each $name, $value in $flex-grow-values {
+  .flex-grow-#{$name} {
+    flex-grow: $value;
+  }
+}
+@each $name, $value in $order-values {
+  .order-#{$name} {
+    order: $value;
+  }
+}
+@each $name, $value in $flex-align-content-values {
+  .f-align-content-#{$name} {
+    align-content: #{$value} !important;
+  }
+}
+@each $name, $value in $flex-justify-content-values {
+  .f-justify-content-#{$name} {
+    justify-content: #{$value} !important;
+  }
+}
+@each $name, $value in $flex-direction-values {
+  .flex-#{$name} {
+    flex-direction: $value;
+  }
+}
+@each $name, $value in $flex-wrap-values {
+  .flex-wrap-#{$name} {
+    flex-wrap: $value;
+  }
+}
+@each $name, $value in $align-items-values {
+  .f-align-items-#{$name} {
+    align-items: $value;
+  }
+}
+
+//##########################################################################
+//###################       width and hright         #########################
+//##########################################################################
+// _mixins.scss
+
+@mixin generate-width-classes {
+  @each $unit-suffix, $unit in $units {
+    @each $size-name, $size-value in $sizes {
+      $class-name: if(
+        $unit-suffix == "",
+        "w-#{$size-name}",
+        "w-#{$size-name}#{$unit-suffix}"
+      );
+      $value: if(
+        $size-value == auto,
+        auto,
+        string.unquote("#{$size-value}#{$unit}")
+      );
+      .#{$class-name} {
+        width: $value;
+      }
+    }
+  }
+}
+@mixin generate-height-classes {
+  @each $unit-suffix, $unit in $units {
+    @each $size-name, $size-value in $sizes {
+      $class-name: if(
+        $unit-suffix == "",
+        "h-#{$size-name}",
+        "h-#{$size-name}#{$unit-suffix}"
+      );
+      $value: if(
+        $size-value == auto,
+        auto,
+        string.unquote("#{$size-value}#{$unit}")
+      );
+      .#{$class-name} {
+        height: $value;
+      }
+    }
+  }
+}
+@mixin ripple-effect {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+
+  &:active::after {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 1;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+}
+.ripple {
+  @include ripple-effect;
+}

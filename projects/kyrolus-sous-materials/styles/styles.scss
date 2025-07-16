@@ -1,0 +1,149 @@
+@use "./abstracts/variables" as *;
+@use "./base/reset" as *;
+@use "./base/base" as *;
+@use "./abstracts/maps" as *;
+@use "./abstracts/mixins" as *;
+@use "./utilities/googleicons" as *;
+@use "./utilities/spacing" as *;
+@use "./utilities/resizable" as *;
+@use "./utilities/draggable" as *;
+
+@use "./base/typography" as *;
+
+//Colors
+@use "./abstracts/colors" as *;
+
+//Components
+@use "./components/card" as *;
+@use "./components/button" as *;
+@use "./components/input" as *;
+@use "./components/loaders" as *;
+
+//Utilities
+@use "./utilities/utilities" as *;
+
+//grid
+@use "./layout/grid" as *;
+
+@use "./utilities/elevations" as *;
+
+@use "./components/accordion" as *;
+@use "./components/table" as *;
+@use "./components/paginator" as *;
+@include generate-display-classes;
+@include generate-responsive-display-classes;
+@include generate-width-classes;
+@include generate-height-classes;
+
+// main.scss (continued)
+
+// Grid Display
+.backdrop {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  visibility: hidden;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  z-index: 2;
+}
+
+.backdrop-show {
+  visibility: visible;
+  background-color: rgba(12, 10, 10, 0.57);
+}
+
+.navbar-height {
+  height: 56px;
+}
+
+* {
+  outline-offset: 3px;
+}
+
+.default-transition {
+  -webkit-transition-duration: 225ms;
+  -moz-transition-duration: 225ms;
+  -o-transition-duration: 225ms;
+  transition-duration: 225ms;
+  -webkit-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  -moz-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  -o-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition-delay: 0s;
+  -moz-transition-delay: 0s;
+  -o-transition-delay: 0s;
+  transition-delay: 0s;
+}
+
+.default-filter-grayscale {
+  filter: grayscale(1);
+  -webkit-filter: grayscale(1);
+  -moz-filter: grayscale(1);
+  -o-filter: grayscale(1);
+}
+
+.hover-effect {
+  &:hover {
+    filter: grayscale(0.6);
+    -webkit-filter: grayscale(0.6);
+    -moz-filter: grayscale(0.6);
+    -o-filter: grayscale(0.6);
+  }
+}
+.text-stroke-white {
+  text-shadow: 0.8px 0 0 white, 0 0.5px 0 white, -0.5px 0 0 white,
+    0 -0.6px 0 white;
+}
+
+.text-stroke-black {
+  text-shadow: 0.8px 0 0 black, 0 0.5px 0 black, -0.5px 0 0 black,
+    0 -0.6px 0 black;
+}
+
+.btn:hover.text-stroke-black {
+  text-shadow: 0.8px 0 0 white, 0 0.5px 0 white, -0.5px 0 0 white,
+    0 -0.6px 0 white;
+}
+
+.btn:hover.text-stroke-white {
+  text-shadow: 0.8px 0 0 black, 0 0.5px 0 black, -0.5px 0 0 black,
+    0 -0.6px 0 black;
+}
+@keyframes ripple-animation {
+  to {
+    transform: scale(9);
+    opacity: 0;
+    -webkit-transform: scale(9);
+    -moz-transform: scale(9);
+    -ms-transform: scale(9);
+    -o-transform: scale(9);
+  }
+}
+.scale-0 {
+  transform: scale(0);
+  -webkit-transform: scale(0);
+  -moz-transform: scale(0);
+  -ms-transform: scale(0);
+  -o-transform: scale(0);
+}
+
+.sidenav-toggle[opened="false"] {
+  transform: translateX(-100%);
+}
+.sidenav-toggle[opened="true"] {
+  transform: translateX(0);
+}
+
+ks-dashboard-layout[ng-reflect-sidebar-mode="side"]
+  .sidenav-toggle[opened="false"]
+  + div {
+  padding-left: 0px;
+}
+ks-dashboard-layout[ng-reflect-sidebar-mode="side"]
+  .sidenav-toggle[opened="true"]
+  + div {
+  padding-left: var(--sidebar-width);
+}

@@ -1,0 +1,59 @@
+// Fade animations
+.fade {
+  transition: opacity 0.3s ease-in-out;
+
+  &-enter {
+    opacity: 0;
+    &.active { opacity: 1; }
+  }
+
+  &-exit {
+    opacity: 1;
+    &.active { opacity: 0; }
+  }
+}
+
+// Scale animations
+.scale {
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+// Slide animations
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-left { animation: slideInLeft 0.5s ease-out; }
+.slide-right { animation: slideInRight 0.5s ease-out; }
+
+// Rotate animation
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.rotate {
+  animation: rotate 2s linear infinite;
+}

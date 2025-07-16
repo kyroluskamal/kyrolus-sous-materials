@@ -1,0 +1,30 @@
+<div class="toast-container">
+
+  @for (toast of toastService.sortedToasts(); track toast.id) {
+  <div class="toast" [class]="toast.type" [@toastAnimation] (mouseenter)="pauseTimer(toast)"
+    (mouseleave)="resumeTimer(toast)">
+    @if(toast.icon){
+    <span class="toast-icon" [class]="toast.type" [ksIcon]="toast.icon.name" [iconType]="toast.icon.type"></span>
+    }
+    <div class="toast-body">
+      <div class="toast-header">
+
+        <span class="toast-title">{{ toast.title }}</span>
+
+        <button class="close-button" (click)="removeToast(toast)">×</button>
+      </div>
+      <div class="toast-content">
+        <p>{{ toast.message }}</p>
+        @if (toast.actionText && toast.actionCallback) {
+        <button class="action-button" (click)="handleAction(toast)">
+          {{ toast.actionText }}
+        </button>
+        }
+      </div>
+    </div>
+    <div class="progress-bar" [style.animation-duration.ms]="toast.duration " [class.paused]="toast.isPaused?.()"
+      [class]="toast.type">
+    </div>
+  </div>
+  }
+</div>

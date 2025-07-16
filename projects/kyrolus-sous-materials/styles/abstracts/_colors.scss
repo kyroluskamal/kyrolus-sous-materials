@@ -1,0 +1,108 @@
+@use "sass:map";
+@use "sass:color";
+@use "variables" as *;
+
+@for $i from 0 through 40 {
+  .opacity-#{$i * 10} {
+    opacity: $i * 10 * 1%;
+  }
+
+  @each $name, $color in $colors {
+    .bg-#{$name}-#{$i} {
+      background-color: color.change($color, $lightness: ($i * 2.5) * 1%);
+    }
+    .bg-hover-#{$name}-#{$i}:hover {
+      background-color: color.change($color, $lightness: ($i * 2.5) * 1%);
+    }
+    .text-#{$name}-#{$i} {
+      color: color.change($color, $lightness: ($i * 2.5) * 1%);
+    }
+
+    .br-#{$name}-#{$i} {
+      border-color: color.change($color, $lightness: ($i * 2.5) * 1%);
+    }
+    .outline-#{$name}-#{$i} {
+      outline-color: color.change($color, $lightness: ($i * 2.5) * 1%);
+    }
+
+    .fill-#{$name}-#{$i} {
+      fill: color.change($color, $lightness: ($i * 2.5) * 1%);
+    }
+
+    .br-c-x-#{$name}-#{$i} {
+      border-right-color: color.change($color, $lightness: ($i * 2.5) * 1%);
+      border-left-color: color.change($color, $lightness: ($i * 2.5) * 1%);
+    }
+
+    .br-c-y-#{$name}-#{$i} {
+      border-top-color: color.change($color, $lightness: ($i * 2.5) * 1%);
+      border-bottom-color: color.change($color, $lightness: ($i * 2.5) * 1%);
+    }
+
+    .br-c-t-#{$name}-#{$i} {
+      border-top-color: color.change($color, $lightness: ($i * 2.5) * 1%);
+    }
+
+    .br-c-r-#{$name}-#{$i} {
+      border-right-color: color.change($color, $lightness: ($i * 2.5) * 1%);
+    }
+
+    .br-c-b-#{$name}-#{$i} {
+      border-bottom-color: color.change($color, $lightness: ($i * 2.5) * 1%);
+    }
+
+    .br-c-l-#{$name}-#{$i} {
+      border-left-color: color.change($color, $lightness: ($i * 2.5) * 1%);
+    }
+
+    .box-shadow-#{$name}-#{$i} {
+      box-shadow: 0
+        0
+        #{$i *
+        2}px
+        color.change($color, $lightness: ($i * 2.5) * 1%);
+    }
+
+    .accent-#{$name}-#{$i} {
+      accent-color: color.change($color, $lightness: ($i * 2.5) * 1%);
+      color: $white;
+    }
+  }
+}
+
+@each $name, $color in $colors {
+  .bg-#{$name} {
+    background-color: $color;
+  }
+  .bg-hover-#{$name}:hover {
+    background-color: $color;
+  }
+  .text-#{$name} {
+    color: $color;
+  }
+  .br-#{$name} {
+    border-color: $color;
+  }
+  .box-shadow-#{$name} {
+    box-shadow: 0 0 7px rgba($color, 0.5);
+  }
+
+  .accent-#{$name} {
+    accent-color: $color;
+    color: $white;
+  }
+}
+
+.bg-white {
+  background-color: $white;
+}
+.text-white {
+  color: $white;
+}
+.bg-dark {
+  background-color: $dark-color;
+}
+
+.dashboard-bg {
+  background-color: #f5f5f5;
+}
