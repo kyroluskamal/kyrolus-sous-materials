@@ -10,3 +10,4 @@ export * from './prefix.directive';
 export * from './ripple.directive';
 export * from './avatar.directive';
 export * from './draggable.directive';
+export * from './toggle-class-on-scroll/toggle-class-on-scroll.directive';

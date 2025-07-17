@@ -3,5 +3,6 @@
   "dest": "../../dist/kyrolus-sous-materials",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "assets": ["./styles/**/*.*", "./assets/**/*.*", "./postbuild.js"]
 }
