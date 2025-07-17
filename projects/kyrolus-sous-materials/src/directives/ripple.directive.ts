@@ -12,7 +12,7 @@ export class RippleDirective {
     private readonly elRef: ElementRef<HTMLElement>
   ) {}
   @HostListener('click', ['$event'])
-  onclick() {
+  onclick(event: MouseEvent) {
     let span = this.renderer2.createElement('span');
     this.renderer2.appendChild(this.elRef.nativeElement, span);
     this.renderer2.setStyles(span, {

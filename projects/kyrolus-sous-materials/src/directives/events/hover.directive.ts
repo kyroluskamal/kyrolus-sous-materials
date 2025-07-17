@@ -27,7 +27,7 @@ export class HoverDirective extends StopEvent<MouseEvent> {
   }
 
   @HostListener('mouseleave', ['$event'])
-  onMouseLeave() {
+  onMouseLeave(event: MouseEvent) {
     this.toggler.set(false);
   }
 }

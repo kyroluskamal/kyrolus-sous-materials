@@ -4,10 +4,9 @@ import {
   HostListener,
   Inject,
   input,
-  DOCUMENT
+  DOCUMENT,
 } from '@angular/core';
 import { StopEvent } from '../stop-event';
-
 
 @Directive({
   selector: '[ksActive]',
@@ -17,8 +16,8 @@ export class ActiveDirective extends StopEvent<Event> {
   activeClasses = input<string>('');
   constructor(@Inject(DOCUMENT) private readonly document: Document) {
     super();
-    this.document.addEventListener('mouseup', () => {
-      this.onMouseUp();
+    this.document.addEventListener('mouseup', (e) => {
+      this.onMouseUp(e);
     });
   }
 
@@ -39,7 +38,7 @@ export class ActiveDirective extends StopEvent<Event> {
 
   @HostListener('mouseup', ['$event'])
   @HostListener('touchend', ['$event'])
-  onMouseUp() {
+  onMouseUp(event: Event) {
     this.toggler.set(false);
   }
 }

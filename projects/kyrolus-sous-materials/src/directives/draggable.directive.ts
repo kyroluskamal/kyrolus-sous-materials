@@ -61,7 +61,7 @@ export class DraggableDirective {
     this.onDrag.emit({ transform: traslate });
   }
   @HostListener('document:pointerup', ['$event'])
-  onMouseUp() {
+  onMouseUp(event: Event) {
     if (!this.isDragging()) return;
     this.isDragging.set(false);
 

@@ -190,7 +190,7 @@ export class DialogComponent implements AfterViewInit, OnInit {
     });
   }
   @HostListener('window:resize', ['$event'])
-  onResize(): void {
+  onResize(event: Event): void {
     this.applyBreakpoints();
   }
 }
