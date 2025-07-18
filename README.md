@@ -1,59 +1,73 @@
-# KyrolusSousMaterials
+ToggleClassOnScrollDirective
+A simple and efficient Angular directive that toggles a CSS class on an element based on the window's vertical scroll position.
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.0.
+This directive is built with modern Angular features, utilizing Signals for reactivity, and is designed to work efficiently in Zoneless applications.
 
-## Development server
+## Features
+* **Modern & Performant:** Built with Angular Signals for optimal performance in Zoneless applications.
+* **Easy to Use:** Requires only a single mandatory input (`ksToggleClassOnScroll`) to be functional.
+* **Customizable:** Allows specifying a scroll offset (`ksScrollOffset`) to control when the class is toggled.
 
-To start a local development server, run:
+## Usage & API
+To use the directive, import ToggleClassOnScrollDirective into your component's or NgModule's imports array.
 
-```bash
-ng serve
+```typescript
+import { ToggleClassOnScrollDirective } from './path/to/your/directive';
+
+@Component({
+  standalone: true,
+  imports: [ToggleClassOnScrollDirective],
+  // ...
+})
+export class MyComponent {}
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Inputs
+| Property | Type | Default | Required | Description |
+|---|---|---|---|---|
+| `ksToggleClassOnScroll` | `string` | — | Yes | The name of the CSS class to be added or removed. |
+| `ksScrollOffset` | `number` | `0` | No | The scroll distance in pixels from the top of the page. The class will be added if the scroll position is less than or equal to this value and removed if it's greater. |
 
-## Code scaffolding
+## Examples
+### 1. Basic Usage
+This example adds the navbar-scrolled class to a navbar when the user scrolls more than 50px down the page.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```html
+<nav 
+  class="navbar" 
+  ksToggleClassOnScroll="navbar-scrolled"
+  [ksScrollOffset]="50">
+  </nav>
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### 2. Advanced Usage with Signals
+This example uses component signals to dynamically control both the class name and the offset.
 
-```bash
-ng generate --help
+**Component TypeScript:**
+```typescript
+import { Component, signal } from '@angular/core';
+
+@Component({
+  // ...
+})
+export class MyAdvancedComponent {
+  scrolledClass = signal('header-is-solid');
+  offset = signal(200);
+}
 ```
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
+**Component HTML:**
+```html
+<header
+  [ksToggleClassOnScroll]="scrolledClass()"
+  [ksScrollOffset]="offset()">
+  </header>
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## ♿ Accessibility Considerations
+This directive only changes the visual appearance of an element. The developer implementing this directive is responsible for ensuring the final result is accessible.
 
-## Running unit tests
+**Note:** Please consider the following when using this directive:
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+* **Color Contrast:** Ensure that the text and interactive elements maintain a sufficient color contrast ratio against the background in both states (with and without the toggled class), as per WCAG guidelines.
+* **Reduced Motion:** If the CSS class triggers an animation or transition, it is a best practice to wrap it within a `@media (prefers-reduced-motion: no-preference)` query to respect user preferences.
