@@ -1,26 +1,28 @@
+import { ScrollPosition } from '../enums';
+
+const navbar = 'ks-navbar-container';
+const navbarClass = 'make-nav-bar-tranparent';
 describe('template spec', () => {
-  it('passes', () => {
+  it('Toggle on scroll directive should toggle class on scroll', () => {
     cy.visit('localhost:4200/toggle-on-scroll-directive-test');
 
-    cy.get('ks-navbar-container').should('exist');
-    cy.get('ks-navbar-container').should(
-      'have.class',
-      'make-nav-bar-tranparent'
-    );
-    cy.get('button').should('exist');
-    cy.wait(1000); // Wait for the page to load
-    cy.scrollTo('bottom', { duration: 1000 });
-    cy.get('ks-navbar-container').should(
-      'not.have.class',
-      'make-nav-bar-tranparent'
-    );
-    cy.get('ks-navbar-container').should('have.class', 'bg-white');
-    cy.get('button').should('be.visible');
-
-    cy.scrollTo('top', { duration: 1000 });
-    cy.get('ks-navbar-container').should(
-      'have.class',
-      'make-nav-bar-tranparent'
-    );
+    cy.get(navbar).should((nb) => {
+      expect(nb).to.exist;
+    });
+    cy.get(navbar).should((nb) => {
+      expect(nb).to.have.class(navbarClass);
+    });
+    cy.wait(1000);
+    cy.scrollTo(ScrollPosition.BOTTOM, { duration: 1000 });
+    cy.get(navbar).should((nb) => {
+      expect(nb).to.have.class(navbarClass);
+    });
+    cy.get('button').should((btn) => {
+      expect(btn).to.be.visible();
+    });
+    cy.scrollTo(ScrollPosition.TOP, { duration: 1000 });
+    cy.get(navbar).should((nb) => {
+      expect(nb).to.have.class(navbarClass);
+    });
   });
 });
