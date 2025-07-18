@@ -1,4 +1,4 @@
-ToggleClassOnScrollDirective
+# ToggleClassOnScrollDirective
 A simple and efficient Angular directive that toggles a CSS class on an element based on the window's vertical scroll position.
 
 This directive is built with modern Angular features, utilizing Signals for reactivity, and is designed to work efficiently in Zoneless applications.
