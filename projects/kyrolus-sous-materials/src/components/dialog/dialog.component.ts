@@ -29,7 +29,7 @@ import { DialogHeaderComponent } from './dialog-header.component';
 import { DialogActionsComponent } from './dialog-actions.component';
 import { DialogContentComponent } from './dialog-content.component';
 import { DialogTitleDirective } from './dialog-title.directive';
-import { ButtonDirective } from '../button/button.directive';
+import { ButtonDirective } from '../../directives/button/button.directive';
 import { DialogService } from './dialog.service';
 import {
   DraggableDirective,

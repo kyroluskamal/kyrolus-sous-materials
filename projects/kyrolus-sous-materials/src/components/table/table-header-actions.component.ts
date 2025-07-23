@@ -5,7 +5,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { ButtonDirective } from '../button/button.directive';
+import { ButtonDirective } from '../../directives/button/button.directive';
 import { IconDirective, TableHeaderActionsDirective } from '../../public-api';
 
 @Component({

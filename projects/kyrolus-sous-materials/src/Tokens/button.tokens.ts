@@ -4,7 +4,7 @@ import {
   ButtonShape,
   ButtonSize,
   ButtonVariant,
-} from '../components/button/button.types';
+} from '../directives/button/button.types';
 
 export const BUTTON_ACTIVE_CLASS = new InjectionToken<string>(
   'BUTTON_ACTIVE_CLASS',
@@ -33,7 +33,7 @@ export const BUTTON_LOADING_CLASS = new InjectionToken<string>(
   { providedIn: 'any', factory: () => '' }
 );
 export const BUTTON_BORDER_RADIUS_CLASS = new InjectionToken<string>(
-  'BUTTON_BORDER_RADIUS',
+  'BUTTON_BORDER_RADIUS_CLASS',
   { providedIn: 'any', factory: () => 'br-r-2' }
 );
 export const BUTTON_SHAPE = new InjectionToken<ButtonShape>('BUTTON_SHAPE', {
@@ -46,7 +46,7 @@ export const BUTTON_RAISE_CLASS = new InjectionToken<string>(
 );
 export const BUTTON_SIZE = new InjectionToken<ButtonSize>('BUTTON_SIZE', {
   providedIn: 'any',
-  factory: () => 'med',
+  factory: () => 'md',
 });
 
 export const BUTTON_IS_RAISED = new InjectionToken<boolean>(
@@ -54,10 +54,13 @@ export const BUTTON_IS_RAISED = new InjectionToken<boolean>(
   { providedIn: 'any', factory: () => false }
 );
 export const BUTTON_VARIANT = new InjectionToken<ButtonVariant>(
-  'Button_IS_RAISED',
-  { providedIn: 'any', factory: () => 'solid' }
+  'BUTTON_VARIANT',
+  {
+    providedIn: 'any',
+    factory: () => 'solid',
+  }
 );
 export const BUTTON_APPEARANCE = new InjectionToken<ButtonAppearance>(
-  'Button_IS_RAISED',
+  'BUTTON_APPEARANCE',
   { providedIn: 'any', factory: () => 'primary' }
 );

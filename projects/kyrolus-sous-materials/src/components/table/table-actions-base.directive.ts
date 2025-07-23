@@ -13,7 +13,7 @@ import {
   ButtonAppearance,
   ButtonShape,
   ButtonVariant,
-} from '../button/button.types';
+} from '../../directives/button/button.types';
 
 export class TableActionsBaseDirective {
   readonly RaisedClass = signal(inject(BUTTON_RAISE_CLASS));

@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import {
+  ButtonDirective,
   NavbarModule,
   ToggleClassOnScrollDirective,
 } from 'kyrolus-sous-materials';
 @Component({
   selector: 'app-toggle-class-on-scroll-directive-test',
-  imports: [ToggleClassOnScrollDirective, NavbarModule],
+  imports: [ToggleClassOnScrollDirective, NavbarModule, ButtonDirective],
   host: {
     class: 'd-block h-100 w-100',
   },
@@ -17,7 +18,7 @@ import {
     >
       <ks-navbar-row> This is my nav bar </ks-navbar-row>
     </ks-navbar-container>
-    <button style="position: absolute; top: 0">fsfsdfsfsd</button>
+    <button ksButton style="position: absolute; top: 0">fsfsdfsfsd</button>
   `,
   styles: `
   :host{

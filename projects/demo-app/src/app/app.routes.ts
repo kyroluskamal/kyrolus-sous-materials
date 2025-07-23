@@ -10,15 +10,21 @@ export const routes: Routes = [
   },
   {
     path: 'tests',
-    component: Tests,
+
     title: 'DemoApp',
-  },
-  {
-    path: 'toggle-on-scroll-directive-test',
-    loadComponent: () =>
-      import('../test-components/toggle-class-on-scroll-directive-test').then(
-        (m) => m.ToggleClassOnScrollDirectiveTest
-      ),
-    title: 'Toggle Class On Scroll Directive Test',
+    children: [
+      {
+        path: '',
+        component: Tests,
+      },
+      {
+        path: 'toggle-on-scroll-directive-test',
+        loadComponent: () =>
+          import(
+            '../test-components/toggle-class-on-scroll-directive-test'
+          ).then((m) => m.ToggleClassOnScrollDirectiveTest),
+        title: 'Toggle Class On Scroll Directive Test',
+      },
+    ],
   },
 ];

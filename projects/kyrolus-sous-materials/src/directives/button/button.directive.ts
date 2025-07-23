@@ -6,11 +6,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import {
-  ButtonAppearance,
-  ButtonSize,
-  ButtonVariant,
-} from '../button/button.types';
+import { ButtonAppearance, ButtonSize, ButtonVariant } from './button.types';
 import {
   BUTTON_APPEARANCE,
   BUTTON_BORDER_RADIUS_CLASS,
@@ -23,6 +19,11 @@ import {
 
 @Directive({
   selector: '[ksButton]',
+  host: {
+    '[class]': 'classes()',
+    '[attr.disabled]': 'disabled() ? true : null',
+    '(click)': 'onClick($event)',
+  },
 })
 export class ButtonDirective {
   readonly size = input<ButtonSize>(inject(BUTTON_SIZE));
@@ -52,19 +53,19 @@ export class ButtonDirective {
       .filter(Boolean)
       .join(' ')
   );
-  @HostBinding('class')
-  get class(): string {
-    return this.classes();
-  }
-  @HostListener('click', ['$event'])
+  // @HostBinding('class')
+  // get class(): string {
+  //   return this.classes();
+  // }
+  // @HostListener('click', ['$event'])
   onClick(event: MouseEvent): void {
     if (this.disabled()) {
       event.preventDefault();
     }
   }
 
-  @HostBinding('attr.disabled')
-  get disabledAttr(): boolean | null {
-    return this.disabled() ? true : null;
-  }
+  // @HostBinding('attr.disabled')
+  // get disabledAttr(): boolean | null {
+  //   return this.disabled() ? true : null;
+  // }
 }

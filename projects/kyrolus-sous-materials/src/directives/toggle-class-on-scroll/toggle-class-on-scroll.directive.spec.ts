@@ -27,7 +27,7 @@ class TestHostComponent {
   scrollOffset = signal(100);
 }
 
-describe('ToggleClassOnScrollDirective with Karma (Zoneless)', () => {
+describe('ToggleClassOnScrollDirective', () => {
   let fixture: ComponentFixture<TestHostComponent>;
   let testElement: DebugElement;
 

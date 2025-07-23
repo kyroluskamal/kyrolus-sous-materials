@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { TableActionsColumnDirective } from './table-actions-column.directive';
-import { ButtonDirective } from '../button/button.directive';
+import { ButtonDirective } from '../../directives/button/button.directive';
 import { IconDirective } from '../../directives/icon.directive';
 
 @Component({

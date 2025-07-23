@@ -13,7 +13,7 @@ import {
   ButtonShape,
   ButtonSize,
   ButtonVariant,
-} from '../button/button.types';
+} from '../../directives/button/button.types';
 import { TableActionsBaseDirective } from './table-actions-base.directive';
 import { TABLE_HEADER_ACTIONS_BUTTON } from './table.tokens';
 export type KsTableButtonConfig = {
