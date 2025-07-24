@@ -6,9 +6,11 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "test": "ng test --watch --code-coverage",
     "serve:ssr:DemoApp": "node dist/DemoApp/server/server.mjs",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "ks": "ng build kyrolus-sous-materials --watch",
+    "demo": "ng serve DemoApp --port 4200"
   },
   "prettier": {
     "overrides": [

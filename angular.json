@@ -36,7 +36,8 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "tsConfig": "projects/kyrolus-sous-materials/tsconfig.spec.json"
+            "tsConfig": "projects/kyrolus-sous-materials/tsconfig.spec.json",
+            "styles": ["node_modules/kyrolus-sous-materials/styles/styles.scss"]
           }
         }
       }

@@ -5,33 +5,33 @@ import {
   ButtonSize,
   ButtonVariant,
 } from '../directives/button/button.types';
-
-export const BUTTON_ACTIVE_CLASS = new InjectionToken<string>(
-  'BUTTON_ACTIVE_CLASS',
-  {
-    providedIn: 'any',
-    factory: () => '',
-  }
-);
-export const BUTTON_DISABLED_CLASS = new InjectionToken<string>(
-  'BUTTON_DISABLED_CLASS',
-  { providedIn: 'any', factory: () => '' }
-);
-export const BUTTON_USE_RIPPLE = new InjectionToken<boolean>(
-  'BUTTON_USE_RIPPLE',
-  { providedIn: 'any', factory: () => false }
-);
-export const BUTTON_RIPPLE_CLASS = new InjectionToken<string>(
-  'BUTTON_RIPPLE_CLASS',
-  {
-    providedIn: 'any',
-    factory: () => '',
-  }
-);
-export const BUTTON_LOADING_CLASS = new InjectionToken<string>(
-  'BUTTON_LOADING_CLASS',
-  { providedIn: 'any', factory: () => '' }
-);
+//NOSONAR (typescript:S125)
+// export const BUTTON_ACTIVE_CLASS = new InjectionToken<string>(
+//   'BUTTON_ACTIVE_CLASS',
+//   {
+//     providedIn: 'any',
+//     factory: () => '',
+//   }
+// );
+// export const BUTTON_DISABLED_CLASS = new InjectionToken<string>(
+//   'BUTTON_DISABLED_CLASS',
+//   { providedIn: 'any', factory: () => '' }
+// );
+// export const BUTTON_USE_RIPPLE = new InjectionToken<boolean>(
+//   'BUTTON_USE_RIPPLE',
+//   { providedIn: 'any', factory: () => false }
+// );
+// export const BUTTON_RIPPLE_CLASS = new InjectionToken<string>(
+//   'BUTTON_RIPPLE_CLASS',
+//   {
+//     providedIn: 'any',
+//     factory: () => '',
+//   }
+// );
+// export const BUTTON_LOADING_CLASS = new InjectionToken<string>(
+//   'BUTTON_LOADING_CLASS',
+//   { providedIn: 'any', factory: () => '' }
+// ); //NOSONAR (typescript:S125)
 export const BUTTON_BORDER_RADIUS_CLASS = new InjectionToken<string>(
   'BUTTON_BORDER_RADIUS_CLASS',
   { providedIn: 'any', factory: () => 'br-r-2' }

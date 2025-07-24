@@ -1,8 +1,7 @@
 import {
+  booleanAttribute,
   computed,
   Directive,
-  HostBinding,
-  HostListener,
   inject,
   input,
 } from '@angular/core';
@@ -21,19 +20,22 @@ import {
   selector: '[ksButton]',
   host: {
     '[class]': 'classes()',
-    '[attr.disabled]': 'disabled() ? true : null',
-    '(click)': 'onClick($event)',
   },
 })
 export class ButtonDirective {
   readonly size = input<ButtonSize>(inject(BUTTON_SIZE));
   readonly variant = input<ButtonVariant>(inject(BUTTON_VARIANT));
   readonly appearance = input<ButtonAppearance>(inject(BUTTON_APPEARANCE));
-  readonly isRaised = input<boolean>(inject(BUTTON_IS_RAISED));
-  readonly BorderRadius = input(inject(BUTTON_BORDER_RADIUS_CLASS));
-  readonly ButtonShape = input(inject(BUTTON_SHAPE));
-  readonly disabled = input<boolean>(false);
+  readonly isRaised = input<boolean, string>(inject(BUTTON_IS_RAISED), {
+    transform: booleanAttribute,
+  });
+  readonly borderRadius = input(inject(BUTTON_BORDER_RADIUS_CLASS));
+  readonly shape = input(inject(BUTTON_SHAPE));
+  readonly disabled = input<boolean, string>(false, {
+    transform: booleanAttribute,
+  });
   readonly RaisedClass = input(inject(BUTTON_RAISE_CLASS));
+
   classes = computed(() =>
     [
       'd-inline-flex',
@@ -42,30 +44,15 @@ export class ButtonDirective {
       'br-none',
       'cursor-pointer',
       'btn',
-      this.BorderRadius(),
+      this.borderRadius(),
       `btn${
         this.variant() !== 'solid' ? '-' + this.variant() : ''
       }-${this.appearance()}`,
       `btn-${this.size()}`,
       `${this.isRaised() ? this.RaisedClass() : 'elevation-0'}`,
-      `btn-${this.ButtonShape()}`,
+      `btn-${this.shape()}`,
     ]
       .filter(Boolean)
       .join(' ')
   );
-  // @HostBinding('class')
-  // get class(): string {
-  //   return this.classes();
-  // }
-  // @HostListener('click', ['$event'])
-  onClick(event: MouseEvent): void {
-    if (this.disabled()) {
-      event.preventDefault();
-    }
-  }
-
-  // @HostBinding('attr.disabled')
-  // get disabledAttr(): boolean | null {
-  //   return this.disabled() ? true : null;
-  // }
 }
