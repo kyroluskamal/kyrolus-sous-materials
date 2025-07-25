@@ -43,13 +43,15 @@
         <span
           ksPrefix
           [ksIcon]="conf.iconLeft.name"
-          [iconType]="conf.iconLeft.type"
+          [iconOptions]="conf.iconLeft.options"
           (click)="conf.iconLeft.onClick?.({event: $event, input: ksInput, icon: conf.iconLeft})"
           (keydown.space)="conf.iconLeft.onKeyDown?.({event: $event, input: ksInput, icon: conf.iconLeft})"
           (keydown.enter)="conf.iconLeft.onKeyDown?.({event: $event, input: ksInput, icon: conf.iconLeft})"
           (mouseenter)="conf.iconLeft.onHover?.({event: $event, input: ksInput, icon: conf.iconLeft})"
         >
-          @if(conf?.iconLeft?.type && conf?.iconLeft?.type ==='google'){
+          @if(conf?.iconLeft?.options && conf?.iconLeft?.options?.provider === 'google'){
+          {{ conf?.iconLeft?.name }}
+          }@else {
           {{ conf?.iconLeft?.name }}
           }
         </span>
@@ -58,13 +60,13 @@
         <span
           ksSuffix
           [ksIcon]="conf.iconRight.name"
-          [iconType]="conf.iconRight.type"
+          [iconOptions]="conf.iconRight.options"
           (click)="conf.iconRight.onClick?.({event: $event, input: ksInput, icon: conf.iconRight})"
           (keydown.space)="conf.iconRight.onKeyDown?.({event: $event, input: ksInput, icon: conf.iconRight})"
           (keydown.enter)="conf.iconRight.onKeyDown?.({event: $event, input: ksInput, icon: conf.iconRight})"
           (mouseenter)="conf.iconRight.onHover?.({event: $event, input: ksInput, icon: conf.iconRight})"
         >
-          @if(conf?.iconRight?.type && conf?.iconRight?.type ==='google'){
+          @if(conf?.iconRight?.options && conf?.iconRight?.options?.provider === 'google'){
           {{ conf?.iconLeft?.name }}
           }
         </span>

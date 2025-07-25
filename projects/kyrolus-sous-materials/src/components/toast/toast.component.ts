@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { toastStateAnimation } from './toast.animation';
 import { Toast } from './toast.type';
 import { ToastService } from './toast.service';
-import { IconDirective } from '../../directives/icon.directive';
+import { IconDirective } from '../../directives/icon/icon.directive';
 
 @Component({
   selector: 'ks-toast',

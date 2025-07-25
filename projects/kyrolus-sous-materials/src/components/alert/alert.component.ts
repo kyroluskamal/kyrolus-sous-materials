@@ -1,12 +1,12 @@
 import { Component, computed, effect, inject } from '@angular/core';
 import { AlertService } from './alert.service';
 import { AlertPosition, AlertType } from './alert.types';
-import { IconDirective } from '../../directives/icon.directive';
 import { ButtonDirective } from '../../directives/button/button.directive';
 import { ButtonAppearance } from '../../directives/button/button.types';
 import { BackDropDirective } from '../../directives/back-drop.directive';
 import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
 import { fadeInOut } from '../../animations/animations.export';
+import { IconDirective } from '../../directives/icon/icon.directive';
 
 @Component({
   selector: 'ks-alert',

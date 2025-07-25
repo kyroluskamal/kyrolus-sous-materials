@@ -1,5 +1,5 @@
 import { WritableSignal } from '@angular/core';
-import { IconType } from '../../directives/icon.types';
+import { IconOptions, IconProvider } from '../../directives/icon/icon.types';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 export type ToastPriority = 'high' | 'medium' | 'low';
@@ -35,7 +35,7 @@ export interface Toast {
   timeoutId?: ReturnType<typeof setTimeout>;
   actionCallback?: () => void;
   isPaused?: WritableSignal<boolean>;
-  icon?: { type: IconType; name: string };
+  icon?: { options: IconOptions; name: string };
   remainingTime: WritableSignal<number>;
   lastUpdate: WritableSignal<number>;
 }

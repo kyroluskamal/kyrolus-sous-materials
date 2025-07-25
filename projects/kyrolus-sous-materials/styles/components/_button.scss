@@ -8,14 +8,14 @@ $btn-sizes: (
     font-size: 0.875rem,
   ),
   "md": (
-    padding-y: 0.75rem,
-    padding-x: 1.5rem,
-    font-size: 1rem,
+    padding-y: 0.7rem,
+    padding-x: 1.4rem,
+    font-size: 1.1rem,
   ),
   "lg": (
     padding-y: 1rem,
     padding-x: 2rem,
-    font-size: 1.125rem,
+    font-size: 1.4rem,
   ),
 );
 
@@ -141,7 +141,7 @@ $btn-colors: (
 @each $size, $values in $btn-sizes {
   .btn-#{$size} {
     padding: map.get($values, padding-y) map.get($values, padding-x);
-    font-size: map.get($values, font-size);
+    font-size: map.get($values, font-size) !important;
     &.btn-rounded {
       padding: map.get($values, padding-y) map.get($values, padding-x);
       border-radius: 0.5rem !important;

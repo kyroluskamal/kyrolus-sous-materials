@@ -25,8 +25,8 @@ import { PaginatorState } from '../paginator/models';
 import { PaginatorComponent } from '../paginator/paginator.component';
 import { TABLE_APPEARANCE, TABLE_OPTIONS, TABLE_STATE } from './table.tokens';
 import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
-import { IconDirective } from '../../public-api';
 import { TableColumnHoverDirective } from './table-column-hover.directive';
+import { IconDirective } from '../../directives/icon/icon.directive';
 @Component({
   selector: 'ks-table',
   imports: [

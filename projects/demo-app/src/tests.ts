@@ -1,14 +1,24 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ButtonDirective } from 'KyrolusSousMaterials';
+import { ButtonDirective, IconDirective } from 'KyrolusSousMaterials';
 
 @Component({
   selector: 'app-tests',
-  imports: [RouterLink, ButtonDirective],
+  imports: [RouterLink, ButtonDirective, IconDirective],
   template: `
-    <button ksButton disabled routerLink="toggle-on-scroll-directive-test">
+    <button ksButton routerLink="toggle-on-scroll-directive-test">
       Toggle class on scroll test
     </button>
+
+    <button
+      ksButton
+      size="sm"
+      ksIcon="0-circle-fill"
+      [iconOptions]="{
+        provider: 'bi',
+      }"
+    ></button>
+    <span class="material-icons-two-tone">face</span>
   `,
   styles: `
   :host {

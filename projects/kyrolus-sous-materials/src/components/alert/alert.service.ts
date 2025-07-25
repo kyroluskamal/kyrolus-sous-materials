@@ -36,12 +36,15 @@ export class AlertService {
     config: Partial<AlertConfig> = {
       cancelButtonText: 'Close',
       autoClose: 2000,
-      icon: { type: 'bi', name: 'check-circle' },
+      icon: { options: { provider: 'bi' }, name: 'check-circle' },
     }
   ) {
     this.show({
       ...config,
-      icon: config.icon ?? { type: 'bi', name: 'check-circle' },
+      icon: config.icon ?? {
+        options: { provider: 'bi' },
+        name: 'check-circle',
+      },
       text,
       title,
       type: 'success',
@@ -53,12 +56,12 @@ export class AlertService {
     title: string = 'Error',
     config: Partial<AlertConfig> = {
       cancelButtonText: 'Close',
-      icon: { type: 'bi', name: 'x-circle' },
+      icon: { options: { provider: 'bi' }, name: 'x-circle' },
     }
   ) {
     this.show({
       ...config,
-      icon: config.icon ?? { type: 'bi', name: 'x-circle' },
+      icon: config.icon ?? { options: { provider: 'bi' }, name: 'x-circle' },
       text,
       title,
       type: 'danger',
@@ -72,12 +75,15 @@ export class AlertService {
       showCancelButton: true,
       cancelButtonText: 'Close',
       confirmButtonText: 'OK',
-      icon: { type: 'bi', name: 'exclamation-triangle' },
+      icon: { options: { provider: 'bi' }, name: 'exclamation-triangle' },
     }
   ) {
     this.show({
       ...config,
-      icon: config.icon ?? { type: 'bi', name: 'exclamation-triangle' },
+      icon: config.icon ?? {
+        options: { provider: 'bi' },
+        name: 'exclamation-triangle',
+      },
       text,
       title,
       type: 'warning',
@@ -90,12 +96,12 @@ export class AlertService {
     config: Partial<AlertConfig> = {
       autoClose: 5000,
       cancelButtonText: 'Close',
-      icon: { type: 'bi', name: 'info-circle' },
+      icon: { options: { provider: 'bi' }, name: 'info-circle' },
     }
   ) {
     this.show({
       ...config,
-      icon: config.icon ?? { type: 'bi', name: 'info-circle' },
+      icon: config.icon ?? { options: { provider: 'bi' }, name: 'info-circle' },
       text,
       title,
     });
@@ -108,12 +114,15 @@ export class AlertService {
       showCancelButton: true,
       confirmButtonText: 'OK',
       cancelButtonText: 'Cancel',
-      icon: { type: 'bi', name: 'question-circle' },
+      icon: { options: { provider: 'bi' }, name: 'question-circle' },
     }
   ) {
     this.show({
       ...config,
-      icon: config.icon ?? { type: 'bi', name: 'question-circle' },
+      icon: config.icon ?? {
+        options: { provider: 'bi' },
+        name: 'question-circle',
+      },
       text,
       title,
       type: 'question',

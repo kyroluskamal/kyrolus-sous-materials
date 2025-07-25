@@ -23,16 +23,16 @@
 >
   <div class="dialog-controls">
     @if(config().draggable.isDraggable && !isMinimized() && !isMaximized()){
-    <button   [ksDraggable]="config().draggable" [elementRef]="dialogRef()!" ksIcon="arrows-move" style="position: relative;"
+    <button   [ksDraggable]="config().draggable" [elementRef]="dialogRef()!" ksIcon="arrows-move" [iconOptions]="{provider: 'bi'}" style="position: relative;"
     [class.draggable]="config().draggable.isDraggable" [style.height.px]="20" (onDragEnd)="setTransform($event)"></button>
     }
     @if(config().isMinimizable){
-      <button (click)="minimize(!isMinimized())" [ksIcon]="isMinimized()? 'window-dock' : 'dash'"></button>
+      <button (click)="minimize(!isMinimized())" [ksIcon]="isMinimized()?  'window-dock' : 'dash'" [iconOptions]="{provider: 'bi'}"></button>
     }
     @if(config().isMaximizable){
-      <button (click)="maximize(!isMaximized())" [ksIcon]="isMaximized()? 'fullscreen-exit' : 'fullscreen'"></button>
+      <button (click)="maximize(!isMaximized())" [ksIcon]="isMaximized()? 'fullscreen-exit' : 'fullscreen'" [iconOptions]="{provider: 'bi'}"></button>
     }
-    <button (click)="close()" ksIcon="x"></button>
+    <button (click)="close()" ksIcon="x" [iconOptions]="{provider: 'bi'}"></button>
   </div>
 
   @if(config().isMinimizable && isMinimized()){

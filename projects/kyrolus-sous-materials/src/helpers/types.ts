@@ -11,13 +11,6 @@ export type AccordionConfig = {
   useHoverEffect?: boolean;
   activeClass?: string;
 };
-export type GoogleIconType =
-  | 'filled'
-  | 'outlined'
-  | 'rounded'
-  | 'sharp'
-  | 'two-tone';
-
 export type KMatColor =
   | 'primary'
   | 'secondary'

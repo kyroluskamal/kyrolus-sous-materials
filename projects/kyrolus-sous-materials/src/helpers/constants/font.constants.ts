@@ -5,9 +5,9 @@ export const fontFamilies = {
 };
 
 export const googleIconFontClass = {
-  MaterialIcons: 'g-icon-material-icons',
-  MaterialIconsRound: 'g-icon-material-icons-round',
-  MaterialIconsOutlined: 'g-icon-material-icons-outlined',
-  MaterialIconsSharp: 'g-icon-material-icons-sharp',
-  MaterialIconsTwoTone: 'g-icon-material-icons-two-tone',
+  MaterialIcons: 'material-icons',
+  MaterialIconsRound: 'material-icons-round',
+  MaterialIconsOutlined: 'material-icons-outlined',
+  MaterialIconsSharp: 'material-icons-sharp',
+  MaterialIconsTwoTone: 'material-icons-two-tone',
 };

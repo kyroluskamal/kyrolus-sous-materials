@@ -1,8 +1,8 @@
 import { TemplateRef } from '@angular/core';
-import { Icon } from '../../directives/icon.types';
 import { ErrorStateMatcher } from './error-state-matcher';
 import { ValidatorFn } from '@angular/forms';
 import { InputComponent } from './input.component';
+import { Icon } from '../../directives/icon/icon.types';
 
 export type InputColor =
   | 'primary'

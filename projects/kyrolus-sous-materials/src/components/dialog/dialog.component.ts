@@ -40,7 +40,7 @@ import {
   ResizeEvent,
 } from '../../directives/resizable.directive';
 import { DIALOG_DEFAULT_CONFIG } from './dialog.tokens';
-import { IconDirective } from '../../directives/icon.directive';
+import { IconDirective } from '../../directives/icon/icon.directive';
 
 @Component({
   selector: 'ks-dialog',

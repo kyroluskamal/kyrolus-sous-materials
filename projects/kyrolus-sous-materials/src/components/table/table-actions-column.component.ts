@@ -7,8 +7,8 @@ import {
   signal,
 } from '@angular/core';
 import { TableActionsColumnDirective } from './table-actions-column.directive';
-import { ButtonDirective } from '../../directives/button/button.directive';
-import { IconDirective } from '../../directives/icon.directive';
+import { IconDirective } from '../../directives/icon/icon.directive';
+import { ButtonDirective } from '../../public-api';
 
 @Component({
   selector: 'ks-table-actions-column',
@@ -23,15 +23,15 @@ import { IconDirective } from '../../directives/icon.directive';
         'variant',
         'appearance',
         'isRaised',
-        'BorderRadius',
+        'borderRadius',
         'disabled',
         'RaisedClass',
-        'ButtonShape',
+        'shape',
       ],
     },
     {
       directive: IconDirective,
-      inputs: ['ksIcon', 'iconType'],
+      inputs: ['ksIcon', 'iconOptions'],
     },
   ],
 })

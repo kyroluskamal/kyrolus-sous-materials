@@ -7,10 +7,10 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { IconDirective } from '../../directives/directives.export';
 import { AccordionItemComponent } from './accordion-item.component';
 import { AccordionContainerComponent } from './accordion-container.component';
-import { IconType } from '../../directives/icon.types';
+import { IconDirective } from '../../directives/icon/icon.directive';
+import { Icon, IconProvider } from '../../directives/icon/icon.types';
 
 @Component({
   selector: 'ks-accordion-header',
@@ -19,13 +19,13 @@ import { IconType } from '../../directives/icon.types';
   template: `
     @if(icon!=null || icon!=undefined || icon!=''){
 
-    <div [ksIcon]="icon().icon" [iconType]="icon().type"></div>
+    <div [ksIcon]="icon().name" [iconOptions]="icon().options"></div>
     }
     <span class="d-flex flex-1">
       <ng-content>Add header here</ng-content>
     </span>
     @if(!accortionItem.headerOnly()){
-    <div ksIcon="chevron-right"></div>
+    <div ksIcon="chevron-right" [iconOptions]="{ provider: 'bi' }"></div>
     }
   `,
   host: {
@@ -41,9 +41,9 @@ import { IconType } from '../../directives/icon.types';
 export class AccordionHeaderComponent {
   readonly accortionContainer = inject(AccordionContainerComponent);
   readonly accortionItem = inject(AccordionItemComponent);
-  readonly icon = input<{ icon: string; type: IconType }>({
-    type: 'bi',
-    icon: '',
+  readonly icon = input<Icon>({
+    options: { provider: 'bi' },
+    name: '',
   });
 
   readonly ActiveClass = input<string>('accordtion-active');

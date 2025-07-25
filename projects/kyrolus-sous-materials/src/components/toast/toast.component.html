@@ -4,7 +4,7 @@
   <div class="toast" [class]="toast.type" [@toastAnimation] (mouseenter)="pauseTimer(toast)"
     (mouseleave)="resumeTimer(toast)">
     @if(toast.icon){
-    <span class="toast-icon" [class]="toast.type" [ksIcon]="toast.icon.name" [iconType]="toast.icon.type"></span>
+    <span class="toast-icon" [class]="toast.type" [ksIcon]="toast.icon.name" [iconOptions]="toast.icon.options"></span>
     }
     <div class="toast-body">
       <div class="toast-header">

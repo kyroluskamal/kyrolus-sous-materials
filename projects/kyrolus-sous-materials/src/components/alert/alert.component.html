@@ -5,7 +5,7 @@
   <div [@fadeInOut] class="alert-container" [class]="theme()" (mouseenter)="pauseTimer()" (mouseleave)="resumeTimer()">
     @if (icon() ) {
     <div class="alert-icon">
-      <div [ksIcon]="icon()?.name!" [iconType]="icon()?.type!" [class]="'icon-'+type()" class="text-white"></div>
+      <div [ksIcon]="icon()?.name!" [iconOptions]="icon()?.options!" [class]="'icon-'+type()" class="text-white"></div>
     </div>
     }
     @if(title()){

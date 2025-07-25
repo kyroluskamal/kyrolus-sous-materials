@@ -21,6 +21,7 @@ import {
   host: {
     '[class]': 'classes()',
   },
+  standalone: true,
 })
 export class ButtonDirective {
   readonly size = input<ButtonSize>(inject(BUTTON_SIZE));

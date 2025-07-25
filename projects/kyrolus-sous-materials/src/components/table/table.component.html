@@ -51,7 +51,7 @@
         >
           {{ col.label }}
           @if(col.options?.sortable){
-          <span ksIcon="sort-alpha-down" class="sort-icon"> </span>
+          <span ksIcon="sort-alpha-down" [iconOptions]="{provider: 'bi'}" class="sort-icon"> </span>
           }
         </th>
         }

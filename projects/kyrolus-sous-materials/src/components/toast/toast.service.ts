@@ -5,7 +5,7 @@ import {
   ToastPriorityEnum,
   ToastTypeEnum,
 } from './toast.type';
-import { IconType } from '../../directives/icon.types';
+import { IconOptions, IconProvider } from '../../directives/icon/icon.types';
 
 @Injectable({
   providedIn: 'root',
@@ -72,9 +72,12 @@ export class ToastService {
       isPaused: signal(false),
     }
   ) {
+    let iconOption: IconOptions = {
+      provider: 'bi' as IconProvider,
+    };
     let conf = {
       type: ToastTypeEnum.INFO,
-      icon: { type: 'bi' as IconType, name: 'info-circle' },
+      icon: { options: iconOption, name: 'info-circle' },
       ...config,
     };
     this.show(title, message, conf);
@@ -89,9 +92,12 @@ export class ToastService {
       isPaused: signal(false),
     }
   ) {
+    let iconOption: IconOptions = {
+      provider: 'bi',
+    };
     let conf = {
       type: ToastTypeEnum.SUCCESS,
-      icon: { type: 'bi' as IconType, name: 'check-circle' },
+      icon: { options: iconOption, name: 'check-circle' },
       ...config,
     };
     this.show(title, message, conf);
@@ -106,9 +112,12 @@ export class ToastService {
       isPaused: signal(false),
     }
   ) {
+    let iconOption: IconOptions = {
+      provider: 'bi',
+    };
     let conf = {
       type: ToastTypeEnum.WARNING,
-      icon: { type: 'bi' as IconType, name: 'exclamation-triangle' },
+      icon: { options: iconOption, name: 'exclamation-triangle' },
       ...config,
     };
     this.show(title, message, conf);
@@ -123,9 +132,12 @@ export class ToastService {
       isPaused: signal(false),
     }
   ) {
+    let iconOption: IconOptions = {
+      provider: 'bi',
+    };
     let conf = {
       type: ToastTypeEnum.ERROR,
-      icon: { type: 'bi' as IconType, name: 'x-circle' },
+      icon: { options: iconOption, name: 'x-circle' },
       ...config,
     };
     this.show(title, message, conf);

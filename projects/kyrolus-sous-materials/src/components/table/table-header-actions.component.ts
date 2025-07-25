@@ -6,7 +6,8 @@ import {
   input,
 } from '@angular/core';
 import { ButtonDirective } from '../../directives/button/button.directive';
-import { IconDirective, TableHeaderActionsDirective } from '../../public-api';
+import { TableHeaderActionsDirective } from '../../public-api';
+import { IconDirective } from '../../directives/icon/icon.directive';
 
 @Component({
   selector: 'ks-table-actions',
@@ -19,15 +20,15 @@ import { IconDirective, TableHeaderActionsDirective } from '../../public-api';
         'variant',
         'appearance',
         'isRaised',
-        'BorderRadius',
+        'borderRadius',
         'disabled',
         'RaisedClass',
-        'ButtonShape',
+        'shape',
       ],
     },
     {
       directive: IconDirective,
-      inputs: ['ksIcon', 'iconType'],
+      inputs: ['ksIcon', 'iconOptions'],
     },
   ],
   template: `{{ label() }}`,

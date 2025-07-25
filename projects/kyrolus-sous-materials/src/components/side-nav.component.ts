@@ -11,9 +11,9 @@ import {
 } from '@angular/core';
 import { SideBarPosition } from '../helpers/types';
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { IconDirective } from '../directives/icon.directive';
-import { IconType } from '../directives/icon.types';
 import { DashboardLayoutComponent } from '../public-api';
+import { IconDirective } from '../directives/icon/icon.directive';
+import { Icon, IconProvider } from '../directives/icon/icon.types';
 
 @Component({
   selector: 'ks-side-nav',
@@ -26,23 +26,12 @@ import { DashboardLayoutComponent } from '../public-api';
     >
       @if(useCloseBtn() && logo()==""){
       <div class="d-flex f-justify-content-end ">
-        <button>
-          @if(closeIcon().type == 'google'){
-          <span
-            ksGoogleIcon="filled"
-            (click)="open.set(false)"
-            [class]="closeBtnClasses()"
-            >{{ closeIcon().icon }}</span
-          >
-          }@else{
-          <span
-            [ksIcon]="closeIcon().icon"
-            [iconType]="closeIcon().type"
-            [class]="closeBtnClasses()"
-            (click)="open.set(false)"
-          ></span>
-          }
-        </button>
+        <button
+          [ksIcon]="closeIcon().name"
+          [iconOptions]="closeIcon().options"
+          [class]="closeBtnClasses()"
+          (click)="open.set(false)"
+        ></button>
       </div>
       } @if(logo()!=""){
       <div
@@ -65,9 +54,9 @@ import { DashboardLayoutComponent } from '../public-api';
 export class SideNavComponent implements AfterViewInit {
   position = input<SideBarPosition>('left');
   open = model<boolean>(true);
-  closeIcon = input<{ type: IconType; icon: string }>({
-    type: 'google',
-    icon: 'close',
+  closeIcon = input<Icon>({
+    options: { provider: 'bi' },
+    name: 'close',
   });
   closeBtnClasses = input<string>('btn aspect-ratio-1x1 br-full text-danger');
   useCloseBtn = input<boolean>(false);

@@ -33,11 +33,11 @@ import {
 } from '@angular/forms';
 import { InputComponent } from '../form/input.component';
 import { FormService } from '../form/form.service';
-import { IconDirective } from '../../directives/icon.directive';
 import { PrefixDirective } from '../../directives/prefix.directive';
 import { SuffixDirective } from '../../directives/suffix.directive';
 import { NgTemplateOutlet } from '@angular/common';
 import { CheckboxComponent } from './checkbox/checkbox.component';
+import { IconDirective } from '../../directives/icon/icon.directive';
 
 @Component({
   selector: 'ks-form',

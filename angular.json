@@ -8,10 +8,13 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss",
-          "type": "component"
+          "type": "component",
+          "standalone": true
         },
         "@schematics/angular:directive": {
-          "type": "directive"
+          "type": "directive",
+          "flat": false,
+          "standalone": true
         },
         "@schematics/angular:service": {
           "type": "service"
@@ -37,7 +40,11 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/kyrolus-sous-materials/tsconfig.spec.json",
-            "styles": ["node_modules/kyrolus-sous-materials/styles/styles.scss"]
+            "styles": [
+              "node_modules/kyrolus-sous-materials/styles/styles.scss",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.scss",
+              "node_modules/material-icons/iconfont/material-icons.css"
+            ]
           }
         }
       }
@@ -71,6 +78,8 @@
             ],
             "styles": [
               "node_modules/kyrolus-sous-materials/styles/styles.scss",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.scss",
+              "node_modules/material-icons/iconfont/material-icons.css",
               "projects/demo-app/src/styles.scss"
             ],
             "server": "projects/demo-app/src/main.server.ts",
