@@ -8,10 +8,8 @@ import {
   Renderer2,
 } from '@angular/core';
 import {
-  FontAwesomeIcon,
   GoogleIcon,
   IconOptions,
-  IconProvider,
 } from './icon.types';
 import { googleIconFontClass } from '../../public-api';
 
@@ -52,39 +50,14 @@ export class IconDirective implements OnInit {
 
     if (!name) return '';
 
-    switch (options?.provider) {
-      case 'fa': {
-        return this.getFaClasses(options?.options as FontAwesomeIcon);
-      }
-
-      case 'google': {
-        return this.getGoogleIconClass(
-          (options?.options as GoogleIcon).type || 'normal'
-        );
-      }
-      default:
-        return `bi bi-${name}`;
+    if (options?.provider === 'google') {
+      return this.getGoogleIconClass(
+        (options?.options as GoogleIcon).type || 'normal'
+      );
+    } else {
+      return `bi bi-${name}`;
     }
   });
-  private getFaClasses(faOptions: FontAwesomeIcon) {
-    const faClasses: string[] = [];
-
-    if (faOptions) {
-      faClasses.push(
-        `fa-${faOptions.family || 'classic'}`,
-        `fa-${faOptions.type || 'solid'}`
-      );
-
-      if (faOptions.size) faClasses.push(`fa-${faOptions.size}`);
-      if (faOptions.animation) faClasses.push(`fa-${faOptions.animation}`);
-      if (faOptions.rotate) faClasses.push(`fa-rotate-${faOptions.rotate}`);
-      if (faOptions.flip) faClasses.push(`fa-flip-${faOptions.flip}`);
-      if (faOptions.isFixedWidth) faClasses.push('fa-fw');
-    }
-
-    faClasses.push(`fa-${this.ksIcon()}`);
-    return faClasses.filter(Boolean).join(' ');
-  }
   private getGoogleIconClass(type: GoogleIcon['type']) {
     switch (type) {
       case 'round':
