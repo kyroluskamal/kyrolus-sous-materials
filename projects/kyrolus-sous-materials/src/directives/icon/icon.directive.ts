@@ -7,10 +7,7 @@ import {
   OnInit,
   Renderer2,
 } from '@angular/core';
-import {
-  GoogleIcon,
-  IconOptions,
-} from './icon.types';
+import { GoogleIcon, IconOptions } from './icon.types';
 import { googleIconFontClass } from '../../public-api';
 
 @Directive({
@@ -24,16 +21,15 @@ export class IconDirective implements OnInit {
   private readonly renderer2 = inject(Renderer2);
   ngOnInit(): void {
     // Remove text nodes from the template if the icon type is not google
-    if (this.iconOptions()?.provider !== 'google') {
-      this.elmRef.nativeElement.childNodes.forEach((node: Node) => {
-        this.elmRef.nativeElement.removeChild(node);
-      });
-    } else {
+    this.elmRef.nativeElement.childNodes.forEach((node: Node) => {
+      this.renderer2.removeChild(this.elmRef.nativeElement, node);
+    });
+    if (this.iconOptions()?.provider === 'google') {
       const nodes = Array.from<Node>(this.elmRef.nativeElement.childNodes);
-      let hasTextNodes = nodes.some(
-        (node) =>
-          node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== ''
-      );
+      let textNode =
+        nodes.filter((node) => node.nodeType === Node.TEXT_NODE)[0] || null;
+      let hasTextNodes =
+        textNode !== null && textNode.textContent?.trim() !== '';
       if (!hasTextNodes) {
         this.renderer2.appendChild(
           this.elmRef.nativeElement,
@@ -47,12 +43,9 @@ export class IconDirective implements OnInit {
   readonly classes = computed(() => {
     const name = this.ksIcon();
     const options = this.iconOptions();
-
-    if (!name) return '';
-
     if (options?.provider === 'google') {
       return this.getGoogleIconClass(
-        (options?.options as GoogleIcon).type || 'normal'
+        (options?.options as GoogleIcon)?.type ?? 'normal'
       );
     } else {
       return `bi bi-${name}`;
@@ -68,7 +61,6 @@ export class IconDirective implements OnInit {
         return googleIconFontClass.MaterialIconsSharp;
       case 'two-tone':
         return googleIconFontClass.MaterialIconsTwoTone;
-      case 'normal':
       default:
         return googleIconFontClass.MaterialIcons;
     }

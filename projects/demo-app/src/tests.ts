@@ -18,6 +18,15 @@ import { ButtonDirective, IconDirective } from 'KyrolusSousMaterials';
         provider: 'bi',
       }"
     ></button>
+    <button
+      ksButton
+      size="sm"
+      ksIcon="home"
+      [iconOptions]="{
+        provider: 'google',
+
+      }"
+    ></button>
     <span class="material-icons-two-tone">face</span>
   `,
   styles: `
