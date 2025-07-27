@@ -1,10 +1,11 @@
 import {
   computed,
   Directive,
+  effect,
   ElementRef,
   inject,
   input,
-  OnInit,
+  model,
   Renderer2,
 } from '@angular/core';
 import { GoogleIcon, IconOptions } from './icon.types';
@@ -16,11 +17,10 @@ import { googleIconFontClass } from '../../public-api';
     '[class]': 'classes()',
   },
 })
-export class IconDirective implements OnInit {
+export class IconDirective {
   private readonly elmRef = inject(ElementRef);
   private readonly renderer2 = inject(Renderer2);
-  ngOnInit(): void {
-    // Remove text nodes from the template if the icon type is not google
+  eff = effect(() => {
     this.elmRef.nativeElement.childNodes.forEach((node: Node) => {
       this.renderer2.removeChild(this.elmRef.nativeElement, node);
     });
@@ -37,8 +37,8 @@ export class IconDirective implements OnInit {
         );
       }
     }
-  }
-  ksIcon = input.required<string>();
+  });
+  ksIcon = model.required<string>();
   iconOptions = input.required<IconOptions>();
   readonly classes = computed(() => {
     const name = this.ksIcon();

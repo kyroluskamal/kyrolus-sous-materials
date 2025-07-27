@@ -64,7 +64,8 @@ describe('ToggleClassOnScrollDirective', () => {
     expect(directiveInstance).toBeTruthy();
   });
 
-  it('should HAVE the class initially when scrollY is 0', () => {
+  it('should HAVE the class initially when scrollY is 0', async () => {
+    await fixture.whenStable();
     expect(testElement.nativeElement.classList.contains('scrolled-past')).toBe(
       true
     );

@@ -11,3 +11,4 @@ export * from './ripple.directive';
 export * from './avatar.directive';
 export * from './draggable.directive';
 export * from './toggle-class-on-scroll/toggle-class-on-scroll.directive';
+export * from './toggle-button/toggle-button.directive';
