@@ -1,0 +1,4 @@
+test  the aria labels
+test console info
+create KsEnterKeyEventDirective
+and KsSpaceKeyKeyEventDirective

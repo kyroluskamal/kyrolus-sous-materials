@@ -174,7 +174,8 @@ $btn-colors: (
       background-color: map.get($colors, hover);
     }
 
-    &:active:not(:disabled) {
+    &:active:not(:disabled),
+    &.active:not(:disabled) {
       background-color: map.get($colors, active);
     }
   }
@@ -202,7 +203,8 @@ $outline-buttons: (
       background-color: rgba($color, 0.1);
     }
 
-    &:active:not(:disabled) {
+    &:active:not(:disabled),
+    &.active:not(:disabled) {
       background-color: rgba($color, 0.2);
     }
   }
@@ -239,7 +241,8 @@ $ghost-buttons: (
       color: white;
     }
 
-    &:active:not(:disabled) {
+    &:active:not(:disabled),
+    &.active:not(:disabled) {
       background-color: color.scale($color, $lightness: $active-darken);
       color: white;
     }
@@ -268,7 +271,8 @@ $text-buttons: (
       background-color: rgba($color, 0.1);
     }
 
-    &:active:not(:disabled) {
+    &:active:not(:disabled),
+    &.active:not(:disabled) {
       background-color: rgba($color, 0.2);
     }
   }

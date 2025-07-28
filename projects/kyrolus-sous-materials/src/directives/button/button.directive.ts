@@ -2,6 +2,7 @@ import {
   booleanAttribute,
   computed,
   Directive,
+  ElementRef,
   inject,
   input,
 } from '@angular/core';
@@ -15,15 +16,19 @@ import {
   BUTTON_SIZE,
   BUTTON_VARIANT,
 } from '../../Tokens/button.tokens';
+import { isNgDevMode } from '../../public-api';
 
 @Directive({
   selector: '[ksButton]',
   host: {
     '[class]': 'classes()',
+    '[attr.aria-disabled]': 'disabled() ? "true" : null',
   },
   standalone: true,
 })
 export class ButtonDirective {
+  private readonly hostElement: HTMLElement = inject(ElementRef).nativeElement;
+
   readonly size = input<ButtonSize>(inject(BUTTON_SIZE));
   readonly variant = input<ButtonVariant>(inject(BUTTON_VARIANT));
   readonly appearance = input<ButtonAppearance>(inject(BUTTON_APPEARANCE));
@@ -56,4 +61,24 @@ export class ButtonDirective {
       .filter(Boolean)
       .join(' ')
   );
+  ngOnInit(): void {
+    if (isNgDevMode) {
+      const tagName = this.hostElement.tagName.toUpperCase();
+      if (tagName !== 'BUTTON' && tagName !== 'A') {
+        console.warn(
+          `[ksButton] Accessibility Warning:\n` +
+            `You are using the 'ksButton' directive on a <${tagName.toLowerCase()}> element.\n\n` +
+            `For proper accessibility, you MUST manually add the following:\n` +
+            `  1. Role: role="button"\n` +
+            `  2. Focus: tabindex="0"\n` +
+            `  3. Keyboard Events: Handle (keydown.enter) and (keydown.space).\n` +
+            `  4. Labeling: Use 'aria-label' if the button has no visible text.\n\n
+            (use KsEnterKeyEventDirective and KsSpaceKeyKeyEventDirective)` +
+            `Example:\n` +
+            `<div ksButton role="button" tabindex="0" (keydown.enter)="..." aria-label="..."></div>\n\n` +
+            `It is highly recommended to use <button> or <a> instead.`
+        );
+      }
+    }
+  }
 }

@@ -139,7 +139,8 @@ ks-dialog {
       background: rgba(0, 0, 0, 0.1);
     }
 
-    &:active {
+    &:active,
+    &.active {
       background: rgba(0, 0, 0, 0.2);
     }
   }

@@ -39,6 +39,13 @@ export class DisabledButtonTestComponent {}
   imports: [ButtonDirective],
 })
 export class CustomButtonTestComponent {}
+@Component({
+  selector: 'app-button-test',
+  template: `<div ksButton>Test Button</div>`,
+  standalone: true,
+  imports: [ButtonDirective],
+})
+export class NonButtonTestComponent {}
 
 describe('ButtonDirective', () => {
   describe('Default Button', () => {
@@ -188,6 +195,32 @@ describe('ButtonDirective', () => {
       testElement.nativeElement.dispatchEvent(clickEvent);
       fixture.detectChanges();
       expect(clickEvent.preventDefault).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Non-button element with ButtonDirective', () => {
+    let fixture: ComponentFixture<NonButtonTestComponent>;
+    let testElement: DebugElement;
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [NonButtonTestComponent],
+        providers: [provideZonelessChangeDetection()],
+      }).compileComponents();
+
+      fixture = TestBed.createComponent(NonButtonTestComponent);
+      testElement = fixture.debugElement.query(By.directive(ButtonDirective));
+    });
+
+    it('should create an instance via TestBed', () => {
+      const directiveInstance = testElement.injector.get(ButtonDirective);
+      expect(directiveInstance).toBeTruthy();
+    });
+
+    it('should show console warning if the tag is not button or anchor tag', () => {
+      spyOn(console, 'warn');
+      fixture.detectChanges();
+      expect(console.warn).toHaveBeenCalled();
     });
   });
 });

@@ -12,3 +12,7 @@ export * from './avatar.directive';
 export * from './draggable.directive';
 export * from './toggle-class-on-scroll/toggle-class-on-scroll.directive';
 export * from './toggle-button/toggle-button.directive';
+export * from './keyboard-events/enter-key-event/enter-key-event.directive';
+export * from './keyboard-events/space-key-event/space-key-event.directive';
+export * from './keyboard-events/escape-key-event/escape-key-event.directive';
+export * from './keyboard-events/key-bindings/key-bindings.directive';

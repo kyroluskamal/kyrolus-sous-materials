@@ -39,3 +39,6 @@ export * from './models/models.exports';
 export * from './components/table/table.exports';
 //paginator
 export * from './components/paginator/paginator.exports';
+
+//menu
+export * from './components/menu/menu.exports';

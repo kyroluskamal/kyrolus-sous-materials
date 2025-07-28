@@ -100,7 +100,8 @@
     background: #c0c0c0;
   }
 
-  &:active {
+  &:active,
+  &.active {
     background: #999;
   }
 }
