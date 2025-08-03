@@ -15,7 +15,7 @@ import { Component, input } from '@angular/core';
       <ng-content select="[ksCardImage]" />
       <ng-content select="ks-card-content">
         <div
-          class="w-100 h-100 d-flex flex-row f-justify-content-center f-align-items-center br-s-dashed br-c-gray"
+          class="w-100 h-100 d-flex flex-row justify-content-center align-items-center br-s-dashed br-c-gray"
         >
           Add Content
         </div>

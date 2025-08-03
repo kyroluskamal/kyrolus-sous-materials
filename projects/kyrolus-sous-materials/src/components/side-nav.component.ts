@@ -25,7 +25,7 @@ import { Icon, IconProvider } from '../directives/icon/icon.types';
       [class.flex-column]="useCloseBtn()"
     >
       @if(useCloseBtn() && logo()==""){
-      <div class="d-flex f-justify-content-end ">
+      <div class="d-flex justify-content-end ">
         <button
           [ksIcon]="closeIcon().name"
           [iconOptions]="closeIcon().options"
@@ -35,7 +35,7 @@ import { Icon, IconProvider } from '../directives/icon/icon.types';
       </div>
       } @if(logo()!=""){
       <div
-        class="navbar-height d-flex f-justify-content-center br-b-dark-38 br-w-b-2 br-s-solid br-b-only"
+        class="navbar-height d-flex justify-content-center br-b-dark-38 br-w-b-2 br-s-solid br-b-only"
       >
         <img [ngSrc]="logo()" alt="logo" width="50" height="50" priority />
       </div>

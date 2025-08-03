@@ -14,7 +14,7 @@ import { CardComponent } from './card.component';
   styles: ``,
   host: {
     class:
-      'd-flex flex-row f-justifuy-content-start f-align-items-center gap-3',
+      'd-flex flex-row justifuy-content-start align-items-center gap-3',
   },
 })
 export class CardHeaderComponent implements OnInit {

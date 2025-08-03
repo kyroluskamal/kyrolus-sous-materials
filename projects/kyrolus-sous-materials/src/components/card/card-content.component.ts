@@ -6,7 +6,7 @@ import { CardComponent } from './card.component';
   imports: [],
   template: `
     <ng-content
-      ><div class="w-100 h-100 d-flex flex-row f-justify-content-center"></div
+      ><div class="w-100 h-100 d-flex flex-row justify-content-center"></div
     ></ng-content>
   `,
   styles: ``,

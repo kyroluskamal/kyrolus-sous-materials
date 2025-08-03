@@ -23,17 +23,19 @@
 
 //grid
 @use "./layout/grid" as *;
+@use "./layout/flex" as *;
 
 @use "./utilities/elevations" as *;
 
 @use "./components/accordion" as *;
 @use "./components/table" as *;
 @use "./components/paginator" as *;
+@use "./components/menu" as *;
+@use "./layout/alignments" as *;
 @include generate-display-classes;
 @include generate-responsive-display-classes;
 @include generate-width-classes;
 @include generate-height-classes;
-
 // main.scss (continued)
 
 // Grid Display

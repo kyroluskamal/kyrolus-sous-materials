@@ -66,7 +66,7 @@ import { By } from '@angular/platform-browser';
 
     <div [ksKeyBindings]="[{ key: 'enter', keyAction: 'emit' }]">TO emit</div>
     <div [ksKeyBindings]="[]">TO emit</div>
-    <div ksKeyBindings>TO emit</div>
+    <div [ksKeyBindings]>TO emit</div>
     <div
       [ksKeyBindings]="[{
         key: ' ',
@@ -244,8 +244,6 @@ describe('KeyBindingsDirective', () => {
     expect(() => {
       testElement[7].triggerEventHandler('keydown', event);
       fixture.detectChanges();
-    }).toThrowError(
-      `The target element '#myelement' could not be found.`
-    );
+    }).toThrowError(`The target element '#myelement' could not be found.`);
   });
 });

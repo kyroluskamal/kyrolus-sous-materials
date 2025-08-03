@@ -15,7 +15,7 @@
       background-color: color.change($color, $lightness: ($i * 2.5) * 1%);
     }
     .text-#{$name}-#{$i} {
-      color: color.change($color, $lightness: ($i * 2.5) * 1%);
+      color: color.change($color, $lightness: ($i * 2.5) * 1%) !important;
     }
 
     .br-#{$name}-#{$i} {

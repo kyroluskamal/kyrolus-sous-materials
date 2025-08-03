@@ -6,7 +6,7 @@ const components = [NavbarContainerComponent, NavbarRowComponent];
 
 @NgModule({
   declarations: [],
-  imports: [...components],
-  exports: [...components],
+  imports: [components],
+  exports: [components],
 })
 export class NavbarModule {}

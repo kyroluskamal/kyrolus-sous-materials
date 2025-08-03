@@ -192,9 +192,11 @@ describe('ButtonDirective', () => {
     it('Should not be clicbale', () => {
       const clickEvent = new MouseEvent('click');
       spyOn(clickEvent, 'preventDefault');
+      spyOn(clickEvent, 'stopPropagation');
       testElement.nativeElement.dispatchEvent(clickEvent);
       fixture.detectChanges();
-      expect(clickEvent.preventDefault).not.toHaveBeenCalled();
+      expect(clickEvent.preventDefault).toHaveBeenCalled();
+      expect(clickEvent.stopPropagation).toHaveBeenCalled();
     });
   });
 

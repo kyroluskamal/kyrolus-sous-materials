@@ -15,7 +15,7 @@ import { By } from '@angular/platform-browser';
       tabindex="0"
       ksEnterKeyEvent
       [actions]="['click', 'focus']"
-      [preventDefault]="true"
+      preventDefault
       [targetToFocus]="'button'"
     >
       Press Enter
@@ -26,24 +26,19 @@ import { By } from '@angular/platform-browser';
       tabindex="0"
       ksEnterKeyEvent
       [actions]="['click']"
-      [preventDefault]="true"
+      preventDefault
       [targetToFocus]="'button'"
     >
       Should throw error if targetToFocus is set but action is not focus
     </div>
-    <div
-      tabindex="0"
-      ksEnterKeyEvent
-      [actions]="['focus']"
-      [preventDefault]="true"
-    >
+    <div tabindex="0" ksEnterKeyEvent [actions]="['focus']" preventDefault>
       should throw error if the action is focus but targetToFocus is not set
     </div>
     <div
       tabindex="0"
       ksEnterKeyEvent
       [actions]="['focus']"
-      [preventDefault]="true"
+      preventDefault
       [targetToFocus]="'#myelement'"
     >
       should throw error if the action is focus and targetToFocus is not a valid

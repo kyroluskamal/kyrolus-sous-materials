@@ -1,6 +1,6 @@
 @if(isVisible()){
 
-<div ksBackDrop [class]="position() + ' d-flex f-justify-content-center f-align-items-center'"
+<div ksBackDrop [class]="position() + ' d-flex justify-content-center align-items-center'"
   (click)="onOverlayClick($event)" (keydown)="onKeyDown($event)">
   <div [@fadeInOut] class="alert-container" [class]="theme()" (mouseenter)="pauseTimer()" (mouseleave)="resumeTimer()">
     @if (icon() ) {

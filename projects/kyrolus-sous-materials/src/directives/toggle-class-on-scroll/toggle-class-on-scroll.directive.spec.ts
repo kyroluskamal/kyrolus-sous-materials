@@ -48,7 +48,6 @@ describe('ToggleClassOnScrollDirective', () => {
   function simulateScroll(y: number) {
     Object.defineProperty(document.defaultView, 'scrollY', {
       value: y,
-
       configurable: true,
     });
 

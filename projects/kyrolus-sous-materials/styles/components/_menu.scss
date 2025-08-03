@@ -1,0 +1,22 @@
+@use "../utilities/spacing" as *;
+
+ks-menu {
+  ks-menu-header,
+  ks-menu-section,
+  ks-menu-footer {
+    @extend .px-5;
+  }
+  ks-menu-header:first-of-type + ks-menu-section {
+    @extend .mt-0;
+  }
+
+  ks-menu-section {
+    @extend .mt-5;
+  }
+  ks-menu-item {
+    button,
+    a {
+      @extend .py-3;
+    }
+  }
+}

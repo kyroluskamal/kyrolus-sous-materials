@@ -9,7 +9,7 @@
     "test": "ng test --watch --code-coverage",
     "serve:ssr:DemoApp": "node dist/DemoApp/server/server.mjs",
     "cypress:open": "cypress open",
-    "ks": "ng build kyrolus-sous-materials --watch",
+    "ks": "ng build kyrolus-sous-materials --watch ",
     "demo": "ng serve DemoApp --port 4200 -o"
   },
   "prettier": {
@@ -44,10 +44,11 @@
     "@angular/build": "^20.1.0",
     "@angular/cli": "^20.1.0",
     "@angular/compiler-cli": "^20.1.0",
+    "@angular/platform-browser-dynamic": "^20.1.4",
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",
-    "cypress": "^14.5.2",
+    "cypress": "^14.5.3",
     "jasmine-core": "~5.8.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

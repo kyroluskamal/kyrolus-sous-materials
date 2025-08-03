@@ -15,7 +15,7 @@ import { SpaceKeyEventDirective } from './space-key-event.directive';
       tabindex="0"
       ksSpaceKeyEvent
       [actions]="['click', 'focus']"
-      [preventDefault]="true"
+      preventDefault
       [targetToFocus]="'button'"
     >
       Press Escape
@@ -26,7 +26,7 @@ import { SpaceKeyEventDirective } from './space-key-event.directive';
       tabindex="0"
       ksSpaceKeyEvent
       [actions]="['click']"
-      [preventDefault]="true"
+      preventDefault
       [targetToFocus]="'button'"
     >
       Should throw error if targetToFocus is set but action is not focus
@@ -36,7 +36,7 @@ import { SpaceKeyEventDirective } from './space-key-event.directive';
       tabindex="0"
       ksSpaceKeyEvent
       [actions]="['focus']"
-      [preventDefault]="true"
+      preventDefault
     >
       should throw error if the action is focus but targetToFocus is not set
     </div>
@@ -44,7 +44,7 @@ import { SpaceKeyEventDirective } from './space-key-event.directive';
       tabindex="0"
       ksSpaceKeyEvent
       [actions]="['focus']"
-      [preventDefault]="true"
+      preventDefault
       [targetToFocus]="'#myelement'"
     >
       should throw error if the action is focus and targetToFocus is not a valid

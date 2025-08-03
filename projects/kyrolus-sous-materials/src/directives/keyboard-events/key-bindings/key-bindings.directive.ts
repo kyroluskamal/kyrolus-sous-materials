@@ -12,7 +12,7 @@ export type KeyActionEvent = {
   key: string;
   keyAction: KeyAction | KeyAction[];
   targetToFocus?: string;
-  preventDefault: boolean;
+  preventDefault?: boolean;
 };
 export type KeyAction = 'click' | 'focus' | 'submit' | 'emit';
 

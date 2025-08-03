@@ -105,7 +105,7 @@ import { SuffixDirective } from '../../directives/suffix.directive';
           appearance() === 'n-vertical' ||
           appearance() === 'normal-float'
         "
-        class=" d-flex flex-row f-justify-content-center f-align-items-center icon-left"
+        class=" d-flex flex-row justify-content-center align-items-center icon-left"
       >
         <ng-content select="[ksPrefix]"></ng-content>
       </div>
@@ -149,7 +149,7 @@ import { SuffixDirective } from '../../directives/suffix.directive';
           appearance() === 'n-vertical' ||
           appearance() === 'normal-float'
         "
-        class="br-s-solid bg-grey-35 d-flex flex-row f-justify-content-center f-align-items-center icon-right"
+        class="br-s-solid bg-grey-35 d-flex flex-row justify-content-center align-items-center icon-right"
       >
         <ng-content select="[ksSuffix]"></ng-content>
       </div>
@@ -334,7 +334,7 @@ export class InputComponent
 
   readonly labelClasses = computed(() => {
     let classes =
-      'd-flex flex-row gap-2 f-justify-content-start f-align-items-center';
+      'd-flex flex-row gap-2 justify-content-start align-items-center';
     if (['outline', 'fill', 'normal-float'].includes(this.appearance())) {
       classes += ` floating-label text-grey-29 ${
         this.dir.direction() === 'ltr' ? 'ml-5' : 'mr-5'

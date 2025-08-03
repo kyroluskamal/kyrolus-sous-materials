@@ -29,3 +29,6 @@ import { ButtonDirective } from 'KyrolusSousMaterials';
 `,
 })
 export class Tests {}
+function platformBrowserDynamicTesting(): import('@angular/core').PlatformRef {
+  throw new Error('Function not implemented.');
+}

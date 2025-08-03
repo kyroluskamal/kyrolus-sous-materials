@@ -654,3 +654,21 @@ $background-origin-values: (
     background-origin: $value;
   }
 }
+.list-none,
+ul.list-none {
+  &li {
+    list-style-type: none;
+  }
+}
+
+@each $name, $value in $list-style-type {
+  .list-#{$name} {
+    list-style-type: $value;
+  }
+}
+
+@each $name, $value in $list-style-position {
+  .list-#{$name} {
+    list-style-position: $value;
+  }
+}

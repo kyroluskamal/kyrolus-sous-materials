@@ -1,0 +1,210 @@
+// =======================================================
+// FINAL, SHARED UTILITIES (ALIGNMENT, ORDER, & GAP)
+// Works for both Flexbox and Grid
+// =======================================================
+
+// --- 1. VARIABLES (All variables needed for this file) ---
+@use "../utilities/spacing" as *;
+@use "../abstracts/variables" as *;
+$justify-content-values: (
+  // Positional Alignment
+  "center": center,
+  "start": flex-start,
+  "end": flex-end,
+  "left": left,
+  "right": right,
+
+  // Distributed Alignment
+  "between": space-between,
+  "around": space-around,
+  "evenly": space-evenly,
+  "stretch": stretch // For items with auto sizes
+);
+
+// ---
+
+$align-items-values: (
+  "start": flex-start,
+  "end": flex-end,
+  "center": center,
+  "stretch": stretch,
+  // Default
+  "baseline": baseline,
+  "self-start": self-start,
+  "self-end": self-end,
+);
+
+// ---
+
+$align-content-values: (
+  // Positional Alignment
+  "center": center,
+  "start": flex-start,
+  "end": flex-end,
+  "left": left,
+  "right": right,
+
+  // Distributed Alignment
+  "between": space-between,
+  "around": space-around,
+  "evenly": space-evenly,
+  "stretch": stretch,
+
+  // Default
+  // Baseline Alignment
+  "baseline": baseline
+);
+
+// ---
+
+$align-self-values: (
+  "auto": auto,
+  "start": flex-start,
+  "end": flex-end,
+  "center": center,
+  "stretch": stretch,
+  "baseline": baseline,
+  "self-start": self-start,
+  "self-end": self-end,
+);
+
+// ---
+// This map is for the Grid-only properties justify-items and justify-self
+// It's good to keep it separate for clarity.
+
+$justify-items-self-values: (
+  start,
+  end,
+  center,
+  stretch,
+  self-start,
+  self-end,
+  auto,
+  left,
+  right,
+  baseline
+);
+
+$order-count: 5;
+
+// --- 2. RESPONSIVE UTILITY GENERATION ---
+
+@each $bp-name, $bp-value in $breakpoints {
+  @media (min-width: $bp-value) {
+    // Justify Content, Align Content, Align Items, Align Self
+    @each $name, $value in $justify-content-values {
+      .justify-content-#{$bp-name}-#{$name} {
+        justify-content: $value !important;
+      }
+    }
+    @each $name, $value in $align-content-values {
+      .align-content-#{$bp-name}-#{$name} {
+        align-content: $value !important;
+      }
+    }
+    @each $name, $value in $align-items-values {
+      .align-items-#{$bp-name}-#{$name} {
+        align-items: $value !important;
+      }
+    }
+    @each $name, $value in $align-self-values {
+      .align-self-#{$bp-name}-#{$name} {
+        align-self: $value !important;
+      }
+    }
+
+    // Justify Items & Justify Self (Mainly for Grid)
+    @each $name in $justify-items-self-values {
+      .justify-items-#{$bp-name}-#{$name} {
+        justify-items: $name !important;
+      }
+      .justify-self-#{$bp-name}-#{$name} {
+        justify-self: $name !important;
+      }
+    }
+
+    // Order
+    .order-#{$bp-name}-first {
+      order: -1 !important;
+    }
+    .order-#{$bp-name}-last {
+      order: $order-count + 1 !important;
+    }
+    @for $i from 0 through $order-count {
+      .order-#{$bp-name}-#{$i} {
+        order: $i !important;
+      }
+    }
+
+    // Gap
+    @each $key, $value in $spaces {
+      .gap-#{$bp-name}-#{$key} {
+        gap: $value !important;
+      }
+      .gap-x-#{$bp-name}-#{$key} {
+        column-gap: $value !important;
+      }
+      .gap-y-#{$bp-name}-#{$key} {
+        row-gap: $value !important;
+      }
+    }
+  }
+}
+
+// --- 3. BASE UTILITY GENERATION ---
+
+// Justify, Align
+@each $name, $value in $justify-content-values {
+  .justify-content-#{$name} {
+    justify-content: $value !important;
+  }
+}
+@each $name, $value in $align-content-values {
+  .align-content-#{$name} {
+    align-content: $value !important;
+  }
+}
+@each $name, $value in $align-items-values {
+  .align-items-#{$name} {
+    align-items: $value !important;
+  }
+}
+@each $name, $value in $align-self-values {
+  .align-self-#{$name} {
+    align-self: $value !important;
+  }
+}
+@each $name in $justify-items-self-values {
+  .justify-items-#{$name} {
+    justify-items: $name !important;
+  }
+  .justify-self-#{$name} {
+    justify-self: $name !important;
+  }
+}
+
+// Order
+.order-first {
+  order: -1 !important;
+}
+.order-last {
+  order: $order-count + 1 !important;
+}
+@for $i from 0 through $order-count {
+  .order-#{$i} {
+    order: $i !important;
+  }
+}
+
+// Gap
+@each $key, $value in $spaces {
+  .gap-#{$key} {
+    gap: $value !important;
+  }
+  .gap-x-#{$key} {
+    column-gap: $value !important;
+  }
+  .gap-y-#{$key} {
+    row-gap: $value !important;
+  }
+}

@@ -10,11 +10,13 @@ import {
 } from '@angular/core';
 import { GoogleIcon, IconOptions } from './icon.types';
 import { googleIconFontClass } from '../../public-api';
+import { ICON_OPTIONS } from '../../Tokens/icon.tokens';
 
 @Directive({
   selector: '[ksIcon]',
   host: {
     '[class]': 'classes()',
+    '[attr.aria-hidden]': 'true',
   },
 })
 export class IconDirective {
@@ -39,7 +41,7 @@ export class IconDirective {
     }
   });
   ksIcon = model.required<string>();
-  iconOptions = input.required<IconOptions>();
+  iconOptions = input<IconOptions>(inject(ICON_OPTIONS));
   readonly classes = computed(() => {
     const name = this.ksIcon();
     const options = this.iconOptions();

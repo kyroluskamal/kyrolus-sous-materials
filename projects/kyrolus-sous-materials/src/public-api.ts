@@ -42,3 +42,6 @@ export * from './components/paginator/paginator.exports';
 
 //menu
 export * from './components/menu/menu.exports';
+
+//badge
+export * from './components/badge/badge.component';

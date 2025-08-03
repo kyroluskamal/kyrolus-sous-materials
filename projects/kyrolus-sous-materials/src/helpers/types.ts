@@ -30,13 +30,7 @@ export type KMatColor =
   | 'white'
   | 'black'
   | 'gray';
-export type ButtonSize = 'sm' | 'normal' | 'lg';
-export type ButtonAppearance =
-  | 'basic'
-  | 'raised'
-  | 'outline'
-  | 'flat'
-  | 'custom';
+
 export type SideBarPosition = 'left' | 'right';
 export type SideBarMode = 'over' | 'side';
 export type ToggleButtons = { text: string; value: any; selected: boolean };

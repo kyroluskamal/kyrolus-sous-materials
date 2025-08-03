@@ -6,7 +6,7 @@ import { CardComponent } from './card.component';
   imports: [],
   template: `<ng-content select="button">
     <div
-      class="d-flex flex-row f-justify-content-center f-align-items-center br-s-dashed br-c-gray"
+      class="d-flex flex-row justify-content-center align-items-center br-s-dashed br-c-gray"
     >
       Add Only Buttons
     </div>

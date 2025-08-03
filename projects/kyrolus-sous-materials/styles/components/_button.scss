@@ -129,11 +129,16 @@ $btn-colors: (
   font-weight: 500;
   transition: all 0.2s ease-in-out;
   width: fit-content;
-  &:disabled {
+  &:disabled,
+  &[disabled] {
     opacity: 0.6;
     background-color: #b6b6b6;
     color: #1b1919;
     cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: none;
   }
 }
 
@@ -170,12 +175,13 @@ $btn-colors: (
     background-color: map.get($colors, bg);
     color: map.get($colors, color);
 
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not([disabled]),
+    &:focus:not(:disabled):not([disabled]) {
       background-color: map.get($colors, hover);
     }
 
-    &:active:not(:disabled),
-    &.active:not(:disabled) {
+    &:active:not(:disabled):not([disabled]),
+    &.active:not(:disabled):not([disabled]) {
       background-color: map.get($colors, active);
     }
   }
@@ -199,12 +205,13 @@ $outline-buttons: (
     border: 2px solid $color !important;
     color: $color;
 
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not([disabled]),
+    &:focus:not(:disabled):not([disabled]) {
       background-color: rgba($color, 0.1);
     }
 
-    &:active:not(:disabled),
-    &.active:not(:disabled) {
+    &:active:not(:disabled):not([disabled]),
+    &.active:not(:disabled):not([disabled]) {
       background-color: rgba($color, 0.2);
     }
   }
@@ -214,7 +221,8 @@ $outline-buttons: (
   background-color: transparent;
   border: 2px solid currentColor;
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled):not([disabled]),
+  &:focus:not(:disabled):not([disabled]) {
     background-color: rgba(0, 0, 0, 0.05);
   }
 }
@@ -236,13 +244,13 @@ $ghost-buttons: (
     background-color: transparent;
     color: $color;
 
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not([disabled]) {
       background-color: $color;
       color: white;
     }
 
-    &:active:not(:disabled),
-    &.active:not(:disabled) {
+    &:active:not(:disabled):not([disabled]),
+    &.active:not(:disabled):not([disabled]) {
       background-color: color.scale($color, $lightness: $active-darken);
       color: white;
     }
@@ -267,12 +275,13 @@ $text-buttons: (
     background-color: transparent;
     color: $color;
 
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not([disabled]),
+    &:focus:not(:disabled):not([disabled]) {
       background-color: rgba($color, 0.1);
     }
 
-    &:active:not(:disabled),
-    &.active:not(:disabled) {
+    &:active:not(:disabled):not([disabled]),
+    &.active:not(:disabled):not([disabled]) {
       background-color: rgba($color, 0.2);
     }
   }
@@ -283,7 +292,8 @@ $text-buttons: (
   padding: 0;
   text-decoration: underline;
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled):not([disabled]),
+  &:focus:not(:disabled):not([disabled]) {
     text-decoration: none;
   }
 }

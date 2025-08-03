@@ -15,7 +15,7 @@ import { By } from '@angular/platform-browser';
       tabindex="0"
       ksEscapeKeyEvent
       [actions]="['click', 'focus']"
-      [preventDefault]="true"
+      preventDefault
       [targetToFocus]="'button'"
     >
       Press Escape
@@ -26,25 +26,20 @@ import { By } from '@angular/platform-browser';
       tabindex="0"
       ksEscapeKeyEvent
       [actions]="['click']"
-      [preventDefault]="true"
+      preventDefault
       [targetToFocus]="'button'"
     >
       Should throw error if targetToFocus is set but action is not focus
     </div>
 
-    <div
-      tabindex="0"
-      ksEscapeKeyEvent
-      [actions]="['focus']"
-      [preventDefault]="true"
-    >
+    <div tabindex="0" ksEscapeKeyEvent [actions]="['focus']" preventDefault>
       should throw error if the action is focus but targetToFocus is not set
     </div>
     <div
       tabindex="0"
       ksEscapeKeyEvent
       [actions]="['focus']"
-      [preventDefault]="true"
+      preventDefault
       [targetToFocus]="'#myelement'"
     >
       should throw error if the action is focus and targetToFocus is not a valid
@@ -126,8 +121,6 @@ describe('EscapeKeyEventDirective', () => {
     expect(() => {
       testElement[3].triggerEventHandler('keydown', escapeKeyEvent);
       fixture.detectChanges();
-    }).toThrowError(
-      "The target element '#myelement' could not be found."
-    );
+    }).toThrowError("The target element '#myelement' could not be found.");
   });
 });

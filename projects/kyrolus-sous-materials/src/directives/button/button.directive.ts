@@ -22,7 +22,9 @@ import { isNgDevMode } from '../../public-api';
   selector: '[ksButton]',
   host: {
     '[class]': 'classes()',
-    '[attr.aria-disabled]': 'disabled() ? "true" : null',
+    '[attr.disabled]': 'disabled() ? true : null',
+    '[attr.aria-disabled]': 'disabled() ? true : null',
+    '(click)': 'onClick($event)',
   },
   standalone: true,
 })
@@ -41,12 +43,17 @@ export class ButtonDirective {
     transform: booleanAttribute,
   });
   readonly RaisedClass = input(inject(BUTTON_RAISE_CLASS));
-
+  onClick(event: Event) {
+    if (this.disabled()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
   classes = computed(() =>
     [
       'd-inline-flex',
-      'f-align-items-center',
-      'f-justify-content-center',
+      'align-items-center',
+      'justify-content-center',
       'br-none',
       'cursor-pointer',
       'btn',
@@ -60,6 +67,7 @@ export class ButtonDirective {
     ]
       .filter(Boolean)
       .join(' ')
+      .concat(this.disabled() ? ' disabled' : '')
   );
   ngOnInit(): void {
     if (isNgDevMode) {

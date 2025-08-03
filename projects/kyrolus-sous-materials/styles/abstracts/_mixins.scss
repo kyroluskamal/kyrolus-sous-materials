@@ -34,118 +34,50 @@
 //##########################################################################
 @each $breakpoint, $breakpoint-value in $breakpoints {
   @media (max-width: $breakpoint-value) {
-    @each $name, $value in $flex-direction-values {
-      .flex-#{$breakpoint}-#{$name} {
-        flex-direction: $value;
-      }
-    }
-    @each $name, $value in $flex-wrap-values {
-      .flex-wrap-#{$breakpoint}-#{$name} {
-        flex-wrap: $value;
-      }
-    }
-    @each $name, $value in $flex-justify-content-values {
-      .f-justify-content-#{$breakpoint}-#{$name} {
-        justify-content: #{$value} !important;
-      }
-    }
-    @each $name, $value in $align-items-values {
-      .f-align-items-#{$breakpoint}-#{$name} {
-        align-items: $value;
-      }
-    }
-    @each $name, $value in $flex-align-content-values {
-      .f-align-content-#{$breakpoint}-#{$name} {
-        align-content: #{$value} !important;
-      }
-    }
-    @each $name, $value in $order-values {
-      .order-#{$breakpoint}-#{$name} {
-        order: $value;
-      }
-    }
-    @each $name, $value in $flex-grow-values {
-      .flex-grow-#{$breakpoint}-#{$name} {
-        flex-grow: $value;
-      }
-    }
-    @each $name, $value in $flex-shrink-values {
-      .flex-shrink-#{$breakpoint}-#{$name} {
-        flex-shrink: $value;
-      }
-    }
-    @each $name, $value in $flex-basis-values {
-      .flex-basis-#{$breakpoint}-#{$name} {
-        flex-basis: $value;
-      }
-    }
-    @each $name, $value in $flex-values {
-      .flex-#{$breakpoint}-#{$name} {
-        flex: $value;
-      }
-    }
-    @each $name, $value in $flex-align-self-values {
-      .f-align-self-#{$breakpoint}-#{$name} {
-        align-self: #{$value} !important;
-      }
-    }
+    // @each $name, $value in $flex-justify-content-values {
+    //   .f-justify-content-#{$breakpoint}-#{$name} {
+    //     justify-content: #{$value} !important;
+    //   }
+    // }
+    // @each $name, $value in $align-items-values {
+    //   .f-align-items-#{$breakpoint}-#{$name} {
+    //     align-items: $value;
+    //   }
+    // }
+    // @each $name, $value in $flex-align-content-values {
+    //   .f-align-content-#{$breakpoint}-#{$name} {
+    //     align-content: #{$value} !important;
+    //   }
+    // }
+
+    // @each $name, $value in $flex-align-self-values {
+    //   .f-align-self-#{$breakpoint}-#{$name} {
+    //     align-self: #{$value} !important;
+    //   }
+    // }
   }
 }
-@each $name, $value in $flex-align-self-values {
-  .f-align-self-#{$name} {
-    align-self: #{$value} !important;
-  }
-}
-@each $name, $value in $flex-values {
-  .flex-#{$name} {
-    flex: $value;
-  }
-}
-@each $name, $value in $flex-basis-values {
-  .flex-basis-#{$name} {
-    flex-basis: $value;
-  }
-}
-@each $name, $value in $flex-shrink-values {
-  .flex-shrink-#{$name} {
-    flex-shrink: $value;
-  }
-}
-@each $name, $value in $flex-grow-values {
-  .flex-grow-#{$name} {
-    flex-grow: $value;
-  }
-}
-@each $name, $value in $order-values {
-  .order-#{$name} {
-    order: $value;
-  }
-}
-@each $name, $value in $flex-align-content-values {
-  .f-align-content-#{$name} {
-    align-content: #{$value} !important;
-  }
-}
-@each $name, $value in $flex-justify-content-values {
-  .f-justify-content-#{$name} {
-    justify-content: #{$value} !important;
-  }
-}
-@each $name, $value in $flex-direction-values {
-  .flex-#{$name} {
-    flex-direction: $value;
-  }
-}
-@each $name, $value in $flex-wrap-values {
-  .flex-wrap-#{$name} {
-    flex-wrap: $value;
-  }
-}
-@each $name, $value in $align-items-values {
-  .f-align-items-#{$name} {
-    align-items: $value;
-  }
-}
+// @each $name, $value in $flex-align-self-values {
+//   .f-align-self-#{$name} {
+//     align-self: #{$value} !important;
+//   }
+// }
+
+// @each $name, $value in $flex-align-content-values {
+//   .f-align-content-#{$name} {
+//     align-content: #{$value} !important;
+//   }
+// }
+// @each $name, $value in $flex-justify-content-values {
+//   .f-justify-content-#{$name} {
+//     justify-content: #{$value} !important;
+//   }
+// }
+// @each $name, $value in $align-items-values {
+//   .f-align-items-#{$name} {
+//     align-items: $value;
+//   }
+// }
 
 //##########################################################################
 //###################       width and hright         #########################
@@ -170,6 +102,26 @@
       }
     }
   }
+
+  @each $prefix, $min-width in $breakpoints {
+    @media (min-width: #{$min-width}) {
+      @each $unit-suffix, $unit in $units {
+        @each $size-name, $size-value in $sizes {
+          $class-name: if(
+            $unit-suffix == "",
+            "w-#{$prefix}-#{$size-name}",
+            "w-#{$prefix}-#{$size-name}#{$unit-suffix}"
+          );
+
+          $value: if($size-value == "auto", auto, #{$size-value}#{$unit});
+
+          .#{$class-name} {
+            width: $value;
+          }
+        }
+      }
+    }
+  }
 }
 @mixin generate-height-classes {
   @each $unit-suffix, $unit in $units {
@@ -186,6 +138,26 @@
       );
       .#{$class-name} {
         height: $value;
+      }
+    }
+  }
+
+  @each $prefix, $min-width in $breakpoints {
+    @media (min-width: #{$min-width}) {
+      @each $unit-suffix, $unit in $units {
+        @each $size-name, $size-value in $sizes {
+          $class-name: if(
+            $unit-suffix == "",
+            "h-#{$prefix}-#{$size-name}",
+            "h-#{$prefix}-#{$size-name}#{$unit-suffix}"
+          );
+
+          $value: if($size-value == "auto", auto, #{$size-value}#{$unit});
+
+          .#{$class-name} {
+            width: $value;
+          }
+        }
       }
     }
   }

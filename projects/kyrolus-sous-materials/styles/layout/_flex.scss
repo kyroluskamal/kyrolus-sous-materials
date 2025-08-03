@@ -1,0 +1,97 @@
+// =======================================================
+// FINAL FLEXBOX-ONLY SYSTEM (WITHOUT ALIGNMENT OR GAP)
+// =======================================================
+@use "../abstracts/variables" as *;
+// --- 2. RESPONSIVE UTILITY GENERATION (Mobile-First) ---
+
+@each $bp-name, $bp-value in $breakpoints {
+  @media (min-width: $bp-value) {
+    // Direction
+    @each $name, $value in $flex-direction-values {
+      .flex-#{$bp-name}-#{$name} {
+        flex-direction: $value !important;
+      }
+    }
+
+    // Wrap
+    @each $name, $value in $flex-wrap-values {
+      .flex-#{$bp-name}-#{$name} {
+        flex-wrap: $value !important;
+      }
+    }
+
+    // Grow, Shrink & Fill
+    .flex-#{$bp-name}-fill {
+      flex: 1 1 auto !important;
+    }
+    @each $name, $value in $flex-shrink-values {
+      .flex-#{$bp-name}-grow-#{$name} {
+        flex-grow: $value !important;
+      }
+      .flex-#{$bp-name}-shrink-#{$name} {
+        flex-shrink: $value !important;
+      }
+    }
+
+    @each $name, $value in $order-values {
+      .order-#{$bp-name}-#{$name} {
+        order: $value;
+      }
+    }
+
+    @each $name, $value in $flex-basis-values {
+      .flex-basis-#{$bp-name}-#{$name} {
+        flex-basis: $value;
+      }
+    }
+    @each $name, $value in $flex-order-values {
+      .flex-#{$bp-name}-#{$name} {
+        flex: $value;
+      }
+    }
+  }
+}
+
+// --- 3. BASE UTILITY GENERATION (for all screen sizes) ---
+
+// Direction
+@each $name, $value in $flex-direction-values {
+  .flex-#{$name} {
+    flex-direction: $value !important;
+  }
+}
+
+// Wrap
+@each $name, $value in $flex-wrap-values {
+  .flex-wrap-#{$name} {
+    flex-wrap: $value !important;
+  }
+}
+
+// Fill, Grow, Shrink
+.flex-fill {
+  flex: 1 1 auto !important;
+}
+@each $name, $value in $flex-shrink-values {
+  .flex-grow-#{$name} {
+    flex-grow: $value !important;
+  }
+  .flex-shrink-#{$name} {
+    flex-shrink: $value !important;
+  }
+}
+@each $name, $value in $flex-order-values {
+  .flex-#{$name} {
+    flex: $value;
+  }
+}
+@each $name, $value in $flex-basis-values {
+  .flex-basis-#{$name} {
+    flex-basis: $value;
+  }
+}
+@each $name, $value in $order-values {
+  .order-#{$name} {
+    order: $value;
+  }
+}

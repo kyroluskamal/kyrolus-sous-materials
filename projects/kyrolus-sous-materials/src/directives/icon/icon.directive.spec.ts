@@ -110,6 +110,11 @@ describe('IconDirective', () => {
         testElement[0].nativeElement.classList.contains('material-icons')
       ).toBeTrue();
     });
+    it('should have aria-hidden set to true', () => {
+      expect(testElement[0].nativeElement.getAttribute('aria-hidden')).toBe(
+        'true'
+      );
+    });
     it('Normal Google Icon should have the font family "Material Icons"', async () => {
       expect(await getFontFamily(0)).toBe('"Material Icons"');
     });

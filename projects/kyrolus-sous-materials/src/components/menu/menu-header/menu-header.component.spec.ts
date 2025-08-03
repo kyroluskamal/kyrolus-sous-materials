@@ -1,19 +1,19 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { MenuSectionComponent } from './menu-section.component';
+// import { MenuHeaderComponent } from './menu-header.component';
 // import { provideZonelessChangeDetection } from '@angular/core';
 
-// describe('MenuSectionComponent', () => {
-//   let component: MenuSectionComponent;
-//   let fixture: ComponentFixture<MenuSectionComponent>;
+// describe('MenuHeaderComponent', () => {
+//   let component: MenuHeaderComponent;
+//   let fixture: ComponentFixture<MenuHeaderComponent>;
 
 //   beforeEach(async () => {
 //     await TestBed.configureTestingModule({
-//       imports: [MenuSectionComponent],
+//       imports: [MenuHeaderComponent],
 //       providers: [provideZonelessChangeDetection()],
 //     }).compileComponents();
 
-//     // fixture = TestBed.createComponent(MenuSectionComponent);
+//     // fixture = TestBed.createComponent(MenuHeaderComponent);
 //     // component = fixture.componentInstance;
 //     // fixture.detectChanges();
 //   });

@@ -9,7 +9,9 @@
         "@schematics/angular:component": {
           "style": "scss",
           "type": "component",
-          "standalone": true
+          "standalone": true,
+          "inlineStyle": true,
+          "inlineTemplate": true
         },
         "@schematics/angular:directive": {
           "type": "directive",

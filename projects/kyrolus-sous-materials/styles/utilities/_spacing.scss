@@ -2,7 +2,7 @@
 $spacer: 1rem;
 
 // Sizes for margin/padding
-$sizes: (
+$spaces: (
   0: 0,
   1: $spacer * 0.1,
   2: $spacer * 0.2,
@@ -57,12 +57,12 @@ $sides: (
     top,
     bottom,
   ),
-  null: null // For all sides,,,,,,,,,,,,
+  null: null // For all sides,,,,,,,,,,,,,
 );
 
 @each $prop, $css-prop in $properties {
   @each $side, $css-side in $sides {
-    @each $size, $value in $sizes {
+    @each $size, $value in $spaces {
       // Generate the class name
       @if $side == null {
         .#{$prop}-#{$size} {

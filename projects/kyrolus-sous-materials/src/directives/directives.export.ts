@@ -16,3 +16,5 @@ export * from './keyboard-events/enter-key-event/enter-key-event.directive';
 export * from './keyboard-events/space-key-event/space-key-event.directive';
 export * from './keyboard-events/escape-key-event/escape-key-event.directive';
 export * from './keyboard-events/key-bindings/key-bindings.directive';
+export * from './keyboard-events/simple-key-event/simple-key-event.directive';
+export * from './separator/separator.directive';

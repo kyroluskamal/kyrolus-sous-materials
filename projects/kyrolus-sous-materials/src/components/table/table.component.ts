@@ -53,7 +53,6 @@ export class TableComponent<T> {
   tableOptions = input<KsTableOptions>(inject(TABLE_OPTIONS));
   options = linkedSignal(() => this.tableOptions());
   useAddButton = input<boolean>(true);
-  // onAddClick = output<void>();
   appearance = input<KsTableAppearance>(inject(TABLE_APPEARANCE));
   gridAppearance = input<KsTableGridAppearance>({});
   headerAppearance = input<KsTableHeaderAppearance>({});
