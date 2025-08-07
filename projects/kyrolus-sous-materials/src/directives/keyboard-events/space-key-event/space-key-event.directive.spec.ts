@@ -6,6 +6,8 @@ import {
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { SpaceKeyEventDirective } from './space-key-event.directive';
+import { vi } from 'vitest';
+
 @Component({
   selector: 'app-escape-key-event',
   standalone: true,
@@ -32,12 +34,7 @@ import { SpaceKeyEventDirective } from './space-key-event.directive';
       Should throw error if targetToFocus is set but action is not focus
     </div>
 
-    <div
-      tabindex="0"
-      ksSpaceKeyEvent
-      [actions]="['focus']"
-      preventDefault
-    >
+    <div tabindex="0" ksSpaceKeyEvent [actions]="['focus']" preventDefault>
       should throw error if the action is focus but targetToFocus is not set
     </div>
     <div
@@ -75,7 +72,7 @@ describe('SpaceKeyEventDirective', () => {
     const hostElement = testElement[0].nativeElement;
     hostElement.focus();
     fixture.detectChanges();
-    spyOn(hostElement, 'click');
+    vi.spyOn(hostElement, 'click');
     const spaceKeyEvent = new KeyboardEvent('keydown', {
       key: ' ',
       bubbles: true,

@@ -6,6 +6,8 @@ import {
 import { EscapeKeyEventDirective } from './escape-key-event.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { vi } from 'vitest';
+
 @Component({
   selector: 'app-escape-key-event',
   standalone: true,
@@ -67,7 +69,7 @@ describe('EscapeKeyEventDirective', () => {
     const hostElement = testElement[0].nativeElement;
     hostElement.focus();
     fixture.detectChanges();
-    spyOn(hostElement, 'click');
+    vi.spyOn(hostElement, 'click');
     const escapeKeyEvent = new KeyboardEvent('keydown', {
       key: 'Escape',
       bubbles: true,

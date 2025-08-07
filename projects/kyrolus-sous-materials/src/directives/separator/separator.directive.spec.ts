@@ -42,19 +42,19 @@ describe('SeparatorDirective', () => {
 
   it('should have the role attribute set to "separator" when not decorative', () => {
     const directiveInstance = testElement[0].injector.get(SeparatorDirective);
-    expect(directiveInstance.isDecorative()).toBeFalse();
+    expect(directiveInstance.isDecorative()).toBeFalsy();
     expect(testElement[0].nativeElement.getAttribute('role')).toBe('separator');
   });
 
   it('should have the role attribute set to null when decorative', () => {
     const directiveInstance = testElement[1].injector.get(SeparatorDirective);
-    expect(directiveInstance.isDecorative()).toBeTrue();
+    expect(directiveInstance.isDecorative()).toBeTruthy();
     expect(testElement[1].nativeElement.getAttribute('role')).toBeNull();
   });
 
   it('should have aria-hidden set to true when decorative', () => {
     const directiveInstance = testElement[1].injector.get(SeparatorDirective);
-    expect(directiveInstance.isDecorative()).toBeTrue();
+    expect(directiveInstance.isDecorative()).toBeTruthy();
     expect(testElement[1].nativeElement.getAttribute('aria-hidden')).toBe(
       'true'
     );

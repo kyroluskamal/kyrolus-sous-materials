@@ -6,6 +6,8 @@ import {
 import { EnterKeyEventDirective } from './enter-key-event.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { vi } from 'vitest';
+
 @Component({
   selector: 'app-enter-key-event',
   standalone: true,
@@ -67,7 +69,7 @@ describe('EnterKeyEventDirective', () => {
     const divElement = testElement[0].nativeElement;
     divElement.focus();
     fixture.detectChanges();
-    spyOn(divElement, 'click');
+    vi.spyOn(divElement, 'click');
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
     testElement[0].triggerEventHandler('keydown', event);
     fixture.detectChanges();
@@ -81,9 +83,9 @@ describe('EnterKeyEventDirective', () => {
     ).nativeElement;
     divElement.focus();
     fixture.detectChanges();
-    spyOn(buttonElement, 'focus');
+    vi.spyOn(buttonElement, 'focus');
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
-    spyOn(event, 'preventDefault');
+    vi.spyOn(event, 'preventDefault');
     testElement[0].triggerEventHandler('keydown', event);
     fixture.detectChanges();
     expect(buttonElement.focus).toHaveBeenCalled();

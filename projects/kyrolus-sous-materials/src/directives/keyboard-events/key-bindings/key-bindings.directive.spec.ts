@@ -6,6 +6,7 @@ import {
 import { KeyBindingsDirective } from './key-bindings.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { vi } from 'vitest';
 
 @Component({
   selector: 'app-key-bindings',
@@ -122,18 +123,18 @@ describe('KeyBindingsDirective', () => {
   it('should Click the div if Enter is pressed and preventDefault is true', () => {
     const hostElement = testElement[0].nativeElement as HTMLElement;
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
-    spyOn(hostElement, 'click');
-    spyOn(event, 'preventDefault');
+    vi.spyOn(hostElement, 'click');
+    vi.spyOn(event, 'preventDefault');
     testElement[0].triggerEventHandler('keydown', event);
     fixture.detectChanges();
 
     expect(hostElement.click).toHaveBeenCalled();
-    expect(hostElement.classList.contains('active')).toBeTrue();
+    expect(hostElement.classList.contains('active')).toBeTruthy();
     expect(event.preventDefault).toHaveBeenCalled();
     const eventAfter = new KeyboardEvent('keyup', { key: 'Enter' });
     testElement[0].triggerEventHandler('keyup', eventAfter);
     fixture.detectChanges();
-    expect(hostElement.classList.contains('active')).toBeFalse();
+    expect(hostElement.classList.contains('active')).toBeFalsy();
   });
 
   it('should focus the button if Escape is pressed', () => {
@@ -154,10 +155,10 @@ describe('KeyBindingsDirective', () => {
     const hostElement = testElement[0].nativeElement as HTMLElement;
     hostElement.focus();
     fixture.detectChanges();
-    spyOn(hostElement, 'click');
+    vi.spyOn(hostElement, 'click');
 
     const event = new KeyboardEvent('keydown', { key: ' ' });
-    spyOn(event, 'preventDefault');
+    vi.spyOn(event, 'preventDefault');
     testElement[0].triggerEventHandler('keydown', event);
     fixture.detectChanges();
 
@@ -195,7 +196,7 @@ describe('KeyBindingsDirective', () => {
     hostElement.focus();
     fixture.detectChanges();
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
-    spyOn(form, 'requestSubmit');
+    vi.spyOn(form, 'requestSubmit');
     testElement[3].triggerEventHandler('keydown', event);
     fixture.detectChanges();
     expect(form.requestSubmit).toHaveBeenCalled();
@@ -206,7 +207,7 @@ describe('KeyBindingsDirective', () => {
     hostElement.focus();
     fixture.detectChanges();
     const directiveInstance = testElement[4].injector.get(KeyBindingsDirective);
-    spyOn(directiveInstance.keyAction, 'emit');
+    vi.spyOn(directiveInstance.keyAction, 'emit');
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
     testElement[4].triggerEventHandler('keydown', event);
     fixture.detectChanges();
@@ -219,7 +220,7 @@ describe('KeyBindingsDirective', () => {
     hostElement.focus();
     fixture.detectChanges();
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
-    spyOn(hostElement, 'click');
+    vi.spyOn(hostElement, 'click');
     testElement[5].triggerEventHandler('keydown', event);
     fixture.detectChanges();
     expect(hostElement.click).not.toHaveBeenCalled();
@@ -230,7 +231,7 @@ describe('KeyBindingsDirective', () => {
     hostElement.focus();
     fixture.detectChanges();
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
-    spyOn(hostElement, 'click');
+    vi.spyOn(hostElement, 'click');
     testElement[6].triggerEventHandler('keydown', event);
     fixture.detectChanges();
     expect(hostElement.click).not.toHaveBeenCalled();

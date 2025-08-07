@@ -4,6 +4,7 @@ import {
   MenuComponent,
   SeparatorDirective,
 } from '../../../public-api';
+import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
 
 @Component({
   selector: 'ks-menu-footer',
@@ -19,6 +20,7 @@ import {
   styles: ``,
   host: {
     class: 'w-100 d-flex flex-wrap-wrap gap-2 py-5 fw-bold align-items-center',
+    '[attr.role]': '"none"',
   },
 })
 export class MenuFooterComponent {
@@ -31,9 +33,7 @@ export class MenuFooterComponent {
   ksMenu = inject(MenuComponent, { host: true, optional: true });
   constructor() {
     if (isNgDevMode && !this.ksMenu) {
-      throw new Error(
-        'MenuFooterComponent must be used within a ks-menu component. Please ensure it is placed inside a ks-menu element.'
-      );
+      throw new Error(getErrorMessageForMenuItemNotInMenu('Footer'));
     }
   }
 }

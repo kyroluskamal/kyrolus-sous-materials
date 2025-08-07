@@ -6,9 +6,10 @@ import {
   input,
   viewChild,
 } from '@angular/core';
-import { ButtonDirective } from '../../../public-api';
+import { ButtonDirective, isNgDevMode } from '../../../public-api';
 import { NgTemplateOutlet } from '@angular/common';
-
+import { MenuComponent } from '../menu/menu.component';
+import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
 @Component({
   selector: 'ks-menu-item',
   imports: [ButtonDirective, NgTemplateOutlet],
@@ -48,6 +49,7 @@ import { NgTemplateOutlet } from '@angular/common';
   styles: [``],
   host: {
     class: 'text-dark d-block',
+    '[attr.role]': '"menuitem"',
   },
 
   standalone: true,
@@ -58,8 +60,13 @@ export class MenuItemComponent {
   readonly disabled = input<boolean, string>(false, {
     transform: booleanAttribute,
   });
-
   readonly button = viewChild(ButtonDirective, {
     read: ElementRef,
   });
+  ksMenu = inject(MenuComponent, { host: true, optional: true });
+  constructor() {
+    if (isNgDevMode && !this.ksMenu) {
+      throw new Error(getErrorMessageForMenuItemNotInMenu('Item'));
+    }
+  }
 }

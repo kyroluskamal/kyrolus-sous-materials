@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import {
+  MenuAriaHandlingDirective,
   MenuComponent,
   MenuFooterComponent,
   MenuHeaderComponent,
@@ -13,6 +14,7 @@ const comps = [
   MenuSectionComponent,
   MenuHeaderComponent,
   MenuFooterComponent,
+  MenuAriaHandlingDirective,
 ];
 @NgModule({
   imports: [comps],

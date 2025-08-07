@@ -4,7 +4,6 @@ import {
   contentChildren,
   Directive,
   ElementRef,
-  HostListener,
   inject,
   Renderer2,
 } from '@angular/core';
@@ -13,8 +12,7 @@ import { MenuItemComponent } from '../menu.exports';
 @Directive({
   selector: '[ksMenuAriaHandling]',
   host: {
-    '[attr.role]': '"menu"',
-    '[attr.aria-orientation]': '"vertical"',
+    '(keydown)': 'handleKeydown($event)',
   },
 })
 export class MenuAriaHandlingDirective {
@@ -28,7 +26,6 @@ export class MenuAriaHandlingDirective {
       .map((item) => item.button()?.nativeElement)
   );
   readonly buttonsWithText = computed(() => {
-    // هيشتغل بس لما قائمة الأزرار تتغير
     return this.buttons().map((button) => {
       const clone = button.cloneNode(true) as HTMLElement;
       const icon = clone.querySelector('[ksicon]');
@@ -45,10 +42,6 @@ export class MenuAriaHandlingDirective {
 
   constructor() {
     afterNextRender(() => {
-      this.menuItems().forEach((item) => {
-        this.renderer2.setAttribute(item.el.nativeElement, 'role', 'menuitem');
-      });
-
       this.buttons().forEach((button) => {
         this.renderer2.setAttribute(button, 'tabindex', '-1');
       });
@@ -58,28 +51,22 @@ export class MenuAriaHandlingDirective {
     });
   }
 
-  @HostListener('keydown', ['$event'])
   handleKeydown(event: KeyboardEvent) {
     const buttons = this.buttons();
     if (buttons.length === 0) return;
-    if (event.key.length === 1 && !event.ctrlKey && !event.metaKey) {
+    if (
+      event.key.length === 1 &&
+      event.key !== ' ' &&
+      !event.ctrlKey &&
+      !event.metaKey
+    ) {
       this.handleTypeahead(event);
       return;
     }
 
     let currentIndex = buttons.indexOf(document.activeElement as HTMLElement);
 
-    if (
-      currentIndex === -1 &&
-      (event.key === 'ArrowDown' || event.key === 'ArrowUp')
-    ) {
-      buttons[0].focus();
-      event.preventDefault();
-      return;
-    }
-
     let nextButton: HTMLElement | undefined;
-
     switch (event.key) {
       case 'ArrowDown':
         nextButton = buttons[(currentIndex + 1) % buttons.length];
@@ -99,8 +86,6 @@ export class MenuAriaHandlingDirective {
         event.preventDefault();
         (document.activeElement as HTMLElement)?.click();
         return;
-      default:
-        return;
     }
 
     if (nextButton) {
@@ -109,8 +94,7 @@ export class MenuAriaHandlingDirective {
     }
   }
 
-  private handleTypeahead(event: KeyboardEvent) {
-    const buttons = this.buttons();
+  handleTypeahead(event: KeyboardEvent) {
     event.preventDefault();
 
     if (this.searchTimeout) {
@@ -123,17 +107,16 @@ export class MenuAriaHandlingDirective {
       this.searchString = '';
     }, 500);
 
-    const currentIndex = buttons.indexOf(document.activeElement as HTMLElement);
+    // ✅ New, simpler, and more correct search logic
+    const buttons = this.buttons();
+    const buttonsText = this.buttonsWithText();
 
-    for (let i = 1; i <= buttons.length; i++) {
-      const checkIndex = (currentIndex + i) % buttons.length;
-      const button = buttons[checkIndex];
-      const buttonText = this.buttonsWithText()[checkIndex];
-
-      if (buttonText.startsWith(this.searchString)) {
-        this.focusButton(button);
-        return;
-      }
+    // Find the first button that starts with the complete search string
+    const buttonToFocus = buttons.find((_, index) =>
+      buttonsText[index].startsWith(this.searchString)
+    );
+    if (buttonToFocus) {
+      this.focusButton(buttonToFocus);
     }
   }
   private focusButton(button: HTMLElement) {

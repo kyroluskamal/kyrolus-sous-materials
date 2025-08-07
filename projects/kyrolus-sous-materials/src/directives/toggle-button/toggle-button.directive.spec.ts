@@ -57,10 +57,10 @@ describe('ToggleButtonDirective', () => {
     it('toggled should changed on click', () => {
       const toggleButton = testElement[0].injector.get(ToggleButtonDirective);
       const initialIcon = toggleButton.iconDirective.ksIcon();
-      expect(toggleButton.toggled()).toBeFalse();
+      expect(toggleButton.toggled()).toBeFalsy();
       testElement[0].triggerEventHandler('click', null);
       fixture.detectChanges();
-      expect(toggleButton.toggled()).toBeTrue();
+      expect(toggleButton.toggled()).toBeTruthy();
       expect(toggleButton.iconDirective.ksIcon()).not.toBe(initialIcon);
     });
     it('Icon should be "close icon" when toggled and returns back to the inical icon when toggled == false', () => {
@@ -81,7 +81,7 @@ describe('ToggleButtonDirective', () => {
         (node) =>
           node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== ''
       );
-      expect(hasTextNodes).toBeTrue();
+      expect(hasTextNodes).toBeTruthy();
       expect(nodes[0].textContent?.trim()).toBe('close');
     });
 
@@ -90,24 +90,24 @@ describe('ToggleButtonDirective', () => {
       fixture.detectChanges();
       await fixture.whenStable();
       const toggleButton = testElement[0].injector.get(ToggleButtonDirective);
-      expect(toggleButton.toggled()).toBeTrue();
+      expect(toggleButton.toggled()).toBeTruthy();
       expect(toggleButton.iconDirective.ksIcon()).toBe('close');
 
       testElement[0].triggerEventHandler('click', null);
       fixture.detectChanges();
-      expect(toggleButton.toggled()).toBeFalse();
+      expect(toggleButton.toggled()).toBeFalsy();
       expect(toggleButton.iconDirective.ksIcon()).toBe('menu');
-      expect(fixture.componentInstance.isToggled).toBeFalse();
+      expect(fixture.componentInstance.isToggled).toBeFalsy();
     });
   });
 
   describe('Using Bootstrap Icons', () => {
     it('toggled should changed on click', () => {
       const toggleButton = testElement[1].injector.get(ToggleButtonDirective);
-      expect(toggleButton.toggled()).toBeFalse();
+      expect(toggleButton.toggled()).toBeFalsy();
       testElement[1].triggerEventHandler('click', null);
       fixture.detectChanges();
-      expect(toggleButton.toggled()).toBeTrue();
+      expect(toggleButton.toggled()).toBeTruthy();
       expect(toggleButton.iconDirective.ksIcon()).toBe('x');
     });
     it('Icon should be "x" when toggled and returns back to the inical icon when toggled == false', () => {
@@ -128,7 +128,7 @@ describe('ToggleButtonDirective', () => {
         (node) =>
           node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== ''
       );
-      expect(hasTextNodes).toBeFalse();
+      expect(hasTextNodes).toBeFalsy();
     });
   });
 });

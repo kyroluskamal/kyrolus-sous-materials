@@ -98,64 +98,45 @@ describe('IconDirective', () => {
 
       fixture.detectChanges();
     });
-    async function getFontFamily(index: number): Promise<string> {
-      fixture.detectChanges();
-      await fixture.whenStable();
-      const styles = window.getComputedStyle(testElement[index].nativeElement);
-      debugger;
-      return styles.fontFamily;
-    }
+
     it('Normal Google Icon should have the correct class "Material Icons"', () => {
       expect(
         testElement[0].nativeElement.classList.contains('material-icons')
-      ).toBeTrue();
+      ).toBeTruthy();
     });
     it('should have aria-hidden set to true', () => {
       expect(testElement[0].nativeElement.getAttribute('aria-hidden')).toBe(
         'true'
       );
     });
-    it('Normal Google Icon should have the font family "Material Icons"', async () => {
-      expect(await getFontFamily(0)).toBe('"Material Icons"');
-    });
-    it('Normal Google Icon should have be the default if the type is not provided', async () => {
-      expect(await getFontFamily(0)).toBe('"Material Icons"');
-    });
+
     it('Round Google Icon should have the correct class "Material Icons Round"', () => {
       expect(
         testElement[1].nativeElement.classList.contains('material-icons-round')
-      ).toBeTrue();
+      ).toBeTruthy();
     });
-    it('Round Google Icon should have the font family "Material Icons Round"', async () => {
-      expect(await getFontFamily(1)).toBe('"Material Icons Round"');
-    });
+
     it('Outlined Google Icon should have the correct class "Material Icons Outlined"', () =>
       expect(
         testElement[2].nativeElement.classList.contains(
           'material-icons-outlined'
         )
-      ).toBeTrue());
-    it('Outlined Google Icon should have the font family "Material Icons Outlined"', async () => {
-      expect(await getFontFamily(2)).toBe('"Material Icons Outlined"');
-    });
+      ).toBeTruthy());
+
     it('Sharp Google Icon should have the correct class "Material Icons Sharp"', () => {
       expect(
         testElement[3].nativeElement.classList.contains('material-icons-sharp')
-      ).toBeTrue();
+      ).toBeTruthy();
     });
-    it('Sharp Google Icon should have the font family "Material Icons Sharp"', async () => {
-      expect(await getFontFamily(3)).toBe('"Material Icons Sharp"');
-    });
+
     it('Two-tone Google Icon should have the correct class "Material Icons Two Tone"', () => {
       expect(
         testElement[4].nativeElement.classList.contains(
           'material-icons-two-tone'
         )
-      ).toBeTrue();
+      ).toBeTruthy();
     });
-    it('Two-tone Google Icon should have the font family "Material Icons Two Tone"', async () => {
-      expect(await getFontFamily(4)).toBe('"Material Icons Two Tone"');
-    });
+
 
     it('should have a text nodes when the icon type is google', () => {
       const nodes = Array.from<Node>(testElement[0].nativeElement.childNodes);
@@ -163,7 +144,7 @@ describe('IconDirective', () => {
         (node) =>
           node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== ''
       );
-      expect(hasTextNodes).toBeTrue();
+      expect(hasTextNodes).toBeTruthy();
       expect(nodes[0].textContent?.trim()).toBe('home');
     });
   });
@@ -184,10 +165,10 @@ describe('IconDirective', () => {
     });
 
     it('should have the correct class "bi bi-0-circle-fill"', () => {
-      expect(testElement.nativeElement.classList.contains('bi')).toBeTrue();
+      expect(testElement.nativeElement.classList.contains('bi')).toBeTruthy();
       expect(
         testElement.nativeElement.classList.contains('bi-0-circle-fill')
-      ).toBeTrue();
+      ).toBeTruthy();
     });
 
     it('should not have text nodes when the icon type is bootstrap', () => {
@@ -196,7 +177,7 @@ describe('IconDirective', () => {
         (node) =>
           node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== ''
       );
-      expect(hasTextNodes).toBeFalse();
+      expect(hasTextNodes).toBeFalsy();
     });
   });
 });

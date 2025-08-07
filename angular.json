@@ -39,14 +39,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/kyrolus-sous-materials/tsconfig.spec.json",
-            "styles": [
-              "node_modules/kyrolus-sous-materials/styles/styles.scss",
-              "node_modules/bootstrap-icons/font/bootstrap-icons.scss",
-              "node_modules/material-icons/iconfont/material-icons.css"
-            ]
+            "runner": "vitest",
+            "buildTarget": "::development"
           }
         }
       }

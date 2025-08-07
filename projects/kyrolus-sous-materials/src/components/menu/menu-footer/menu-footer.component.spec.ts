@@ -1,43 +1,41 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { MenuHeaderComponent } from './menu-header.component';
 import {
   Component,
   DebugElement,
   provideZonelessChangeDetection,
 } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MenuFooterComponent } from './menu-footer.component';
 import { MenuComponent } from '../menu.exports';
 import { By } from '@angular/platform-browser';
 import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
+
 @Component({
-  selector: 'ks-menu-header-test',
   template: `
     <ks-menu>
-      <ks-menu-header useSeparator>Test Footer</ks-menu-header>
+      <ks-menu-footer useSeparator>Test Footer</ks-menu-footer>
     </ks-menu>
     <ks-menu>
-      <ks-menu-header useSeparator decorativeSeparator
-        >Test Footer</ks-menu-header
+      <ks-menu-footer useSeparator decorativeSeparator
+        >Test Footer</ks-menu-footer
       >
     </ks-menu>
   `,
   standalone: true,
-  imports: [MenuComponent, MenuHeaderComponent],
+  imports: [MenuComponent, MenuFooterComponent],
 })
 class TestHostComponent {}
-describe('MenuHeaderComponent', () => {
+describe('MenuFooterComponent', () => {
   let fixture: ComponentFixture<TestHostComponent>;
   let debugElement: DebugElement[];
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestHostComponent],
       providers: [provideZonelessChangeDetection()],
+      imports: [TestHostComponent],
     }).compileComponents();
-
     fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
     debugElement = fixture.debugElement.queryAll(
-      By.directive(MenuHeaderComponent)
+      By.directive(MenuFooterComponent)
     );
   });
 
@@ -63,8 +61,8 @@ describe('MenuHeaderComponent', () => {
 
     it('Should throw an error if used outside of ks-menu', () => {
       expect(() => {
-        TestBed.createComponent(MenuHeaderComponent);
-      }).toThrowError(getErrorMessageForMenuItemNotInMenu('Header'));
+        TestBed.createComponent(MenuFooterComponent);
+      }).toThrowError(getErrorMessageForMenuItemNotInMenu('Footer'));
     });
   });
 
