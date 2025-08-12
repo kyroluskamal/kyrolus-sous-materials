@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   computed,
   Directive,
   effect,
@@ -16,12 +17,15 @@ import { ICON_OPTIONS } from '../../Tokens/icon.tokens';
   selector: '[ksIcon]',
   host: {
     '[class]': 'classes()',
-    '[attr.aria-hidden]': 'true',
+    '[attr.aria-hidden]': '!isNotDecorative() ? "true" : null',
   },
 })
 export class IconDirective {
   private readonly elmRef = inject(ElementRef);
   private readonly renderer2 = inject(Renderer2);
+  readonly isNotDecorative = input<boolean, string>(false, {
+    transform: booleanAttribute,
+  });
   eff = effect(() => {
     this.elmRef.nativeElement.childNodes.forEach((node: Node) => {
       this.renderer2.removeChild(this.elmRef.nativeElement, node);

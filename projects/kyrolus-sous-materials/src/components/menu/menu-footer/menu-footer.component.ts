@@ -2,6 +2,7 @@ import { booleanAttribute, Component, inject, input } from '@angular/core';
 import {
   isNgDevMode,
   MenuComponent,
+  PopoverMenuBlock,
   SeparatorDirective,
 } from '../../../public-api';
 import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
@@ -31,8 +32,10 @@ export class MenuFooterComponent {
     transform: booleanAttribute,
   });
   ksMenu = inject(MenuComponent, { host: true, optional: true });
+  ksPopOverMenu = inject(PopoverMenuBlock, { host: true, optional: true });
+
   constructor() {
-    if (isNgDevMode && !this.ksMenu) {
+    if (isNgDevMode && !this.ksMenu && !this.ksPopOverMenu) {
       throw new Error(getErrorMessageForMenuItemNotInMenu('Footer'));
     }
   }

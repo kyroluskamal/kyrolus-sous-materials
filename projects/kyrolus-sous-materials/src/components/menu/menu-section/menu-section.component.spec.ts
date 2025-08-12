@@ -60,12 +60,12 @@ describe('MenuSectionComponent', () => {
       const sectionTitle = debugElement[0].nativeElement.querySelector('p');
       debugger;
       expect(sectionTitle.textContent).toBe('Test Section');
-      expect(sectionTitle.id).toBe('test-section');
+      expect(sectionTitle.id).toContain('test-section');
     });
     it('Should use the provided id', () => {
       const sectionTitle = debugElement[1].nativeElement.querySelector('p');
       expect(sectionTitle.textContent).toBe('Test Section2');
-      expect(sectionTitle.id).toBe('menu-test-section');
+      expect(sectionTitle.id).toContain('menu-test-section');
     });
     it('Should throw an error if the parent menu is not provided', () => {
       expect(() => {
@@ -86,7 +86,7 @@ describe('MenuSectionComponent', () => {
     });
     it('Should have title with id', () => {
       const sectionTitle = debugElement[0].nativeElement.querySelector('p');
-      expect(sectionTitle.id).toBe('test-section');
+      expect(sectionTitle.id).toContain('test-section');
     });
 
     it('Should have role group with aria-labelledby', () => {

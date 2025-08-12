@@ -1,0 +1,97 @@
+
+@let opened = isOpen();
+@let menu = ksMenu();
+@let buttonConfig = menu.buttonConfig;
+@let options = menu.options;
+@let menuConfig = menu.menuConfig;
+<div class="position-relative d-inline-block" >
+  <div #buttonTemplate>
+    @if(toggleButtonTemplate()) {
+      <ng-container [ngTemplateOutlet]="toggleButtonTemplate()"></ng-container>
+    }@else {
+      <button
+      ksToggleButton
+
+      [size]="buttonConfig.size"
+      [variant]="buttonConfig.variant"
+      [appearance]="buttonConfig.appearance"
+      isRaised="{{buttonConfig.isRaised || false}}"
+      [borderRadius]="buttonConfig.borderRadius!"
+      [shape]="buttonConfig.shape"
+      disabled="{{buttonConfig.disabled || false}}"
+      [id]="buttonConfig.id || 'menu-Toggle-button'"
+      [iconName]="buttonConfig.iconName|| 'menu'"
+      [iconOptions]="buttonConfig.iconOptions || ksMenu().options.iconOptions"
+      RaisedClass="{{buttonConfig.RaisedClass}}"
+      class="px-6 py-5"
+      aria-haspopup="true"
+      isNotDecorative="{{buttonConfig.isNotDecorative || false}}"
+      [attr.aria-expanded]="opened"
+      [attr.aria-controls]="opened ? id : null"
+      [(toggled)]="isOpen"
+    ></button>
+    }</div>
+     <ng-template #header>
+      <ng-content select="ks-menu-header"></ng-content>
+    </ng-template>
+     <ng-template #footer>
+      <ng-content select="ks-menu-footer"></ng-content>
+    </ng-template>
+
+    @if(opened) {
+        <ks-menu
+          [id]="id"
+          ksMenuAriaHandling
+          ksFloatingUI
+          [(placement)]="placement"
+          [refElement]="buttonTemplate"
+          [@menuAnimation]
+          offset="8"
+          class="position-absolute elevation-1 p-1 {{ placement() }} w-auto {{
+            options.menuClasses
+          }}"
+        >
+      <ng-container [ngTemplateOutlet]="header"></ng-container>
+
+        @for(ksItem of menuConfig; track ksItem) {
+          @if('title' in ksItem){
+            <ng-container ngProjectAs="ks-menu-section">
+              <ks-menu-section [title]="ksItem.title">
+              @for(ksSubItem of ksItem.items; track ksSubItem) {
+                <ng-container ngProjectAs="ks-menu-item">
+                    <ks-menu-item >
+                    @if(ksSubItem.icon) {
+                      <span ksIcon="{{ksSubItem.icon}}" [iconOptions]="ksSubItem.iconOptions?? options.iconOptions"></span>
+                    }
+                      <p>{{ksSubItem.label}}</p>
+                  </ks-menu-item>
+                </ng-container>
+              }
+            </ks-menu-section>
+            </ng-container>
+          }
+          @else if('type' in ksItem ) {
+            <ks-menu-item [type]="ksItem.type">
+              @if(ksItem.icon) {
+                <span ksIcon="{{ksItem.icon}}" [iconOptions]="ksItem.iconOptions?? options.iconOptions"></span>
+              }
+              <p>{{ksItem.label}}</p>
+            </ks-menu-item>
+          } @else if('separator' in ksItem){
+            @if(ksItem.isDecorative){
+              <hr ksSeparator isDecorative>
+            }
+            @else {
+              <hr ksSeparator>
+            }
+          }@else {
+              <ng-content select="ks-menu-section" />
+              <ng-content select="ks-menu-item" />
+              <ng-content select="[ksSeparator]" />
+          }
+        }
+        <ng-container [ngTemplateOutlet]="footer"></ng-container>
+      </ks-menu>
+    }
+
+  </div>

@@ -18,3 +18,4 @@ export * from './keyboard-events/escape-key-event/escape-key-event.directive';
 export * from './keyboard-events/key-bindings/key-bindings.directive';
 export * from './keyboard-events/simple-key-event/simple-key-event.directive';
 export * from './separator/separator.directive';
+export * from './floating-ui/floating-ui.directive';

@@ -85,6 +85,9 @@ export class MenuAriaHandlingDirective {
       case ' ':
         event.preventDefault();
         (document.activeElement as HTMLElement)?.click();
+        document.activeElement?.classList.add('active');
+        break;
+      default:
         return;
     }
 

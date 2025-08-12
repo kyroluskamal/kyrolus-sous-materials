@@ -41,7 +41,7 @@ import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
     <ng-template #content
       ><div class="d-flex flex-1 gap-3 align-items-center">
         <ng-content select="[ksIcon]"></ng-content>
-        <ng-content select="*:not([ksicon]):not(ks-badge)"></ng-content>
+        <ng-content select="*:not([ksIcon]):not(ks-badge)"></ng-content>
       </div>
       <ng-content select="ks-badge"></ng-content>
     </ng-template>
@@ -64,6 +64,7 @@ export class MenuItemComponent {
     read: ElementRef,
   });
   ksMenu = inject(MenuComponent, { host: true, optional: true });
+
   constructor() {
     if (isNgDevMode && !this.ksMenu) {
       throw new Error(getErrorMessageForMenuItemNotInMenu('Item'));

@@ -11,7 +11,7 @@ export * from './services/services.export';
 export * from './components/accordion/acoordion.export';
 export * from './components/navbar/navbar.export';
 export * from './components/side-nav.component';
-
+export * from './blocks/blocks.exports';
 // tokens
 export * from './Tokens/tokens.exports';
 //card
