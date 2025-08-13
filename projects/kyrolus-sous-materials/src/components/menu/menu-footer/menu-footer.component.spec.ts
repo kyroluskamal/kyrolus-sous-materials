@@ -19,6 +19,9 @@ import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
         >Test Footer</ks-menu-footer
       >
     </ks-menu>
+    <ks-menu>
+      <ks-menu-footer>Test Footer</ks-menu-footer>
+    </ks-menu>
   `,
   standalone: true,
   imports: [MenuComponent, MenuFooterComponent],
@@ -53,16 +56,29 @@ describe('MenuFooterComponent', () => {
     it('Should have a decorative separator when useSeparator and decorativeSeparator are true', () => {
       const footer = debugElement[1].componentInstance;
       fixture.detectChanges();
-      const separator = fixture.debugElement.query(By.css('hr'));
+      const separator = debugElement[1].query(By.css('hr'));
       expect(separator).not.toBeNull;
       expect(footer.useSeparator()).toBeTruthy();
       expect(footer.decorativeSeparator()).toBeTruthy();
+      expect(separator.nativeElement.classList).toContain('flex-basis-100');
+      expect(
+        (separator.nativeElement as HTMLElement).getAttribute('aria-hidden')
+      ).toBe('true');
     });
 
     it('Should throw an error if used outside of ks-menu', () => {
       expect(() => {
         TestBed.createComponent(MenuFooterComponent);
       }).toThrowError(getErrorMessageForMenuItemNotInMenu('Footer'));
+    });
+
+    it('should not have a separator when useSeparator is false', () => {
+      const footer = debugElement[2].componentInstance;
+      fixture.detectChanges();
+      const separator = debugElement[2].query(By.css('hr'));
+      expect(separator).toBeNull();
+      expect(footer.useSeparator()).toBeFalsy();
+      expect(footer.decorativeSeparator()).toBeFalsy();
     });
   });
 
@@ -73,7 +89,11 @@ describe('MenuFooterComponent', () => {
     });
 
     it('should have a separator with role="separator" when useSeparator is true and decorativeSeparator is false', () => {
-      const separator = fixture.debugElement.query(By.css('hr'));
+      const separator = debugElement[0].query(By.css('hr'));
+      console.log(
+        '//////////////////////////////////////////////////',
+        separator.nativeElement.outerHTML
+      );
       expect(separator).not.toBeNull();
       expect(separator.nativeElement.getAttribute('role')).toBe('separator');
       expect(separator.nativeElement.getAttribute('aria-hidden')).toBeNull();

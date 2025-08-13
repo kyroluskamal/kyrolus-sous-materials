@@ -23,7 +23,7 @@ import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
       appearance="dark"
       class="w-100 justify-content-between px-4"
     >
-      <ng-container *ngTemplateOutlet="content"></ng-container>
+      <ng-container [ngTemplateOutlet]="content"></ng-container>
     </button>
     }@else {
     <a
@@ -34,7 +34,7 @@ import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
       appearance="dark"
       class="w-100 justify-content-between px-4"
     >
-      <ng-container *ngTemplateOutlet="content"></ng-container>
+      <ng-container [ngTemplateOutlet]="content"></ng-container>
     </a>
     }
 

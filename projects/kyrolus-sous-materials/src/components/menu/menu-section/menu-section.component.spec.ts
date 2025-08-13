@@ -24,6 +24,11 @@ import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
         <ks-menu-item>Item 2</ks-menu-item>
         <hr ksSeparator />
       </ks-menu-section>
+      <ks-menu-section>
+        <ks-menu-item>Item 1</ks-menu-item>
+        <ks-menu-item>Item 2</ks-menu-item>
+        <hr ksSeparator />
+      </ks-menu-section>
     </ks-menu>
   `,
   standalone: true,
@@ -66,6 +71,11 @@ describe('MenuSectionComponent', () => {
       const sectionTitle = debugElement[1].nativeElement.querySelector('p');
       expect(sectionTitle.textContent).toBe('Test Section2');
       expect(sectionTitle.id).toContain('menu-test-section');
+      const sectionGroup = debugElement[1].nativeElement.querySelector('div');
+      expect(sectionGroup.getAttribute('role')).toBe('group');
+      expect(sectionGroup.getAttribute('arialabelledby')).toContain(
+        'menu-test-section'
+      );
     });
     it('Should throw an error if the parent menu is not provided', () => {
       expect(() => {
@@ -92,7 +102,13 @@ describe('MenuSectionComponent', () => {
     it('Should have role group with aria-labelledby', () => {
       const sectionGroup = debugElement[0].nativeElement.querySelector('div');
       expect(sectionGroup.getAttribute('role')).toBe('group');
-      expect(sectionGroup.getAttribute('arialabelledby')).toBe('test-section');
+      expect(sectionGroup.getAttribute('arialabelledby')).toContain(
+        'test-section'
+      );
+    });
+    it('Should not have aria-labelledby if no title or id is provided', () => {
+      const sectionGroup = debugElement[2].nativeElement.querySelector('div');
+      expect(sectionGroup.getAttribute('arialabelledby')).toBeNull();
     });
   });
 });

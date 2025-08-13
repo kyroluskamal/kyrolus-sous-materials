@@ -44,7 +44,6 @@ export class FloatingUIDirective {
   readonly mode = input<'flip' | 'freeStyle'>('flip');
   constructor() {
     afterNextRender(() => {
-      console.log(this.refElement());
       if (this.refElement()) this.adjustPlacement();
     });
   }

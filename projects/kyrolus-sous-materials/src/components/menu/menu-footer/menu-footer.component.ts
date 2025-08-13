@@ -11,12 +11,14 @@ import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
   selector: 'ks-menu-footer',
   imports: [SeparatorDirective],
   template: `
-    @if (useSeparator() && decorativeSeparator()) {
-    <hr ksSeparator isDecorative class="flex-basis-100" />
-    }@else if (useSeparator() && !decorativeSeparator()) {
-    <hr ksSeparator class="flex-basis-100" />
+    @if (useSeparator() ) {
+    <hr
+      ksSeparator
+      isDecorative="{{decorativeSeparator()}}"
+      class="flex-basis-100"
+    />
     }
-    <ng-content />
+    <ng-content select="*:not([ksSeparator]),*:not(hr)" />
   `,
   styles: ``,
   host: {

@@ -157,6 +157,35 @@ describe('ButtonDirective', () => {
         testElement.nativeElement.classList.contains('elevation-3')
       ).toBeTruthy();
     });
+    it('Should have custom RaisedClass', () => {
+      expect(
+        testElement.nativeElement.classList.contains('elevation-3')
+      ).toBeTruthy();
+    });
+    it('Should remove active and focus classes on Enter or Space keyup', () => {
+      let ele = testElement.nativeElement as HTMLElement;
+      ele.classList.add('active', 'focus');
+      ele.focus();
+      fixture.detectChanges();
+      const keyupEvent = new KeyboardEvent('keyup', { key: 'Enter' });
+      testElement.nativeElement.dispatchEvent(keyupEvent);
+      fixture.detectChanges();
+      expect(
+        testElement.nativeElement.classList.contains('active')
+      ).toBeFalsy();
+
+      expect(testElement.nativeElement.classList.contains('focus')).toBeFalsy();
+      ele.classList.add('active', 'focus');
+      ele.focus();
+      fixture.detectChanges();
+      const keyupEvent2 = new KeyboardEvent('keyup', { key: ' ' });
+      testElement.nativeElement.dispatchEvent(keyupEvent2);
+      fixture.detectChanges();
+      expect(
+        testElement.nativeElement.classList.contains('active')
+      ).toBeFalsy();
+      expect(testElement.nativeElement.classList.contains('focus')).toBeFalsy();
+    });
   });
 
   describe('Disabled Button', () => {

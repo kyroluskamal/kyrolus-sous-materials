@@ -15,8 +15,10 @@ import {
   selector: '[ksToggleClassOnScroll]',
 })
 export class ToggleClassOnScrollDirective {
-  ksToggleClassOnScroll = input.required<string>();
-  ksScrollOffset = input<number>(0);
+  /* v8 ignore next */
+  readonly ksToggleClassOnScroll = input.required<string>();
+  /* v8 ignore next */
+  readonly ksScrollOffset = input<number>(0);
   private readonly _scrollOffset = linkedSignal(() => this.ksScrollOffset());
   private readonly document = inject<Document>(DOCUMENT);
   private readonly renderer2 = inject(Renderer2);
@@ -46,7 +48,6 @@ export class ToggleClassOnScrollDirective {
   setScrollOffset() {
     let scrollPosition =
       this.document.defaultView?.scrollY || this.document.body.scrollTop;
-
     this._scrollOffset.set(scrollPosition);
   }
 

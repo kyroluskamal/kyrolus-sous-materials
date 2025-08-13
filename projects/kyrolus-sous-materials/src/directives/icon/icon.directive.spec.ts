@@ -19,7 +19,7 @@ import { By } from '@angular/platform-browser';
         provider: 'google'
       }"
     >
-      hhh
+      {{ 'hhh ' }}
     </button>
 
     <button
@@ -136,7 +136,6 @@ describe('IconDirective', () => {
         )
       ).toBeTruthy();
     });
-
 
     it('should have a text nodes when the icon type is google', () => {
       const nodes = Array.from<Node>(testElement[0].nativeElement.childNodes);

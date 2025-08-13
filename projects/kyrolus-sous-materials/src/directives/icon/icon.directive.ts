@@ -34,9 +34,7 @@ export class IconDirective {
       const nodes = Array.from<Node>(this.elmRef.nativeElement.childNodes);
       let textNode =
         nodes.filter((node) => node.nodeType === Node.TEXT_NODE)[0] || null;
-      let hasTextNodes =
-        textNode !== null && textNode.textContent?.trim() !== '';
-      if (!hasTextNodes) {
+      if (textNode === null) {
         this.renderer2.appendChild(
           this.elmRef.nativeElement,
           this.renderer2.createText(this.ksIcon())

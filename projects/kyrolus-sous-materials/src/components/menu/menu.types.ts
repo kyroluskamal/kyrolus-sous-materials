@@ -84,11 +84,12 @@ export interface IMenuItem {
 }
 
 export interface IMenuSection {
-  title: string;
+  title?: string;
   items: IMenuItem[];
   classes?: string;
   icon?: string;
   separator?: never;
+  isDecorative?: never;
 }
 
 export interface IMenuSeparator {

@@ -53,12 +53,8 @@ export class MenuAriaHandlingDirective {
 
   handleKeydown(event: KeyboardEvent) {
     const buttons = this.buttons();
-    if (buttons.length === 0) return;
     if (
-      event.key.length === 1 &&
-      event.key !== ' ' &&
-      !event.ctrlKey &&
-      !event.metaKey
+      !['ArrowDown', 'ArrowUp', 'Home', 'End', 'Enter', ' '].includes(event.key)
     ) {
       this.handleTypeahead(event);
       return;
@@ -87,8 +83,6 @@ export class MenuAriaHandlingDirective {
         (document.activeElement as HTMLElement)?.click();
         document.activeElement?.classList.add('active');
         break;
-      default:
-        return;
     }
 
     if (nextButton) {

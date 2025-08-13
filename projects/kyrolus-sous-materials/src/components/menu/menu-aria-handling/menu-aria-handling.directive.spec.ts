@@ -38,6 +38,7 @@ import { vi } from 'vitest';
       <span ksIcon="add"></span>
       <p>leeg</p>
     </ks-menu-item>
+    <ks-menu-item></ks-menu-item>
 
     <ks-menu-footer useSeparator></ks-menu-footer>
   </ks-menu>`,
@@ -70,8 +71,8 @@ describe('MenuAriaHandlingDirective', () => {
       ).querySelectorAll('button, a');
       expect(firstFocusable[1]).toBeTruthy();
       expect(firstFocusable[1].getAttribute('tabindex')).toBe('0');
-      expect(directive.buttons().length).toBe(4);
-      expect(directive.menuItems().length).toBe(5);
+      expect(directive.buttons().length).toBe(5);
+      expect(directive.menuItems().length).toBe(6);
     });
 
     it('Should have the first button with tabindex 0 and the others with -1', () => {
@@ -85,7 +86,13 @@ describe('MenuAriaHandlingDirective', () => {
   describe('buttonsWithText', () => {
     it('Should return the text content of buttons without icons', () => {
       const buttonsWithText = directive.buttonsWithText();
-      expect(buttonsWithText).toEqual(['search', 'settings', 'logout', 'leeg']);
+      expect(buttonsWithText).toEqual([
+        'search',
+        'settings',
+        'logout',
+        'leeg',
+        '',
+      ]);
     });
   });
 
@@ -135,6 +142,7 @@ describe('MenuAriaHandlingDirective', () => {
       const event = new KeyboardEvent('keydown', { key: 'x' });
       vi.spyOn(event, 'preventDefault');
       directive.handleTypeahead(event);
+      expect(directive.handleTypeahead(event)).toBeUndefined();
       expect(
         buttons.every((button) => button !== document.activeElement)
       ).toBeTruthy();
@@ -186,6 +194,17 @@ describe('MenuAriaHandlingDirective', () => {
       debugElement.nativeElement.dispatchEvent(sevent);
       debugElement.nativeElement.dispatchEvent(eevent);
       expect(buttons[0] === document.activeElement).toBeTruthy();
+    });
+    it('should clear the searchString after 500ms', () => {
+      vi.useFakeTimers();
+      const event = new KeyboardEvent('keydown', { key: 's' });
+      directive.handleTypeahead(event);
+      // @ts-expect-error
+      expect(directive.searchString).toBe('s');
+      vi.advanceTimersByTime(500);
+      // @ts-expect-error
+      expect(directive.searchString).toBe('');
+      vi.useRealTimers();
     });
   });
 });

@@ -20,7 +20,7 @@ import {
       <ng-template #toggleButton>
         <button (click)="isOpen.set(!isOpen())">Toggle</button></ng-template
       >
-      <ks-menu-header>
+      <ks-menu-header useSeparator decorativeSeparator>
         <span ksIcon="home"> </span>
         <p>Coding Bible Menu</p>
       </ks-menu-header>

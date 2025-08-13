@@ -25,14 +25,16 @@ import { UtilitiesService } from '../../../services/utilities.service';
 export class MenuSectionComponent {
   readonly title = input<string>();
   private readonly utitlitiesService = inject(UtilitiesService);
+  readonly id = input<string>();
   _id = computed(() => {
-    if (!this.title()) {
-      return null;
-    }
-    return this.utitlitiesService.generateUniqueId(
-      this.title()?.replace(/\s/g, '-').toLowerCase()
+    return (
+      this.id()?.toLowerCase().replace(/\s/g, '-') ||
+      this.utitlitiesService.generateUniqueId(
+        this.title()?.replace(/\s/g, '-').toLowerCase()
+      )
     );
   });
+
   ksMenu = inject(MenuComponent, { host: true, optional: true });
   constructor() {
     if (isNgDevMode && !this.ksMenu) {
