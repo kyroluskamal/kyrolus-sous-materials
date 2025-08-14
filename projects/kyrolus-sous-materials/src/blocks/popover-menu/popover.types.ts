@@ -1,8 +1,8 @@
 export type PopoverPlacement =
-  | 'top'       //top
-  | 'top-start' //top-right
-  | 'top-end'  //top-right
-  | 'bottom' 
+  | 'top'
+  | 'top-start'
+  | 'top-end'
+  | 'bottom'
   | 'bottom-start'
   | 'bottom-end'
   | 'left'

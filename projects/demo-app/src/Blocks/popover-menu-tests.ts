@@ -25,20 +25,15 @@ import {
         <p>Coding Bible Menu</p>
       </ks-menu-header>
     </ks-popover-menu>
-    <ks-popover-menu
-      [isOpen]="true"
-      [ksMenu]="menuItems"
-      placement="left-start"
-    />
-    <ks-popover-menu
-      [isOpen]="true"
-      [ksMenu]="menuItems"
-      placement="left-start"
-    />
+    <ks-menu>
+      <ks-menu-item type="button" href="https://example.com">
+        <p>test</p></ks-menu-item
+      >
+    </ks-menu>
   `,
   host: {
     class:
-      'd-block h-100vh bg-grey-39 d-flex align-items-start justify-content-between flex-wrap-wrap',
+      'd-block h-100vh bg-grey-39 d-flex align-items-center justify-content-center flex-wrap-wrap',
   },
 })
 export class PopoverMenuTests {
@@ -47,13 +42,18 @@ export class PopoverMenuTests {
     {
       title: 'Document section',
       items: [
-        { type: 'a', disabled: true, icon: 'add', label: 'New' },
-        { type: 'button', icon: 'search', label: 'Search' },
+        { disabled: true, icon: 'add', label: 'New' },
+        {
+          icon: 'search',
+          label: 'Search',
+          href: 'https://google.com',
+          routerLink: '/tests',
+        },
       ],
     },
-    { type: 'a', icon: 'settings', label: 'Settings' },
-    { type: 'button', icon: 'add', label: 'Logout' },
+    { icon: 'settings', label: 'Settings' },
+    { icon: 'add', label: 'Logout' },
     { separator: true, isDecorative: true },
-    { type: 'button', icon: 'add', label: 'leeg' },
+    { icon: 'add', label: 'leeg' },
   ]);
 }

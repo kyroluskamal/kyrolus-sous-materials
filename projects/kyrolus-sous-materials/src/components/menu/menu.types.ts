@@ -13,19 +13,22 @@ import {
   IconOptions,
 } from '../../public-api';
 import { ICON_OPTIONS } from '../../Tokens/icon.tokens';
-// readonly size = input<ButtonSize>(inject(BUTTON_SIZE));
-//   readonly variant = input<ButtonVariant>(inject(BUTTON_VARIANT));
-//   readonly appearance = input<ButtonAppearance>(inject(BUTTON_APPEARANCE));
-//   readonly isRaised = input<boolean, string>(inject(BUTTON_IS_RAISED), {
-//     transform: booleanAttribute,
-//   });
-//   readonly borderRadius = input(inject(BUTTON_BORDER_RADIUS_CLASS));
-//   readonly shape = input(inject(BUTTON_SHAPE));
-//   readonly disabled = input<boolean, string>(false, {
-//     transform: booleanAttribute,
-//   });
-//   readonly RaisedClass = input(inject(BUTTON_RAISE_CLASS));
+import { MENU_BUTTON_CONFIG } from '../../Tokens/menu.tokens';
 export type KsMenuConfig = IMenuSection | IMenuItem | IMenuSeparator;
+export type ButtonConfig = {
+  size: ButtonSize;
+  variant: ButtonVariant;
+  appearance: ButtonAppearance;
+  isRaised?: boolean;
+  borderRadius?: string;
+  shape: ButtonShape;
+  disabled?: boolean;
+  RaisedClass?: string;
+  iconName?: string;
+  isNotDecorativeIcon?: boolean;
+  iconOptions?: IconOptions;
+  id?: string;
+};
 export class KsMenu {
   constructor(
     public menuConfig: KsMenuConfig[],
@@ -38,20 +41,7 @@ export class KsMenu {
     } = {
       iconOptions: inject(ICON_OPTIONS),
     },
-    public buttonConfig: {
-      size: ButtonSize;
-      variant: ButtonVariant;
-      appearance: ButtonAppearance;
-      isRaised?: boolean;
-      borderRadius?: string;
-      shape: ButtonShape;
-      disabled?: boolean;
-      RaisedClass?: string;
-      iconName?: string;
-      isNotDecorative?: boolean;
-      iconOptions?: IconOptions;
-      id?: string;
-    } = {
+    public toggleButtonConfig: ButtonConfig = {
       size: inject(BUTTON_SIZE),
       variant: inject(BUTTON_VARIANT),
       appearance: inject(BUTTON_APPEARANCE),
@@ -60,9 +50,13 @@ export class KsMenu {
       shape: inject(BUTTON_SHAPE),
       disabled: false,
       iconName: 'menu',
-      isNotDecorative: true,
+      isNotDecorativeIcon: false,
       id: `menu-button-${Math.random().toString(36).substring(2, 15)}`,
-    }
+    },
+    public menuItemButtonConfig: Omit<
+      ButtonConfig,
+      'disabled' | 'iconOptions' | 'isNotDecorativeIcon' | 'iconName'
+    > = inject(MENU_BUTTON_CONFIG)
   ) {}
 }
 
@@ -72,7 +66,6 @@ export interface IMenuItem {
   href?: string;
   routerLink?: string;
   action?: () => void;
-  type: 'a' | 'button';
   icon?: string;
   iconOptions?: IconOptions;
   classes?: string;
@@ -87,8 +80,13 @@ export interface IMenuSection {
   title?: string;
   items: IMenuItem[];
   classes?: string;
+  routerLink?: never;
+  label?: never;
   icon?: string;
+  href?: never;
+  iconOptions?: never;
   separator?: never;
+  disabled?: never;
   isDecorative?: never;
 }
 

@@ -20,7 +20,7 @@ import { IconDirective } from '../icon/icon.directive';
     },
     {
       directive: IconDirective,
-      inputs: ['iconOptions', 'ksIcon:iconName', 'isNotDecorative'],
+      inputs: ['iconOptions', 'ksIcon:iconName', 'isNotDecorativeIcon'],
     },
   ],
   host: {

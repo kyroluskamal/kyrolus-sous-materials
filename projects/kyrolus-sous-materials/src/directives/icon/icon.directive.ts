@@ -17,13 +17,14 @@ import { ICON_OPTIONS } from '../../Tokens/icon.tokens';
   selector: '[ksIcon]',
   host: {
     '[class]': 'classes()',
-    '[attr.aria-hidden]': '!isNotDecorative() ? "true" : null',
+    '[attr.aria-hidden]': '!isNotDecorativeIcon() ? "true" : null',
   },
 })
 export class IconDirective {
+  /* v8 ignore next */
   private readonly elmRef = inject(ElementRef);
   private readonly renderer2 = inject(Renderer2);
-  readonly isNotDecorative = input<boolean, string>(false, {
+  readonly isNotDecorativeIcon = input<boolean, string>(false, {
     transform: booleanAttribute,
   });
   eff = effect(() => {
