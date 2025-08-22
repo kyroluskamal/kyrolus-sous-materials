@@ -63,15 +63,16 @@ export class FloatingUIDirective {
     let floatRect = this.floatingElement.getBoundingClientRect();
     let viewportHeight = window.innerHeight;
     let viewportWidth = window.innerWidth;
+    const currentOffset = this.offset(); // احصل على قيمة الـ offset هنا
 
     if (!refRect || !floatRect) {
       return;
     }
     let spcesArroundRef = {
-      top: refRect.top,
-      bottom: viewportHeight - refRect.bottom,
-      left: refRect.left,
-      right: viewportWidth - refRect.right,
+      top: refRect.top - currentOffset,
+      bottom: viewportHeight - refRect.bottom - currentOffset,
+      left: refRect.left - currentOffset,
+      right: viewportWidth - refRect.right - currentOffset,
     };
 
     let sidesAvaliableForFloating: {

@@ -93,13 +93,11 @@ describe('ToggleClassOnScrollDirective', () => {
   it('should ADD the class AGAIN when scrolling back before the offset', () => {
     simulateScroll(200);
     expect(testElement[0].nativeElement.classList.contains('scrolled-past'))
-      .withContext('Class should be removed after scrolling down')
       .toBe(false);
 
     simulateScroll(50);
 
     expect(testElement[0].nativeElement.classList.contains('scrolled-past'))
-      .withContext('Class should be added back after scrolling up')
       .toBe(true);
   });
 

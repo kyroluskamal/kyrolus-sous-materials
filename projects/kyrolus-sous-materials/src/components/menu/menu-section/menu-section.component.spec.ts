@@ -58,22 +58,22 @@ describe('MenuSectionComponent', () => {
 
   describe('Component tests', () => {
     it('Should have the correct title', () => {
-      const sectionTitle = debugElement[0].nativeElement.querySelector('p');
+      const sectionTitle = debugElement[0].nativeElement.querySelector('span');
       expect(sectionTitle.textContent).toBe('Test Section');
     });
     it('Should put the id from the title if no id is provided', () => {
-      const sectionTitle = debugElement[0].nativeElement.querySelector('p');
+      const sectionTitle = debugElement[0].nativeElement.querySelector('span');
       debugger;
       expect(sectionTitle.textContent).toBe('Test Section');
       expect(sectionTitle.id).toContain('test-section');
     });
     it('Should use the provided id', () => {
-      const sectionTitle = debugElement[1].nativeElement.querySelector('p');
+      const sectionTitle = debugElement[1].nativeElement.querySelector('span');
       expect(sectionTitle.textContent).toBe('Test Section2');
       expect(sectionTitle.id).toContain('menu-test-section');
       const sectionGroup = debugElement[1].nativeElement.querySelector('div');
       expect(sectionGroup.getAttribute('role')).toBe('group');
-      expect(sectionGroup.getAttribute('arialabelledby')).toContain(
+      expect(sectionGroup.getAttribute('aria-labelledby')).toContain(
         'menu-test-section'
       );
     });
@@ -95,20 +95,20 @@ describe('MenuSectionComponent', () => {
       expect(sectionHost.getAttribute('role')).toBe('none');
     });
     it('Should have title with id', () => {
-      const sectionTitle = debugElement[0].nativeElement.querySelector('p');
+      const sectionTitle = debugElement[0].nativeElement.querySelector('span');
       expect(sectionTitle.id).toContain('test-section');
     });
 
     it('Should have role group with aria-labelledby', () => {
       const sectionGroup = debugElement[0].nativeElement.querySelector('div');
       expect(sectionGroup.getAttribute('role')).toBe('group');
-      expect(sectionGroup.getAttribute('arialabelledby')).toContain(
+      expect(sectionGroup.getAttribute('aria-labelledby')).toContain(
         'test-section'
       );
     });
     it('Should not have aria-labelledby if no title or id is provided', () => {
       const sectionGroup = debugElement[2].nativeElement.querySelector('div');
-      expect(sectionGroup.getAttribute('arialabelledby')).toBeNull();
+      expect(sectionGroup.getAttribute('aria-labelledby')).toBeNull();
     });
   });
 });

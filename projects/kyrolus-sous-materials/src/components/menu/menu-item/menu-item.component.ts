@@ -4,17 +4,20 @@ import {
   ElementRef,
   inject,
   input,
+  output,
   viewChild,
 } from '@angular/core';
 import {
-  ButtonConfig,
+  KsMenuItemButtonConfig,
   ButtonDirective,
   isNgDevMode,
+  ItemClickEvent,
 } from '../../../public-api';
 import { NgTemplateOutlet } from '@angular/common';
 import { MenuComponent } from '../menu/menu.component';
 import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
 import { MENU_BUTTON_CONFIG } from '../../../Tokens/menu.tokens';
+import { PopoverMenuBlock } from '../../../blocks/popover-menu/popover-menu.block';
 @Component({
   selector: 'ks-menu-item',
   imports: [ButtonDirective, NgTemplateOutlet],
@@ -25,15 +28,16 @@ import { MENU_BUTTON_CONFIG } from '../../../Tokens/menu.tokens';
     <button
       ksButton
       disabled="{{ disabled() }}"
-      [size]="btnConfig.size"
-      [variant]="btnConfig.variant"
-      [appearance]="btnConfig.appearance"
+      [size]="btnConfig.size!"
+      [variant]="btnConfig.variant!"
+      [appearance]="btnConfig.appearance!"
       isRaised="{{ btnConfig.isRaised }}"
       [borderRadius]="btnConfig.borderRadius ?? ''"
       [RaisedClass]="btnConfig.RaisedClass ?? ''"
-      [shape]="btnConfig.shape"
-      [attr.id]="btnConfig?.id ?? null"
+      [shape]="btnConfig.shape!"
+      [attr.id]="btnConfig.id ?? null"
       class="w-100 justify-content-between px-4"
+      (click)="clicked($event)"
     >
       <ng-container [ngTemplateOutlet]="content"></ng-container>
     </button>
@@ -41,15 +45,16 @@ import { MENU_BUTTON_CONFIG } from '../../../Tokens/menu.tokens';
     <a
       ksButton
       disabled="{{ disabled() }}"
-      [size]="btnConfig.size"
-      [variant]="btnConfig.variant"
-      [appearance]="btnConfig.appearance"
+      [size]="btnConfig.size!"
+      [variant]="btnConfig.variant!"
+      [appearance]="btnConfig.appearance!"
       isRaised="{{ btnConfig.isRaised }}"
       [borderRadius]="btnConfig.borderRadius ?? ''"
-      [shape]="btnConfig.shape"
-      [attr.id]="btnConfig?.id ?? null"
+      [shape]="btnConfig.shape!"
       [attr.routerLink]="routerLink() ? routerLink() : null"
       [attr.href]="href() ? href() : null"
+      [attr.id]="btnConfig.id ?? null"
+      (click)="clicked($event)"
       class="w-100 justify-content-between px-4"
       [RaisedClass]="btnConfig.RaisedClass ?? ''"
     >
@@ -77,12 +82,10 @@ export class MenuItemComponent {
   readonly el = inject(ElementRef);
   readonly routerLink = input<string | any[]>();
   readonly href = input<string>();
-  readonly buttonConfig = input<
-    Omit<
-      ButtonConfig,
-      'disabled' | 'iconOptions' | 'isNotDecorativeIcon' | 'iconName'
-    >
-  >(inject(MENU_BUTTON_CONFIG));
+  readonly itemClcik = output<ItemClickEvent>();
+  readonly buttonConfig = input<KsMenuItemButtonConfig>(
+    inject(MENU_BUTTON_CONFIG)
+  );
   readonly disabled = input<boolean, string>(false, {
     transform: booleanAttribute,
   });
@@ -90,6 +93,22 @@ export class MenuItemComponent {
     read: ElementRef,
   });
   readonly ksMenu = inject(MenuComponent, { host: true, optional: true });
+  readonly popOverMenu = inject(PopoverMenuBlock, {
+    host: true,
+    optional: true,
+  });
+  clicked(event: MouseEvent): void {
+    if (this.disabled()) {
+      event.preventDefault();
+      event.stopPropagation();
+    } else {
+      this.itemClcik.emit({
+        event,
+        itemRef: this.el.nativeElement,
+        buttonRef: this.button()?.nativeElement,
+      });
+    }
+  }
   ngOnInit(): void {
     if (isNgDevMode && this.href() && this.routerLink())
       throw new Error(
@@ -97,7 +116,7 @@ export class MenuItemComponent {
       );
   }
   constructor() {
-    if (isNgDevMode && !this.ksMenu) {
+    if (isNgDevMode && !this.ksMenu && !this.popOverMenu) {
       throw new Error(
         this.el.nativeElement.outerHTML +
           '\n' +

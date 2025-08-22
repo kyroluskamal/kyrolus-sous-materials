@@ -90,10 +90,6 @@ describe('MenuFooterComponent', () => {
 
     it('should have a separator with role="separator" when useSeparator is true and decorativeSeparator is false', () => {
       const separator = debugElement[0].query(By.css('hr'));
-      console.log(
-        '//////////////////////////////////////////////////',
-        separator.nativeElement.outerHTML
-      );
       expect(separator).not.toBeNull();
       expect(separator.nativeElement.getAttribute('role')).toBe('separator');
       expect(separator.nativeElement.getAttribute('aria-hidden')).toBeNull();

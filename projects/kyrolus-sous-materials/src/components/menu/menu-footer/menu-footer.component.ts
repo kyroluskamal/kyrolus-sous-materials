@@ -14,7 +14,7 @@ import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
     @if (useSeparator() ) {
     <hr
       ksSeparator
-      isDecorative="{{decorativeSeparator()}}"
+      isDecorative="{{ decorativeSeparator() }}"
       class="flex-basis-100"
     />
     }
@@ -33,8 +33,11 @@ export class MenuFooterComponent {
   decorativeSeparator = input<boolean, string>(false, {
     transform: booleanAttribute,
   });
-  ksMenu = inject(MenuComponent, { host: true, optional: true });
-  ksPopOverMenu = inject(PopoverMenuBlock, { host: true, optional: true });
+  readonly ksMenu = inject(MenuComponent, { host: true, optional: true });
+  readonly ksPopOverMenu = inject(PopoverMenuBlock, {
+    host: true,
+    optional: true,
+  });
 
   constructor() {
     if (isNgDevMode && !this.ksMenu && !this.ksPopOverMenu) {

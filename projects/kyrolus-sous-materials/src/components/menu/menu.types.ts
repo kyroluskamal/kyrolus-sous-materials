@@ -16,19 +16,22 @@ import { ICON_OPTIONS } from '../../Tokens/icon.tokens';
 import { MENU_BUTTON_CONFIG } from '../../Tokens/menu.tokens';
 export type KsMenuConfig = IMenuSection | IMenuItem | IMenuSeparator;
 export type ButtonConfig = {
-  size: ButtonSize;
-  variant: ButtonVariant;
-  appearance: ButtonAppearance;
+  size?: ButtonSize;
+  variant?: ButtonVariant;
+  appearance?: ButtonAppearance;
   isRaised?: boolean;
   borderRadius?: string;
-  shape: ButtonShape;
+  shape?: ButtonShape;
   disabled?: boolean;
   RaisedClass?: string;
   iconName?: string;
-  isNotDecorativeIcon?: boolean;
   iconOptions?: IconOptions;
   id?: string;
 };
+export type KsMenuItemButtonConfig = Omit<
+  ButtonConfig,
+  'disabled' | 'iconOptions' | 'isNotDecorativeIcon' | 'iconName'
+>;
 export class KsMenu {
   constructor(
     public menuConfig: KsMenuConfig[],
@@ -38,6 +41,7 @@ export class KsMenu {
       menuClasses?: string;
       itemClasses?: string;
       separatorClasses?: string;
+      floatngUiOffset?: string;
     } = {
       iconOptions: inject(ICON_OPTIONS),
     },
@@ -48,29 +52,27 @@ export class KsMenu {
       isRaised: inject(BUTTON_IS_RAISED) || false,
       borderRadius: inject(BUTTON_BORDER_RADIUS_CLASS),
       shape: inject(BUTTON_SHAPE),
+      iconOptions: inject(ICON_OPTIONS),
       disabled: false,
       iconName: 'menu',
-      isNotDecorativeIcon: false,
       id: `menu-button-${Math.random().toString(36).substring(2, 15)}`,
     },
-    public menuItemButtonConfig: Omit<
-      ButtonConfig,
-      'disabled' | 'iconOptions' | 'isNotDecorativeIcon' | 'iconName'
-    > = inject(MENU_BUTTON_CONFIG)
+    public menuItemButtonConfig: KsMenuItemButtonConfig = inject(
+      MENU_BUTTON_CONFIG
+    )
   ) {}
 }
 
-export interface IMenuItem {
+export interface IMenuItem<T = any> {
   id?: string;
   label: string;
   href?: string;
   routerLink?: string;
-  action?: () => void;
+  action?: (event: ItemClickEvent, itemRef: HTMLElement) => T;
   icon?: string;
   iconOptions?: IconOptions;
   classes?: string;
   disabled?: boolean;
-  tooltip?: string;
   separator?: never;
   title?: never;
   items?: never;
@@ -78,11 +80,12 @@ export interface IMenuItem {
 
 export interface IMenuSection {
   title?: string;
+  id?: string;
   items: IMenuItem[];
   classes?: string;
   routerLink?: never;
   label?: never;
-  icon?: string;
+  icon?: never;
   href?: never;
   iconOptions?: never;
   separator?: never;
@@ -94,3 +97,9 @@ export interface IMenuSeparator {
   separator: true;
   isDecorative?: boolean;
 }
+
+export type ItemClickEvent = {
+  event: MouseEvent | PointerEvent | TouchEvent;
+  itemRef: HTMLElement;
+  buttonRef?: HTMLButtonElement;
+};

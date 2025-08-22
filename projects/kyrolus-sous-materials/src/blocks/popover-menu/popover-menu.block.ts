@@ -11,19 +11,18 @@ import {
   TemplateRef,
   viewChild,
 } from '@angular/core';
-import {
-  ButtonDirective,
-  FloatingUIDirective,
-  IconDirective,
-  KsMenu,
-  MenuComponent,
-  MenuModule,
-  SeparatorDirective,
-  ToggleButtonDirective,
-} from '../../public-api';
 import { UtilitiesService } from '../../services/utilities.service';
 import { PopoverPlacement } from './popover.types';
 import { NgTemplateOutlet } from '@angular/common';
+import { ToggleButtonDirective } from '../../directives/toggle-button/toggle-button.directive';
+import { MenuModule } from '../../components/menu/menu-module';
+import { SeparatorDirective } from '../../directives/separator/separator.directive';
+import { IconDirective } from '../../directives/icon/icon.directive';
+import { ButtonDirective } from '../../directives/button/button.directive';
+import { FloatingUIDirective } from '../../directives/floating-ui/floating-ui.directive';
+import { KsMenu } from '../../components/menu/menu.types';
+import { MenuComponent } from '../../components/menu/menu/menu.component';
+import { MenuAriaHandlingDirective } from '../../public-api';
 
 @Component({
   selector: 'ks-popover-menu',
@@ -61,15 +60,20 @@ import { NgTemplateOutlet } from '@angular/common';
     ButtonDirective,
     FloatingUIDirective,
     NgTemplateOutlet,
+    MenuAriaHandlingDirective,
   ],
   templateUrl: './popover-menu.block.html',
   host: {
     '[attr.role]': '"none"',
+    class: 'position-relative d-inline-block',
   },
   styles: ``,
 })
 export class PopoverMenuBlock {
   readonly elementRef = inject(ElementRef).nativeElement as HTMLElement;
+  readonly ksMenu = input<KsMenu>(new KsMenu([]));
+  readonly isOpen = model<boolean>(false);
+
   readonly toggleButton = viewChild(ToggleButtonDirective, {
     read: ElementRef,
   });
@@ -77,19 +81,41 @@ export class PopoverMenuBlock {
   private readonly menuElement = viewChild(MenuComponent, {
     read: ElementRef,
   });
-  readonly ksMenu = input<KsMenu>(new KsMenu([]));
   readonly toggleButtonTemplate = input<TemplateRef<any>>();
+  readonly customToggleButtonTemplate = viewChild(
+    'customToggleButtonTemplate',
+    {
+      read: ElementRef,
+    }
+  );
   private readonly renderer2 = inject(Renderer2);
   readonly utilitiesService = inject(UtilitiesService);
-  id = this.utilitiesService.generateUniqueId('popover-menu');
+  readonly ariaMenuid = this.utilitiesService.generateUniqueId('popover-menu');
   readonly placement = model<PopoverPlacement>('top-start');
+
   constructor() {
     afterEveryRender(() => {
-      this.adjusePlacement();
+      if (this.isOpen()) this.adjusePlacement();
+      if (this.toggleButtonTemplate() && this.customToggleButtonTemplate()) {
+        this.renderer2.setAttribute(
+          this.customToggleButtonTemplate()?.nativeElement.children[0],
+          'aria-controls',
+          this.ariaMenuid
+        );
+      }
+      if (this.ksMenu()?.options?.separatorClasses && this.elementRef) {
+        const separators = this.elementRef.querySelectorAll('hr[ksSeparator]');
+        let classes =
+          this.ksMenu()?.options?.separatorClasses?.split(' ') ;
+        separators.forEach((separator) => {
+          classes?.forEach((cls) => {
+            this.renderer2.addClass(separator, cls);
+          });
+        });
+      }
     });
   }
 
-  readonly isOpen = model<boolean>(false);
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     if (!this.elementRef.contains(event.target as Node)) {

@@ -15,21 +15,28 @@ import {
       [ksMenu]="menuItems"
       placement="left-start"
       [(isOpen)]="isOpen"
-      [toggleButtonTemplate]="toggleButton"
     >
-      <ng-template #toggleButton>
-        <button (click)="isOpen.set(!isOpen())">Toggle</button></ng-template
-      >
       <ks-menu-header useSeparator decorativeSeparator>
         <span ksIcon="home"> </span>
         <p>Coding Bible Menu</p>
       </ks-menu-header>
+      <ks-menu-section title="Document section">
+        <ks-menu-item><p>new item test</p></ks-menu-item>
+        <ks-menu-item><p>new item test2</p></ks-menu-item>
+      </ks-menu-section>
+      <ks-menu-item>
+        <span ksIcon="search"></span>
+        <p>Search</p>
+      </ks-menu-item>
+      <ks-menu-item>
+        <span ksIcon="settings"></span>
+        <p>Settings</p>
+      </ks-menu-item>
+      <ks-menu-footer useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-footer>
     </ks-popover-menu>
-    <ks-menu>
-      <ks-menu-item type="button" href="https://example.com">
-        <p>test</p></ks-menu-item
-      >
-    </ks-menu>
   `,
   host: {
     class:
@@ -38,22 +45,57 @@ import {
 })
 export class PopoverMenuTests {
   readonly isOpen = signal(true);
-  menuItems = new KsMenu([
+  menuItems = new KsMenu(
+    [
+      {
+        title: 'Document section',
+        items: [
+          {
+            disabled: false,
+            icon: 'plus-lg',
+            label: 'New',
+            action: (event, itemRef) => {
+              console.log('New item clicked', event, itemRef);
+            },
+            iconOptions: { provider: 'bi' },
+            id: 'new-item',
+          },
+          {
+            icon: 'search',
+            label: 'Search',
+            routerLink: '/tests',
+          },
+        ],
+      },
+      { icon: 'settings', label: 'Settings222' },
+      { icon: 'settings', label: 'Logout' },
+      { separator: true, isDecorative: true },
+      { icon: 'add', label: 'leeg' },
+    ],
     {
-      title: 'Document section',
-      items: [
-        { disabled: true, icon: 'add', label: 'New' },
-        {
-          icon: 'search',
-          label: 'Search',
-          href: 'https://google.com',
-          routerLink: '/tests',
-        },
-      ],
+      iconOptions: {
+        provider: 'google',
+        options: { type: 'outlined' },
+      },
+      menuClasses: 'bg-white',
+      itemClasses: 'text-primary',
+      separatorClasses: 'spearaotor-class',
     },
-    { icon: 'settings', label: 'Settings' },
-    { icon: 'add', label: 'Logout' },
-    { separator: true, isDecorative: true },
-    { icon: 'add', label: 'leeg' },
-  ]);
+    {
+      size: 'md',
+      variant: 'text',
+      appearance: 'dark',
+      isRaised: true,
+      borderRadius: 'rounded',
+      shape: 'circle',
+      disabled: false,
+      iconOptions: {
+        provider: 'google',
+        options: { type: 'outlined' },
+      },
+      iconName: 'menu',
+      RaisedClass: 'raised',
+      id: `menu-button-${Math.random().toString(36).substring(2, 15)}`,
+    }
+  );
 }

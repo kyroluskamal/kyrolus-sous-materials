@@ -1,17 +1,18 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, ElementRef, inject, input } from '@angular/core';
 import { MenuComponent } from '../menu/menu.component';
 import { isNgDevMode } from '../../../helpers/constants/constants.exports';
 import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
 import { UtilitiesService } from '../../../services/utilities.service';
+import { PopoverMenuBlock } from '../../../public-api';
 
 @Component({
   selector: 'ks-menu-section',
   imports: [],
   template: `
     @if(title()) {
-    <p [id]="_id()">{{ title() }}</p>
+    <span [id]="_id()">{{ title() }}</span>
     }
-    <div role="group" [attr.arialabelledby]="title() ? _id() : null">
+    <div role="group" [attr.aria-labelledby]="title() ? _id() : null">
       <ng-content select="ks-menu-item" />
       <ng-content select="[ksSeparator]" />
     </div>
@@ -23,6 +24,7 @@ import { UtilitiesService } from '../../../services/utilities.service';
   },
 })
 export class MenuSectionComponent {
+  readonly el = inject(ElementRef).nativeElement as HTMLElement;
   readonly title = input<string>();
   private readonly utitlitiesService = inject(UtilitiesService);
   readonly id = input<string>();
@@ -35,10 +37,16 @@ export class MenuSectionComponent {
     );
   });
 
-  ksMenu = inject(MenuComponent, { host: true, optional: true });
+  readonly ksMenu = inject(MenuComponent, { host: true, optional: true });
+  readonly popOverMenu = inject(PopoverMenuBlock, {
+    host: true,
+    optional: true,
+  });
   constructor() {
-    if (isNgDevMode && !this.ksMenu) {
-      throw new Error(getErrorMessageForMenuItemNotInMenu('Section'));
+    if (isNgDevMode) {
+      if (!this.ksMenu && !this.popOverMenu) {
+        throw new Error(getErrorMessageForMenuItemNotInMenu('Section'));
+      }
     }
   }
 }

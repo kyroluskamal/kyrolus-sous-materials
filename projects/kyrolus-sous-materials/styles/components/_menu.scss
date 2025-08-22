@@ -86,6 +86,10 @@ ks-menu {
   &.leave {
     animation: ks-menu-leave 0.2s ease-in-out;
   }
+  button [ksIcon],
+  button [class*="material-icons"] {
+    font-size: large;
+  }
 }
 
 @keyframes ks-menu-enter {
