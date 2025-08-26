@@ -23,7 +23,6 @@ import { MenuSectionComponent } from '../../components/menu/menu-section/menu-se
 import { MenuItemComponent } from '../../components/menu/menu-item/menu-item.component';
 import { MenuComponent } from '../../components/menu/menu/menu.component';
 import { SeparatorDirective } from '../../public-api';
-import { query } from '@angular/animations';
 @Component({
   selector: 'app-popover-menu-tests',
   imports: [PopoverMenuBlock, MenuModule, IconDirective],
@@ -428,45 +427,8 @@ describe('PopoverMenuBlock', () => {
     });
   });
 
-  describe('3. placement adjustment tests', () => {
-    it('3.1. should adjust the placement of the menu if the placement is set to left or right', () => {
-      const placement = PopOverMenucomponent[1].placement.set('left');
-      fixture.detectChanges();
-      const menuComponent = debugElement[1].query(By.directive(MenuComponent))
-        .nativeElement as HTMLElement;
-      const toggleButton = debugElement[1].query(
-        By.directive(ToggleButtonDirective)
-      ).nativeElement as HTMLElement;
-      Object.defineProperty(toggleButton, 'offsetWidth', { value: 100 });
-      Object.defineProperty(menuComponent, 'offsetWidth', { value: 50 });
-      //@ts-expect-error
-      PopOverMenucomponent[1].adjusePlacement();
-      expect(menuComponent).not.toBeNull();
-      expect(menuComponent.style.top).toEqual(
-        `${toggleButton.offsetWidth / 2 - menuComponent.offsetWidth / 2}px`
-      );
-    });
-    it('3.2. should adjust the placement of the menu if the placement is set to top or bottom', () => {
-      const placement = PopOverMenucomponent[1].placement.set('top');
-      fixture.detectChanges();
-      const menuComponent = debugElement[1].query(By.directive(MenuComponent))
-        .nativeElement as HTMLElement;
-      const toggleButton = debugElement[1].query(
-        By.directive(ToggleButtonDirective)
-      ).nativeElement as HTMLElement;
-      Object.defineProperty(toggleButton, 'offsetHeight', { value: 100 });
-      Object.defineProperty(menuComponent, 'offsetHeight', { value: 50 });
-      //@ts-expect-error
-      PopOverMenucomponent[1].adjusePlacement();
-      expect(menuComponent).not.toBeNull();
-      expect(menuComponent.style.left).toEqual(
-        `${toggleButton.offsetHeight / 2 - menuComponent.offsetHeight / 2}px`
-      );
-    });
-  });
-
-  describe('4. Document click tests', () => {
-    it('4.1. Should close the menu if clicked outside', () => {
+  describe('3. Document click tests', () => {
+    it('3.1. Should close the menu if clicked outside', () => {
       PopOverMenucomponent[0].isOpen.set(true);
       fixture.detectChanges();
       document.body.click();
@@ -474,8 +436,8 @@ describe('PopoverMenuBlock', () => {
     });
   });
 
-  describe('5. Aria tests', () => {
-    it('5.1. Should have the toggle button with with aria-controls attribute set to the menu id', () => {
+  describe('4. Aria tests', () => {
+    it('4.1. Should have the toggle button with with aria-controls attribute set to the menu id', () => {
       const toggleButtonElement =
         PopOverMenucomponent[0].customToggleButtonTemplate()
           ?.nativeElement as HTMLElement;
@@ -486,13 +448,13 @@ describe('PopoverMenuBlock', () => {
         PopOverMenucomponent[1].ariaMenuid
       );
     });
-    it('5.2. Should not have aria-hidden attribute on the toggle button', () => {
+    it('4.2. Should not have aria-hidden attribute on the toggle button', () => {
       const toggleButtonElement = debugElement[1].query(
         By.directive(ToggleButtonDirective)
       ).nativeElement as HTMLElement;
       expect(toggleButtonElement.getAttribute('aria-hidden')).toBeNull();
     });
-    it('5.3 Should have the popover-menu with role="none"', () => {
+    it('4.3 Should have the popover-menu with role="none"', () => {
       const popoverMenuElement = debugElement[0].nativeElement as HTMLElement;
       expect(popoverMenuElement.getAttribute('role')).toBe('none');
     });

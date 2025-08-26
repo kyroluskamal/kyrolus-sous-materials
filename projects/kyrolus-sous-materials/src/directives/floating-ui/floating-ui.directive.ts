@@ -5,9 +5,11 @@ import {
   input,
   model,
   numberAttribute,
-  afterNextRender,
+  afterEveryRender,
+  PLATFORM_ID,
 } from '@angular/core';
 import { PopoverPlacement } from '../../blocks/popover-menu/popover.types';
+import { isPlatformBrowser } from '@angular/common';
 type sides = {
   top?: number;
   bottom?: number;
@@ -35,35 +37,47 @@ export class FloatingUIDirective {
   ] as const;
   private readonly elRef = inject(ElementRef<HTMLElement>);
   private readonly floatingElement = this.elRef.nativeElement as HTMLElement;
+  private readonly resizeObserver!: ResizeObserver;
 
-  readonly refElement = input.required<HTMLElement>();
+  readonly referenceElement = input.required<HTMLElement>();
   readonly placement = model.required<PopoverPlacement>();
+  platformId = inject(PLATFORM_ID);
   readonly offset = input.required<number, string>({
     transform: numberAttribute,
   });
-  readonly mode = input<'flip' | 'freeStyle'>('flip');
+  // readonly mode = input<'flip' | 'freeStyle'>('flip');
   constructor() {
-    afterNextRender(() => {
-      if (this.refElement()) this.adjustPlacement();
+    afterEveryRender(() => {
+      if (this.referenceElement()) this.adjustPlacement();
     });
+    if (isPlatformBrowser(this.platformId) && 'ResizeObserver' in window) {
+      this.resizeObserver = new ResizeObserver(() => {
+        if (this.referenceElement()) {
+          this.adjustPlacement();
+        }
+      });
+      if (this.resizeObserver.observe)
+        this.resizeObserver?.observe(document.body);
+    }
   }
-
+  ngOnDestroy() {
+    if (this.resizeObserver?.disconnect) this.resizeObserver?.disconnect();
+  }
   private adjustPlacement() {
     const result = this.calculateOptimalPosition();
     const positions = result ? result.avaliablePosition : [];
     if (positions.length === 0) return;
-    const optimal: PopoverPlacement = (
-      positions.length > 0 ? positions[0] : 'bottom'
-    ) as PopoverPlacement;
+    const optimal: PopoverPlacement = positions[0] as PopoverPlacement;
+
     this.placement.set(optimal);
   }
 
   private calculateOptimalPosition() {
-    let refRect = this.refElement()?.getBoundingClientRect();
+    let refRect = this.referenceElement()?.getBoundingClientRect();
     let floatRect = this.floatingElement.getBoundingClientRect();
     let viewportHeight = window.innerHeight;
     let viewportWidth = window.innerWidth;
-    const currentOffset = this.offset(); // احصل على قيمة الـ offset هنا
+    const currentOffset = this.offset();
 
     if (!refRect || !floatRect) {
       return;
@@ -119,36 +133,6 @@ export class FloatingUIDirective {
         });
       });
     });
-    // sonarqube-disable
-    // // if (
-    //   spcesArroundRef.top > this.floatingElement.offsetHeight ||
-    //   (['left', 'right'].includes(this.placement()) &&
-    //     spcesArroundRef.top > this.floatingElement.offsetHeight / 2)
-    // ) {
-    //   sidesAvaliableForFloating.top = spcesArroundRef.top;
-    // }
-    // if (
-    //   spcesArroundRef.bottom > this.floatingElement.offsetHeight ||
-    //   (['left', 'right'].includes(this.placement()) &&
-    //     spcesArroundRef.bottom > this.floatingElement.offsetHeight / 2)
-    // ) {
-    //   sidesAvaliableForFloating.bottom = spcesArroundRef.bottom;
-    // }
-    // if (
-    //   spcesArroundRef.left > this.floatingElement.offsetWidth ||
-    //   (['top', 'bottom'].includes(this.placement()) &&
-    //     spcesArroundRef.left > this.floatingElement.offsetWidth / 2)
-    // ) {
-    //   sidesAvaliableForFloating.left = spcesArroundRef.left;
-    // }
-    // if (
-    //   spcesArroundRef.right > this.floatingElement.offsetWidth ||
-    //   (['top', 'bottom'].includes(this.placement()) &&
-    //     spcesArroundRef.right > this.floatingElement.offsetWidth / 2)
-    // ) {
-    //   sidesAvaliableForFloating.right = spcesArroundRef.right;
-    // }
-    // sonarqube-enable
     let avaliablePosition: string[] = [];
     let sidesAvaliable = new Map<string, number>();
 

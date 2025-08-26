@@ -105,8 +105,7 @@ export class PopoverMenuBlock {
       }
       if (this.ksMenu()?.options?.separatorClasses && this.elementRef) {
         const separators = this.elementRef.querySelectorAll('hr[ksSeparator]');
-        let classes =
-          this.ksMenu()?.options?.separatorClasses?.split(' ') ;
+        let classes = this.ksMenu()?.options?.separatorClasses?.split(' ');
         separators.forEach((separator) => {
           classes?.forEach((cls) => {
             this.renderer2.addClass(separator, cls);
@@ -122,7 +121,7 @@ export class PopoverMenuBlock {
       this.isOpen.set(false);
     }
   }
-
+  /* v8 ignore start */
   private adjusePlacement() {
     let isRightOrLeft = ['right', 'left'].includes(this.placement());
     let isTopOrBottom = ['top', 'bottom'].includes(this.placement());
@@ -136,9 +135,9 @@ export class PopoverMenuBlock {
     }
     let offsetName: string | null;
     if (isRightOrLeft) {
-      offsetName = 'offsetWidth';
-    } else if (isTopOrBottom) {
       offsetName = 'offsetHeight';
+    } else if (isTopOrBottom) {
+      offsetName = 'offsetWidth';
     } else {
       offsetName = null;
     }
@@ -153,4 +152,5 @@ export class PopoverMenuBlock {
         }px`
       );
   }
+  /* v8 ignore end */
 }

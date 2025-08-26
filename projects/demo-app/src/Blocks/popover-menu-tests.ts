@@ -4,6 +4,7 @@ import {
   KsMenu,
   MenuModule,
   PopoverMenuBlock,
+  PopoverPlacement,
 } from 'KyrolusSousMaterials';
 
 @Component({
@@ -11,27 +12,69 @@ import {
   imports: [PopoverMenuBlock, MenuModule, IconDirective],
   template: `
     <ks-popover-menu
+      id="left"
       [isOpen]="true"
       [ksMenu]="menuItems"
-      placement="left-start"
+      [placement]="'left'"
       [(isOpen)]="isOpen"
     >
       <ks-menu-header useSeparator decorativeSeparator>
         <span ksIcon="home"> </span>
         <p>Coding Bible Menu</p>
       </ks-menu-header>
-      <ks-menu-section title="Document section">
-        <ks-menu-item><p>new item test</p></ks-menu-item>
-        <ks-menu-item><p>new item test2</p></ks-menu-item>
-      </ks-menu-section>
-      <ks-menu-item>
-        <span ksIcon="search"></span>
-        <p>Search</p>
-      </ks-menu-item>
-      <ks-menu-item>
-        <span ksIcon="settings"></span>
-        <p>Settings</p>
-      </ks-menu-item>
+
+      <ks-menu-footer useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-footer>
+    </ks-popover-menu>
+
+    <ks-popover-menu
+      id="right"
+      [isOpen]="true"
+      [ksMenu]="menuItems"
+      [placement]="'right'"
+      [(isOpen)]="isOpen"
+    >
+      <ks-menu-header useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-header>
+
+      <ks-menu-footer useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-footer>
+    </ks-popover-menu>
+    <ks-popover-menu
+      id="top"
+      [isOpen]="true"
+      [ksMenu]="menuItems"
+      [placement]="'top'"
+      [(isOpen)]="isOpen"
+    >
+      <ks-menu-header useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-header>
+
+      <ks-menu-footer useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-footer>
+    </ks-popover-menu>
+    <ks-popover-menu
+      id="bottom"
+      [isOpen]="true"
+      [ksMenu]="menuItems"
+      [placement]="'bottom'"
+      [(isOpen)]="isOpen"
+    >
+      <ks-menu-header useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-header>
+
       <ks-menu-footer useSeparator decorativeSeparator>
         <span ksIcon="home"> </span>
         <p>Coding Bible Menu</p>
@@ -40,7 +83,7 @@ import {
   `,
   host: {
     class:
-      'd-block h-100vh bg-grey-39 d-flex align-items-center justify-content-center flex-wrap-wrap',
+      'd-block h-100vh bg-grey-39 d-flex align-items-start justify-content-start flex-wrap-wrap gap-5 p-5',
   },
 })
 export class PopoverMenuTests {
@@ -98,4 +141,5 @@ export class PopoverMenuTests {
       id: `menu-button-${Math.random().toString(36).substring(2, 15)}`,
     }
   );
+  placement = signal<PopoverPlacement>('bottom');
 }

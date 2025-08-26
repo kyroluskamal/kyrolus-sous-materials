@@ -49,9 +49,9 @@
     [firstButtonIsFocused]="isOpen()"
     ksFloatingUI
     [(placement)]="placement"
-    [refElement]="buttonTemplate"
+    [referenceElement]="buttonTemplate"
     [@menuAnimation]
-    [offset]="options?.floatngUiOffset || '8'"
+    [offset]="options?.floatngUiOffset || '0'"
     class="position-absolute elevation-1 p-1 {{ placement() }} w-auto {{options?.menuClasses}}"
   >
     <ng-template #menuItemTemplate let-ksItem="ksItem">
@@ -104,8 +104,8 @@
     <ng-container [ngTemplateOutlet]="footer"></ng-container>
   </ks-menu>
   }
-<ng-template #bodyIfNoMenuConfig>
-   <ng-content select="ks-menu-section" />
-    <ng-content select="ks-menu-item" />
-    <ng-content select="ks-menu-separator" />
-</ng-template>
+    <ng-template #bodyIfNoMenuConfig>
+      <ng-content select="ks-menu-section" />
+        <ng-content select="ks-menu-item" />
+        <ng-content select="ks-menu-separator" />
+    </ng-template>
