@@ -1,6 +1,8 @@
 import {
   Component,
   DebugElement,
+  input,
+  inputBinding,
   provideZonelessChangeDetection,
 } from '@angular/core';
 import { MenuAriaHandlingDirective } from './menu-aria-handling.directive';
@@ -10,13 +12,16 @@ import { By } from '@angular/platform-browser';
 import { vi } from 'vitest';
 @Component({
   selector: 'ks-menu-aria-handling-test',
-  template: `<ks-menu ksMenuAriaHandling>
+  template: `<ks-menu
+    ksMenuAriaHandling
+    [firstButtonIsFocused]="firstElementIsFocused()"
+  >
     <ks-menu-header useSeparator>
       <span ksIcon="home"> </span>
       <p>Coding Bible Menu</p>
     </ks-menu-header>
     <ks-menu-section title="Document section">
-      <ks-menu-item type="a" disabled>
+      <ks-menu-item disabled>
         <span ksIcon="add"></span>
         <p>New</p>
       </ks-menu-item>
@@ -38,13 +43,16 @@ import { vi } from 'vitest';
       <span ksIcon="add"></span>
       <p>leeg</p>
     </ks-menu-item>
+    <ks-menu-item></ks-menu-item>
 
     <ks-menu-footer useSeparator></ks-menu-footer>
   </ks-menu>`,
   standalone: true,
   imports: [MenuModule],
 })
-class TestHostComponent {}
+class TestHostComponent {
+  firstElementIsFocused = input(false);
+}
 describe('MenuAriaHandlingDirective', () => {
   let fixture: ComponentFixture<TestHostComponent>;
   let debugElement: DebugElement;
@@ -64,16 +72,27 @@ describe('MenuAriaHandlingDirective', () => {
     buttons = directive.buttons();
   });
   describe('initialization', () => {
-    it('Should have the first element focusable', () => {
+    it('Should have the first button focused focusable', () => {
       const firstFocusable = (
         debugElement.nativeElement as HTMLElement
       ).querySelectorAll('button, a');
       expect(firstFocusable[1]).toBeTruthy();
       expect(firstFocusable[1].getAttribute('tabindex')).toBe('0');
-      expect(directive.buttons().length).toBe(4);
-      expect(directive.menuItems().length).toBe(5);
+      expect(directive.buttons().length).toBe(5);
     });
+    it('should have the first button focused when firstButtonIsFocused is true', () => {
+      const fixture = TestBed.createComponent(TestHostComponent, {
+        bindings: [inputBinding('firstElementIsFocused', () => true)],
+      });
+      fixture.detectChanges();
+      const firstFocusableAfter = (
+        fixture.debugElement.nativeElement as HTMLElement
+      ).querySelectorAll('button, a');
+      expect(firstFocusableAfter[1] === document.activeElement).toBeTruthy();
+    });
+  });
 
+  describe('buttons', () => {
     it('Should have the first button with tabindex 0 and the others with -1', () => {
       expect(buttons[0].getAttribute('tabindex')).toBe('0');
       expect(buttons[1].getAttribute('tabindex')).toBe('-1');
@@ -85,7 +104,13 @@ describe('MenuAriaHandlingDirective', () => {
   describe('buttonsWithText', () => {
     it('Should return the text content of buttons without icons', () => {
       const buttonsWithText = directive.buttonsWithText();
-      expect(buttonsWithText).toEqual(['search', 'settings', 'logout', 'leeg']);
+      expect(buttonsWithText).toEqual([
+        'search',
+        'settings',
+        'logout',
+        'leeg',
+        '',
+      ]);
     });
   });
 
@@ -131,13 +156,13 @@ describe('MenuAriaHandlingDirective', () => {
       expect(event.preventDefault).toHaveBeenCalled();
     });
 
-    it('Should not focus any button if no match is found', () => {
+    it('Should not change focus if no button matches the typed character', () => {
+      buttons[0].focus();
       const event = new KeyboardEvent('keydown', { key: 'x' });
       vi.spyOn(event, 'preventDefault');
       directive.handleTypeahead(event);
-      expect(
-        buttons.every((button) => button !== document.activeElement)
-      ).toBeTruthy();
+      expect(directive.handleTypeahead(event)).toBeUndefined();
+      expect(buttons[0] === document.activeElement).toBeTruthy();
       expect(event.preventDefault).toHaveBeenCalled();
     });
     it('Should focus the first button when Home key is pressed', () => {
@@ -186,6 +211,29 @@ describe('MenuAriaHandlingDirective', () => {
       debugElement.nativeElement.dispatchEvent(sevent);
       debugElement.nativeElement.dispatchEvent(eevent);
       expect(buttons[0] === document.activeElement).toBeTruthy();
+    });
+    it('should clear the searchString after 500ms', () => {
+      vi.useFakeTimers();
+      const event = new KeyboardEvent('keydown', { key: 's' });
+      directive.handleTypeahead(event);
+      // @ts-expect-error
+      expect(directive.searchString).toBe('s');
+      vi.advanceTimersByTime(500);
+      // @ts-expect-error
+      expect(directive.searchString).toBe('');
+      vi.useRealTimers();
+    });
+    it('should ignore the Tab key and allow focus to leave the component', () => {
+      const firstButton = buttons[0];
+      firstButton.focus();
+      expect(document.activeElement).toBe(firstButton);
+      const tabEvent = new KeyboardEvent('keydown', { key: 'Tab' });
+      debugElement.nativeElement.dispatchEvent(tabEvent);
+      (document.activeElement as HTMLElement)?.blur();
+      const spyPreventDefault = vi.spyOn(tabEvent, 'preventDefault');
+      expect(spyPreventDefault).not.toHaveBeenCalled();
+      const hasFocus = buttons.some((btn) => btn === document.activeElement);
+      expect(hasFocus).toBeFalsy();
     });
   });
 });

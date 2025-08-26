@@ -5,8 +5,14 @@ import {
   ElementRef,
   inject,
   input,
+  Renderer2,
 } from '@angular/core';
-import { ButtonAppearance, ButtonSize, ButtonVariant } from './button.types';
+import {
+  ButtonAppearance,
+  ButtonShape,
+  ButtonSize,
+  ButtonVariant,
+} from './button.types';
 import {
   BUTTON_APPEARANCE,
   BUTTON_BORDER_RADIUS_CLASS,
@@ -25,28 +31,35 @@ import { isNgDevMode } from '../../public-api';
     '[attr.disabled]': 'disabled() ? true : null',
     '[attr.aria-disabled]': 'disabled() ? true : null',
     '(click)': 'onClick($event)',
+    '(keyup)': 'removeActiveAndFocus($event)',
   },
   standalone: true,
 })
 export class ButtonDirective {
   private readonly hostElement: HTMLElement = inject(ElementRef).nativeElement;
-
+  private readonly renderer2 = inject(Renderer2);
   readonly size = input<ButtonSize>(inject(BUTTON_SIZE));
   readonly variant = input<ButtonVariant>(inject(BUTTON_VARIANT));
   readonly appearance = input<ButtonAppearance>(inject(BUTTON_APPEARANCE));
   readonly isRaised = input<boolean, string>(inject(BUTTON_IS_RAISED), {
     transform: booleanAttribute,
   });
-  readonly borderRadius = input(inject(BUTTON_BORDER_RADIUS_CLASS));
-  readonly shape = input(inject(BUTTON_SHAPE));
+  readonly borderRadius = input<string>(inject(BUTTON_BORDER_RADIUS_CLASS));
+  readonly shape = input<ButtonShape>(inject(BUTTON_SHAPE));
   readonly disabled = input<boolean, string>(false, {
     transform: booleanAttribute,
   });
-  readonly RaisedClass = input(inject(BUTTON_RAISE_CLASS));
+  readonly RaisedClass = input<string>(inject(BUTTON_RAISE_CLASS));
   onClick(event: Event) {
     if (this.disabled()) {
       event.preventDefault();
       event.stopPropagation();
+    }
+  }
+  removeActiveAndFocus(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      this.renderer2.removeClass(this.hostElement, 'active');
+      this.renderer2.removeClass(this.hostElement, 'focus');
     }
   }
   classes = computed(() =>

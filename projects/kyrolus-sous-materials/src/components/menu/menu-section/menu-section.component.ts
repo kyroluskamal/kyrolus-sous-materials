@@ -1,19 +1,18 @@
-import {
-  Component,
-  computed,
-  inject,
-  input,
-} from '@angular/core';
+import { Component, computed, ElementRef, inject, input } from '@angular/core';
 import { MenuComponent } from '../menu/menu.component';
 import { isNgDevMode } from '../../../helpers/constants/constants.exports';
 import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
+import { UtilitiesService } from '../../../services/utilities.service';
+import { PopoverMenuBlock } from '../../../public-api';
 
 @Component({
   selector: 'ks-menu-section',
   imports: [],
   template: `
-    <p [id]="_id()">{{ title() }}</p>
-    <div role="group" [attr.arialabelledby]="_id()">
+    @if(title()) {
+    <span [id]="_id()">{{ title() }}</span>
+    }
+    <div role="group" [attr.aria-labelledby]="title() ? _id() : null">
       <ng-content select="ks-menu-item" />
       <ng-content select="[ksSeparator]" />
     </div>
@@ -25,16 +24,29 @@ import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
   },
 })
 export class MenuSectionComponent {
-  readonly title = input.required<string>();
+  readonly el = inject(ElementRef).nativeElement as HTMLElement;
+  readonly title = input<string>();
+  private readonly utitlitiesService = inject(UtilitiesService);
   readonly id = input<string>();
-  _id = computed(
-    () =>
-      this.id()?.toLowerCase() || this.title().replace(/\s/g, '-').toLowerCase()
-  );
-  ksMenu = inject(MenuComponent, { host: true, optional: true });
+  _id = computed(() => {
+    return (
+      this.id()?.toLowerCase().replace(/\s/g, '-') ||
+      this.utitlitiesService.generateUniqueId(
+        this.title()?.replace(/\s/g, '-').toLowerCase()
+      )
+    );
+  });
+
+  readonly ksMenu = inject(MenuComponent, { host: true, optional: true });
+  readonly popOverMenu = inject(PopoverMenuBlock, {
+    host: true,
+    optional: true,
+  });
   constructor() {
-    if (isNgDevMode && !this.ksMenu) {
-      throw new Error(getErrorMessageForMenuItemNotInMenu('Section'));
+    if (isNgDevMode) {
+      if (!this.ksMenu && !this.popOverMenu) {
+        throw new Error(getErrorMessageForMenuItemNotInMenu('Section'));
+      }
     }
   }
 }

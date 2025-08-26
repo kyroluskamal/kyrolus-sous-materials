@@ -1,14 +1,13 @@
 import {
   afterNextRender,
   computed,
-  contentChildren,
   Directive,
   ElementRef,
   inject,
+  input,
   Renderer2,
+  signal,
 } from '@angular/core';
-import { MenuItemComponent } from '../menu.exports';
-
 @Directive({
   selector: '[ksMenuAriaHandling]',
   host: {
@@ -16,15 +15,10 @@ import { MenuItemComponent } from '../menu.exports';
   },
 })
 export class MenuAriaHandlingDirective {
-  readonly menuItems = contentChildren(MenuItemComponent, {
-    descendants: true,
-  });
+  readonly firstButtonIsFocused = input(false);
+  readonly el = inject(ElementRef);
+  readonly buttons = signal<HTMLElement[]>([]);
   private readonly renderer2 = inject(Renderer2);
-  readonly buttons = computed<HTMLElement[]>(() =>
-    this.menuItems()
-      .filter((item) => !item.button()?.nativeElement.hasAttribute('disabled'))
-      .map((item) => item.button()?.nativeElement)
-  );
   readonly buttonsWithText = computed(() => {
     return this.buttons().map((button) => {
       const clone = button.cloneNode(true) as HTMLElement;
@@ -42,28 +36,34 @@ export class MenuAriaHandlingDirective {
 
   constructor() {
     afterNextRender(() => {
-      this.buttons().forEach((button) => {
+      this.buttons.set(
+        Array.from<HTMLElement>(
+          this.el.nativeElement.querySelectorAll('[ksbutton], button, a')
+        ).filter((el) => !el.hasAttribute('disabled'))
+      );
+      const buttons = this.buttons();
+      this.resetTabIndex();
+      buttons.forEach((button) => {
         this.renderer2.setAttribute(button, 'tabindex', '-1');
       });
-      if (this.buttons()[0]) {
-        this.renderer2.setAttribute(this.buttons()[0], 'tabindex', '0');
+      if (buttons[0]) {
+        this.renderer2.setAttribute(buttons[0], 'tabindex', '0');
+        if (this.firstButtonIsFocused()) buttons[0].focus();
       }
     });
   }
 
   handleKeydown(event: KeyboardEvent) {
+    if (event.key === 'Tab') {
+      return;
+    }
     const buttons = this.buttons();
-    if (buttons.length === 0) return;
     if (
-      event.key.length === 1 &&
-      event.key !== ' ' &&
-      !event.ctrlKey &&
-      !event.metaKey
+      !['ArrowDown', 'ArrowUp', 'Home', 'End', 'Enter', ' '].includes(event.key)
     ) {
       this.handleTypeahead(event);
       return;
     }
-
     let currentIndex = buttons.indexOf(document.activeElement as HTMLElement);
 
     let nextButton: HTMLElement | undefined;
@@ -85,7 +85,8 @@ export class MenuAriaHandlingDirective {
       case ' ':
         event.preventDefault();
         (document.activeElement as HTMLElement)?.click();
-        return;
+        document.activeElement?.classList.add('active');
+        break;
     }
 
     if (nextButton) {
@@ -117,6 +118,8 @@ export class MenuAriaHandlingDirective {
     );
     if (buttonToFocus) {
       this.focusButton(buttonToFocus);
+    } else {
+      this.resetTabIndex();
     }
   }
   private focusButton(button: HTMLElement) {

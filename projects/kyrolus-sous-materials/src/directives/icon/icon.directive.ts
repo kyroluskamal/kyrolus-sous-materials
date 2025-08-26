@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   computed,
   Directive,
   effect,
@@ -16,12 +17,16 @@ import { ICON_OPTIONS } from '../../Tokens/icon.tokens';
   selector: '[ksIcon]',
   host: {
     '[class]': 'classes()',
-    '[attr.aria-hidden]': 'true',
+    '[attr.aria-hidden]': '!isNotDecorativeIcon() ? "true" : null',
   },
 })
 export class IconDirective {
+  /* v8 ignore next */
   private readonly elmRef = inject(ElementRef);
   private readonly renderer2 = inject(Renderer2);
+  readonly isNotDecorativeIcon = input<boolean, string>(false, {
+    transform: booleanAttribute,
+  });
   eff = effect(() => {
     this.elmRef.nativeElement.childNodes.forEach((node: Node) => {
       this.renderer2.removeChild(this.elmRef.nativeElement, node);
@@ -30,9 +35,7 @@ export class IconDirective {
       const nodes = Array.from<Node>(this.elmRef.nativeElement.childNodes);
       let textNode =
         nodes.filter((node) => node.nodeType === Node.TEXT_NODE)[0] || null;
-      let hasTextNodes =
-        textNode !== null && textNode.textContent?.trim() !== '';
-      if (!hasTextNodes) {
+      if (textNode === null) {
         this.renderer2.appendChild(
           this.elmRef.nativeElement,
           this.renderer2.createText(this.ksIcon())

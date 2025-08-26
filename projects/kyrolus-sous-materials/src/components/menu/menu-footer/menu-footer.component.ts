@@ -2,6 +2,7 @@ import { booleanAttribute, Component, inject, input } from '@angular/core';
 import {
   isNgDevMode,
   MenuComponent,
+  PopoverMenuBlock,
   SeparatorDirective,
 } from '../../../public-api';
 import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
@@ -10,12 +11,14 @@ import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
   selector: 'ks-menu-footer',
   imports: [SeparatorDirective],
   template: `
-    @if (useSeparator() && decorativeSeparator()) {
-    <hr ksSeparator isDecorative class="flex-basis-100" />
-    }@else if (useSeparator() && !decorativeSeparator()) {
-    <hr ksSeparator class="flex-basis-100" />
+    @if (useSeparator() ) {
+    <hr
+      ksSeparator
+      isDecorative="{{ decorativeSeparator() }}"
+      class="flex-basis-100"
+    />
     }
-    <ng-content />
+    <ng-content select="*:not([ksSeparator]),*:not(hr)" />
   `,
   styles: ``,
   host: {
@@ -30,9 +33,14 @@ export class MenuFooterComponent {
   decorativeSeparator = input<boolean, string>(false, {
     transform: booleanAttribute,
   });
-  ksMenu = inject(MenuComponent, { host: true, optional: true });
+  readonly ksMenu = inject(MenuComponent, { host: true, optional: true });
+  readonly ksPopOverMenu = inject(PopoverMenuBlock, {
+    host: true,
+    optional: true,
+  });
+
   constructor() {
-    if (isNgDevMode && !this.ksMenu) {
+    if (isNgDevMode && !this.ksMenu && !this.ksPopOverMenu) {
       throw new Error(getErrorMessageForMenuItemNotInMenu('Footer'));
     }
   }

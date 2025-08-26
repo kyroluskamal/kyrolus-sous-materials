@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { App } from './app';
 import { Tests } from '../tests';
 
 export const routes: Routes = [
@@ -27,8 +26,17 @@ export const routes: Routes = [
       },
       {
         path: 'menu-test',
-        loadComponent: () => import('../menu-test').then((m) => m.MenuTest),
+        loadComponent: () =>
+          import('../components/menu-test').then((m) => m.MenuTest),
         title: 'Menu Test',
+      },
+      {
+        path: 'popover-menu-tests',
+        loadComponent: () =>
+          import('../Blocks/popover-menu-tests').then(
+            (m) => m.PopoverMenuTests
+          ),
+        title: 'Popover Menu Tests',
       },
     ],
   },

@@ -20,6 +20,9 @@ import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
         >Test Footer</ks-menu-header
       >
     </ks-menu>
+    <ks-menu>
+      <ks-menu-header> Test Footer</ks-menu-header>
+    </ks-menu>
   `,
   standalone: true,
   imports: [MenuComponent, MenuHeaderComponent],
@@ -45,7 +48,7 @@ describe('MenuHeaderComponent', () => {
     it('Should has a separator when useSeparator is true', () => {
       const footer = debugElement[0].componentInstance;
       fixture.detectChanges();
-      const separator = fixture.debugElement.query(By.css('hr'));
+      const separator = debugElement[0].query(By.css('hr'));
       expect(separator).not.toBeNull;
       expect(separator.nativeElement.classList).toContain('flex-basis-100');
       expect(footer.useSeparator()).toBeTruthy();
@@ -55,16 +58,29 @@ describe('MenuHeaderComponent', () => {
     it('Should have a decorative separator when useSeparator and decorativeSeparator are true', () => {
       const footer = debugElement[1].componentInstance;
       fixture.detectChanges();
-      const separator = fixture.debugElement.query(By.css('hr'));
+      const separator = debugElement[1].nativeElement.querySelector(
+        'hr'
+      ) as HTMLHRElement;
       expect(separator).not.toBeNull;
       expect(footer.useSeparator()).toBeTruthy();
       expect(footer.decorativeSeparator()).toBeTruthy();
+      expect(separator.classList).toContain('flex-basis-100');
+
+      expect(separator.getAttribute('aria-hidden')).toBe('true');
     });
 
     it('Should throw an error if used outside of ks-menu', () => {
       expect(() => {
         TestBed.createComponent(MenuHeaderComponent);
       }).toThrowError(getErrorMessageForMenuItemNotInMenu('Header'));
+    });
+    it('should not have a separator when useSeparator is false', () => {
+      const footer = debugElement[2].componentInstance;
+      fixture.detectChanges();
+      const separator = debugElement[2].query(By.css('hr'));
+      expect(separator).toBeNull();
+      expect(footer.useSeparator()).toBeFalsy();
+      expect(footer.decorativeSeparator()).toBeFalsy();
     });
   });
 

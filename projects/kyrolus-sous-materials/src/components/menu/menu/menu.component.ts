@@ -4,12 +4,12 @@ import { Component, input } from '@angular/core';
   selector: 'ks-menu',
   imports: [],
   template: `
-    <ng-content selector="ks-menu-header"></ng-content>
-    <ng-content selector="ks-menu-section" />
-
-    <ng-content selector="ks-menu-item" />
-    <ng-content selector="[ksSeparator]" />
-    <ng-content selector=".ks-menu-footer"></ng-content>
+    <ng-content select="ks-menu-header" />
+    <ng-content select="ks-menu-section" />
+    <ng-content select="ks-menu-item" />
+    <ng-content select="[ksSeparator]" />
+    <ng-content select="ks-menu-footer" />
+    <ng-content />
   `,
   styles: [``],
   host: {

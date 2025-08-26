@@ -20,7 +20,7 @@ import { IconDirective } from '../icon/icon.directive';
     },
     {
       directive: IconDirective,
-      inputs: ['iconOptions', 'ksIcon:iconName'],
+      inputs: ['iconOptions', 'ksIcon:iconName', 'isNotDecorativeIcon'],
     },
   ],
   host: {
@@ -32,7 +32,11 @@ export class ToggleButtonDirective {
   iconToggled = input<string>();
   iconDirective = inject(IconDirective, { self: true });
   toggled = model<boolean>(false);
-  private readonly mainIcon = this.iconDirective.ksIcon();
+  private mainIcon: string = '';
+
+  ngOnInit(): void {
+    this.mainIcon = this.iconDirective.ksIcon();
+  }
   private readonly eff = effect(() => {
     if (this.iconToggled()) {
       if (this.toggled()) {

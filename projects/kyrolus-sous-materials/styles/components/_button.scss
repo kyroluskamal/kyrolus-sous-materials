@@ -297,3 +297,6 @@ $text-buttons: (
     text-decoration: none;
   }
 }
+a[ksButton]:not([class*="Link"]) {
+  text-decoration: none;
+}

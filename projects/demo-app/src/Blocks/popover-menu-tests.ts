@@ -1,0 +1,145 @@
+import { Component, signal } from '@angular/core';
+import {
+  IconDirective,
+  KsMenu,
+  MenuModule,
+  PopoverMenuBlock,
+  PopoverPlacement,
+} from 'KyrolusSousMaterials';
+
+@Component({
+  selector: 'app-popover-menu-tests',
+  imports: [PopoverMenuBlock, MenuModule, IconDirective],
+  template: `
+    <ks-popover-menu
+      id="left"
+      [isOpen]="true"
+      [ksMenu]="menuItems"
+      [placement]="'left'"
+      [(isOpen)]="isOpen"
+    >
+      <ks-menu-header useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-header>
+
+      <ks-menu-footer useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-footer>
+    </ks-popover-menu>
+
+    <ks-popover-menu
+      id="right"
+      [isOpen]="true"
+      [ksMenu]="menuItems"
+      [placement]="'right'"
+      [(isOpen)]="isOpen"
+    >
+      <ks-menu-header useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-header>
+
+      <ks-menu-footer useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-footer>
+    </ks-popover-menu>
+    <ks-popover-menu
+      id="top"
+      [isOpen]="true"
+      [ksMenu]="menuItems"
+      [placement]="'top'"
+      [(isOpen)]="isOpen"
+    >
+      <ks-menu-header useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-header>
+
+      <ks-menu-footer useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-footer>
+    </ks-popover-menu>
+    <ks-popover-menu
+      id="bottom"
+      [isOpen]="true"
+      [ksMenu]="menuItems"
+      [placement]="'bottom'"
+      [(isOpen)]="isOpen"
+    >
+      <ks-menu-header useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-header>
+
+      <ks-menu-footer useSeparator decorativeSeparator>
+        <span ksIcon="home"> </span>
+        <p>Coding Bible Menu</p>
+      </ks-menu-footer>
+    </ks-popover-menu>
+  `,
+  host: {
+    class:
+      'd-block h-100vh bg-grey-39 d-flex align-items-start justify-content-start flex-wrap-wrap gap-5 p-5',
+  },
+})
+export class PopoverMenuTests {
+  readonly isOpen = signal(true);
+  menuItems = new KsMenu(
+    [
+      {
+        title: 'Document section',
+        items: [
+          {
+            disabled: false,
+            icon: 'plus-lg',
+            label: 'New',
+            action: (event, itemRef) => {
+              console.log('New item clicked', event, itemRef);
+            },
+            iconOptions: { provider: 'bi' },
+            id: 'new-item',
+          },
+          {
+            icon: 'search',
+            label: 'Search',
+            routerLink: '/tests',
+          },
+        ],
+      },
+      { icon: 'settings', label: 'Settings222' },
+      { icon: 'settings', label: 'Logout' },
+      { separator: true, isDecorative: true },
+      { icon: 'add', label: 'leeg' },
+    ],
+    {
+      iconOptions: {
+        provider: 'google',
+        options: { type: 'outlined' },
+      },
+      menuClasses: 'bg-white',
+      itemClasses: 'text-primary',
+      separatorClasses: 'spearaotor-class',
+    },
+    {
+      size: 'md',
+      variant: 'text',
+      appearance: 'dark',
+      isRaised: true,
+      borderRadius: 'rounded',
+      shape: 'circle',
+      disabled: false,
+      iconOptions: {
+        provider: 'google',
+        options: { type: 'outlined' },
+      },
+      iconName: 'menu',
+      RaisedClass: 'raised',
+      id: `menu-button-${Math.random().toString(36).substring(2, 15)}`,
+    }
+  );
+  placement = signal<PopoverPlacement>('bottom');
+}
