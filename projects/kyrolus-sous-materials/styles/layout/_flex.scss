@@ -24,11 +24,15 @@
     .flex-#{$bp-name}-fill {
       flex: 1 1 auto !important;
     }
-    @each $name, $value in $flex-shrink-values {
-      .flex-#{$bp-name}-grow-#{$name} {
+    @each $name, $value in $flex-grow-values {
+      $class: if($name == 1, "flex-#{$bp-name}-grow", "flex-#{$bp-name}-grow-#{$name}");
+      .#{$class} {
         flex-grow: $value !important;
       }
-      .flex-#{$bp-name}-shrink-#{$name} {
+    }
+    @each $name, $value in $flex-shrink-values {
+      $class: if($name == 1, "flex-#{$bp-name}-shrink", "flex-#{$bp-name}-shrink-#{$name}");
+      .#{$class} {
         flex-shrink: $value !important;
       }
     }
@@ -43,6 +47,9 @@
       .flex-basis-#{$bp-name}-#{$name} {
         flex-basis: $value;
       }
+      .basis-#{$bp-name}-#{$name} {
+        flex-basis: $value;
+      }
     }
     @each $name, $value in $flex-order-values {
       .flex-#{$bp-name}-#{$name} {
@@ -54,6 +61,14 @@
 
 // --- 3. BASE UTILITY GENERATION (for all screen sizes) ---
 
+// Display
+.flex {
+  display: flex !important;
+}
+.inline-flex {
+  display: inline-flex !important;
+}
+
 // Direction
 @each $name, $value in $flex-direction-values {
   .flex-#{$name} {
@@ -61,10 +76,25 @@
   }
 }
 
-// Wrap
+// Wrap (existing classes and Tailwind aliases)
 @each $name, $value in $flex-wrap-values {
   .flex-wrap-#{$name} {
     flex-wrap: $value !important;
+  }
+}
+@each $name, $value in $flex-wrap-values {
+  @if $name == wrap {
+    .flex-wrap {
+      flex-wrap: $value !important;
+    }
+  } @else if $name == wrap-reverse {
+    .flex-wrap-reverse {
+      flex-wrap: $value !important;
+    }
+  } @else if $name == nowrap {
+    .flex-nowrap {
+      flex-wrap: $value !important;
+    }
   }
 }
 
@@ -72,14 +102,19 @@
 .flex-fill {
   flex: 1 1 auto !important;
 }
-@each $name, $value in $flex-shrink-values {
-  .flex-grow-#{$name} {
+@each $name, $value in $flex-grow-values {
+  $class: if($name == 1, "flex-grow", "flex-grow-#{$name}");
+  .#{$class} {
     flex-grow: $value !important;
   }
-  .flex-shrink-#{$name} {
+}
+@each $name, $value in $flex-shrink-values {
+  $class: if($name == 1, "flex-shrink", "flex-shrink-#{$name}");
+  .#{$class} {
     flex-shrink: $value !important;
   }
 }
+
 @each $name, $value in $flex-order-values {
   .flex-#{$name} {
     flex: $value;
@@ -87,6 +122,9 @@
 }
 @each $name, $value in $flex-basis-values {
   .flex-basis-#{$name} {
+    flex-basis: $value;
+  }
+  .basis-#{$name} {
     flex-basis: $value;
   }
 }
