@@ -12,6 +12,20 @@ $grid-rows: 6;
 // Values for grid-auto-flow
 $grid-flow-values: ("row", "column", "row-dense", "column-dense");
 
+// Values for grid-auto-columns and grid-auto-rows
+$grid-auto-columns-values: (
+  auto: auto,
+  min: min-content,
+  max: max-content,
+  fr: minmax(0, 1fr)
+);
+$grid-auto-rows-values: (
+  auto: auto,
+  min: min-content,
+  max: max-content,
+  fr: minmax(0, 1fr)
+);
+
 // --- 2. RESPONSIVE UTILITY GENERATION (Mobile-First) ---
 
 @each $bp-name, $bp-value in $breakpoints {
@@ -78,6 +92,18 @@ $grid-flow-values: ("row", "column", "row-dense", "column-dense");
       grid-row-start: auto;
     }
 
+    // grid-auto-columns & grid-auto-rows
+    @each $name, $value in $grid-auto-columns-values {
+      .auto-cols-#{$bp-name}-#{$name} {
+        grid-auto-columns: $value !important;
+      }
+    }
+    @each $name, $value in $grid-auto-rows-values {
+      .auto-rows-#{$bp-name}-#{$name} {
+        grid-auto-rows: $value !important;
+      }
+    }
+
     // grid-auto-flow
     @each $name in $grid-flow-values {
       .grid-flow-#{$bp-name}-#{$name} {
@@ -88,6 +114,14 @@ $grid-flow-values: ("row", "column", "row-dense", "column-dense");
 }
 
 // --- 3. BASE UTILITY GENERATION (for all screen sizes) ---
+
+// Display
+.grid {
+  display: grid !important;
+}
+.inline-grid {
+  display: inline-grid !important;
+}
 
 // grid-template-*
 .grid-cols-none {
@@ -104,6 +138,18 @@ $grid-flow-values: ("row", "column", "row-dense", "column-dense");
 @for $i from 1 through $grid-rows {
   .grid-rows-#{$i} {
     grid-template-rows: repeat($i, minmax(0, 1fr)) !important;
+  }
+}
+
+// auto-cols & auto-rows
+@each $name, $value in $grid-auto-columns-values {
+  .auto-cols-#{$name} {
+    grid-auto-columns: $value !important;
+  }
+}
+@each $name, $value in $grid-auto-rows-values {
+  .auto-rows-#{$name} {
+    grid-auto-rows: $value !important;
   }
 }
 
