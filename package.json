@@ -36,7 +36,7 @@
     "@angular/ssr": "^20.1.5",
     "bootstrap-icons": "^1.13.1",
     "express": "^5.1.0",
-    "kyrolus-sous-materials": "^1.0.0",
+    "kyrolus-sous-materials": "file:dist/kyrolus-sous-materials",
     "material-icons": "^1.13.14",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
