@@ -12,6 +12,9 @@ import { ButtonDirective } from 'KyrolusSousMaterials';
 
     <button ksButton routerLink="menu-test">Menu test</button>
     <button ksButton routerLink="popover-menu-tests">Popeover menu</button>
+    <button ksButton routerLink="floating-free-style-tests">
+      Floating UI Free Style Tests
+    </button>
   `,
   styles: `
   :host {
