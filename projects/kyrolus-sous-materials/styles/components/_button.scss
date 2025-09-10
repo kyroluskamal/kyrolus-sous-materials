@@ -21,10 +21,10 @@ $btn-sizes: (
 
 $btn-colors: (
   "primary": (
-    bg: $primay-color,
+    bg: $primary-color,
     color: #ffffff,
-    hover: color.scale($primay-color, $lightness: $hover-darken),
-    active: color.scale($primay-color, $lightness: $active-darken),
+    hover: color.scale($primary-color, $lightness: $hover-darken),
+    active: color.scale($primary-color, $lightness: $active-darken),
   ),
   "secondary": (
     bg: $secondary-color,
@@ -76,9 +76,9 @@ $btn-colors: (
   ),
   "link-primary": (
     bg: transparent,
-    color: $primay-color,
-    hover: color.scale($primay-color, $lightness: $hover-darken),
-    active: color.scale($primay-color, $lightness: $active-darken),
+    color: $primary-color,
+    hover: color.scale($primary-color, $lightness: $hover-darken),
+    active: color.scale($primary-color, $lightness: $active-darken),
   ),
   "link-secondary": (
     bg: transparent,
@@ -187,7 +187,7 @@ $btn-colors: (
   }
 }
 $outline-buttons: (
-  "primary": $primay-color,
+  "primary": $primary-color,
   "secondary": $secondary-color,
   "tertiary": $tertiary,
   "success": $success-color,
@@ -227,7 +227,7 @@ $outline-buttons: (
   }
 }
 $ghost-buttons: (
-  "primary": $primay-color,
+  "primary": $primary-color,
   "secondary": $secondary-color,
   "tertiary": $tertiary,
   "success": $success-color,
@@ -258,7 +258,7 @@ $ghost-buttons: (
 }
 
 $text-buttons: (
-  "primary": $primay-color,
+  "primary": $primary-color,
   "secondary": $secondary-color,
   "tertiary": $tertiary,
   "success": $success-color,
