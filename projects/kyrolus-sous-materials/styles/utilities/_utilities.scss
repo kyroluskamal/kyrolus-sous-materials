@@ -558,26 +558,6 @@ $border-radius-sides: (
 }
 
 .placeholder-transparent {
-  &::-webkit-input-placeholder {
-    color: transparent;
-  }
-
-  &:-moz-placeholder {
-    color: transparent;
-  }
-
-  &::-moz-placeholder {
-    color: transparent;
-  }
-
-  &:-ms-input-placeholder {
-    color: transparent;
-  }
-
-  &::-ms-input-placeholder {
-    color: transparent;
-  }
-
   &::placeholder {
     color: transparent;
   }
