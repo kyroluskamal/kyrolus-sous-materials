@@ -38,6 +38,15 @@ export const routes: Routes = [
           ),
         title: 'Popover Menu Tests',
       },
+
+      {
+        path: 'floating-free-style-tests',
+        loadComponent: () =>
+          import('../directives/floating-ui-free-style-mode').then(
+            (m) => m.FloatingUiFreeStyleMode
+          ),
+        title: 'Floating UI Free Style Tests',
+      },
     ],
   },
 ];
