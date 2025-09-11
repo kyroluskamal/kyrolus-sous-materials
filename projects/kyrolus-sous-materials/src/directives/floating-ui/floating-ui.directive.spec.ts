@@ -9,7 +9,6 @@ import { TestBed } from '@angular/core/testing';
 import { FloatingUIDirective } from './floating-ui.directive';
 import { PopoverPlacement } from '../../blocks/popover-menu/popover.types';
 import { By } from '@angular/platform-browser';
-import { FloatingUiService } from './floating-ui.service';
 
 @Component({
   template: `
@@ -197,8 +196,7 @@ describe('1. FloatingUIDirective', () => {
     component.adjustPlacement();
     expect(fixture.componentInstance.placement()).toBe(initialPlacement);
   });
-  it('1.10. should return early when there is enough space on all four sides', () => {
-    const initialPlacement = fixture.componentInstance.placement();
+  it('1.10. should choose side with most space when all sides are available', () => {
     vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
       top: 375,
       bottom: 425,
@@ -210,14 +208,11 @@ describe('1. FloatingUIDirective', () => {
 
     // @ts-expect-error: private method
     component.adjustPlacement();
-
-    expect(fixture.componentInstance.placement()).toBe(initialPlacement);
+    expect(fixture.componentInstance.placement()).toBe('left');
   });
   it('1.11. should create and observe with ResizeObserver if available', () => {
     const mockObserve = vi.fn();
     let callback!: () => void;
-
-    // mock ResizeObserver بحيث نخزن الكولباك
     (globalThis as any).ResizeObserver = vi.fn().mockImplementation((cb) => {
       callback = cb;
       return {
@@ -256,41 +251,34 @@ describe('1. FloatingUIDirective', () => {
     expect(mockDisconnect).toHaveBeenCalled();
   });
 
-  it(
-    '1.13. should remove right-start when not enough space on bottom for taller float element',
-    () => {
-      const service = TestBed.inject(FloatingUiService);
-      service.setElements(refEl, floatEl);
+  it('1.13. should switch to right-end when not enough space on bottom for taller float element', () => {
+    fixture.componentInstance.placement.set('right-start');
+    fixture.detectChanges();
 
-      vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
-        top: 650,
-        bottom: 700,
-        left: 100,
-        right: 200,
-        width: 100,
-        height: 50,
-      } as DOMRect);
+    vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
+      top: 650,
+      bottom: 700,
+      left: 100,
+      right: 200,
+      width: 100,
+      height: 50,
+    } as DOMRect);
 
-      vi.spyOn(floatEl, 'getBoundingClientRect').mockReturnValue({
-        top: 650,
-        bottom: 850,
-        left: 200,
-        right: 300,
-        width: 100,
-        height: 200,
-      } as DOMRect);
+    vi.spyOn(floatEl, 'getBoundingClientRect').mockReturnValue({
+      top: 650,
+      bottom: 850,
+      left: 200,
+      right: 300,
+      width: 100,
+      height: 200,
+    } as DOMRect);
 
-      const result = service.calculateOptimalPosition('right-start', 8);
-
-      expect(result?.avaliablePosition).not.toContain('right-start');
-      expect(result?.avaliablePosition).toContain('right-end');
-    }
-  );
+    // @ts-expect-error: private method
+    component.adjustPlacement();
+    expect(fixture.componentInstance.placement()).toBe('right-end');
+  });
 
   it('1.14. should shift floating element horizontally when slightly off-screen', () => {
-    const service = TestBed.inject(FloatingUiService);
-    service.setElements(refEl, floatEl);
-
     vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
       top: 100,
       bottom: 150,
@@ -318,16 +306,40 @@ describe('1. FloatingUIDirective', () => {
         height: 200,
       } as DOMRect,
     ];
-
     let call = 0;
     vi.spyOn(floatEl, 'getBoundingClientRect').mockImplementation(
       () => floatRects[Math.min(call++, floatRects.length - 1)]
     );
-
     Object.defineProperty(floatEl, 'offsetLeft', { value: 0 });
-
-    service.calculateOptimalPosition('bottom', 8);
+    // @ts-expect-error: private method
+    component.adjustPlacement();
 
     expect(floatEl.style.left).toBe('5px');
+  });
+  it('1.15. should clamp dimensions when float element exceeds viewport', () => {
+    vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(150);
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(150);
+    vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
+      top: 0,
+      bottom: 50,
+      left: 0,
+      right: 100,
+      width: 100,
+      height: 50,
+    } as DOMRect);
+    vi.spyOn(floatEl, 'getBoundingClientRect').mockReturnValue({
+      top: 0,
+      bottom: 250,
+      left: 0,
+      right: 250,
+      width: 250,
+      height: 250,
+    } as DOMRect);
+    // @ts-expect-error: private method
+    component.adjustPlacement();
+    expect(floatEl.style.maxHeight).toBe('142px');
+    expect(floatEl.style.overflowY).toBe('auto');
+    expect(floatEl.style.maxWidth).toBe('142px');
+    expect(floatEl.style.overflowX).toBe('auto');
   });
 });

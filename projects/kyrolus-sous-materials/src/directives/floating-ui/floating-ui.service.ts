@@ -35,8 +35,8 @@ export class FloatingUiService {
     this.floatElement = float;
   }
   calculateOptimalPosition(placement: PopoverPlacement, offset = 8) {
-    let refRect = this.refElement.getBoundingClientRect();
-    let floatRect = this.floatElement.getBoundingClientRect();
+    let refRect = this.refElement?.getBoundingClientRect();
+    let floatRect = this.floatElement?.getBoundingClientRect();
     let viewportHeight = window.innerHeight;
     let viewportWidth = window.innerWidth;
 
@@ -172,7 +172,7 @@ export class FloatingUiService {
 
     if (shiftX !== 0) {
       this.floatElement.style.left = `${this.floatElement.offsetLeft + shiftX}px`;
-      floatRect = this.floatElement.getBoundingClientRect();
+      floatRect = this.floatElement?.getBoundingClientRect();
     }
 
     let shiftY = 0;
@@ -187,7 +187,7 @@ export class FloatingUiService {
 
     if (shiftY !== 0) {
       this.floatElement.style.top = `${this.floatElement.offsetTop + shiftY}px`;
-      floatRect = this.floatElement.getBoundingClientRect();
+      floatRect = this.floatElement?.getBoundingClientRect();
     }
     return {
       avaliablePosition,
