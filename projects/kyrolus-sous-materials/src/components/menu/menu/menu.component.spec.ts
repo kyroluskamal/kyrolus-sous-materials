@@ -36,7 +36,7 @@ class FakeMenuFooter {}
 
 @Component({
   template: `
-    <ks-menu>
+    <ks-menu ariaLabel="Test Menu">
       <ks-menu-header>Test Header</ks-menu-header>
       <ks-menu-section>Test Section</ks-menu-section>
       <ks-menu-item>Test Item</ks-menu-item>
@@ -68,33 +68,48 @@ describe('MenuComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should project ks-menu-header content', () => {
+  it('1. should project ks-menu-header content', () => {
     const headerEl = testElement.query(By.css('ks-menu-header'));
     expect(headerEl).not.toBeNull();
     expect(headerEl.nativeElement.textContent).toContain('Test Header');
   });
 
-  it('should project ks-menu-section content', () => {
+  it('2. should project ks-menu-section content', () => {
     const sectionEl = fixture.debugElement.query(By.css('ks-menu-section'));
     debugger;
     expect(sectionEl).not.toBeNull();
     expect(sectionEl.nativeElement.textContent).toContain('Test Section');
   });
 
-  it('should project ks-menu-item content', () => {
+  it('3. should project ks-menu-item content', () => {
     const itemEl = fixture.debugElement.query(By.css('ks-menu-item'));
     expect(itemEl).not.toBeNull();
     expect(itemEl.nativeElement.textContent).toContain('Test Item');
   });
 
-  it('should project content with [ksSeparator] attribute', () => {
+  it('4. should project content with [ksSeparator] attribute', () => {
     const separatorEl = fixture.debugElement.query(By.css('[ksSeparator]'));
     expect(separatorEl).not.toBeNull();
   });
 
-  it('should project content with .ks-menu-footer class', () => {
+  it('5. should project content with .ks-menu-footer class', () => {
     const footerEl = fixture.debugElement.query(By.css('ks-menu-footer'));
     expect(footerEl).not.toBeNull();
     expect(footerEl.nativeElement.textContent).toContain('Test Footer');
+  });
+
+  it('6. should set the aria-label attribute', () => {
+    const menuEl = testElement.query(By.css('ks-menu'));
+    expect(menuEl.attributes['aria-label']).toBe('Test Menu');
+  });
+
+  it('7. should have role attribute set to menu', () => {
+    const menuEl = testElement.query(By.css('ks-menu'));
+    expect(menuEl.attributes['role']).toBe('menu');
+  });
+
+  it('8. should have aria-orientation attribute set to vertical', () => {
+    const menuEl = testElement.query(By.css('ks-menu'));
+    expect(menuEl.attributes['aria-orientation']).toBe('vertical');
   });
 });

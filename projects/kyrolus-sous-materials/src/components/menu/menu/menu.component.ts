@@ -15,12 +15,13 @@ import { Component, input } from '@angular/core';
   host: {
     class:
       'w-60 w-md-15rem h-fit-content bg-white br-r-3 br-grey-38 br-w-2 br-s-solid p-1',
-    '[attr.role]': '"menu"',
-    '[attr.aria-label]': 'ariaLabel()',
-    '[attr.aria-orientation]': '"vertical"',
+    role: 'menu',
+    '[aria-label]': 'ariaLabel()',
+    '[aria-orientation]': '"vertical"',
   },
   standalone: true,
 })
 export class MenuComponent {
+  /* v8 ignore next */
   readonly ariaLabel = input('Menu');
 }
