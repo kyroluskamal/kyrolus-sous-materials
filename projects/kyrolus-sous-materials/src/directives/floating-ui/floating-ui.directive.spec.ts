@@ -9,6 +9,7 @@ import { TestBed } from '@angular/core/testing';
 import { FloatingUIDirective } from './floating-ui.directive';
 import { PopoverPlacement } from '../../blocks/popover-menu/popover.types';
 import { By } from '@angular/platform-browser';
+import { FloatingUiService } from './floating-ui.service';
 
 @Component({
   template: `
@@ -253,5 +254,80 @@ describe('1. FloatingUIDirective', () => {
 
     fixtureLocal.destroy();
     expect(mockDisconnect).toHaveBeenCalled();
+  });
+
+  it(
+    '1.13. should remove right-start when not enough space on bottom for taller float element',
+    () => {
+      const service = TestBed.inject(FloatingUiService);
+      service.setElements(refEl, floatEl);
+
+      vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
+        top: 650,
+        bottom: 700,
+        left: 100,
+        right: 200,
+        width: 100,
+        height: 50,
+      } as DOMRect);
+
+      vi.spyOn(floatEl, 'getBoundingClientRect').mockReturnValue({
+        top: 650,
+        bottom: 850,
+        left: 200,
+        right: 300,
+        width: 100,
+        height: 200,
+      } as DOMRect);
+
+      const result = service.calculateOptimalPosition('right-start', 8);
+
+      expect(result?.avaliablePosition).not.toContain('right-start');
+      expect(result?.avaliablePosition).toContain('right-end');
+    }
+  );
+
+  it('1.14. should shift floating element horizontally when slightly off-screen', () => {
+    const service = TestBed.inject(FloatingUiService);
+    service.setElements(refEl, floatEl);
+
+    vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
+      top: 100,
+      bottom: 150,
+      left: 100,
+      right: 200,
+      width: 100,
+      height: 50,
+    } as DOMRect);
+
+    const floatRects = [
+      {
+        top: 100,
+        bottom: 300,
+        left: -5,
+        right: 95,
+        width: 100,
+        height: 200,
+      } as DOMRect,
+      {
+        top: 100,
+        bottom: 300,
+        left: 0,
+        right: 100,
+        width: 100,
+        height: 200,
+      } as DOMRect,
+    ];
+
+    let call = 0;
+    vi.spyOn(floatEl, 'getBoundingClientRect').mockImplementation(
+      () => floatRects[Math.min(call++, floatRects.length - 1)]
+    );
+
+    Object.defineProperty(floatEl, 'offsetLeft', { value: 0 });
+
+    service.calculateOptimalPosition('bottom', 8);
+
+    expect(floatEl.style.left).toBe('5px');
   });
 });

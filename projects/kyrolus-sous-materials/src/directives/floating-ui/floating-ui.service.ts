@@ -132,6 +132,63 @@ export class FloatingUiService {
           !['left', 'left-start', 'right', 'right-start'].includes(p)
       );
     }
+
+    // evaluate cross-axis space for start/end variations
+    const extraWidth = Math.max(0, floatRect.width - refRect.width);
+    const extraHeight = Math.max(0, floatRect.height - refRect.height);
+    avaliablePosition = avaliablePosition.filter((pos) => {
+      if (!pos.includes('-')) return true;
+      const [main, align] = pos.split('-');
+
+      if (main === 'top' || main === 'bottom') {
+        // top/bottom placements align horizontally
+        if (align === 'start') {
+          return extraWidth <= spcesArroundRef.right;
+        } else if (align === 'end') {
+          return extraWidth <= spcesArroundRef.left;
+        }
+      } else if (main === 'left' || main === 'right') {
+        // left/right placements align vertically
+        if (align === 'start') {
+          return extraHeight <= spcesArroundRef.bottom;
+        } else if (align === 'end') {
+          return extraHeight <= spcesArroundRef.top;
+        }
+      }
+      return true;
+    });
+
+    // shift floating element back into the viewport if slightly overflowing
+    const tolerance = offset;
+    let shiftX = 0;
+    if (floatRect.left < 0 && Math.abs(floatRect.left) <= tolerance) {
+      shiftX = -floatRect.left;
+    } else if (
+      floatRect.right > viewportWidth &&
+      floatRect.right - viewportWidth <= tolerance
+    ) {
+      shiftX = viewportWidth - floatRect.right;
+    }
+
+    if (shiftX !== 0) {
+      this.floatElement.style.left = `${this.floatElement.offsetLeft + shiftX}px`;
+      floatRect = this.floatElement.getBoundingClientRect();
+    }
+
+    let shiftY = 0;
+    if (floatRect.top < 0 && Math.abs(floatRect.top) <= tolerance) {
+      shiftY = -floatRect.top;
+    } else if (
+      floatRect.bottom > viewportHeight &&
+      floatRect.bottom - viewportHeight <= tolerance
+    ) {
+      shiftY = viewportHeight - floatRect.bottom;
+    }
+
+    if (shiftY !== 0) {
+      this.floatElement.style.top = `${this.floatElement.offsetTop + shiftY}px`;
+      floatRect = this.floatElement.getBoundingClientRect();
+    }
     return {
       avaliablePosition,
       sidesAvaliable,
