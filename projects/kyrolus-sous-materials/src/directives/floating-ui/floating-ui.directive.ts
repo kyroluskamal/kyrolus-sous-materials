@@ -7,6 +7,7 @@ import {
   numberAttribute,
   afterEveryRender,
   PLATFORM_ID,
+  OnDestroy,
 } from '@angular/core';
 import { PopoverPlacement } from '../../blocks/popover-menu/popover.types';
 import { isPlatformBrowser } from '@angular/common';
@@ -21,7 +22,7 @@ type sides = {
   selector: '[ksFloatingUI]',
   standalone: true,
 })
-export class FloatingUIDirective {
+export class FloatingUIDirective implements OnDestroy {
   position = [
     'top',
     'top-start',
@@ -50,6 +51,10 @@ export class FloatingUIDirective {
   readonly mode = input<'flip' | 'freeStyle'>('flip');
   constructor() {
     afterEveryRender(() => {
+      this.floatingUiService.setElements(
+        this.referenceElement(),
+        this.floatingElement
+      );
       if (this.referenceElement()) this.adjustPlacement();
     });
     if (isPlatformBrowser(this.platformId) && 'ResizeObserver' in window) {
@@ -76,106 +81,4 @@ export class FloatingUIDirective {
 
     this.placement.set(optimal);
   }
-
-  // private calculateOptimalPosition() {
-  //   let refRect = this.referenceElement()?.getBoundingClientRect();
-  //   let floatRect = this.floatingElement.getBoundingClientRect();
-  //   let viewportHeight = window.innerHeight;
-  //   let viewportWidth = window.innerWidth;
-  //   const currentOffset = this.offset();
-
-  //   if (!refRect || !floatRect) {
-  //     return;
-  //   }
-  //   let spcesArroundRef = {
-  //     top: refRect.top - currentOffset,
-  //     bottom: viewportHeight - refRect.bottom - currentOffset,
-  //     left: refRect.left - currentOffset,
-  //     right: viewportWidth - refRect.right - currentOffset,
-  //   };
-
-  //   let sidesAvaliableForFloating: {
-  //     top?: number;
-  //     bottom?: number;
-  //     left?: number;
-  //     right?: number;
-  //   } = {};
-  //   const evaluteSidesAvalibleForFloating = (params: {
-  //     sidesToCheck: string[];
-  //     sideToPut: keyof sides;
-  //     offset: keyof HTMLElement;
-  //   }) => {
-  //     const elemProp = this.floatingElement[
-  //       `offset${params.offset}` as keyof HTMLElement
-  //     ] as number;
-  //     if (
-  //       spcesArroundRef[params.sideToPut] > elemProp ||
-  //       (params.sidesToCheck.includes(this.placement()) &&
-  //         spcesArroundRef[params.sideToPut] > elemProp / 2)
-  //     ) {
-  //       sidesAvaliableForFloating[params.sideToPut] =
-  //         spcesArroundRef[params.sideToPut];
-  //     }
-  //   };
-  //   const sidesToEvaluate = [
-  //     {
-  //       sides: ['left', 'right'],
-  //       sideToPut: ['top', 'bottom'],
-  //       offset: 'Height',
-  //     },
-  //     {
-  //       sides: ['top', 'bottom'],
-  //       sideToPut: ['left', 'right'],
-  //       offset: 'Width',
-  //     },
-  //   ];
-  //   sidesToEvaluate.forEach((sides) => {
-  //     sides.sideToPut.forEach((side) => {
-  //       evaluteSidesAvalibleForFloating({
-  //         sidesToCheck: sides.sides,
-  //         sideToPut: side as keyof sides,
-  //         offset: sides.offset as keyof HTMLElement,
-  //       });
-  //     });
-  //   });
-  //   let avaliablePosition: string[] = [];
-  //   let sidesAvaliable = new Map<string, number>();
-
-  //   if (Object.keys(sidesAvaliableForFloating).length === 4) {
-  //     return { avaliablePosition, sidesAvaliable };
-  //   }
-  //   sidesAvaliable = new Map<string, number>(
-  //     Object.entries(sidesAvaliableForFloating)
-  //   );
-  //   avaliablePosition = this.position.filter((pos) =>
-  //     Array.from(sidesAvaliable.keys()).some((side) => pos.includes(side))
-  //   );
-  //   if (!sidesAvaliable.get('right')) {
-  //     avaliablePosition = avaliablePosition.filter(
-  //       (p) =>
-  //         !p.includes('right') && !p.includes('top') && !p.includes('bottom')
-  //     );
-  //   }
-  //   if (!sidesAvaliable.get('left')) {
-  //     avaliablePosition = avaliablePosition.filter(
-  //       (p) =>
-  //         !p.includes('left') && !p.includes('top') && !p.includes('bottom')
-  //     );
-  //   }
-  //   if (!sidesAvaliable.get('top')) {
-  //     avaliablePosition = avaliablePosition.filter(
-  //       (p) =>
-  //         !p.includes('top') &&
-  //         !['left', 'left-end', 'right', 'right-end'].includes(p)
-  //     );
-  //   }
-  //   if (!sidesAvaliable.get('bottom')) {
-  //     avaliablePosition = avaliablePosition.filter(
-  //       (p) =>
-  //         !p.includes('bottom') &&
-  //         !['left', 'left-start', 'right', 'right-start'].includes(p)
-  //     );
-  //   }
-  //   return { avaliablePosition, sidesAvaliable };
-  // }
 }
