@@ -44,6 +44,29 @@ class HostComponent {
   offset = '8';
 }
 
+@Component({
+  template: `
+    <div #boundary style="position:relative;height:400px;width:400px;">
+      <div #ref style="width:100px;height:50px;"></div>
+      <div
+        ksFloatingUI
+        [referenceElement]="ref"
+        [boundaryElement]="boundary"
+        [(placement)]="placement"
+        [offset]="offset"
+      >
+        Floating Content
+      </div>
+    </div>
+  `,
+  standalone: true,
+  imports: [FloatingUIDirective],
+})
+class HostBoundaryComponent {
+  placement = signal<PopoverPlacement>('bottom');
+  offset = '8';
+}
+
 describe('1. FloatingUIDirective', () => {
   let fixture: any;
   let refEl: HTMLElement;
@@ -380,5 +403,46 @@ describe('1. FloatingUIDirective', () => {
     const removeSpy = vi.spyOn(window, 'removeEventListener');
     fixture.destroy();
     expect(removeSpy).toHaveBeenCalledWith('scroll', expect.any(Function));
+  });
+
+  it('1.18. should keep menu within boundary element', () => {
+    const fixtureBoundary = TestBed.createComponent(HostBoundaryComponent);
+    const boundaryEl = fixtureBoundary.nativeElement.querySelector('div');
+    const refEl = boundaryEl.querySelector('div');
+    const floatEl = boundaryEl.querySelector('[ksFloatingUI]') as HTMLElement;
+    const debug = fixtureBoundary.debugElement.query(
+      By.directive(FloatingUIDirective),
+    );
+    const dir = debug.injector.get(FloatingUIDirective);
+
+    Object.defineProperty(floatEl, 'offsetWidth', { value: 100 });
+    Object.defineProperty(floatEl, 'offsetHeight', { value: 200 });
+
+    vi.spyOn(boundaryEl, 'getBoundingClientRect').mockReturnValue({
+      top: 0,
+      bottom: 400,
+      left: 0,
+      right: 400,
+      width: 400,
+      height: 400,
+    } as DOMRect);
+
+    vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
+      top: 350,
+      bottom: 400,
+      left: 100,
+      right: 200,
+      width: 100,
+      height: 50,
+    } as DOMRect);
+
+    vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(800);
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1200);
+
+    fixtureBoundary.detectChanges();
+
+    // @ts-expect-error: private method
+    dir.adjustPlacement();
+    expect(fixtureBoundary.componentInstance.placement()).toBe('top');
   });
 });
