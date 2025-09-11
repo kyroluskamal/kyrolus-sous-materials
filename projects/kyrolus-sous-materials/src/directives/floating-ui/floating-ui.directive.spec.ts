@@ -196,8 +196,7 @@ describe('1. FloatingUIDirective', () => {
     component.adjustPlacement();
     expect(fixture.componentInstance.placement()).toBe(initialPlacement);
   });
-  it('1.10. should return early when there is enough space on all four sides', () => {
-    const initialPlacement = fixture.componentInstance.placement();
+  it('1.10. should choose side with most space when all sides are available', () => {
     vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
       top: 375,
       bottom: 425,
@@ -209,8 +208,7 @@ describe('1. FloatingUIDirective', () => {
 
     // @ts-expect-error: private method
     component.adjustPlacement();
-
-    expect(fixture.componentInstance.placement()).toBe(initialPlacement);
+    expect(fixture.componentInstance.placement()).toBe('left');
   });
   it('1.11. should create and observe with ResizeObserver if available', () => {
     const mockObserve = vi.fn();
@@ -317,5 +315,31 @@ describe('1. FloatingUIDirective', () => {
     component.adjustPlacement();
 
     expect(floatEl.style.left).toBe('5px');
+  });
+  it('1.15. should clamp dimensions when float element exceeds viewport', () => {
+    vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(150);
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(150);
+    vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
+      top: 0,
+      bottom: 50,
+      left: 0,
+      right: 100,
+      width: 100,
+      height: 50,
+    } as DOMRect);
+    vi.spyOn(floatEl, 'getBoundingClientRect').mockReturnValue({
+      top: 0,
+      bottom: 250,
+      left: 0,
+      right: 250,
+      width: 250,
+      height: 250,
+    } as DOMRect);
+    // @ts-expect-error: private method
+    component.adjustPlacement();
+    expect(floatEl.style.maxHeight).toBe('142px');
+    expect(floatEl.style.overflowY).toBe('auto');
+    expect(floatEl.style.maxWidth).toBe('142px');
+    expect(floatEl.style.overflowX).toBe('auto');
   });
 });
