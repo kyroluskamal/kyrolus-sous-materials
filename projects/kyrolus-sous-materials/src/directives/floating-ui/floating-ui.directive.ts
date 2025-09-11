@@ -44,6 +44,7 @@ export class FloatingUIDirective implements OnDestroy {
   private scrollTimeoutId!: any;
 
   readonly referenceElement = input.required<HTMLElement>();
+  readonly boundaryElement = input<HTMLElement>();
   readonly placement = model.required<PopoverPlacement>();
   platformId = inject(PLATFORM_ID);
   readonly offset = input.required<number, string>({
@@ -56,6 +57,7 @@ export class FloatingUIDirective implements OnDestroy {
       this.floatingUiService.setElements(
         this.referenceElement(),
         this.floatingElement,
+        this.boundaryElement(),
       );
       if (this.referenceElement()) this.adjustPlacement();
     });

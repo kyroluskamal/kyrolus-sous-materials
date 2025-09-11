@@ -29,26 +29,36 @@ export class FloatingUiService {
   }
   refElement!: HTMLElement;
   floatElement!: HTMLElement;
+  boundaryElement?: HTMLElement;
 
-  setElements(ref: HTMLElement, float: HTMLElement) {
+  setElements(ref: HTMLElement, float: HTMLElement, boundary?: HTMLElement) {
     this.refElement = ref;
     this.floatElement = float;
+    this.boundaryElement = boundary;
   }
   calculateOptimalPosition(placement: PopoverPlacement, offset = 8) {
     let refRect = this.refElement?.getBoundingClientRect();
     let floatRect = this.floatElement?.getBoundingClientRect();
-    let viewportHeight = window.innerHeight;
-    let viewportWidth = window.innerWidth;
+    let boundaryRect = this.boundaryElement?.getBoundingClientRect();
+    let viewportHeight = boundaryRect?.height ?? window.innerHeight;
+    let viewportWidth = boundaryRect?.width ?? window.innerWidth;
 
     if (!refRect || !floatRect) {
       return;
     }
-    let spcesArroundRef = {
-      top: refRect.top - offset,
-      bottom: viewportHeight - refRect.bottom - offset,
-      left: refRect.left - offset,
-      right: viewportWidth - refRect.right - offset,
-    };
+    let spcesArroundRef = boundaryRect
+      ? {
+          top: refRect.top - boundaryRect.top - offset,
+          bottom: boundaryRect.bottom - refRect.bottom - offset,
+          left: refRect.left - boundaryRect.left - offset,
+          right: boundaryRect.right - refRect.right - offset,
+        }
+      : {
+          top: refRect.top - offset,
+          bottom: viewportHeight - refRect.bottom - offset,
+          left: refRect.left - offset,
+          right: viewportWidth - refRect.right - offset,
+        };
 
     let sidesAvaliableForFloating: {
       top?: number;
@@ -161,13 +171,27 @@ export class FloatingUiService {
     // shift floating element back into the viewport if slightly overflowing
     const tolerance = offset;
     let shiftX = 0;
-    if (floatRect.left < 0 && Math.abs(floatRect.left) <= tolerance) {
-      shiftX = -floatRect.left;
-    } else if (
-      floatRect.right > viewportWidth &&
-      floatRect.right - viewportWidth <= tolerance
-    ) {
-      shiftX = viewportWidth - floatRect.right;
+    if (boundaryRect) {
+      if (
+        floatRect.left < boundaryRect.left &&
+        boundaryRect.left - floatRect.left <= tolerance
+      ) {
+        shiftX = boundaryRect.left - floatRect.left;
+      } else if (
+        floatRect.right > boundaryRect.right &&
+        floatRect.right - boundaryRect.right <= tolerance
+      ) {
+        shiftX = boundaryRect.right - floatRect.right;
+      }
+    } else {
+      if (floatRect.left < 0 && Math.abs(floatRect.left) <= tolerance) {
+        shiftX = -floatRect.left;
+      } else if (
+        floatRect.right > viewportWidth &&
+        floatRect.right - viewportWidth <= tolerance
+      ) {
+        shiftX = viewportWidth - floatRect.right;
+      }
     }
 
     if (shiftX !== 0) {
@@ -176,13 +200,27 @@ export class FloatingUiService {
     }
 
     let shiftY = 0;
-    if (floatRect.top < 0 && Math.abs(floatRect.top) <= tolerance) {
-      shiftY = -floatRect.top;
-    } else if (
-      floatRect.bottom > viewportHeight &&
-      floatRect.bottom - viewportHeight <= tolerance
-    ) {
-      shiftY = viewportHeight - floatRect.bottom;
+    if (boundaryRect) {
+      if (
+        floatRect.top < boundaryRect.top &&
+        boundaryRect.top - floatRect.top <= tolerance
+      ) {
+        shiftY = boundaryRect.top - floatRect.top;
+      } else if (
+        floatRect.bottom > boundaryRect.bottom &&
+        floatRect.bottom - boundaryRect.bottom <= tolerance
+      ) {
+        shiftY = boundaryRect.bottom - floatRect.bottom;
+      }
+    } else {
+      if (floatRect.top < 0 && Math.abs(floatRect.top) <= tolerance) {
+        shiftY = -floatRect.top;
+      } else if (
+        floatRect.bottom > viewportHeight &&
+        floatRect.bottom - viewportHeight <= tolerance
+      ) {
+        shiftY = viewportHeight - floatRect.bottom;
+      }
     }
 
     if (shiftY !== 0) {
