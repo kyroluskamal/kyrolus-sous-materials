@@ -113,7 +113,12 @@ ks-menu {
     transform: scale(0.25);
   }
 }
-
+.menu-enter {
+  animation: ks-menu-enter 0.2s ease-in-out;
+}
+.menu-leave {
+  animation: ks-menu-leave 0.2s ease-in-out;
+}
 .arrow {
   position: absolute;
   width: 10px;

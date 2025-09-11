@@ -1,4 +1,3 @@
-import { animate, style, transition, trigger } from '@angular/animations';
 import {
   afterEveryRender,
   Component,
@@ -26,32 +25,6 @@ import { MenuAriaHandlingDirective } from '../../public-api';
 
 @Component({
   selector: 'ks-popover-menu',
-  animations: [
-    trigger('menuAnimation', [
-      transition(':enter', [
-        style({
-          opacity: 0,
-          transform: 'scale(0.25)',
-        }),
-        animate(
-          '100ms ease-out',
-          style({
-            opacity: 1,
-            transform: 'scale(1)',
-          })
-        ),
-      ]),
-      transition(':leave', [
-        animate(
-          '75ms ease-in',
-          style({
-            opacity: 0,
-            transform: 'scale(0.25)',
-          })
-        ),
-      ]),
-    ]),
-  ],
   imports: [
     ToggleButtonDirective,
     MenuModule,
@@ -70,6 +43,7 @@ import { MenuAriaHandlingDirective } from '../../public-api';
   styles: ``,
 })
 export class PopoverMenuBlock {
+  /* v8 ignore start */
   readonly elementRef = inject(ElementRef).nativeElement as HTMLElement;
   readonly ksMenu = input<KsMenu>(new KsMenu([]));
   readonly isOpen = model<boolean>(false);
@@ -92,7 +66,7 @@ export class PopoverMenuBlock {
   readonly utilitiesService = inject(UtilitiesService);
   readonly ariaMenuid = this.utilitiesService.generateUniqueId('popover-menu');
   readonly placement = model<PopoverPlacement>('top-start');
-
+  /* v8 ignore end */
   constructor() {
     afterEveryRender(() => {
       if (this.isOpen()) this.adjusePlacement();

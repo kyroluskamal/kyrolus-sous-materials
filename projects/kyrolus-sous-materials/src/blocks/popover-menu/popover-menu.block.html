@@ -50,7 +50,8 @@
     ksFloatingUI
     [(placement)]="placement"
     [referenceElement]="buttonTemplate"
-    [@menuAnimation]
+    animate.enter="menu-enter"
+    animate.leave="menu-leave"
     [offset]="options?.floatngUiOffset || '0'"
     class="position-absolute elevation-1 p-1 {{ placement() }} w-auto {{options?.menuClasses}}"
   >
