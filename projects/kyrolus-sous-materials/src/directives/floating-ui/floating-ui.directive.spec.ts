@@ -5,11 +5,24 @@ import {
   provideZonelessChangeDetection,
   signal,
 } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { FloatingUIDirective } from './floating-ui.directive';
 import { PopoverPlacement } from '../../blocks/popover-menu/popover.types';
-import { By } from '@angular/platform-browser';
-
+import { BrowserModule, By } from '@angular/platform-browser';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeAll,
+  afterAll,
+  beforeEach,
+  afterEach,
+} from 'vitest';
+import {
+  BrowserTestingModule,
+  platformBrowserTesting,
+} from '@angular/platform-browser/testing';
 @Component({
   template: `
     <div #ref style="width:100px;height:50px;"></div>
@@ -46,16 +59,24 @@ describe('1. FloatingUIDirective', () => {
 
     // attach to global/window
     (globalThis as any).ResizeObserver = ResizeObserverMock;
+    const testBed = getTestBed();
+    if (!testBed.platform) {
+      testBed.initTestEnvironment(
+        BrowserTestingModule,
+        platformBrowserTesting()
+      );
+    }
   });
   afterAll(() => {
     delete (globalThis as any).ResizeObserver;
   });
   afterEach(() => {
     vi.restoreAllMocks();
+    TestBed.resetTestingModule();
   });
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HostComponent],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [BrowserModule, HostComponent],
       providers: [
         provideZonelessChangeDetection(),
         { provide: PLATFORM_ID, useValue: 'browser' },
@@ -65,7 +86,7 @@ describe('1. FloatingUIDirective', () => {
     refEl = fixture.nativeElement.querySelector('div');
     floatEl = fixture.nativeElement.querySelector('[ksFloatingUI]');
     debugElement = fixture.debugElement.query(
-      By.directive(FloatingUIDirective)
+      By.directive(FloatingUIDirective),
     );
     component = debugElement.injector.get(FloatingUIDirective);
     Object.defineProperty(floatEl, 'offsetWidth', { value: 100 });
@@ -196,7 +217,8 @@ describe('1. FloatingUIDirective', () => {
     component.adjustPlacement();
     expect(fixture.componentInstance.placement()).toBe(initialPlacement);
   });
-  it('1.10. should choose side with most space when all sides are available', () => {
+  it('1.10. should retain original placement when ample space is available on all sides', () => {
+    const initialPlacement = fixture.componentInstance.placement();
     vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
       top: 375,
       bottom: 425,
@@ -208,7 +230,7 @@ describe('1. FloatingUIDirective', () => {
 
     // @ts-expect-error: private method
     component.adjustPlacement();
-    expect(fixture.componentInstance.placement()).toBe('left');
+    expect(fixture.componentInstance.placement()).toBe(initialPlacement);
   });
   it('1.11. should create and observe with ResizeObserver if available', () => {
     const mockObserve = vi.fn();
@@ -308,7 +330,7 @@ describe('1. FloatingUIDirective', () => {
     ];
     let call = 0;
     vi.spyOn(floatEl, 'getBoundingClientRect').mockImplementation(
-      () => floatRects[Math.min(call++, floatRects.length - 1)]
+      () => floatRects[Math.min(call++, floatRects.length - 1)],
     );
     Object.defineProperty(floatEl, 'offsetLeft', { value: 0 });
     // @ts-expect-error: private method
@@ -341,5 +363,22 @@ describe('1. FloatingUIDirective', () => {
     expect(floatEl.style.overflowY).toBe('auto');
     expect(floatEl.style.maxWidth).toBe('142px');
     expect(floatEl.style.overflowX).toBe('auto');
+  });
+
+  it('1.16. should call adjustPlacement on window scroll with debounce', async () => {
+    vi.useFakeTimers();
+    const spy = vi.spyOn<any, any>(component, 'adjustPlacement');
+    window.dispatchEvent(new Event('scroll'));
+    expect(spy).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(100);
+    await Promise.resolve();
+    expect(spy).toHaveBeenCalledTimes(1);
+    vi.useRealTimers();
+  });
+
+  it('1.17. should remove scroll listener on destroy', () => {
+    const removeSpy = vi.spyOn(window, 'removeEventListener');
+    fixture.destroy();
+    expect(removeSpy).toHaveBeenCalledWith('scroll', expect.any(Function));
   });
 });

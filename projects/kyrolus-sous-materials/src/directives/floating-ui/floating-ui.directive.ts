@@ -40,6 +40,8 @@ export class FloatingUIDirective implements OnDestroy {
   private readonly elRef = inject(ElementRef<HTMLElement>);
   private readonly floatingElement = this.elRef.nativeElement as HTMLElement;
   private readonly resizeObserver!: ResizeObserver;
+  private scrollListener!: () => void;
+  private scrollTimeoutId!: any;
 
   readonly referenceElement = input.required<HTMLElement>();
   readonly placement = model.required<PopoverPlacement>();
@@ -53,27 +55,42 @@ export class FloatingUIDirective implements OnDestroy {
     afterEveryRender(() => {
       this.floatingUiService.setElements(
         this.referenceElement(),
-        this.floatingElement
+        this.floatingElement,
       );
       if (this.referenceElement()) this.adjustPlacement();
     });
-    if (isPlatformBrowser(this.platformId) && 'ResizeObserver' in window) {
-      this.resizeObserver = new ResizeObserver(() => {
-        if (this.referenceElement()) {
-          this.adjustPlacement();
-        }
-      });
-      if (this.resizeObserver.observe)
-        this.resizeObserver?.observe(document.body);
+    if (isPlatformBrowser(this.platformId)) {
+      if ('ResizeObserver' in window) {
+        this.resizeObserver = new ResizeObserver(() => {
+          if (this.referenceElement()) {
+            this.adjustPlacement();
+          }
+        });
+        if (this.resizeObserver.observe)
+          this.resizeObserver.observe(document.body);
+      }
+
+      this.scrollListener = () => {
+        clearTimeout(this.scrollTimeoutId);
+        this.scrollTimeoutId = setTimeout(() => {
+          if (this.referenceElement()) {
+            this.adjustPlacement();
+          }
+        }, 100);
+      };
+      window.addEventListener('scroll', this.scrollListener);
     }
   }
   ngOnDestroy() {
-    if (this.resizeObserver?.disconnect) this.resizeObserver?.disconnect();
+    if (this.resizeObserver?.disconnect) this.resizeObserver.disconnect();
+    if (this.scrollListener)
+      window.removeEventListener('scroll', this.scrollListener);
+    clearTimeout(this.scrollTimeoutId);
   }
   private adjustPlacement() {
     const result = this.floatingUiService.calculateOptimalPosition(
       this.placement(),
-      this.offset()
+      this.offset(),
     );
     if (!result) return;
     const {
