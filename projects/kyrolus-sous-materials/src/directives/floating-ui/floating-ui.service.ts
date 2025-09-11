@@ -144,99 +144,32 @@ export class FloatingUiService {
     }
 
     // evaluate cross-axis space for start/end variations
-    const extraWidth = Math.max(0, floatRect.width - refRect.width);
-    const extraHeight = Math.max(0, floatRect.height - refRect.height);
-    avaliablePosition = avaliablePosition.filter((pos) => {
-      if (!pos.includes('-')) return true;
-      const [main, align] = pos.split('-');
-
-      if (main === 'top' || main === 'bottom') {
-        // top/bottom placements align horizontally
-        if (align === 'start') {
-          return extraWidth <= spcesArroundRef.right;
-        } else if (align === 'end') {
-          return extraWidth <= spcesArroundRef.left;
-        }
-      } else if (main === 'left' || main === 'right') {
-        // left/right placements align vertically
-        if (align === 'start') {
-          return extraHeight <= spcesArroundRef.bottom;
-        } else if (align === 'end') {
-          return extraHeight <= spcesArroundRef.top;
-        }
-      }
-      return true;
-    });
-
-    // shift floating element back into the viewport if slightly overflowing
-    const tolerance = offset;
-    let shiftX = 0;
-    if (boundaryRect) {
-      if (
-        floatRect.left < boundaryRect.left &&
-        boundaryRect.left - floatRect.left <= tolerance
-      ) {
-        shiftX = boundaryRect.left - floatRect.left;
-      } else if (
-        floatRect.right > boundaryRect.right &&
-        floatRect.right - boundaryRect.right <= tolerance
-      ) {
-        shiftX = boundaryRect.right - floatRect.right;
-      }
-    } else {
-      if (floatRect.left < 0 && Math.abs(floatRect.left) <= tolerance) {
-        shiftX = -floatRect.left;
-      } else if (
-        floatRect.right > viewportWidth &&
-        floatRect.right - viewportWidth <= tolerance
-      ) {
-        shiftX = viewportWidth - floatRect.right;
-      }
-    }
-
-    if (shiftX !== 0) {
-      this.floatElement.style.left = `${this.floatElement.offsetLeft + shiftX}px`;
-      floatRect = this.floatElement?.getBoundingClientRect();
-    }
-
-    let shiftY = 0;
-    if (boundaryRect) {
-      if (
-        floatRect.top < boundaryRect.top &&
-        boundaryRect.top - floatRect.top <= tolerance
-      ) {
-        shiftY = boundaryRect.top - floatRect.top;
-      } else if (
-        floatRect.bottom > boundaryRect.bottom &&
-        floatRect.bottom - boundaryRect.bottom <= tolerance
-      ) {
-        shiftY = boundaryRect.bottom - floatRect.bottom;
-      }
-    } else {
-      if (floatRect.top < 0 && Math.abs(floatRect.top) <= tolerance) {
-        shiftY = -floatRect.top;
-      } else if (
-        floatRect.bottom > viewportHeight &&
-        floatRect.bottom - viewportHeight <= tolerance
-      ) {
-        shiftY = viewportHeight - floatRect.bottom;
-      }
-    }
-
-    if (shiftY !== 0) {
-      this.floatElement.style.top = `${this.floatElement.offsetTop + shiftY}px`;
-      floatRect = this.floatElement?.getBoundingClientRect();
-    }
-    return {
+    avaliablePosition = this.evaluteCrossAxisOverflow(
       avaliablePosition,
-      sidesAvaliable,
       spcesArroundRef,
       refRect,
       floatRect,
-      viewportHeight,
-      viewportWidth,
-    };
-  }
+      placement
+    );
+
+  // shift floating element back into the viewport if slightly overflowing
+      this.shiftElementIntoView(
+        boundaryRect,
+        floatRect,
+        viewportHeight,
+        viewportWidth,
+        offset
+      );
+      return {
+        avaliablePosition,
+        sidesAvaliable,
+        spcesArroundRef,
+        refRect,
+        floatRect,
+        viewportHeight,
+        viewportWidth,
+      };
+    }
 
   isElementInViewport(el: HTMLElement) {
     const rect = this.getRect(el);
@@ -297,5 +230,93 @@ export class FloatingUiService {
       }
     }
     return false;
+  }
+
+  evaluteCrossAxisOverflow(
+    avaliablePosition: string[],
+    spcesArroundRef: sides,
+    refRect: DOMRect,
+    floatRect: DOMRect,
+    placement: PopoverPlacement
+  ) {
+    const extraWidth = Math.max(0, floatRect.width - refRect.width);
+    const extraHeight = Math.max(0, floatRect.height - refRect.height);
+    return avaliablePosition.filter((pos) => {
+      if (!pos.includes('-')) return true;
+      const [main, align] = pos.split('-');
+
+      if (main === 'top' || main === 'bottom') {
+        // top/bottom placements align horizontally
+        if (align === 'start') {
+          return extraWidth <= spcesArroundRef.right!;
+        } else if (align === 'end') {
+          return extraWidth <= spcesArroundRef.left!;
+        }
+      } else if (main === 'left' || main === 'right') {
+        // left/right placements align vertically
+        if (align === 'start') {
+          return extraHeight <= spcesArroundRef.bottom!;
+        } else if (align === 'end') {
+          return extraHeight <= spcesArroundRef.top!;
+        }
+      }
+      return true;
+    });
+  }
+
+  private calculateAxisShift(
+    start: number,
+    end: number,
+    minLimit: number,
+    maxLimit: number,
+    tolerance: number
+  ): number {
+    if (start < minLimit && (minLimit - start) <= tolerance) {
+      return minLimit - start;
+    }
+    if (end > maxLimit && (end - maxLimit) <= tolerance) {
+      return maxLimit - end;
+    }
+    return 0;
+  }
+
+  private shiftElementIntoView(
+    boundaryRect: DOMRect | undefined,
+    floatRect: DOMRect,
+    viewportHeight: number,
+    viewportWidth: number,
+    offset = 8
+  ) {
+    const tolerance = offset;
+
+    const minX = boundaryRect?.left ?? 0;
+    const maxX = boundaryRect?.right ?? viewportWidth;
+    const minY = boundaryRect?.top ?? 0;
+    const maxY = boundaryRect?.bottom ?? viewportHeight;
+
+    const shiftX = this.calculateAxisShift(
+      floatRect.left,
+      floatRect.right,
+      minX,
+      maxX,
+      tolerance
+    );
+
+    if (shiftX) {
+      this.floatElement.style.left = `${this.floatElement.offsetLeft + shiftX}px`;
+      floatRect = this.floatElement.getBoundingClientRect();
+    }
+
+    const shiftY = this.calculateAxisShift(
+      floatRect.top,
+      floatRect.bottom,
+      minY,
+      maxY,
+      tolerance
+    );
+
+    if (shiftY) {
+      this.floatElement.style.top = `${this.floatElement.offsetTop + shiftY}px`;
+    }
   }
 }
