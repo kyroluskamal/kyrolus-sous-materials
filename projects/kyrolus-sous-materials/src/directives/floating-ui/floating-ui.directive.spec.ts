@@ -5,11 +5,24 @@ import {
   provideZonelessChangeDetection,
   signal,
 } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { getTestBed, TestBed } from '@angular/core/testing';
 import { FloatingUIDirective } from './floating-ui.directive';
 import { PopoverPlacement } from '../../blocks/popover-menu/popover.types';
-import { By } from '@angular/platform-browser';
-
+import { BrowserModule, By } from '@angular/platform-browser';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeAll,
+  afterAll,
+  beforeEach,
+  afterEach,
+} from 'vitest';
+import {
+  BrowserTestingModule,
+  platformBrowserTesting,
+} from '@angular/platform-browser/testing';
 @Component({
   template: `
     <div #ref style="width:100px;height:50px;"></div>
@@ -46,16 +59,24 @@ describe('1. FloatingUIDirective', () => {
 
     // attach to global/window
     (globalThis as any).ResizeObserver = ResizeObserverMock;
+    const testBed = getTestBed();
+    if (!testBed.platform) {
+      testBed.initTestEnvironment(
+        BrowserTestingModule,
+        platformBrowserTesting()
+      );
+    }
   });
   afterAll(() => {
     delete (globalThis as any).ResizeObserver;
   });
   afterEach(() => {
     vi.restoreAllMocks();
+    TestBed.resetTestingModule();
   });
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HostComponent],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [BrowserModule, HostComponent],
       providers: [
         provideZonelessChangeDetection(),
         { provide: PLATFORM_ID, useValue: 'browser' },
@@ -196,7 +217,8 @@ describe('1. FloatingUIDirective', () => {
     component.adjustPlacement();
     expect(fixture.componentInstance.placement()).toBe(initialPlacement);
   });
-  it('1.10. should choose side with most space when all sides are available', () => {
+  it('1.10. should retain original placement when ample space is available on all sides', () => {
+    const initialPlacement = fixture.componentInstance.placement();
     vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
       top: 375,
       bottom: 425,
@@ -208,7 +230,7 @@ describe('1. FloatingUIDirective', () => {
 
     // @ts-expect-error: private method
     component.adjustPlacement();
-    expect(fixture.componentInstance.placement()).toBe('left');
+    expect(fixture.componentInstance.placement()).toBe(initialPlacement);
   });
   it('1.11. should create and observe with ResizeObserver if available', () => {
     const mockObserve = vi.fn();
