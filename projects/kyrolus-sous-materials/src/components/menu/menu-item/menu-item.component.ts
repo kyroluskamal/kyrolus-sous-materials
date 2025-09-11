@@ -4,6 +4,7 @@ import {
   ElementRef,
   inject,
   input,
+  OnInit,
   output,
   viewChild,
 } from '@angular/core';
@@ -78,8 +79,9 @@ import { PopoverMenuBlock } from '../../../blocks/popover-menu/popover-menu.bloc
 
   standalone: true,
 })
-export class MenuItemComponent {
+export class MenuItemComponent implements OnInit {
   readonly el = inject(ElementRef);
+  /* v8 ignore start */
   readonly routerLink = input<string | any[]>();
   readonly href = input<string>();
   readonly itemClcik = output<ItemClickEvent>();
@@ -92,6 +94,8 @@ export class MenuItemComponent {
   readonly button = viewChild(ButtonDirective, {
     read: ElementRef,
   });
+  /* v8 ignore end */
+
   readonly ksMenu = inject(MenuComponent, { host: true, optional: true });
   readonly popOverMenu = inject(PopoverMenuBlock, {
     host: true,

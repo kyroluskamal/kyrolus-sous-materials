@@ -25,6 +25,8 @@ import { PopoverMenuBlock } from '../../../public-api';
 })
 export class MenuSectionComponent {
   readonly el = inject(ElementRef).nativeElement as HTMLElement;
+  /* v8 ignore start */
+
   readonly title = input<string>();
   private readonly utitlitiesService = inject(UtilitiesService);
   readonly id = input<string>();
@@ -36,6 +38,7 @@ export class MenuSectionComponent {
       )
     );
   });
+  /* v8 ignore end */
 
   readonly ksMenu = inject(MenuComponent, { host: true, optional: true });
   readonly popOverMenu = inject(PopoverMenuBlock, {

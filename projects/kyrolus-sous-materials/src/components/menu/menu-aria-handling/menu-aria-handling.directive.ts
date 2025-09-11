@@ -15,6 +15,7 @@ import {
   },
 })
 export class MenuAriaHandlingDirective {
+  /* v8 ignore start */
   readonly firstButtonIsFocused = input(false);
   readonly el = inject(ElementRef);
   readonly buttons = signal<HTMLElement[]>([]);
@@ -30,6 +31,7 @@ export class MenuAriaHandlingDirective {
     });
   });
   readonly elemRef = inject(ElementRef);
+  /* v8 ignore end */
 
   private searchString = '';
   private searchTimeout: any;

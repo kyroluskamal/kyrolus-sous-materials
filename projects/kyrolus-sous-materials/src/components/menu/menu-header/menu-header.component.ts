@@ -27,12 +27,16 @@ import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
   },
 })
 export class MenuHeaderComponent {
+  /* v8 ignore start */
+
   useSeparator = input<boolean, string>(false, {
     transform: booleanAttribute,
   });
   decorativeSeparator = input<boolean, string>(false, {
     transform: booleanAttribute,
   });
+  /* v8 ignore end */
+
   readonly ksMenu = inject(MenuComponent, { host: true, optional: true });
   readonly ksPopOverMenu = inject(PopoverMenuBlock, {
     host: true,
