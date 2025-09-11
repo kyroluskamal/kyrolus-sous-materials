@@ -75,10 +75,49 @@ export class FloatingUIDirective implements OnDestroy {
       this.placement(),
       this.offset()
     );
-    const positions = result ? result.avaliablePosition : [];
-    if (positions.length === 0) return;
-    const optimal: PopoverPlacement = positions[0] as PopoverPlacement;
+    if (!result) return;
+    const {
+      avaliablePosition: positions,
+      sidesAvaliable,
+      spcesArroundRef,
+      floatRect,
+      viewportHeight,
+      viewportWidth,
+    } = result;
 
-    this.placement.set(optimal);
+    let optimal: PopoverPlacement | undefined;
+
+    if (positions.length > 0) {
+      optimal = positions[0] as PopoverPlacement;
+    } else if (sidesAvaliable && sidesAvaliable.size > 0) {
+      let maxSide: string | undefined;
+      let maxSpace = -Infinity;
+      sidesAvaliable.forEach((_, side) => {
+        const space = (spcesArroundRef as any)[side] ?? 0;
+        if (space > maxSpace) {
+          maxSpace = space;
+          maxSide = side;
+        }
+      });
+      if (maxSide) {
+        optimal = maxSide as PopoverPlacement;
+      }
+    }
+
+    if (optimal) {
+      this.placement.set(optimal);
+    }
+
+    if (floatRect) {
+      const margin = this.offset();
+      if (floatRect.height > viewportHeight) {
+        this.floatingElement.style.maxHeight = `${viewportHeight - margin}px`;
+        this.floatingElement.style.overflowY = 'auto';
+      }
+      if (floatRect.width > viewportWidth) {
+        this.floatingElement.style.maxWidth = `${viewportWidth - margin}px`;
+        this.floatingElement.style.overflowX = 'auto';
+      }
+    }
   }
 }
