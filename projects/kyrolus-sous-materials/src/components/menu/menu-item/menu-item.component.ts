@@ -74,7 +74,7 @@ import { PopoverMenuBlock } from '../../../blocks/popover-menu/popover-menu.bloc
   styles: [``],
   host: {
     class: 'text-dark d-content',
-    '[attr.role]': '"menuitem"',
+    role: 'menuitem',
   },
 
   standalone: true,

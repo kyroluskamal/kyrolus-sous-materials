@@ -23,7 +23,7 @@ import { getErrorMessageForMenuItemNotInMenu } from '../menu.const';
   styles: ``,
   host: {
     class: 'w-100 d-flex flex-wrap-wrap gap-2 py-5 fw-bold align-items-center',
-    '[attr.role]': '"none"',
+    role: 'none',
   },
 })
 export class MenuFooterComponent {

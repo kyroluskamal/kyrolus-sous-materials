@@ -123,6 +123,10 @@ describe('MenuItemComponent', () => {
   });
 
   describe('Aria tests', () => {
+    it("Should have role='menuitem' on the host element", () => {
+      const menuItemElement = debugElement[0].nativeElement;
+      expect(menuItemElement.getAttribute('role')).toBe('menuitem');
+    });
     it('should set aria-disabled attribute when disabled is true', () => {
       const disabledButton =
         debugElement[3].nativeElement.querySelector('button');
