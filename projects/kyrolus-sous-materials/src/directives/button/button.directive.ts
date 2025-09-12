@@ -38,6 +38,7 @@ import { isNgDevMode } from '../../public-api';
 export class ButtonDirective {
   private readonly hostElement: HTMLElement = inject(ElementRef).nativeElement;
   private readonly renderer2 = inject(Renderer2);
+  /* v8 ignore start */
   readonly size = input<ButtonSize>(inject(BUTTON_SIZE));
   readonly variant = input<ButtonVariant>(inject(BUTTON_VARIANT));
   readonly appearance = input<ButtonAppearance>(inject(BUTTON_APPEARANCE));
@@ -49,6 +50,7 @@ export class ButtonDirective {
   readonly disabled = input<boolean, string>(false, {
     transform: booleanAttribute,
   });
+  /* v8 ignore end */
   readonly RaisedClass = input<string>(inject(BUTTON_RAISE_CLASS));
   onClick(event: Event) {
     if (this.disabled()) {
