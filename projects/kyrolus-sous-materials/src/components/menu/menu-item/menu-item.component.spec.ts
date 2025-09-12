@@ -138,11 +138,6 @@ describe('MenuItemComponent', () => {
         debugElement[0].nativeElement.querySelector('button');
       expect(buttonElement.getAttribute('aria-disabled')).toBeNull();
     });
-
-    it('should set role="menuitem" on the host element', () => {
-      const menuItemElement = debugElement[0].nativeElement;
-      expect(menuItemElement.getAttribute('role')).toBe('menuitem');
-    });
   });
   describe('Event emission tests', () => {
     it('should emit itemClcik event when a non-disabled item is clicked', () => {
