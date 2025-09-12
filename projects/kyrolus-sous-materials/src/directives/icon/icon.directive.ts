@@ -21,12 +21,13 @@ import { ICON_OPTIONS } from '../../Tokens/icon.tokens';
   },
 })
 export class IconDirective {
-  /* v8 ignore next */
+  /* v8 ignore start */
   private readonly elmRef = inject(ElementRef);
   private readonly renderer2 = inject(Renderer2);
   readonly isNotDecorativeIcon = input<boolean, string>(false, {
     transform: booleanAttribute,
   });
+  /* v8 ignore end */
   eff = effect(() => {
     this.elmRef.nativeElement.childNodes.forEach((node: Node) => {
       this.renderer2.removeChild(this.elmRef.nativeElement, node);

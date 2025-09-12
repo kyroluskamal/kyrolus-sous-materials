@@ -40,7 +40,7 @@ export class FloatingUIDirective implements OnDestroy {
   private readonly elRef = inject(ElementRef<HTMLElement>);
   private readonly floatingElement = this.elRef.nativeElement as HTMLElement;
   private readonly resizeObserver!: ResizeObserver;
-  private scrollListener!: () => void;
+  private readonly scrollListener!: () => void;
   private scrollTimeoutId!: any;
 
   readonly referenceElement = input.required<HTMLElement>();

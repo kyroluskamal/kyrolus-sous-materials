@@ -9,7 +9,9 @@ import { booleanAttribute, Directive, input } from '@angular/core';
   },
 })
 export class SeparatorDirective {
+  /* v8 ignore start */
   isDecorative = input<boolean, string>(false, {
     transform: booleanAttribute,
   });
+  /* v8 ignore end */
 }

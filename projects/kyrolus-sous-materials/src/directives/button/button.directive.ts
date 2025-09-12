@@ -5,6 +5,7 @@ import {
   ElementRef,
   inject,
   input,
+  OnInit,
   Renderer2,
 } from '@angular/core';
 import {
@@ -35,7 +36,7 @@ import { isNgDevMode } from '../../public-api';
   },
   standalone: true,
 })
-export class ButtonDirective {
+export class ButtonDirective implements OnInit {
   private readonly hostElement: HTMLElement = inject(ElementRef).nativeElement;
   private readonly renderer2 = inject(Renderer2);
   /* v8 ignore start */
