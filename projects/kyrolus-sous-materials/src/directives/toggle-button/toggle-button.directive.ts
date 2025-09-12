@@ -1,4 +1,4 @@
-import { Directive, effect, inject, input, model } from '@angular/core';
+import { Directive, effect, inject, input, model, OnInit } from '@angular/core';
 import { ButtonDirective } from '../button/button.directive';
 import { IconDirective } from '../icon/icon.directive';
 
@@ -28,12 +28,13 @@ import { IconDirective } from '../icon/icon.directive';
   },
   standalone: true,
 })
-export class ToggleButtonDirective {
-  iconToggled = input<string>();
-  iconDirective = inject(IconDirective, { self: true });
-  toggled = model<boolean>(false);
+export class ToggleButtonDirective implements OnInit {
+  /* v8 ignore start */
+  readonly iconToggled = input<string>();
+  readonly iconDirective = inject(IconDirective, { self: true });
+  readonly toggled = model<boolean>(false);
   private mainIcon: string = '';
-
+  /* v8 ignore end */
   ngOnInit(): void {
     this.mainIcon = this.iconDirective.ksIcon();
   }

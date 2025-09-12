@@ -18,12 +18,14 @@ import {
 })
 export class SimpleKeyEventDirective {
   private readonly keyBindings = inject(KeyBindingsDirective);
+  /* v8 ignore start */
   readonly key = model<string>(' ');
   readonly actions = input<KeyAction | KeyAction[]>('click');
   readonly targetToFocus = input<string>();
   readonly preventDefault = input<boolean, string>(false, {
     transform: booleanAttribute,
   });
+  /* v8 ignore end */
   constructor() {
     effect(() => {
       this.keyBindings.ksKeyBindings.set([

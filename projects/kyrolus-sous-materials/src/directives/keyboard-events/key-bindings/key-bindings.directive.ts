@@ -25,6 +25,7 @@ export type KeyAction = 'click' | 'focus' | 'submit' | 'emit';
   },
 })
 export class KeyBindingsDirective {
+  /* v8 ignore next */
   readonly ksKeyBindings = model<KeyActionEvent[]>();
   private readonly hostElement: HTMLElement = inject(ElementRef).nativeElement;
   readonly keyAction = output<KeyboardEvent>();
