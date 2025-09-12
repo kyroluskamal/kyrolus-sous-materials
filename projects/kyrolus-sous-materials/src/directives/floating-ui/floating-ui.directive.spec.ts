@@ -67,6 +67,24 @@ class HostBoundaryComponent {
   offset = '8';
 }
 
+@Component({
+  template: `
+    <div
+      ksFloatingUI
+      [referenceElement]="ref"
+      [(placement)]="placement"
+      [offset]="offset"
+    ></div>
+  `,
+  standalone: true,
+  imports: [FloatingUIDirective],
+})
+class HostNoRefComponent {
+  ref!: HTMLElement;
+  placement = signal<PopoverPlacement>('bottom');
+  offset = '8';
+}
+
 describe('1. FloatingUIDirective', () => {
   let fixture: any;
   let refEl: HTMLElement;
@@ -444,5 +462,87 @@ describe('1. FloatingUIDirective', () => {
     // @ts-expect-error: private method
     dir.adjustPlacement();
     expect(fixtureBoundary.componentInstance.placement()).toBe('top');
+  });
+
+  it('1.19. should skip browser logic when not in platform browser', async () => {
+    fixture.destroy();
+    const addSpy = vi.spyOn(window, 'addEventListener');
+    const resizeSpy = vi.spyOn(globalThis as any, 'ResizeObserver');
+
+    TestBed.resetTestingModule();
+    await TestBed.configureTestingModule({
+      imports: [BrowserModule, HostComponent],
+      providers: [
+        provideZonelessChangeDetection(),
+        { provide: PLATFORM_ID, useValue: 'server' },
+      ],
+    }).compileComponents();
+
+    const fixtureLocal = TestBed.createComponent(HostComponent);
+    fixtureLocal.detectChanges();
+
+    expect(resizeSpy).not.toHaveBeenCalled();
+    expect(addSpy).not.toHaveBeenCalledWith('scroll', expect.any(Function));
+    fixtureLocal.destroy();
+  });
+
+  it('1.20. should handle absence of ResizeObserver and remove scroll listener', async () => {
+    fixture.destroy();
+    const addSpy = vi.spyOn(window, 'addEventListener');
+    const removeSpy = vi.spyOn(window, 'removeEventListener');
+    const originalRO = (globalThis as any).ResizeObserver;
+    delete (globalThis as any).ResizeObserver;
+
+    TestBed.resetTestingModule();
+    await TestBed.configureTestingModule({
+      imports: [BrowserModule, HostComponent],
+      providers: [
+        provideZonelessChangeDetection(),
+        { provide: PLATFORM_ID, useValue: 'browser' },
+      ],
+    }).compileComponents();
+
+    const fixtureLocal = TestBed.createComponent(HostComponent);
+    const dir = fixtureLocal.debugElement
+      .query(By.directive(FloatingUIDirective))
+      .injector.get(FloatingUIDirective);
+
+    fixtureLocal.detectChanges();
+
+    expect((dir as any).resizeObserver).toBeUndefined();
+    expect(addSpy).toHaveBeenCalledWith('scroll', expect.any(Function));
+
+    fixtureLocal.destroy();
+    expect(removeSpy).toHaveBeenCalledWith('scroll', expect.any(Function));
+    (globalThis as any).ResizeObserver = originalRO;
+  });
+
+  it('1.21. should not adjust placement when referenceElement is missing', async () => {
+    fixture.destroy();
+    TestBed.resetTestingModule();
+    await TestBed.configureTestingModule({
+      imports: [BrowserModule, HostNoRefComponent],
+      providers: [
+        provideZonelessChangeDetection(),
+        { provide: PLATFORM_ID, useValue: 'browser' },
+      ],
+    }).compileComponents();
+
+    const fixtureLocal = TestBed.createComponent(HostNoRefComponent);
+    const dir = fixtureLocal.debugElement
+      .query(By.directive(FloatingUIDirective))
+      .injector.get(FloatingUIDirective);
+    const adjustSpy = vi.spyOn<any, any>(dir, 'adjustPlacement');
+
+    fixtureLocal.detectChanges();
+    expect(adjustSpy).not.toHaveBeenCalled();
+
+    vi.useFakeTimers();
+    window.dispatchEvent(new Event('scroll'));
+    vi.advanceTimersByTime(100);
+    await Promise.resolve();
+    expect(adjustSpy).not.toHaveBeenCalled();
+    vi.useRealTimers();
+    fixtureLocal.destroy();
   });
 });
