@@ -21,6 +21,8 @@ export class FloatingUiFreeStyleDirective {
   private readonly elRef = inject(ElementRef<HTMLElement>);
   private readonly floatingElement = this.elRef.nativeElement as HTMLElement;
   private readonly resizeObserver!: ResizeObserver;
+  private removeResizeListener?: () => void;
+  private removeScrollListener?: () => void;
   readonly isRefElementIsVisinble = signal(true);
   readonly placement = model.required<PopoverPlacement>();
   private readonly floatingUiService = inject(FloatingUiService);
@@ -38,62 +40,118 @@ export class FloatingUiFreeStyleDirective {
       );
       if (this.referenceElement()) this.adjustPlacement();
     });
-
-    if (isPlatformBrowser(this.platformId) && 'ResizeObserver' in window) {
-      this.resizeObserver = new ResizeObserver(() => {
-        if (this.referenceElement()) {
-          this.adjustPlacement();
+    if (isPlatformBrowser(this.platformId)) {
+      this.removeResizeListener = this.renderer.listen(
+        'window',
+        'resize',
+        () => {
+          if (this.referenceElement()) this.adjustPlacement();
         }
-      });
-      if (this.resizeObserver.observe)
-        this.resizeObserver?.observe(document.body);
+      );
+      this.removeScrollListener = this.renderer.listen(
+        'window',
+        'scroll',
+        () => {
+          if (this.referenceElement()) this.adjustPlacement();
+        }
+      );
+      if ('ResizeObserver' in window) {
+        this.resizeObserver = new ResizeObserver(() => {
+          if (this.referenceElement()) {
+            this.adjustPlacement();
+          }
+        });
+        if (this.resizeObserver.observe)
+          this.resizeObserver.observe(document.body);
+      }
     }
   }
   adjustPlacement() {
-    // const result = this.floatingUiService.calculateOptimalPosition(
-    //   this.placement(),
-    //   this.offset()
-    // );
-    // if (!result) return;
+    const result = this.floatingUiService.calculateOptimalPosition(
+      this.placement(),
+      this.offset()
+    );
+    if (!result) return;
 
-    // const floatingRect = this.floatingElement.getBoundingClientRect();
-    // const refRect = result.refRect;
+    const {
+      avaliablePosition,
+      sidesAvaliable,
+      refRect,
+      floatRect,
+      viewportHeight,
+      viewportWidth,
+    } = result;
 
-    // // اختار الوضع الأمثل
-    // const positions = result.avaliablePosition;
-    // const optimal: PopoverPlacement = positions[0] as PopoverPlacement;
+    if (!refRect || !floatRect || viewportHeight == null || viewportWidth == null) {
+      return;
+    }
 
-    // let top = 0;
-    // let left = 0;
+    let optimal: PopoverPlacement;
+    if (avaliablePosition.length) {
+      optimal = avaliablePosition[0] as PopoverPlacement;
+    } else if (sidesAvaliable.size) {
+      const best = Array.from(sidesAvaliable.entries()).sort(
+        (a, b) => b[1] - a[1]
+      )[0][0];
+      optimal = best as PopoverPlacement;
+    } else {
+      optimal = this.placement();
+    }
 
-    // if (optimal.startsWith('bottom')) {
-    //   top = refRect?.bottom + this.offset();
-    //   left = Number(refRect?.left);
-    // } else if (optimal.startsWith('top')) {
-    //   top = refRect?.top - floatingRect.height - this.offset();
-    //   left = Number(refRect?.left);
-    // } else if (optimal.startsWith('right')) {
-    //   top = Number(refRect?.top);
-    //   left = refRect?.right + this.offset();
-    // } else if (optimal.startsWith('left')) {
-    //   top = Number(refRect?.top);
-    //   left = Number(refRect?.left) - floatingRect.width - this.offset();
-    // }
+    const offset = this.offset();
+    let top = 0;
+    let left = 0;
 
-    // // ✨ أهم حاجة: تعيين position جديد مطلق
-    // this.renderer.setStyle(this.floatingElement, 'position', 'absolute');
-    // this.renderer.setStyle(
-    //   this.floatingElement,
-    //   'top',
-    //   `${Math.max(0, top)}px`
-    // );
-    // this.renderer.setStyle(
-    //   this.floatingElement,
-    //   'left',
-    //   `${Math.max(0, left)}px`
-    // );
+    if (optimal.startsWith('bottom')) {
+      top = refRect.bottom + offset;
+      if (optimal.endsWith('start')) {
+        left = refRect.left;
+      } else if (optimal.endsWith('end')) {
+        left = refRect.right - floatRect.width;
+      } else {
+        left = refRect.left + refRect.width / 2 - floatRect.width / 2;
+      }
+    } else if (optimal.startsWith('top')) {
+      top = refRect.top - floatRect.height - offset;
+      if (optimal.endsWith('start')) {
+        left = refRect.left;
+      } else if (optimal.endsWith('end')) {
+        left = refRect.right - floatRect.width;
+      } else {
+        left = refRect.left + refRect.width / 2 - floatRect.width / 2;
+      }
+    } else if (optimal.startsWith('right')) {
+      left = refRect.right + offset;
+      if (optimal.endsWith('start')) {
+        top = refRect.top;
+      } else if (optimal.endsWith('end')) {
+        top = refRect.bottom - floatRect.height;
+      } else {
+        top = refRect.top + refRect.height / 2 - floatRect.height / 2;
+      }
+    } else if (optimal.startsWith('left')) {
+      left = refRect.left - floatRect.width - offset;
+      if (optimal.endsWith('start')) {
+        top = refRect.top;
+      } else if (optimal.endsWith('end')) {
+        top = refRect.bottom - floatRect.height;
+      } else {
+        top = refRect.top + refRect.height / 2 - floatRect.height / 2;
+      }
+    }
+
+    const maxTop = viewportHeight - floatRect.height;
+    const maxLeft = viewportWidth - floatRect.width;
+    top = Math.max(0, Math.min(top, maxTop));
+    left = Math.max(0, Math.min(left, maxLeft));
+
+    this.renderer.setStyle(this.floatingElement, 'position', 'absolute');
+    this.renderer.setStyle(this.floatingElement, 'top', `${top}px`);
+    this.renderer.setStyle(this.floatingElement, 'left', `${left}px`);
   }
   ngOnDestroy() {
-    if (this.resizeObserver?.disconnect) this.resizeObserver?.disconnect();
+    this.removeResizeListener?.();
+    this.removeScrollListener?.();
+    if (this.resizeObserver?.disconnect) this.resizeObserver.disconnect();
   }
 }
