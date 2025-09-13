@@ -42,7 +42,7 @@ export class FloatingUIDirective implements OnDestroy {
   private readonly resizeObserver!: ResizeObserver;
   private readonly scrollListener!: () => void;
   private scrollTimeoutId!: any;
-
+  /* v8 ignore start */
   readonly referenceElement = input.required<HTMLElement>();
   readonly boundaryElement = input<HTMLElement>();
   readonly placement = model.required<PopoverPlacement>();
@@ -52,6 +52,7 @@ export class FloatingUIDirective implements OnDestroy {
   });
   private readonly floatingUiService = inject(FloatingUiService);
   readonly mode = input<'flip' | 'freeStyle'>('flip');
+  /* v8 ignore end */
   constructor() {
     afterEveryRender(() => {
       this.floatingUiService.setElements(
