@@ -23,13 +23,13 @@ describe('FloatingUiService', () => {
     vi.restoreAllMocks();
   });
 
-  describe('calculateOptimalPosition', () => {
-    it('should return undefined when ref or float element missing', () => {
+  describe('1. calculateOptimalPosition', () => {
+    it('1.1. should return undefined when ref or float element missing', () => {
       const res = service.calculateOptimalPosition('bottom');
       expect(res).toBeUndefined();
     });
 
-    it('should early return when all sides have space', () => {
+    it('1.2. should early return when all sides have space', () => {
       service.setElements(refEl, floatEl);
       vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(1000);
       vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
@@ -55,7 +55,7 @@ describe('FloatingUiService', () => {
       expect(res!.sidesAvaliable.size).toBe(0);
     });
 
-    it('should compute available positions considering boundary', () => {
+    it('1.3. should compute available positions considering boundary', () => {
       service.setElements(refEl, floatEl, boundaryEl);
       vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(1000);
       vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
@@ -91,7 +91,7 @@ describe('FloatingUiService', () => {
       expect(res!.avaliablePosition).toEqual(['right-start']);
     });
 
-    it('should exclude top/bottom/right placements when right side not available', () => {
+    it('1.4. should exclude top/bottom/right placements when right side not available', () => {
       service.setElements(refEl, floatEl);
       vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(200);
       vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(200);
@@ -120,7 +120,7 @@ describe('FloatingUiService', () => {
       );
     });
 
-    it('should exclude bottom placements when bottom side not available', () => {
+    it('1.5. should exclude bottom placements when bottom side not available', () => {
       service.setElements(refEl, floatEl);
       vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(200);
       vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(200);
@@ -153,7 +153,7 @@ describe('FloatingUiService', () => {
       ).toBe(true);
     });
 
-    it('should allow left placement with only half width available when placement is vertical', () => {
+    it('1.6. should allow left placement with only half width available when placement is vertical', () => {
       service.setElements(refEl, floatEl);
       vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(200);
       vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(200);
@@ -181,47 +181,8 @@ describe('FloatingUiService', () => {
     });
   });
 
-  describe('viewport utilities', () => {
-    it('isElementInViewport should detect element visibility', () => {
-      const el = document.createElement('div');
-      vi.spyOn(el, 'getBoundingClientRect')
-        .mockReturnValueOnce({
-          top: 10,
-          left: 10,
-          bottom: 20,
-          right: 20,
-        } as DOMRect)
-        .mockReturnValueOnce({
-          top: -10,
-          left: 0,
-          bottom: 20,
-          right: 20,
-        } as DOMRect);
-
-      expect(service.isElementInViewport(el)).toBe(true);
-      expect(service.isElementInViewport(el)).toBe(false);
-    });
-
-    it('isElementInViewport should fall back to documentElement when window size is zero', () => {
-      const el = document.createElement('div');
-      vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(0);
-      vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(0);
-      vi.spyOn(document.documentElement, 'clientHeight', 'get').mockReturnValue(
-        500
-      );
-      vi.spyOn(document.documentElement, 'clientWidth', 'get').mockReturnValue(
-        500
-      );
-      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({
-        top: 0,
-        left: 0,
-        bottom: 400,
-        right: 400,
-      } as DOMRect);
-      expect(service.isElementInViewport(el)).toBe(true);
-    });
-
-    it('should detect floating element outside viewport', () => {
+  describe('2. viewport utilities', () => {
+    it('2.1. should detect floating element outside viewport', () => {
       service.setElements(refEl, floatEl);
       vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(1000);
       vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
@@ -268,7 +229,7 @@ describe('FloatingUiService', () => {
       expect(service.isFloatingRightNotInViewport()).toBe(false);
     });
 
-    it('should fall back to documentElement dimensions when window inner sizes are zero', () => {
+    it('2.2. should fall back to documentElement dimensions when window inner sizes are zero', () => {
       service.setElements(refEl, floatEl);
       vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(0);
       vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(0);
@@ -304,14 +265,14 @@ describe('FloatingUiService', () => {
       expect(service.isFloatingRightNotInViewport()).toBe(false);
     });
 
-    it('should return false when floating element is not set', () => {
+    it('2.3. should return false when floating element is not set', () => {
       expect(service.isFloatingTopNotInViewport()).toBe(false);
       expect(service.isFloatingBottomNotInViewport()).toBe(false);
       expect(service.isFloatingLeftNotInViewport()).toBe(false);
       expect(service.isFloatingRightNotInViewport()).toBe(false);
     });
 
-    it('should determine if reference is under floating element', () => {
+    it('2.4. should determine if reference is under floating element', () => {
       service.setElements(refEl, floatEl);
       vi.spyOn(refEl, 'getBoundingClientRect')
         .mockReturnValueOnce({
@@ -337,7 +298,7 @@ describe('FloatingUiService', () => {
       expect(service.isRefElementIsUnderFloating()).toBe(false);
     });
 
-    it('should return false when ref or floating elements missing', () => {
+    it('2.5. should return false when ref or floating elements missing', () => {
       expect(service.isRefElementIsUnderFloating()).toBe(false);
       service.refElement = refEl;
       expect(service.isRefElementIsUnderFloating()).toBe(false);
@@ -347,8 +308,8 @@ describe('FloatingUiService', () => {
     });
   });
 
-  describe('evaluteCrossAxisOverflow', () => {
-    it('filters start and end for top placements based on horizontal space', () => {
+  describe('3. evaluteCrossAxisOverflow', () => {
+    it('3.1. filters start and end for top placements based on horizontal space', () => {
       const refRect = { width: 50, height: 50 } as DOMRect;
       const floatRect = { width: 100, height: 50 } as DOMRect;
       let spcs = { top: 20, bottom: 20, left: 60, right: 40 };
@@ -356,8 +317,7 @@ describe('FloatingUiService', () => {
         ['top-start', 'top-end'],
         spcs,
         refRect,
-        floatRect,
-        'top'
+        floatRect
       );
       expect(res).toEqual(['top-end']);
 
@@ -366,13 +326,12 @@ describe('FloatingUiService', () => {
         ['top-start', 'top-end'],
         spcs,
         refRect,
-        floatRect,
-        'top'
+        floatRect
       );
       expect(res).toEqual(['top-start']);
     });
 
-    it('filters start and end for left placements based on vertical space', () => {
+    it('3.2. filters start and end for left placements based on vertical space', () => {
       const refRect = { width: 50, height: 50 } as DOMRect;
       const floatRect = { width: 50, height: 100 } as DOMRect;
       let spcs = { top: 60, bottom: 40, left: 20, right: 20 };
@@ -380,8 +339,7 @@ describe('FloatingUiService', () => {
         ['left-start', 'left-end'],
         spcs,
         refRect,
-        floatRect,
-        'left'
+        floatRect
       );
       expect(res).toEqual(['left-end']);
 
@@ -390,27 +348,25 @@ describe('FloatingUiService', () => {
         ['left-start', 'left-end'],
         spcs,
         refRect,
-        floatRect,
-        'left'
+        floatRect
       );
       expect(res).toEqual(['left-start']);
     });
 
-    it('keeps placements with non start/end alignments', () => {
+    it('3.3. keeps placements with non start/end alignments', () => {
       const refRect = { width: 50, height: 50 } as DOMRect;
       const floatRect = { width: 60, height: 60 } as DOMRect;
       const spcs = { top: 10, bottom: 10, left: 10, right: 10 };
       const res = service.evaluteCrossAxisOverflow(
-        ['top-middle'],
+        ['top'],
         spcs,
         refRect,
-        floatRect,
-        'top'
+        floatRect
       );
-      expect(res).toEqual(['top-middle']);
+      expect(res).toEqual(['top']);
     });
 
-    it('returns placements untouched when no alignment segment is present', () => {
+    it('3.5. returns placements untouched when no alignment segment is present', () => {
       const refRect = { width: 50, height: 50 } as DOMRect;
       const floatRect = { width: 60, height: 60 } as DOMRect;
       const spcs = { top: 10, bottom: 10, left: 10, right: 10 };
@@ -418,15 +374,14 @@ describe('FloatingUiService', () => {
         ['top', 'left'],
         spcs,
         refRect,
-        floatRect,
-        'top'
+        floatRect
       );
       expect(res).toEqual(['top', 'left']);
     });
   });
 
-  describe('internal helpers', () => {
-    it('calculateAxisShift should return correct shift', () => {
+  describe('4. internal helpers', () => {
+    it('4.1. calculateAxisShift should return correct shift', () => {
       const calc = (service as any).calculateAxisShift.bind(service) as (
         start: number,
         end: number,
@@ -440,7 +395,7 @@ describe('FloatingUiService', () => {
       expect(calc(-20, 80, 0, 100, 10)).toBe(0);
     });
 
-    it('shiftElementIntoView should adjust element position', () => {
+    it('4.2. shiftElementIntoView should adjust element position', () => {
       service.floatElement = floatEl;
       const shift = (service as any).shiftElementIntoView.bind(service) as (
         boundary: DOMRect | undefined,
@@ -484,7 +439,7 @@ describe('FloatingUiService', () => {
       expect(floatEl.style.top).toBe('45px');
     });
 
-    it('shiftElementIntoView should keep position when no shift needed', () => {
+    it('4.3. shiftElementIntoView should keep position when no shift needed', () => {
       service.floatElement = floatEl;
       const shift = (service as any).shiftElementIntoView.bind(service) as (
         boundary: DOMRect | undefined,
@@ -501,4 +456,49 @@ describe('FloatingUiService', () => {
       expect(floatEl.style.top).toBe('');
     });
   });
+
+  // describe('5. Fallback tests if the menu is longer than the viewport where only 2 or one sides avaliable', () => {
+  //   beforeEach(() => {
+  //     Object.defineProperty(floatEl, 'offsetHeight', { value: 2000 });
+  //     Object.defineProperty(boundaryEl, 'offsetHeight', { value: 1500 });
+  //     Object.defineProperty(boundaryEl, 'offsetWidth', { value: 1500 });
+  //   });
+
+  //   it('5.1. should return the best position when only 2 sides avaliable', () => {
+  //     service.setElements(refEl, floatEl, boundaryEl);
+  //     vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(1000);
+  //     vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
+  //     vi.spyOn(boundaryEl, 'getBoundingClientRect').mockReturnValue({
+  //       top: 0,
+  //       bottom: 1000,
+  //       left: 0,
+  //       right: 1000,
+  //       width: 1000,
+  //       height: 1000,
+  //     } as DOMRect);
+  //     vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
+  //       top: 400,
+  //       bottom: 450,
+  //       left: 400,
+  //       right: 450,
+  //       width: 50,
+  //       height: 50,
+  //     } as DOMRect);
+  //     vi.spyOn(floatEl, 'getBoundingClientRect').mockReturnValue({
+  //       top: 0,
+  //       bottom: 2000,
+  //       left: 0,
+  //       right: 100,
+  //       width: 100,
+  //       height: 2000,
+  //     } as DOMRect);
+
+  //     const res = service.calculateOptimalPosition('bottom');
+  //     expect(res?.avaliablePosition.length).toBe(1);
+  //     expect(res?.avaliablePosition[0]).toBe('right-start');
+  //     expect(res!.sidesAvaliable.size).toBe(2);
+  //     expect(res!.sidesAvaliable.has('right')).toBe(true);
+  //     expect(res!.sidesAvaliable.has('left')).toBe(true);
+  //   });
+  // });
 });

@@ -58,7 +58,7 @@ export class FloatingUIDirective implements OnDestroy {
       this.floatingUiService.setElements(
         this.referenceElement(),
         this.floatingElement,
-        this.boundaryElement(),
+        this.boundaryElement()
       );
       if (this.referenceElement()) this.adjustPlacement();
     });
@@ -74,7 +74,8 @@ export class FloatingUIDirective implements OnDestroy {
       }
 
       this.scrollListener = () => {
-        clearTimeout(this.scrollTimeoutId);
+        if (this.scrollTimeoutId)
+          clearTimeout(this.scrollTimeoutId);
         this.scrollTimeoutId = setTimeout(() => {
           if (this.referenceElement()) {
             this.adjustPlacement();
@@ -93,51 +94,11 @@ export class FloatingUIDirective implements OnDestroy {
   private adjustPlacement() {
     const result = this.floatingUiService.calculateOptimalPosition(
       this.placement(),
-      this.offset(),
+      this.offset()
     );
-    if (!result) return;
-    const {
-      avaliablePosition: positions,
-      sidesAvaliable,
-      spcesArroundRef,
-      floatRect,
-      viewportHeight,
-      viewportWidth,
-    } = result;
-
-    let optimal: PopoverPlacement | undefined;
-
-    if (positions.length > 0) {
-      optimal = positions[0] as PopoverPlacement;
-    } else if (sidesAvaliable && sidesAvaliable.size > 0) {
-      let maxSide: string | undefined;
-      let maxSpace = -Infinity;
-      sidesAvaliable.forEach((_, side) => {
-        const space = (spcesArroundRef as any)[side] ?? 0;
-        if (space > maxSpace) {
-          maxSpace = space;
-          maxSide = side;
-        }
-      });
-      if (maxSide) {
-        optimal = maxSide as PopoverPlacement;
-      }
-    }
-
-    if (optimal) {
-      this.placement.set(optimal);
-    }
-
-    if (floatRect) {
-      const margin = this.offset();
-      if (floatRect.height > viewportHeight) {
-        this.floatingElement.style.maxHeight = `${viewportHeight - margin}px`;
-        this.floatingElement.style.overflowY = 'auto';
-      }
-      if (floatRect.width > viewportWidth) {
-        this.floatingElement.style.maxWidth = `${viewportWidth - margin}px`;
-        this.floatingElement.style.overflowX = 'auto';
-      }
-    }
+    const positions = result ? result.avaliablePosition : [];
+    if (positions.length === 0) return;
+    const optimal: PopoverPlacement = positions[0];
+    this.placement.set(optimal);
   }
 }

@@ -20,66 +20,42 @@ ks-menu {
     }
   }
 
-  &.left,
-  &.left-start,
-  &.left-end {
-    right: calc(100% + 5px);
-  }
-  &.right,
-  &.right-start,
-  &.right-end {
-    left: calc(100% + 5px);
-  }
-  &.top,
-  &.top-start,
-  &.top-end {
-    bottom: calc(100% + 5px);
-  }
-  &.bottom,
-  &.bottom-start,
-  &.bottom-end {
-    top: calc(100% + 5px);
-  }
-  &.top-start,
-  &.bottom-start {
-    left: 0;
-  }
-  &.top-start,
-  &.top-end {
-    transform-origin: bottom left;
-  }
-  &.bottom-start,
-  &.bottom-end {
-    transform-origin: top left;
-  }
-  &.right-end,
-  &.left-end {
-    bottom: 0;
-  }
-  &.left-start {
-    transform-origin: right top;
-  }
-  &.right-start {
-    transform-origin: left top;
-  }
-  &.left {
-    transform-origin: right center;
-  }
-  &.right {
-    transform-origin: left center;
-  }
-  &.top {
-    transform-origin: bottom center;
-  }
-  &.bottom {
-    transform-origin: top center;
-  }
-  &.right-end {
-    transform-origin: left bottom;
-  }
-  &.left-end {
-    transform-origin: right bottom;
-  }
+ /* صفّر الـinset أولاً عشان مفيش قيم قديمة تسرّب */
+  &.top, &.top-start, &.top-end,
+  &.bottom, &.bottom-start, &.bottom-end,
+  &.left, &.left-start, &.left-end,
+  &.right, &.right-start, &.right-end { inset: auto; }
+
+  /* اتجاه المحور الأساسي */
+  &.left, &.left-start, &.left-end   { right: calc(100% + 5px); }
+  &.right, &.right-start, &.right-end { left:  calc(100% + 5px); }
+  &.top, &.top-start, &.top-end      { bottom: calc(100% + 5px); }
+  &.bottom, &.bottom-start, &.bottom-end { top: calc(100% + 5px); }
+
+  /* محاذاة المحور العرضي */
+  &.top-start, &.bottom-start { left: 0;  right: auto; }
+  &.top-end,   &.bottom-end   { right: 0; left:  auto; }
+
+  &.left-start,  &.right-start { top: 0;    bottom: auto; }
+  &.left-end,    &.right-end   { bottom: 0; top:    auto; }
+
+  /* نقاط أصل الأنيميشن صح */
+  &.top            { transform-origin: bottom center; }
+  &.top-start      { transform-origin: bottom left; }
+  &.top-end        { transform-origin: bottom right; }
+  &.bottom         { transform-origin: top center; }
+  &.bottom-start   { transform-origin: top left; }
+  &.bottom-end     { transform-origin: top right; }
+  &.left           { transform-origin: right center; }
+  &.left-start     { transform-origin: right top; }
+  &.left-end       { transform-origin: right bottom; }
+  &.right          { transform-origin: left center; }
+  &.right-start    { transform-origin: left top; }
+  &.right-end      { transform-origin: left bottom; }
+
+  /* (اختياري) توسيط الحالات غير المبدوءة/المنتهية من غير ما نكسر scale في الأنيميشن */
+  &.top, &.bottom  { left: 50%; translate: -50% 0; }   /* بدل transform: translateX() */
+  &.left, &.right  { top: 50%;  translate: 0 -50%; }
   &.enter {
     animation: ks-menu-enter 0.2s ease-in-out;
   }

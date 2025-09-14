@@ -31,10 +31,12 @@ import {
   `,
   host: {
     class:
-      'd-block h-100vh bg-grey-39 d-flex align-items-center justify-content-center flex-wrap-wrap gap-5 p-5',
+      'd-block h-100 w-100 bg-grey-39 d-flex align-items-center justify-content-center flex-wrap-wrap gap-5 p-5',
   },
 })
 export class FloatingUiFreeStyleMode {
+  placement = signal<PopoverPlacement>('top');
+
   readonly isOpen = signal(true);
   menuItems = new KsMenu(
     [
@@ -61,15 +63,39 @@ export class FloatingUiFreeStyleMode {
       { icon: 'settings', label: 'Settings222' },
       { icon: 'settings', label: 'Logout' },
       { icon: 'add', label: 'leeg' },
-      { icon: 'settings', label: 'Settings222' },
-      { icon: 'settings', label: 'Logout' },
-      { icon: 'add', label: 'leeg' },
-      { icon: 'settings', label: 'Settings222' },
-      { icon: 'settings', label: 'Logout' },
-      { icon: 'add', label: 'leeg' },
-      { icon: 'settings', label: 'Settings222' },
-      { icon: 'settings', label: 'Logout' },
-      { icon: 'add', label: 'leeg' },
+      // { icon: 'settings', label: 'Settings222' },
+      // { icon: 'settings', label: 'Logout' },
+      // { icon: 'add', label: 'leeg' },
+      // { icon: 'settings', label: 'Settings222' },
+      // { icon: 'settings', label: 'Logout' },
+      // { icon: 'add', label: 'leeg' },
+      // { icon: 'settings', label: 'Settings222' },
+      // { icon: 'settings', label: 'Logout' },
+      // { icon: 'add', label: 'leeg' },
+      // { icon: 'settings', label: 'Settings222' },
+      // { icon: 'settings', label: 'Logout' },
+      // { icon: 'add', label: 'leeg' },
+      // { icon: 'settings', label: 'Settings222' },
+      // { icon: 'settings', label: 'Logout' },
+      // { icon: 'add', label: 'leeg' },
+      // { icon: 'settings', label: 'Settings222' },
+      // { icon: 'settings', label: 'Logout' },
+      // { icon: 'add', label: 'leeg' },
+      // { icon: 'settings', label: 'Settings222' },
+      // { icon: 'settings', label: 'Logout' },
+      // { icon: 'add', label: 'leeg' },
+      // { icon: 'settings', label: 'Settings222' },
+      // { icon: 'settings', label: 'Logout' },
+      // { icon: 'add', label: 'leeg' },
+      // { icon: 'settings', label: 'Settings222' },
+      // { icon: 'settings', label: 'Logout' },
+      // { icon: 'add', label: 'leeg' },
+      // { icon: 'settings', label: 'Settings222' },
+      // { icon: 'settings', label: 'Logout' },
+      // { icon: 'add', label: 'leeg' },
+      // { icon: 'settings', label: 'Settings222' },
+      // { icon: 'settings', label: 'Logout' },
+      // { icon: 'add', label: 'leeg' },
     ],
     {
       iconOptions: {
@@ -82,8 +108,7 @@ export class FloatingUiFreeStyleMode {
     },
     {
       size: 'md',
-      variant: 'text',
-      appearance: 'dark',
+      appearance: 'primary',
       isRaised: true,
       borderRadius: 'rounded',
       shape: 'circle',
@@ -97,5 +122,4 @@ export class FloatingUiFreeStyleMode {
       id: `menu-button-${Math.random().toString(36).substring(2, 15)}`,
     }
   );
-  placement = signal<PopoverPlacement>('top');
 }

@@ -21,7 +21,7 @@ import { ButtonDirective } from '../../directives/button/button.directive';
 import { FloatingUIDirective } from '../../directives/floating-ui/floating-ui.directive';
 import { KsMenu } from '../../components/menu/menu.types';
 import { MenuComponent } from '../../components/menu/menu/menu.component';
-import { MenuAriaHandlingDirective } from '../../public-api';
+import { MenuAriaHandlingDirective } from '../../components/menu/menu-aria-handling/menu-aria-handling.directive';
 
 @Component({
   selector: 'ks-popover-menu',
@@ -33,8 +33,8 @@ import { MenuAriaHandlingDirective } from '../../public-api';
     ButtonDirective,
     FloatingUIDirective,
     NgTemplateOutlet,
-    MenuAriaHandlingDirective,
-  ],
+    MenuAriaHandlingDirective
+],
   templateUrl: './popover-menu.block.html',
   host: {
     '[attr.role]': '"none"',
@@ -69,7 +69,6 @@ export class PopoverMenuBlock {
   /* v8 ignore end */
   constructor() {
     afterEveryRender(() => {
-      if (this.isOpen()) this.adjusePlacement();
       if (this.toggleButtonTemplate() && this.customToggleButtonTemplate()) {
         this.renderer2.setAttribute(
           this.customToggleButtonTemplate()?.nativeElement.children[0],
@@ -95,36 +94,4 @@ export class PopoverMenuBlock {
       this.isOpen.set(false);
     }
   }
-  /* v8 ignore start */
-  private adjusePlacement() {
-    let isRightOrLeft = ['right', 'left'].includes(this.placement());
-    let isTopOrBottom = ['top', 'bottom'].includes(this.placement());
-    let styleName: string | null;
-    if (isRightOrLeft) {
-      styleName = 'top';
-    } else if (isTopOrBottom) {
-      styleName = 'left';
-    } else {
-      styleName = null;
-    }
-    let offsetName: string | null;
-    if (isRightOrLeft) {
-      offsetName = 'offsetHeight';
-    } else if (isTopOrBottom) {
-      offsetName = 'offsetWidth';
-    } else {
-      offsetName = null;
-    }
-    if (!styleName || !offsetName) return;
-    if (this.menuElement()?.nativeElement)
-      this.renderer2.setStyle(
-        this.menuElement()?.nativeElement,
-        styleName,
-        `${
-          this.toggleButton()?.nativeElement[offsetName] / 2 -
-          this.menuElement()?.nativeElement[offsetName] / 2
-        }px`
-      );
-  }
-  /* v8 ignore end */
 }

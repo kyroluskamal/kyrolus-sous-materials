@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { PopoverPlacement } from '../../blocks/popover-menu/popover.types';
 export type sides = {
   top?: number;
@@ -24,9 +24,96 @@ export class FloatingUiService {
     'right-start',
     'right-end',
   ] as const;
+
+  calculateOptimalPosition(placement: PopoverPlacement, offset = 8) {
+    let refRect = this.refElement?.getBoundingClientRect();
+    let floatRect = this.floatElement?.getBoundingClientRect();
+    let boundaryRect = this.boundaryElement?.getBoundingClientRect();
+
+    const { viewportHeight, viewportWidth } =
+      this.getViewportSize(boundaryRect);
+
+    if (!refRect || !floatRect) {
+      return;
+    }
+
+    let spcesArroundRef = this.computeSpacesAroundRef(
+      refRect,
+      boundaryRect,
+      offset,
+      viewportHeight,
+      viewportWidth
+    );
+
+    const sidesAvaliableForFloating = this.evaluateSidesAvailableForFloating(
+      spcesArroundRef,
+      placement
+    );
+
+    let avaliablePosition: PopoverPlacement[] = [];
+    let sidesAvaliable = new Map<string, number>();
+
+    if (Object.keys(sidesAvaliableForFloating).length === 4) {
+      return { avaliablePosition, sidesAvaliable };
+    }
+    sidesAvaliable = new Map<string, number>(
+      Object.entries(sidesAvaliableForFloating)
+    );
+
+    avaliablePosition = this.position.filter((pos) =>
+      Array.from(sidesAvaliable.keys()).some((side) => pos.includes(side))
+    );
+
+    avaliablePosition = this.filterPositionsByMissingSides(
+      avaliablePosition,
+      sidesAvaliable
+    );
+
+    avaliablePosition = this.prioritizeByFirstLetter(
+      avaliablePosition,
+      placement
+    );
+
+    // evaluate cross-axis space for start/end variations
+    avaliablePosition = this.evaluteCrossAxisOverflow(
+      avaliablePosition,
+      spcesArroundRef,
+      refRect,
+      floatRect
+    );
+
+    // shift floating element back into the viewport if slightly overflowing
+    this.shiftElementIntoView(
+      boundaryRect,
+      floatRect,
+      viewportHeight,
+      viewportWidth,
+      offset
+    );
+
+    if (avaliablePosition.length === 0) {
+      const optimal = this.chooseFallbackPosition(sidesAvaliable, placement);
+      if (!this.shouldScroll()) {
+        this.scrollToElementIfNeeded();
+      }
+      if (optimal) {
+        avaliablePosition.push(optimal);
+      }
+    }
+    return {
+      avaliablePosition,
+      sidesAvaliable,
+      spcesArroundRef,
+      refRect,
+      floatRect,
+      viewportHeight,
+      viewportWidth,
+    };
+  }
   private getRect(element: HTMLElement) {
     return element?.getBoundingClientRect();
   }
+  shouldScroll = signal(false);
   refElement!: HTMLElement;
   floatElement!: HTMLElement;
   boundaryElement?: HTMLElement;
@@ -36,17 +123,22 @@ export class FloatingUiService {
     this.floatElement = float;
     this.boundaryElement = boundary;
   }
-  calculateOptimalPosition(placement: PopoverPlacement, offset = 8) {
-    let refRect = this.refElement?.getBoundingClientRect();
-    let floatRect = this.floatElement?.getBoundingClientRect();
-    let boundaryRect = this.boundaryElement?.getBoundingClientRect();
-    let viewportHeight = boundaryRect?.height ?? window.innerHeight;
-    let viewportWidth = boundaryRect?.width ?? window.innerWidth;
 
-    if (!refRect || !floatRect) {
-      return;
-    }
-    let spcesArroundRef = boundaryRect
+  private getViewportSize(boundaryRect: DOMRect | undefined) {
+    return {
+      viewportHeight: boundaryRect?.height ?? window.innerHeight,
+      viewportWidth: boundaryRect?.width ?? window.innerWidth,
+    };
+  }
+
+  private computeSpacesAroundRef(
+    refRect: DOMRect,
+    boundaryRect: DOMRect | undefined,
+    offset: number,
+    viewportHeight: number,
+    viewportWidth: number
+  ): sides {
+    return boundaryRect
       ? {
           top: refRect.top - boundaryRect.top - offset,
           bottom: boundaryRect.bottom - refRect.bottom - offset,
@@ -59,142 +151,164 @@ export class FloatingUiService {
           left: refRect.left - offset,
           right: viewportWidth - refRect.right - offset,
         };
+  }
 
-    let sidesAvaliableForFloating: {
-      top?: number;
-      bottom?: number;
-      left?: number;
-      right?: number;
-    } = {};
-    const evaluteSidesAvalibleForFloating = (params: {
-      sidesToCheck: string[];
-      sideToPut: keyof sides;
-      offset: keyof HTMLElement;
-    }) => {
-      const elemProp = this.floatElement[
-        `offset${params.offset}` as keyof HTMLElement
-      ] as number;
+  private evaluateSidesAvailableForFloating(
+    spaces: sides,
+    placement: PopoverPlacement
+  ): sides {
+    const result: sides = {};
+    const elemHeight = this.floatElement.offsetHeight;
+    const elemWidth = this.floatElement.offsetWidth;
+
+    const check = (
+      sidesToCheck: string[],
+      sideToPut: keyof sides,
+      needed: number
+    ) => {
+      const space = spaces[sideToPut] ?? 0;
       if (
-        spcesArroundRef[params.sideToPut] > elemProp ||
-        (params.sidesToCheck.includes(placement) &&
-          spcesArroundRef[params.sideToPut] > elemProp / 2)
+        space > needed ||
+        (sidesToCheck.includes(placement) && space > needed / 2)
       ) {
-        sidesAvaliableForFloating[params.sideToPut] =
-          spcesArroundRef[params.sideToPut];
+        result[sideToPut] = space;
       }
     };
-    const sidesToEvaluate = [
-      {
-        sides: ['left', 'right'],
-        sideToPut: ['top', 'bottom'],
-        offset: 'Height',
-      },
-      {
-        sides: ['top', 'bottom'],
-        sideToPut: ['left', 'right'],
-        offset: 'Width',
-      },
-    ];
-    sidesToEvaluate.forEach((sides) => {
-      sides.sideToPut.forEach((side) => {
-        evaluteSidesAvalibleForFloating({
-          sidesToCheck: sides.sides,
-          sideToPut: side as keyof sides,
-          offset: sides.offset as keyof HTMLElement,
-        });
-      });
-    });
-    let avaliablePosition: string[] = [];
-    let sidesAvaliable = new Map<string, number>();
 
-    if (Object.keys(sidesAvaliableForFloating).length === 4) {
-      return { avaliablePosition, sidesAvaliable };
-    }
-    sidesAvaliable = new Map<string, number>(
-      Object.entries(sidesAvaliableForFloating)
-    );
-    avaliablePosition = this.position.filter((pos) =>
-      Array.from(sidesAvaliable.keys()).some((side) => pos.includes(side))
-    );
+    check(['left', 'right'], 'top', elemHeight);
+    check(['left', 'right'], 'bottom', elemHeight);
+    check(['top', 'bottom'], 'left', elemWidth);
+    check(['top', 'bottom'], 'right', elemWidth);
+
+    return result;
+  }
+
+  private filterPositionsByMissingSides(
+    avaliablePosition: PopoverPlacement[],
+    sidesAvaliable: Map<string, number>
+  ): PopoverPlacement[] {
+    let res = [...avaliablePosition];
+
     if (!sidesAvaliable.get('right')) {
-      avaliablePosition = avaliablePosition.filter(
+      res = res.filter(
         (p) =>
           !p.includes('right') && !p.includes('top') && !p.includes('bottom')
       );
     }
     if (!sidesAvaliable.get('left')) {
-      avaliablePosition = avaliablePosition.filter(
+      res = res.filter(
         (p) =>
           !p.includes('left') && !p.includes('top') && !p.includes('bottom')
       );
     }
     if (!sidesAvaliable.get('top')) {
-      avaliablePosition = avaliablePosition.filter(
+      res = res.filter(
         (p) =>
           !p.includes('top') &&
           !['left', 'left-end', 'right', 'right-end'].includes(p)
       );
     }
     if (!sidesAvaliable.get('bottom')) {
-      avaliablePosition = avaliablePosition.filter(
+      res = res.filter(
         (p) =>
           !p.includes('bottom') &&
           !['left', 'left-start', 'right', 'right-start'].includes(p)
       );
     }
 
-    // evaluate cross-axis space for start/end variations
-    avaliablePosition = this.evaluteCrossAxisOverflow(
-      avaliablePosition,
-      spcesArroundRef,
-      refRect,
-      floatRect,
-      placement
-    );
+    return res;
+  }
 
-  // shift floating element back into the viewport if slightly overflowing
-      this.shiftElementIntoView(
-        boundaryRect,
-        floatRect,
-        viewportHeight,
-        viewportWidth,
-        offset
-      );
-      return {
-        avaliablePosition,
-        sidesAvaliable,
-        spcesArroundRef,
-        refRect,
-        floatRect,
-        viewportHeight,
-        viewportWidth,
-      };
+  private chooseFallbackPosition(
+    sidesAvaliable: Map<string, number>,
+    placement: PopoverPlacement
+  ): PopoverPlacement {
+    let optimal: PopoverPlacement = placement;
+
+    if (sidesAvaliable.size === 2) {
+      switch (placement) {
+        case 'right':
+        case 'right-start':
+        case 'right-end':
+          optimal = 'right-start';
+          break;
+        case 'left':
+        case 'left-start':
+        case 'left-end':
+          optimal = 'left-start';
+          break;
+        case 'bottom-start':
+        case 'top-start':
+          optimal = 'bottom-start';
+          break;
+        case 'bottom-end':
+        case 'top-end':
+          optimal = 'bottom-end';
+          break;
+        case 'bottom':
+        case 'top':
+          optimal = 'bottom';
+          break;
+      }
+    } else if (sidesAvaliable.size === 1) {
+      if (sidesAvaliable.get('right')) {
+        switch (placement) {
+          case 'right':
+          case 'right-end':
+          case 'right-start':
+          case 'left':
+          case 'left-end':
+          case 'left-start':
+            optimal = 'right-start';
+            break;
+          case 'bottom-end':
+          case 'bottom-start':
+          case 'bottom':
+          case 'top':
+          case 'top-end':
+          case 'top-start':
+            optimal = 'bottom-start';
+            break;
+        }
+      } else if (sidesAvaliable.get('left')) {
+        switch (placement) {
+          case 'right':
+          case 'right-end':
+          case 'right-start':
+          case 'left':
+          case 'left-end':
+          case 'left-start':
+            optimal = 'left-start';
+            break;
+          case 'bottom-end':
+          case 'bottom-start':
+          case 'bottom':
+          case 'top':
+          case 'top-end':
+          case 'top-start':
+            optimal = 'bottom-end';
+            break;
+        }
+      }
     }
 
-  isElementInViewport(el: HTMLElement) {
-    const rect = this.getRect(el);
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
+    return optimal;
   }
 
   isFloatingTopNotInViewport() {
     if (this.floatElement) {
       const rect = this.getRect(this.floatElement);
-      return rect.top < 0;
+      return rect.top < 0 || this.getComputedSideValue('top') < 0;
     }
     return false;
   }
   isFloatingBottomNotInViewport() {
     if (this.floatElement) {
       const rect = this.getRect(this.floatElement);
+      let clientHeight =
+        document.documentElement.clientHeight || window.innerHeight;
       return (
-        rect.bottom >
-        (window.innerHeight || document.documentElement.clientHeight)
+        rect.bottom > clientHeight || this.getComputedSideValue('bottom') < 0
       );
     }
     return false;
@@ -202,16 +316,16 @@ export class FloatingUiService {
   isFloatingLeftNotInViewport() {
     if (this.floatElement) {
       const rect = this.getRect(this.floatElement);
-      return rect.left < 0;
+      return rect.left < 0 || this.getComputedSideValue('left') < 0;
     }
     return false;
   }
   isFloatingRightNotInViewport() {
     if (this.floatElement) {
       const rect = this.getRect(this.floatElement);
-      return (
-        rect.right > (window.innerWidth || document.documentElement.clientWidth)
-      );
+      let clientWidth =
+        window.innerWidth || document.documentElement.clientWidth;
+      return rect.right > clientWidth || this.getComputedSideValue('right') < 0;
     }
     return false;
   }
@@ -232,12 +346,11 @@ export class FloatingUiService {
     return false;
   }
 
-  evaluteCrossAxisOverflow(
-    avaliablePosition: string[],
+ evaluteCrossAxisOverflow(
+    avaliablePosition: PopoverPlacement[],
     spcesArroundRef: sides,
     refRect: DOMRect,
-    floatRect: DOMRect,
-    placement: PopoverPlacement
+    floatRect: DOMRect
   ) {
     const extraWidth = Math.max(0, floatRect.width - refRect.width);
     const extraHeight = Math.max(0, floatRect.height - refRect.height);
@@ -271,10 +384,10 @@ export class FloatingUiService {
     maxLimit: number,
     tolerance: number
   ): number {
-    if (start < minLimit && (minLimit - start) <= tolerance) {
+    if (start < minLimit && minLimit - start <= tolerance) {
       return minLimit - start;
     }
-    if (end > maxLimit && (end - maxLimit) <= tolerance) {
+    if (end > maxLimit && end - maxLimit <= tolerance) {
       return maxLimit - end;
     }
     return 0;
@@ -303,7 +416,9 @@ export class FloatingUiService {
     );
 
     if (shiftX) {
-      this.floatElement.style.left = `${this.floatElement.offsetLeft + shiftX}px`;
+      this.floatElement.style.left = `${
+        this.floatElement.offsetLeft + shiftX
+      }px`;
       floatRect = this.floatElement.getBoundingClientRect();
     }
 
@@ -318,5 +433,46 @@ export class FloatingUiService {
     if (shiftY) {
       this.floatElement.style.top = `${this.floatElement.offsetTop + shiftY}px`;
     }
+  }
+
+  private getComputedSideValue(side: 'top' | 'bottom' | 'left' | 'right') {
+    const value = getComputedStyle(this.floatElement).getPropertyValue(side);
+    return parseInt(value ? value.replace('px', '').trim() : '');
+  }
+
+  private scrollToElementIfNeeded() {
+    if (!this.refElement || !this.floatElement || this.shouldScroll()) return;
+
+    const refRect = this.refElement.getBoundingClientRect();
+    const floatRect = this.floatElement.getBoundingClientRect();
+    const margin = 8;
+
+    const needUp = refRect.top - (floatRect.height + margin) < 0;
+    const needDown =
+      refRect.bottom + (floatRect.height + margin) > window.innerHeight;
+    if (!needUp && !needDown) return;
+
+    const pageY = window.scrollY || document.documentElement.scrollTop || 0;
+    let target;
+
+    if (needUp) {
+      target = pageY + refRect.top - (floatRect.height + margin);
+    } else {
+      target =
+        pageY +
+        (refRect.bottom + (floatRect.height + margin) - window.innerHeight);
+    }
+
+    this.shouldScroll.set(true);
+    window.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+  }
+  private prioritizeByFirstLetter(
+    arr: readonly PopoverPlacement[],
+    letter: string
+  ): PopoverPlacement[] {
+    const l = letter?.toLowerCase();
+    const first = arr.filter((p) => p.startsWith(l));
+    const rest = arr.filter((p) => !p.startsWith(l));
+    return [...first, ...rest];
   }
 }
