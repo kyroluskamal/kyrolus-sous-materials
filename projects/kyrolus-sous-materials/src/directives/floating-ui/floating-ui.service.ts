@@ -37,6 +37,7 @@ export class FloatingUiService {
       return;
     }
 
+    floatRect = this.floatElement.getBoundingClientRect();
     let spcesArroundRef = this.computeSpacesAroundRef(
       refRect,
       boundaryRect,
@@ -72,23 +73,6 @@ export class FloatingUiService {
     avaliablePosition = this.prioritizeByFirstLetter(
       avaliablePosition,
       placement
-    );
-
-    // evaluate cross-axis space for start/end variations
-    avaliablePosition = this.evaluteCrossAxisOverflow(
-      avaliablePosition,
-      spcesArroundRef,
-      refRect,
-      floatRect
-    );
-
-    // shift floating element back into the viewport if slightly overflowing
-    this.shiftElementIntoView(
-      boundaryRect,
-      floatRect,
-      viewportHeight,
-      viewportWidth,
-      offset
     );
 
     if (avaliablePosition.length === 0) {
@@ -344,95 +328,6 @@ export class FloatingUiService {
       }
     }
     return false;
-  }
-
- evaluteCrossAxisOverflow(
-    avaliablePosition: PopoverPlacement[],
-    spcesArroundRef: sides,
-    refRect: DOMRect,
-    floatRect: DOMRect
-  ) {
-    const extraWidth = Math.max(0, floatRect.width - refRect.width);
-    const extraHeight = Math.max(0, floatRect.height - refRect.height);
-    return avaliablePosition.filter((pos) => {
-      if (!pos.includes('-')) return true;
-      const [main, align] = pos.split('-');
-
-      if (main === 'top' || main === 'bottom') {
-        // top/bottom placements align horizontally
-        if (align === 'start') {
-          return extraWidth <= spcesArroundRef.right!;
-        } else if (align === 'end') {
-          return extraWidth <= spcesArroundRef.left!;
-        }
-      } else if (main === 'left' || main === 'right') {
-        // left/right placements align vertically
-        if (align === 'start') {
-          return extraHeight <= spcesArroundRef.bottom!;
-        } else if (align === 'end') {
-          return extraHeight <= spcesArroundRef.top!;
-        }
-      }
-      return true;
-    });
-  }
-
-  private calculateAxisShift(
-    start: number,
-    end: number,
-    minLimit: number,
-    maxLimit: number,
-    tolerance: number
-  ): number {
-    if (start < minLimit && minLimit - start <= tolerance) {
-      return minLimit - start;
-    }
-    if (end > maxLimit && end - maxLimit <= tolerance) {
-      return maxLimit - end;
-    }
-    return 0;
-  }
-
-  private shiftElementIntoView(
-    boundaryRect: DOMRect | undefined,
-    floatRect: DOMRect,
-    viewportHeight: number,
-    viewportWidth: number,
-    offset = 8
-  ) {
-    const tolerance = offset;
-
-    const minX = boundaryRect?.left ?? 0;
-    const maxX = boundaryRect?.right ?? viewportWidth;
-    const minY = boundaryRect?.top ?? 0;
-    const maxY = boundaryRect?.bottom ?? viewportHeight;
-
-    const shiftX = this.calculateAxisShift(
-      floatRect.left,
-      floatRect.right,
-      minX,
-      maxX,
-      tolerance
-    );
-
-    if (shiftX) {
-      this.floatElement.style.left = `${
-        this.floatElement.offsetLeft + shiftX
-      }px`;
-      floatRect = this.floatElement.getBoundingClientRect();
-    }
-
-    const shiftY = this.calculateAxisShift(
-      floatRect.top,
-      floatRect.bottom,
-      minY,
-      maxY,
-      tolerance
-    );
-
-    if (shiftY) {
-      this.floatElement.style.top = `${this.floatElement.offsetTop + shiftY}px`;
-    }
   }
 
   private getComputedSideValue(side: 'top' | 'bottom' | 'left' | 'right') {

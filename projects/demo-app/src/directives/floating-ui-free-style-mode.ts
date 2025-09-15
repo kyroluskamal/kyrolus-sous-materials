@@ -31,7 +31,7 @@ import {
   `,
   host: {
     class:
-      'd-block h-100 w-100 bg-grey-39 d-flex align-items-center justify-content-center flex-wrap-wrap gap-5 p-5',
+      'd-block h-100 w-100 bg-grey-39 d-flex align-items-start justify-content-end flex-wrap-wrap gap-5 p-5',
   },
 })
 export class FloatingUiFreeStyleMode {
@@ -63,9 +63,9 @@ export class FloatingUiFreeStyleMode {
       { icon: 'settings', label: 'Settings222' },
       { icon: 'settings', label: 'Logout' },
       { icon: 'add', label: 'leeg' },
-      // { icon: 'settings', label: 'Settings222' },
-      // { icon: 'settings', label: 'Logout' },
-      // { icon: 'add', label: 'leeg' },
+      { icon: 'settings', label: 'Settings222' },
+      { icon: 'settings', label: 'Logout' },
+      { icon: 'add', label: 'leeg' },
       // { icon: 'settings', label: 'Settings222' },
       // { icon: 'settings', label: 'Logout' },
       // { icon: 'add', label: 'leeg' },

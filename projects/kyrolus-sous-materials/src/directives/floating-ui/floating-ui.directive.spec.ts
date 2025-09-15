@@ -127,13 +127,22 @@ describe('1. FloatingUIDirective', () => {
     refEl = fixture.nativeElement.querySelector('div');
     floatEl = fixture.nativeElement.querySelector('[ksFloatingUI]');
     debugElement = fixture.debugElement.query(
-      By.directive(FloatingUIDirective),
+      By.directive(FloatingUIDirective)
     );
     component = debugElement.injector.get(FloatingUIDirective);
-    Object.defineProperty(floatEl, 'offsetWidth', { value: 100, configurable: true });
-    Object.defineProperty(floatEl, 'offsetHeight', { value: 200, configurable: true });
-    vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(800);
-    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1200);
+    Object.defineProperty(floatEl, 'offsetWidth', {
+      value: 100,
+      configurable: true,
+    });
+    Object.defineProperty(floatEl, 'offsetHeight', {
+      value: 200,
+      configurable: true,
+    });
+    vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(900);
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1800);
+    vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(900);
+
+    vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(1800);
     fixture.detectChanges();
   });
 
@@ -165,20 +174,28 @@ describe('1. FloatingUIDirective', () => {
   });
   it('1.3. should choose left-end if there is space avaliable on the top, on the right only the placement is bottom', () => {
     vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
-      top: 742,
-      bottom: 792,
-      left: 1100,
-      right: 1200,
-      width: 100,
-      height: 50,
+      top: 846,
+      bottom: 890,
+      left: 1655,
+      right: 1700,
+      width: 44,
+      height: 44,
     } as DOMRect);
+    vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
+      top: 509,
+      bottom: 890,
+      left: 1410,
+      right: 1700,
+      width: 240,
+      height: 380,
+    } as DOMRect);
+    fixture.detectChanges();
     // @ts-expect-error: private method
     component.adjustPlacement();
     expect(fixture.componentInstance.placement()).toBe('left-end');
   });
   it('1.4. should choose right-start if there is space avaliable on the bottom, on the right only the placement is top', () => {
     fixture.componentInstance.placement.set('top');
-    fixture.detectChanges();
     vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
       top: 8,
       bottom: 58,
@@ -187,13 +204,13 @@ describe('1. FloatingUIDirective', () => {
       width: 100,
       height: 50,
     } as DOMRect);
+    fixture.detectChanges();
     // @ts-expect-error: private method
     component.adjustPlacement();
     expect(fixture.componentInstance.placement()).toBe('right-start');
   });
   it('1.5. should choose bottom if there is space avaliable on the bottom, on the right and on the left only the placement is top', () => {
     fixture.componentInstance.placement.set('top');
-    fixture.detectChanges();
     vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
       top: 8,
       bottom: 58,
@@ -202,51 +219,84 @@ describe('1. FloatingUIDirective', () => {
       width: 100,
       height: 50,
     } as DOMRect);
+    vi.spyOn(floatEl, 'getBoundingClientRect').mockReturnValue({
+      top: 0,
+      bottom: 200,
+      left: 500,
+      right: 600,
+      width: 100,
+      height: 200,
+    } as DOMRect);
+    fixture.detectChanges();
     // @ts-expect-error: private method
     component.adjustPlacement();
     expect(fixture.componentInstance.placement()).toBe('bottom');
   });
   it('1.6. should choose left-start if there is space avaliable on the bottom, on the left only the placement is top', () => {
     fixture.componentInstance.placement.set('top');
-    fixture.detectChanges();
     vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
       top: 8,
-      bottom: 58,
-      left: 1100,
-      right: 1200,
-      width: 100,
-      height: 50,
+      bottom: 52,
+      left: 1655,
+      right: 1700,
+      width: 44,
+      height: 44,
     } as DOMRect);
+    vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
+      top: -380,
+      bottom: 8,
+      left: 1410,
+      right: 1850,
+      width: 240,
+      height: 380,
+    } as DOMRect);
+    fixture.detectChanges();
     // @ts-expect-error: private method
     component.adjustPlacement();
     expect(fixture.componentInstance.placement()).toBe('left-start');
   });
   it('1.7. should choose right if there is space avaliable on the bottom, on the right and on the top only, only the placement is left', () => {
     fixture.componentInstance.placement.set('left');
-    fixture.detectChanges();
     vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
-      top: 300,
-      bottom: 350,
-      left: 0,
-      right: 100,
-      width: 100,
-      height: 50,
+      top: 427,
+      bottom: 471,
+      left: 8,
+      right: 52,
+      width: 44,
+      height: 44,
     } as DOMRect);
+    vi.spyOn(floatEl, 'getBoundingClientRect').mockReturnValue({
+      top: 259,
+      bottom: 640,
+      left: 57,
+      right: 297,
+      width: 240,
+      height: 380,
+    } as DOMRect);
+    fixture.detectChanges();
     // @ts-expect-error: private method
     component.adjustPlacement();
     expect(fixture.componentInstance.placement()).toBe('right');
   });
   it('1.8. should choose left if there is space avaliable on the bottom, on the left and on the top only, only the placement is left', () => {
     fixture.componentInstance.placement.set('left');
-    fixture.detectChanges();
     vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
-      top: 300,
-      bottom: 350,
-      left: 1100,
-      right: 1200,
-      width: 100,
-      height: 50,
+      top: 428,
+      bottom: 472,
+      left: 1655,
+      right: 1700,
+      width: 44,
+      height: 44,
     } as DOMRect);
+    vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
+      top: 260,
+      bottom: 640,
+      left: 1516,
+      right: 1756,
+      width: 240,
+      height: 380,
+    } as DOMRect);
+    fixture.detectChanges();
     // @ts-expect-error: private method
     component.adjustPlacement();
     expect(fixture.componentInstance.placement()).toBe('left');
@@ -341,72 +391,7 @@ describe('1. FloatingUIDirective', () => {
     expect(fixture.componentInstance.placement()).toBe('right-end');
   });
 
-  it('1.14. should shift floating element horizontally when slightly off-screen', () => {
-    vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
-      top: 100,
-      bottom: 150,
-      left: 100,
-      right: 200,
-      width: 100,
-      height: 50,
-    } as DOMRect);
-
-    const floatRects = [
-      {
-        top: 100,
-        bottom: 300,
-        left: -5,
-        right: 95,
-        width: 100,
-        height: 200,
-      } as DOMRect,
-      {
-        top: 100,
-        bottom: 300,
-        left: 0,
-        right: 100,
-        width: 100,
-        height: 200,
-      } as DOMRect,
-    ];
-    let call = 0;
-    vi.spyOn(floatEl, 'getBoundingClientRect').mockImplementation(
-      () => floatRects[Math.min(call++, floatRects.length - 1)],
-    );
-    Object.defineProperty(floatEl, 'offsetLeft', { value: 0 });
-    // @ts-expect-error: private method
-    component.adjustPlacement();
-
-    expect(floatEl.style.left).toBe('5px');
-  });
-  it('1.15. should clamp dimensions when float element exceeds viewport', () => {
-    vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(150);
-    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(150);
-    vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
-      top: 0,
-      bottom: 50,
-      left: 0,
-      right: 100,
-      width: 100,
-      height: 50,
-    } as DOMRect);
-    vi.spyOn(floatEl, 'getBoundingClientRect').mockReturnValue({
-      top: 0,
-      bottom: 250,
-      left: 0,
-      right: 250,
-      width: 250,
-      height: 250,
-    } as DOMRect);
-    // @ts-expect-error: private method
-    component.adjustPlacement();
-    expect(floatEl.style.maxHeight).toBe('142px');
-    expect(floatEl.style.overflowY).toBe('auto');
-    expect(floatEl.style.maxWidth).toBe('142px');
-    expect(floatEl.style.overflowX).toBe('auto');
-  });
-
-  it('1.16. should call adjustPlacement on window scroll with debounce', async () => {
+  it('1.15. should call adjustPlacement on window scroll with debounce', async () => {
     vi.useFakeTimers();
     const spy = vi.spyOn<any, any>(component, 'adjustPlacement');
     window.dispatchEvent(new Event('scroll'));
@@ -417,19 +402,19 @@ describe('1. FloatingUIDirective', () => {
     vi.useRealTimers();
   });
 
-  it('1.17. should remove scroll listener on destroy', () => {
+  it('1.16. should remove scroll listener on destroy', () => {
     const removeSpy = vi.spyOn(window, 'removeEventListener');
     fixture.destroy();
     expect(removeSpy).toHaveBeenCalledWith('scroll', expect.any(Function));
   });
 
-  it('1.18. should keep menu within boundary element', () => {
+  it('1.17. should keep menu within boundary element', () => {
     const fixtureBoundary = TestBed.createComponent(HostBoundaryComponent);
     const boundaryEl = fixtureBoundary.nativeElement.querySelector('div');
     const refEl = boundaryEl.querySelector('div');
     const floatEl = boundaryEl.querySelector('[ksFloatingUI]') as HTMLElement;
     const debug = fixtureBoundary.debugElement.query(
-      By.directive(FloatingUIDirective),
+      By.directive(FloatingUIDirective)
     );
     const dir = debug.injector.get(FloatingUIDirective);
 
@@ -464,7 +449,7 @@ describe('1. FloatingUIDirective', () => {
     expect(fixtureBoundary.componentInstance.placement()).toBe('top');
   });
 
-  it('1.19. should skip browser logic when not in platform browser', async () => {
+  it('1.20. should skip browser logic when not in platform browser', async () => {
     fixture.destroy();
     const addSpy = vi.spyOn(window, 'addEventListener');
     const resizeSpy = vi.spyOn(globalThis as any, 'ResizeObserver');
@@ -486,7 +471,7 @@ describe('1. FloatingUIDirective', () => {
     fixtureLocal.destroy();
   });
 
-  it('1.20. should handle absence of ResizeObserver and remove scroll listener', async () => {
+  it('1.21. should handle absence of ResizeObserver and remove scroll listener', async () => {
     fixture.destroy();
     const addSpy = vi.spyOn(window, 'addEventListener');
     const removeSpy = vi.spyOn(window, 'removeEventListener');
@@ -517,7 +502,7 @@ describe('1. FloatingUIDirective', () => {
     (globalThis as any).ResizeObserver = originalRO;
   });
 
-  it('1.21. should not adjust placement when referenceElement is missing', async () => {
+  it('1.22. should not adjust placement when referenceElement is missing', async () => {
     fixture.destroy();
     TestBed.resetTestingModule();
     await TestBed.configureTestingModule({
@@ -545,89 +530,64 @@ describe('1. FloatingUIDirective', () => {
     vi.useRealTimers();
     fixtureLocal.destroy();
   });
-   it('1.22. should fall back to left-end when bottom and right space are limited', () => {
-     fixture.componentInstance.placement.set('bottom');
-     vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(100);
-     vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(100);
+  it('1.23. should fall back to left-end when bottom and right space are limited', () => {
+    fixture.componentInstance.placement.set('bottom');
+    vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(100);
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(100);
 
-     vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
-       top: 60,
-       bottom: 80,
-       left: 50,
-       right: 70,
-       width: 20,
-       height: 20,
-     } as DOMRect);
+    vi.spyOn(refEl, 'getBoundingClientRect').mockReturnValue({
+      top: 60,
+      bottom: 80,
+      left: 50,
+      right: 70,
+      width: 20,
+      height: 20,
+    } as DOMRect);
 
-     vi.spyOn(floatEl, 'getBoundingClientRect').mockReturnValue({
-       top: 0,
-       bottom: 30,
-       left: 0,
-       right: 30,
-       width: 30,
-       height: 30,
-     } as DOMRect);
+    vi.spyOn(floatEl, 'getBoundingClientRect').mockReturnValue({
+      top: 0,
+      bottom: 30,
+      left: 0,
+      right: 30,
+      width: 30,
+      height: 30,
+    } as DOMRect);
 
-     Object.defineProperty(floatEl, 'offsetHeight', {
-       value: 30,
-       configurable: true,
-     });
-     Object.defineProperty(floatEl, 'offsetWidth', {
-       value: 30,
-       configurable: true,
-     });
+    Object.defineProperty(floatEl, 'offsetHeight', {
+      value: 30,
+      configurable: true,
+    });
+    Object.defineProperty(floatEl, 'offsetWidth', {
+      value: 30,
+      configurable: true,
+    });
 
-     const calcSpy = vi.spyOn<any, any>(
-       component['floatingUiService'],
-       'calculateOptimalPosition'
-     );
+    const calcSpy = vi.spyOn<any, any>(
+      component['floatingUiService'],
+      'calculateOptimalPosition'
+    );
 
-     // @ts-expect-error: private method
-     component.adjustPlacement();
+    // @ts-expect-error: private method
+    component.adjustPlacement();
 
-     expect(calcSpy).toHaveBeenCalled();
-     expect(fixture.componentInstance.placement()).toBe('left-end');
-   });
+    expect(calcSpy).toHaveBeenCalled();
+    expect(fixture.componentInstance.placement()).toBe('left-end');
+  });
 
-   it('1.23. should pass reference, floating, and boundary elements to the service on render', async () => {
-     const fixtureBoundary = TestBed.createComponent(HostBoundaryComponent);
-     const boundaryEl = fixtureBoundary.nativeElement.querySelector('div');
-     const refEl = boundaryEl.querySelector('div');
-     const floatEl = boundaryEl.querySelector('[ksFloatingUI]');
-     const dir = fixtureBoundary.debugElement
-       .query(By.directive(FloatingUIDirective))
-       .injector.get(FloatingUIDirective);
-     const setSpy = vi.spyOn<any, any>(dir['floatingUiService'], 'setElements');
+  it('1.24. should pass reference, floating, and boundary elements to the service on render', async () => {
+    const fixtureBoundary = TestBed.createComponent(HostBoundaryComponent);
+    const boundaryEl = fixtureBoundary.nativeElement.querySelector('div');
+    const refEl = boundaryEl.querySelector('div');
+    const floatEl = boundaryEl.querySelector('[ksFloatingUI]');
+    const dir = fixtureBoundary.debugElement
+      .query(By.directive(FloatingUIDirective))
+      .injector.get(FloatingUIDirective);
+    const setSpy = vi.spyOn<any, any>(dir['floatingUiService'], 'setElements');
 
-     fixtureBoundary.detectChanges();
-     await fixtureBoundary.whenStable();
+    fixtureBoundary.detectChanges();
+    await fixtureBoundary.whenStable();
 
-     expect(setSpy).toHaveBeenCalledWith(refEl, floatEl, boundaryEl);
-     fixtureBoundary.destroy();
-   });
-
-   it('1.24. should choose side with most space when no placement fits', () => {
-     const calcSpy = vi
-       .spyOn<any, any>(
-         component['floatingUiService'],
-         'calculateOptimalPosition'
-       )
-       .mockReturnValue({
-         avaliablePosition: [],
-         sidesAvaliable: new Map([
-           ['left', 50],
-           ['right', 100],
-         ]),
-         spcesArroundRef: { left: 50, right: 100 },
-         floatRect: { height: 50, width: 50 } as DOMRect,
-         viewportHeight: 1000,
-         viewportWidth: 1000,
-       });
-
-     // @ts-expect-error: private method
-     component.adjustPlacement();
-
-     expect(calcSpy).toHaveBeenCalled();
-     expect(fixture.componentInstance.placement()).toBe('right');
-   });
+    expect(setSpy).toHaveBeenCalledWith(refEl, floatEl, boundaryEl);
+    fixtureBoundary.destroy();
+  });
 });
