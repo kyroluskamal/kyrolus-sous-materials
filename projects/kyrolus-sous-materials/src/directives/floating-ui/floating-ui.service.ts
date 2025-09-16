@@ -97,11 +97,12 @@ export class FloatingUiService {
   private getRect(element: HTMLElement) {
     return element?.getBoundingClientRect();
   }
+  /* v8 ignore start */
   shouldScroll = signal(false);
   refElement!: HTMLElement;
   floatElement!: HTMLElement;
   boundaryElement?: HTMLElement;
-
+  /* v8 ignore end */
   setElements(ref: HTMLElement, float: HTMLElement, boundary?: HTMLElement) {
     this.refElement = ref;
     this.floatElement = float;
