@@ -1,15 +1,20 @@
-import { Component } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import { Component, computed, effect, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ButtonDirective } from 'KyrolusSousMaterials';
+import {
+  ButtonDirective,
+  DeviceInfoService,
+  DeviceTypeService,
+} from 'KyrolusSousMaterials';
 
 @Component({
   selector: 'app-tests',
-  imports: [RouterLink, ButtonDirective],
+  imports: [RouterLink, ButtonDirective, JsonPipe],
   template: `
     <button ksButton routerLink="toggle-on-scroll-directive-test">
       Toggle class on scroll test
     </button>
-
+    <p>formFactors {{ dev().formFactors | json }}</p>
     <button ksButton routerLink="menu-test">Menu test</button>
     <button ksButton routerLink="popover-menu-tests">Popeover menu</button>
   `,
@@ -29,7 +34,14 @@ import { ButtonDirective } from 'KyrolusSousMaterials';
 }
 `,
 })
-export class Tests {}
-function platformBrowserDynamicTesting(): import('@angular/core').PlatformRef {
-  throw new Error('Function not implemented.');
+export class Tests {
+  deviceInfo = inject(DeviceTypeService);
+  deviceInfo2 = inject(DeviceInfoService);
+  dev = computed(() => {
+    let dev = this.deviceInfo2.device();
+    return dev;
+  });
+  eff = effect(()=>{
+    console.log(this.dev())
+  })
 }

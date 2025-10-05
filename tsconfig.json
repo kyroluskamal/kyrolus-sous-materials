@@ -17,7 +17,11 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "preserve",
+    "lib": ["ES2022", "DOM"],
+    "types": [
+      "./node_modules/user-agent-data-types"
+     ]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

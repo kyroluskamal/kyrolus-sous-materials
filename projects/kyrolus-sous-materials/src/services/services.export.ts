@@ -6,3 +6,7 @@ export * from './crypto.service';
 export * from './http-rx-resource.service';
 export * from './http-resource.service';
 export * from './resource-helper.service';
+export * from './device-info/device-info.service';
+export * from './device-info/device-type.service';
+export * from './device-info/device-locale.service';
+export * from './device-info/device-environment.service';
