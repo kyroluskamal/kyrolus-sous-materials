@@ -163,24 +163,24 @@ export class DeviceInfoService {
         ),
         { initialValue: this.buildScreenInfo() }
       )
-    : signal<DeviceScreenInfo | null>(null);
+    : signal<DeviceScreenInfo | undefined>(undefined);
 
   private readonly destroyRef = inject(DestroyRef);
 
   readonly highEntropy = this.isBrowser
-    ? promiseToSignal<UACHDataValues | null>(
+    ? promiseToSignal<UACHDataValues | undefined>(
         () => {
           const ua = (navigator as any).userAgentData;
           return ua
             ? ua.getHighEntropyValues(HINTS as unknown as string[])
-            : Promise.resolve(null);
+            : Promise.resolve(undefined);
         },
         {
-          initialValue: null,
+          initialValue: undefined,
           injector: this.injector,
         }
       )
-    : signal<UACHDataValues | null>(null);
+    : signal<UACHDataValues | undefined>(undefined);
 
   private collectSnapshot(): DeviceInfo {
     if (!this.isBrowser || !navigator || !window || !document)
@@ -192,13 +192,13 @@ export class DeviceInfoService {
 
     // Agent type derived from UA only (bot/headless/preview/human)
     const agentType: AgentType = detectAgentType(uaString);
-    const parsed = uaString ? parseUA(uaString) : null;
+    const parsed = uaString ? parseUA(uaString) : undefined;
     const hw = normalizeHardwareForContext({
       ua: uaString,
       agentType,
       arch: parsed?.arch,
       bitness: parsed?.bitness as any,
-      wow64: parsed?.wow64 ?? null,
+      wow64: parsed?.wow64,
     });
     let browser =
       mapBrowserFromBrands(client.brands) ?? parsed?.browser ?? 'Unknown';
@@ -217,11 +217,11 @@ export class DeviceInfoService {
     const hardwareConcurrency =
       typeof (nav as any)?.hardwareConcurrency === 'number'
         ? (nav as any).hardwareConcurrency
-        : null;
+        : undefined;
     const deviceMemory =
       typeof (nav as any)?.deviceMemory === 'number'
         ? (nav as any).deviceMemory
-        : null;
+        : undefined;
     if ((nav as any)?.brave?.isBrave()) {
       browser = 'Brave';
     }
@@ -248,10 +248,10 @@ export class DeviceInfoService {
       deviceMemory,
       agentType,
       architecture: hw.arch,
-      bitness: typeof hw.bitness === 'number' ? hw.bitness : null,
+      bitness: typeof hw.bitness === 'number' ? hw.bitness : undefined,
       wow64: hw.wow64,
-      formFactors: null,
-      model: null,
+      formFactors: undefined,
+      model: undefined,
       brands: client.brands,
     };
   }
@@ -317,14 +317,8 @@ export class DeviceInfoService {
     if (!ua) return 'desktop';
 
     // 1) Bots & previews (broad first)
-    if (
-      /\b(bot|crawl|spider)\b/.test(ua) ||
-      /(googlebot|bingpreview|facebookexternalhit|facebot|twitterbot|pinterestbot|linkedinbot|slackbot|discordbot|whatsapp|telegrambot)/i.test(
-        ua
-      )
-    ) {
-      return 'bot';
-    }
+    const at = detectAgentType(uaString); // فيها preview/bot/headless, الخ...
+    if (at === 'bot' || at === 'preview' || at === 'headless') return 'bot';
 
     // 2) Windows Phone / Edge Mobile => mobile (must be before UWP rule)
     if (/(iemobile|windows phone|edge\/\d+.*mobile)/i.test(ua)) return 'mobile';
@@ -345,6 +339,7 @@ export class DeviceInfoService {
     // 5) Game launchers & overlays => desktop
     if (/steam.+gameoverlay/i.test(ua) || /epicgameslauncher/i.test(ua))
       return 'desktop';
+    if (/android/.test(ua) && /\bpixel\s+fold\b/i.test(ua)) return 'mobile';
 
     // 6) Tablets
     if (
@@ -401,11 +396,11 @@ function normalizePlatform(p?: string): DeviceOperatingSystem | undefined {
   if (s.includes('win')) return 'Windows';
   if (s.includes('mac')) return 'macOS';
   if (s.includes('linux')) return 'Linux';
-  if (s.includes('cros')) return 'Chrome OS';
+  if (s.includes('cros')) return 'ChromeOS';
   return undefined;
 }
 function mapBrowserFromBrands(
-  brands: { brand: string; version: string }[] | undefined
+  brands: NavigatorUABrandVersion[] | undefined
 ): DeviceBrowser | null {
   const BROWSER_RULES: readonly [RegExp, DeviceBrowser][] = [
     [/edg|edge/i, 'Edge'],
@@ -491,7 +486,7 @@ function mapPlatformVersionToOSVersion(
 function deriveDeviceTypeFromHints(
   current?: DeviceType,
   isMobile?: boolean,
-  formFactors?: readonly string[] | null
+  formFactors?: readonly string[]
 ): DeviceType | undefined {
   if (isMobile) return 'mobile';
   if (Array.isArray(formFactors) && formFactors.length) {
@@ -514,11 +509,11 @@ function tokenizeSystemBlock(ua: string): string[] {
 
 function detectArchBitness(tokens: string[]): {
   arch: UAParsed['arch'];
-  bitness: Bitness;
+  bitness?: Bitness;
   wow64: boolean;
 } {
   let arch: UAParsed['arch'] = undefined;
-  let bitness: Bitness = null;
+  let bitness: Bitness = undefined;
   let wow64 = false;
 
   if (tokens.some((t) => /x86_64|amd64|x64/.test(t))) {
@@ -532,6 +527,7 @@ function detectArchBitness(tokens: string[]): {
     bitness = 32;
   } else if (tokens.some((t) => /^arm$|armv7|armv8/.test(t))) {
     arch = 'arm';
+    bitness = undefined;
   } else if (tokens.some((t) => /ppc|powerpc/.test(t))) {
     arch = 'ppc';
   } else if (tokens.some((t) => /mips/.test(t))) {
@@ -578,10 +574,10 @@ function parseOSFromUA(ua: string): {
   if (m)
     return { platform: 'Android', platformVersion: m[1].replace(/_/g, '.') };
 
-  // Chrome OS
+  // ChromeOS
   if (/CrOS/i.test(ua)) {
     const v = /CrOS [^ ]+ ([\d.]+)/i.exec(ua)?.[1];
-    return { platform: 'Chrome OS', platformVersion: v };
+    return { platform: 'ChromeOS', platformVersion: v };
   }
 
   // macOS
@@ -617,24 +613,28 @@ function parseOSFromUA(ua: string): {
 type BrowserHit = { browser: DeviceBrowser; browserVersion?: string };
 
 const isBotUA = (ua: string) =>
-  /\b(googlebot|bingbot|bingpreview|facebot|duckduckbot|baiduspider|yandexbot|semrushbot|ahrefs|crawler|spider)\b/i.test(
+  /(applebot|googlebot(?:-(?:image|video|news))?|bingbot|duckduckbot|baiduspider|yandex(?:bot|images|accessibilitybot)?|petalbot|sogou|seznambot|qwantify|ia_archiver|mj12bot|ahrefsbot|semrushbot|crawler|spider)/i.test(//NOSONAR
+    //NOSONAR
     ua
   );
-
 const isNonBrowserUA = (ua: string) =>
   /steam.+gameoverlay/i.test(ua) || /epicgameslauncher/i.test(ua);
 
 // Order matters
-type SimpleRule = { re: RegExp; brand: DeviceBrowser | 'Torch' | 'Tor'; verIdx?: number };
+type SimpleRule = {
+  re: RegExp;
+  brand: DeviceBrowser | 'Torch' | 'Tor';
+  verIdx?: number;
+};
 const SIMPLE_RULES: SimpleRule[] = [
   { re: /\b(edg|edgios|edga)\/([\d.]+)/i, brand: 'Edge', verIdx: 2 }, // Chromium Edge
-  { re: /\bOPR\/([\d.]+)/i, brand: 'Opera', verIdx: 1 },              // Opera (Chromium)
-  { re: /\bHeadlessChrome\/([\d.]+)/i, brand: 'Chrome', verIdx: 1 },  // Headless Chrome
+  { re: /\b(?:OPR|OPT|OPiOS)\/([\d.]+)/i, brand: 'Opera', verIdx: 1 },
+  { re: /\bHeadlessChrome\/([\d.]+)/i, brand: 'Chrome', verIdx: 1 }, // Headless Chrome
   { re: /\bSamsungBrowser\/([\d.]+)/i, brand: 'Samsung Internet', verIdx: 1 },
   { re: /\b(YaBrowser|YandexBrowser)\/([\d.]+)/i, brand: 'Yandex', verIdx: 2 },
   { re: /\bVivaldi\/([\d.]+)/i, brand: 'Vivaldi', verIdx: 1 },
   { re: /\bBrave\/([\d.]+)/i, brand: 'Brave', verIdx: 1 },
-  { re: /\bTorch\/([\d.]+)/i, brand: 'Torch', verIdx: 1 },            // Torch
+  { re: /\bTorch\/([\d.]+)/i, brand: 'Torch', verIdx: 1 }, // Torch
 ];
 
 const classifyBySimpleRules = (ua: string): BrowserHit | undefined => {
@@ -647,7 +647,8 @@ const classifyBySimpleRules = (ua: string): BrowserHit | undefined => {
 
 const parseOperaPresto = (ua: string): BrowserHit | undefined => {
   if (!/Opera/i.test(ua)) return undefined;
-  const v = /\bVersion\/([\d.]+)/i.exec(ua)?.[1] ?? /\bOpera\/([\d.]+)/i.exec(ua)?.[1];
+  const v =
+    /\bVersion\/([\d.]+)/i.exec(ua)?.[1] ?? /\bOpera\/([\d.]+)/i.exec(ua)?.[1];
   return { browser: 'Opera', browserVersion: v || undefined };
 };
 
@@ -655,7 +656,9 @@ const parseEdgeHTML = (ua: string): BrowserHit | undefined => {
   const m = /\bEdge\/([\d.]+)/i.exec(ua);
   if (!m) return undefined;
   const isWinPhone = /(windows phone|iemobile)/i.test(ua);
-  return isWinPhone ? { browser: 'Edge', browserVersion: m[1] } : { browser: 'Unknown' };
+  return isWinPhone
+    ? { browser: 'Edge', browserVersion: m[1] }
+    : { browser: 'Unknown' };
 };
 
 const parseTor = (ua: string): BrowserHit | undefined => {
@@ -679,11 +682,11 @@ const parseFirefoxToken = (ua: string): BrowserHit | undefined => {
 
 const parseSafariToken = (ua: string): BrowserHit | undefined => {
   if (!/safari\//i.test(ua)) return undefined;
-  if (/(chrome|crios|chromium|edg|edge|opr|opera)/i.test(ua)) return undefined;
+  if (/(chrome|crios|chromium|edg|edge|opr|opera|opt|opios)/i.test(ua))
+    return undefined;
   const v = /version\/([\d.]+)/i.exec(ua)?.[1];
   return v ? { browser: 'Safari', browserVersion: v } : undefined;
 };
-
 const parseIEToken = (ua: string): BrowserHit | undefined => {
   if (/\bMSIE\s[\d.]+/i.test(ua) || /Trident\/\d+.*;\s*rv:[\d.]+/i.test(ua)) {
     return { browser: 'Unknown', browserVersion: undefined };
@@ -692,11 +695,15 @@ const parseIEToken = (ua: string): BrowserHit | undefined => {
 };
 
 // ---- main: low-complexity orchestrator ----
-function parseBrowserFromUA(uaRaw: string): { browser: DeviceBrowser; browserVersion?: string } {
+function parseBrowserFromUA(uaRaw: string): {
+  browser: DeviceBrowser;
+  browserVersion?: string;
+} {
   const ua = String(uaRaw ?? '');
 
   if (isBotUA(ua)) return { browser: 'Unknown', browserVersion: undefined };
-  if (isNonBrowserUA(ua)) return { browser: 'Unknown', browserVersion: undefined };
+  if (isNonBrowserUA(ua))
+    return { browser: 'Unknown', browserVersion: undefined };
 
   const simple = classifyBySimpleRules(ua);
   if (simple) return simple;
@@ -724,7 +731,6 @@ function parseBrowserFromUA(uaRaw: string): { browser: DeviceBrowser; browserVer
 
   return { browser: 'Unknown', browserVersion: undefined };
 }
-
 
 export function parseUA(uaRaw: string): UAParsed {
   const ua = String(uaRaw ?? '').trim();
@@ -798,7 +804,7 @@ function applyWindowsArchHeuristics(
   platform: UAParsed['platform'] | undefined,
   ua: string,
   current: { arch: UAParsed['arch']; bitness: Bitness; wow64: boolean }
-): { arch: UAParsed['arch']; bitness: Bitness; wow64: boolean } {
+): { arch: UAParsed['arch']; bitness?: Bitness; wow64: boolean } {
   if (platform !== 'Windows') return current;
 
   const low = ua.toLowerCase();
@@ -820,7 +826,7 @@ function applyWindowsArchHeuristics(
     /\bWindows NT\s*6\.2\b/i.test(ua) &&
     /touch/i.test(ua)
   ) {
-    return { arch: undefined, bitness: null, wow64: false };
+    return { arch: undefined, bitness: undefined, wow64: false };
   }
 
   // 2) Respect explicit tokens only
@@ -849,7 +855,7 @@ function applyWindowsArchHeuristics(
   // 3) Win7 + (IE|Trident) heuristic → many 64-bit desktops didn't expose Win64
   const isIEorTrident = /\bmsie\b|\btrident\/\d+/i.test(ua);
   if (!current.wow64 && !current.arch && ntRaw === '6.1' && isIEorTrident) {
-    return { arch: 'x64', bitness: 64, wow64: false };
+    return { arch: undefined, bitness: undefined, wow64: false };
   }
 
   // 4) DO NOT force x64 for EdgeHTML or UWP WebView if it's not explicit.
@@ -897,28 +903,28 @@ function isEdgeHTMLWebView(ua: string): boolean {
 function normalizeHardwareForContext(opts: {
   ua: string;
   agentType: AgentType;
-  arch: string | null | undefined;
-  bitness: Bitness | string | null | undefined;
-  wow64: boolean | null | undefined;
+  arch?: string;
+  bitness?: Bitness;
+  wow64?: boolean;
 }) {
   const low = (opts.ua || '').toLowerCase();
-  let arch = opts.arch ?? null;
-  let bitness = typeof opts.bitness === 'number' ? opts.bitness : null;
-  let wow64 = opts.wow64 ?? null;
+  let arch = opts.arch;
+  let bitness = opts.bitness;
+  let wow64 = opts.wow64;
 
   // Bots & preview -> suppress hardware fields
   if (opts.agentType === 'bot' || opts.agentType === 'preview') {
-    return { arch: null, bitness: null, wow64: null };
+    return { arch: undefined, bitness: undefined, wow64: undefined };
   }
 
   // UWP EdgeHTML WebView -> suppress hardware
   if (isEdgeHTMLWebView(opts.ua)) {
-    return { arch: null, bitness: null, wow64: null };
+    return { arch: undefined, bitness: undefined, wow64: undefined };
   }
 
   // Epic Games Launcher (Chromium UA, not a browser) -> suppress hardware
   if (/epicgameslauncher/i.test(opts.ua)) {
-    return { arch: null, bitness: null, wow64: null };
+    return { arch: undefined, bitness: undefined, wow64: undefined };
   }
 
   // Xbox: do not assume x64 unless token explicitly present
@@ -930,7 +936,7 @@ function normalizeHardwareForContext(opts: {
     low.includes('aarch64');
 
   if (/\bxbox\b/.test(low) && !hasExplicitHW) {
-    return { arch: null, bitness: null, wow64: null };
+    return { arch: undefined, bitness: undefined, wow64: undefined };
   }
 
   return { arch, bitness, wow64 };

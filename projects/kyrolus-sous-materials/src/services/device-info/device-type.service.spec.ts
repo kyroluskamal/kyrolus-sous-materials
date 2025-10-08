@@ -42,11 +42,11 @@ const MOBILE_INFO: DeviceInfo = {
   screen: { width: 390, height: 844, pixelRatio: 3, orientation: undefined },
   hardwareConcurrency: 8,
   deviceMemory: 6,
-  bitness: null,
-  architecture: null,
-  formFactors: null,
-  model: null,
-  wow64: null,
+  bitness: undefined,
+  architecture: undefined,
+  formFactors: undefined,
+  model: undefined,
+  wow64: undefined,
 };
 
 
@@ -59,14 +59,14 @@ const BOT_INFO: DeviceInfo = {
   browserVersion: undefined,
   language: undefined,
   languages: [],
-  timezone: null!,
+  timezone: undefined,
   screen: { width: 390, height: 844, pixelRatio: 3, orientation: undefined },
   deviceMemory: undefined,
-  bitness: null,
-  architecture: null,
-  formFactors: null,
-  model: null,
-  wow64: null,
+  bitness: undefined,
+  architecture: undefined,
+  formFactors: undefined,
+  model: undefined,
+  wow64: false,
 };
 
 describe('DeviceTypeService (Signals-only)', () => {

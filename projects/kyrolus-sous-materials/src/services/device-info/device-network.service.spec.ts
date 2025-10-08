@@ -22,10 +22,10 @@ function createService(platform: 'browser' | 'server' = 'browser') {
 
 class FakeConnection extends EventTarget {
   constructor(
-    public effectiveType: string | null,
-    public saveData: boolean | null,
-    public downlink: number | null,
-    public rtt: number | null
+    public effectiveType: string | undefined,
+    public saveData: boolean | undefined,
+    public downlink: number | undefined,
+    public rtt: number | undefined
   ) {
     super();
   }
@@ -47,7 +47,7 @@ function stubNavigator(obj: any) {
   vi.stubGlobal('navigator', obj as Navigator);
 }
 
-function stubConnOnNavigator(conn: FakeConnection | null) {
+function stubConnOnNavigator(conn: FakeConnection | undefined) {
   const base: any = typeof navigator === 'undefined' ? {} : navigator;
   stubNavigator({
     ...base,
@@ -67,14 +67,14 @@ afterEach(() => {
 describe('DeviceNetworkService (Signals-only)', () => {
   /* ============ 1) Init & SSR ============ */
   describe('1) Init & SSR', () => {
-    it('1.1 SSR: online=true الافتراضي و info كلها null', () => {
+    it('1.1 SSR: online=true الافتراضي و info كلها undefined', () => {
       const svc = createService('server');
       expect(svc.online()).toBe(true);
       expect(svc.info()).toEqual({
-        effectiveType: null,
-        saveData: null,
-        downlink: null,
-        rtt: null,
+        effectiveType: undefined,
+        saveData: undefined,
+        downlink: undefined,
+        rtt: undefined,
       });
     });
 
@@ -83,10 +83,10 @@ describe('DeviceNetworkService (Signals-only)', () => {
       const svc = createService('browser');
       expect(svc.online()).toBe(false);
       expect(svc.info()).toEqual({
-        effectiveType: null,
-        saveData: null,
-        downlink: null,
-        rtt: null,
+        effectiveType: undefined,
+        saveData: undefined,
+        downlink: undefined,
+        rtt: undefined,
       });
     });
   });
@@ -180,15 +180,15 @@ describe('DeviceNetworkService (Signals-only)', () => {
       expect(svc.online()).toBe(true);
     });
 
-    it('4.2 عند غياب connection تمامًا يظل info ثابتًا على nulls', () => {
+    it('4.2 عند غياب connection تمامًا يظل info ثابتًا على undefineds', () => {
       stubNavigator({ onLine: true } as any);
-      stubConnOnNavigator(null);
+      stubConnOnNavigator(undefined);
       const svc = createService('browser');
       expect(svc.info()).toEqual({
-        effectiveType: null,
-        saveData: null,
-        downlink: null,
-        rtt: null,
+        effectiveType: undefined,
+        saveData: undefined,
+        downlink: undefined,
+        rtt: undefined,
       });
     });
   });

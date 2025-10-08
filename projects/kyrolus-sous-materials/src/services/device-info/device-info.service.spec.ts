@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { DeviceInfoService } from './device-info.service';
 import { PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
-
-import { platformMapsWithoutUaCH } from './mockups/windows/windows-tests';
+import { platformMapsWithoutUaCH } from './mockups/platform-ua-tests';
 
 const tick = () => new Promise<void>((r) => setTimeout(r, 0));
 
@@ -35,10 +34,12 @@ describe('DeviceInfoService', () => {
   });
 
   describe('2. UA only without UA-CH', () => {
-    platformMapsWithoutUaCH.forEach((section) => {
+    let keys = Object.keys(platformMapsWithoutUaCH);
+    keys.forEach((key) => {
+      let section = platformMapsWithoutUaCH[key];
       describe(`${section.sectionNo}. ${section.sectonName}`, () => {
         section.test.forEach((test, index) => {
-          it(`${index + 1}. ${test.testName}`, () => {
+          it(`${section.sectionNo}.${index + 1}. ${test.testName}`, () => {
             runNavMock(test.navMock);
             const srv = createServiceFromBasedonPltrom('browser');
             expect(srv.device()).toMatchObject(test.expect);

@@ -39,11 +39,28 @@ export const UA_WIN_VISTA_OPERA_10_PRESTO_X86 =
   'Opera/9.80 (Windows NT 6.0; U; en) Presto/2.2.15 Version/10.00';
 
 // ---------- Windows 7 (NT 6.1) ----------
-export const UA_WIN7_IE10_DESKTOP_X64 =
+export const UA_WIN7_IE10_DESKTOP_ArchUndefined =
   'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)';
 
-export const UA_WIN7_IE11_DESKTOP_X64 =
+export const UA_WIN7_IE11_DESKTOP_ArchUndefined =
   'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko';
+
+
+export const UA_WIN7_IE10_DESKTOP_X64 =
+  'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0; Win64; x64)';
+
+// IE11 64-bit process على Windows 7 x64
+export const UA_WIN7_IE11_DESKTOP_X64 =
+  'Mozilla/5.0 (Windows NT 6.1; Win64; x64; Trident/7.0; rv:11.0) like Gecko';
+
+// IE10 32-bit process على Windows 7 x64 (WOW64)
+export const UA_WIN7_IE10_DESKTOP_WOW64 =
+  'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)';
+
+// IE11 32-bit process على Windows 7 x64 (WOW64)
+export const UA_WIN7_IE11_DESKTOP_WOW64 =
+  'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko';
+
 
 export const UA_WIN7_CHROME_109_DESKTOP_X64 =
   'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36';

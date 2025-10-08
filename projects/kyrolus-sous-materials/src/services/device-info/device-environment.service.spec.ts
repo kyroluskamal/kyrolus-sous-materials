@@ -70,11 +70,11 @@ describe('DeviceEnvironmentService', () => {
         screen: { width: 1920, height: 1080, pixelRatio: 1 },
         hardwareConcurrency: 12,
         deviceMemory: 32,
-        bitness: null,
-        architecture: null,
-        model: null,
-        formFactors: null,
-        wow64: null,
+        bitness: undefined,
+        architecture: undefined,
+        model: undefined,
+        formFactors: undefined,
+        wow64: undefined,
       } as Partial<DeviceInfo>);
 
       await tick();

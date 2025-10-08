@@ -7,7 +7,7 @@ export type DeviceOperatingSystem =
   | 'Windows'
   | 'macOS'
   | 'Linux'
-  | 'Chrome OS'
+  | 'ChromeOS'
   | 'Unknown';
 
 export type DeviceBrowser =
@@ -48,17 +48,17 @@ export class DeviceInfo {
   hardwareConcurrency?: number = 0;
   deviceMemory?: number = 0;
   bitness?: Bitness;
-  architecture?: string | null;
-  formFactors?: string[] | null;
-  model?: string | null;
-  wow64?: boolean | null;
+  architecture?: string;
+  formFactors?: string[];
+  model?: string;
+  wow64?: boolean;
   brands?: NavigatorUABrandVersion[];
 }
 export type ClientInfo = {
   brands?: NavigatorUABrandVersion[];
   platform?: string;
   mobile?: boolean;
-  uaString?: string | null;
+  uaString?: string;
 };
 export type UAData = {
   brands: NavigatorUABrandVersion[];
@@ -67,12 +67,12 @@ export type UAData = {
   getHighEntropyValues?: (hints: string[]) => Promise<Record<string, any>>;
 };
 export type EnvLocaleOptions = {
-  locale: string | null;
-  calendar: string | null;
-  hourCycle: string | null;
-  numberingSystem: string | null;
-  region: string | null;
-  timeZone: string | null;
+  locale: string;
+  calendar: string;
+  hourCycle: string;
+  numberingSystem: string;
+  region: string;
+  timeZone: string;
 };
 export type EffectiveConnectionType =
   | 'slow-2g'
@@ -82,12 +82,12 @@ export type EffectiveConnectionType =
   | 'unknown';
 
 export type NetInfo = {
-  effectiveType: EffectiveConnectionType | null;
-  saveData: boolean | null;
-  downlink: number | null;
-  rtt: number | null;
+  effectiveType?: EffectiveConnectionType;
+  saveData?: boolean;
+  downlink?: number;
+  rtt?: number;
 };
-export type Bitness = 32 | 64 | string | null;
+export type Bitness = 32 | 64 | string | undefined;
 
 export interface UAParsed {
   platform: DeviceOperatingSystem;
