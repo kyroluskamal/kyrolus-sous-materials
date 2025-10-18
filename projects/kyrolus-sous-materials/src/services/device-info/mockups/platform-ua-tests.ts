@@ -1,6 +1,5 @@
 import {
   Bitness,
-  DeviceInfo,
   DeviceOperatingSystem,
 } from 'projects/kyrolus-sous-materials/src/models/device-info';
 import { windowsTestCases } from './windows/windows-tests';
@@ -9,132 +8,18 @@ import {
   ChromeOSDesktopCases,
   ChromeOSTableCases,
 } from './chromeos/chromeos-tests';
-import {
-  DEFAULT_LANG,
-  DEFAULT_LANGS,
-  DEFAULT_TZ,
-  PLATFORM_DEFAULTS,
-  PRESET_Android,
-  PRESET_ChromeOS_DESKTOP,
-  PRESET_ChromeOS_TABLET,
-  PRESET_iOS,
-  PRESET_Linux,
-  PRESET_macOS,
-  PRESET_WINDOWS,
-  resolveVendor,
-} from './mockup-constants';
 import { iosCases } from './ios/ios-tests';
-import {
-  Preset,
-  ExpectedArgs,
-  deviceInfoTests,
-  UAMockInput,
-} from './mockup-types';
 import { LinuxCases } from './linux/linux-tests';
-
-export const mkUAMockFull = (p: UAMockInput, preset: Preset = 'windows') => {
-  let base: any;
-  if (preset == 'android') base = PRESET_Android;
-  else if (preset == 'chromeOSDesktop') base = PRESET_ChromeOS_DESKTOP;
-  else if (preset == 'chromeOSTablet') base = PRESET_ChromeOS_TABLET;
-  else if (preset == 'ios') base = PRESET_iOS;
-  else if (preset == 'linux') base = PRESET_Linux;
-  else if (preset == 'macos') base = PRESET_macOS;
-  else base = PRESET_WINDOWS;
-  const ua = JSON.stringify(p.ua);
-  const v = JSON.stringify(p.vendor ?? 'Google Inc.');
-  const lang = JSON.stringify(p.lang ?? DEFAULT_LANG);
-  const langs = JSON.stringify(p.langs ?? DEFAULT_LANGS);
-  const tz = JSON.stringify(p.timeZone ?? DEFAULT_TZ);
-
-  const num = (val: number | undefined, fallback: number) =>
-    Number.isFinite(val ?? NaN) ? (val as number) : fallback;
-
-  const mtp = num(p.maxTouchPoints, base.maxTouchPoints);
-  const hc = num(p.hardwareConcurrency, base.hardwareConcurrency);
-  const dm = num(p.deviceMemory, base.deviceMemory);
-  const w = num(p.innerWidth, base.innerWidth);
-  const h = num(p.innerHeight, base.innerHeight);
-  const dpr = num(p.dpr, base.dpr);
-  const plugins = num(p.pluginsCount, base.pluginsCount);
-
-  return `
-vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(${ua});
-Object.defineProperty(navigator, 'userAgentData', { value: undefined, configurable: true });
-
-// Locale & vendor
-vi.spyOn(navigator, 'language', 'get').mockReturnValue(${lang});
-Object.defineProperty(navigator, 'languages', { value: ${langs}, configurable: true });
-vi.spyOn(navigator, 'vendor', 'get').mockReturnValue(${v});
-
-// Inputs that service reads
-Object.defineProperty(navigator, 'maxTouchPoints', { value: ${mtp}, configurable: true });
-Object.defineProperty(navigator, 'hardwareConcurrency', { value: ${hc}, configurable: true });
-Object.defineProperty(navigator, 'deviceMemory', { value: ${dm}, configurable: true });
-
-// Avoid headless false-positives
-Object.defineProperty(navigator, 'plugins', { value: { length: ${plugins} }, configurable: true });
-
-// Stable timezone
-vi.spyOn(Intl, 'DateTimeFormat').mockImplementation(() => ({
-  resolvedOptions: () => ({ timeZone: ${tz} })
-}));
-
-// Screen (viewport-first)
-Object.defineProperty(window, 'innerWidth', { value: ${w}, configurable: true });
-Object.defineProperty(window, 'innerHeight', { value: ${h}, configurable: true });
-Object.defineProperty(window, 'devicePixelRatio', { value: ${dpr}, configurable: true });
-`.trim();
-};
-
-export function expectedUA(args: ExpectedArgs, preset: Preset): DeviceInfo {
-  const plat = args.platform;
-  const base = PLATFORM_DEFAULTS[preset] ?? PLATFORM_DEFAULTS['windows'];
-
-  const width = args.width ?? base.width;
-  const height = args.height ?? base.height;
-  const pixelRatio = args.pixelRatio ?? base.pixelRatio;
-  const vendor = resolveVendor(args.browser, args.vendor);
-  const orientation: string = width >= height ? 'landscape' : 'portrait';
-
-  return {
-    // ---- identity / agent ----
-    userAgent: args.ua,
-    agentType: args.agentType ?? 'human',
-    vendor,
-    platform: plat,
-    deviceType: args.deviceType,
-    platformVersion: args.platformVersion,
-
-    // ---- browser ----
-    browser: args.browser,
-    browserVersion: args.browserVersion ?? undefined,
-
-    // ---- locale ----
-    language: args.language ?? DEFAULT_LANG,
-    languages: (args.languages?.length
-      ? [...args.languages]
-      : [...DEFAULT_LANGS]) as readonly string[],
-    timezone: args.timeZone ?? DEFAULT_TZ,
-
-    // ---- input / hardware ----
-    maxTouchPoints: args.maxTouchPoints ?? base.maxTouchPoints,
-    hardwareConcurrency: args.hardwareConcurrency ?? base.hardwareConcurrency,
-    deviceMemory: args.deviceMemory ?? base.deviceMemory,
-
-    // ---- screen ----
-    screen: { width, height, pixelRatio, orientation },
-
-    // ---- arch / bitness ----
-    architecture: args.architecture ?? undefined,
-    bitness: (args.bitness ?? undefined) as Bitness,
-    wow64: args.wow64 ?? undefined,
-
-    formFactors: args.formFactors ?? undefined,
-    model: args.model ?? undefined,
-    brands: args.brands ?? undefined,
-  } as DeviceInfo;
-}
+import {
+  brandsFor,
+  deviceInfoTests,
+  ExpectedArgs,
+  expectedUA,
+  isChromiumUA,
+  mkNavMockWithUAChHigh,
+  mkNavMockWithUAChLow,
+  mkUAMockFull,
+} from './device-info-mockup-kits';
 
 export const expectedUAWindows = (args: Omit<ExpectedArgs, 'platform'>) =>
   expectedUA(
@@ -384,6 +269,113 @@ export const linuxWithoutUACH: deviceInfoTests = {
     }),
   })),
 };
+export const windowsWithLowUACh: deviceInfoTests = {
+  sectionNo: '3.1',
+  sectonName: 'Windows + UA-CH (LOW only)',
+  test: windowsTestCases
+    .filter((c) => isChromiumUA(c.ua))
+    .map((c) => {
+      const brands = brandsFor(c.browser);
+      return {
+        testName: `${c.testName}`,
+        navMock: mkNavMockWithUAChLow(
+          {
+            ua: c.ua,
+            brands,
+            uaChPlatform: 'Windows',
+            mobile: false,
+            navPlatform: 'Win32',
+            brave: c.browser.toLowerCase() === 'brave',
+            innerWidth: c.width,
+            innerHeight: c.height,
+            dpr: c.pixelRatio,
+            maxTouchPoints: c.maxTouchPoints,
+            hardwareConcurrency: c.hardwareConcurrency,
+            deviceMemory: c.deviceMemory,
+            vendor: c.vendor,
+          },
+          'windows'
+        ),
+        expect: expectedUAWindows({
+          ua: c.ua,
+          platformVersion: c.platformVersion,
+          browser: c.browser,
+          browserVersion: c.browserVersion,
+          deviceType: c.deviceType,
+          agentType: c.agentType,
+          vendor: c.vendor,
+          maxTouchPoints: c.maxTouchPoints,
+          hardwareConcurrency: c.hardwareConcurrency,
+          deviceMemory: c.deviceMemory,
+          width: c.width,
+          height: c.height,
+          pixelRatio: c.pixelRatio,
+          architecture: c.architecture,
+          bitness: c.bitness,
+          wow64: c.wow64,
+          brands,
+        }),
+      };
+    }),
+};
+
+export const windowsWithHighUACh: deviceInfoTests = {
+  sectionNo: '4.1',
+  sectonName: 'Windows + UA-CH (HIGH, overrides UA)',
+  test: windowsTestCases
+    .filter((c) => isChromiumUA(c.ua))
+    .map((c) => {
+      const brands = brandsFor(c.browser);
+      const high = {
+        wow64: /WOW64/i.test(c.ua) || c.wow64 === true || false,
+        bitness: (/WOW64/i.test(c.ua) || c.bitness === 32 ? 32 : 64) as Bitness,
+        architecture:
+          /WOW64/i.test(c.ua) || c.architecture === 'x86'
+            ? ('x86' as any)
+            : ('x64' as any),
+        platformVersion: '10.0.0',
+        fullVersion: c.browserVersion ?? '125.0.0.0',
+        formFactors: ['Desktop'],
+      };
+      return {
+        testName: `${c.testName} — UA + HIGH UA-CH (override)`,
+        navMock: mkNavMockWithUAChHigh(
+          {
+            ua: c.ua,
+            brands,
+            uaChPlatform: 'Windows',
+            mobile: false,
+            navPlatform: 'Win32',
+            brave: c.browser.toLowerCase() === 'brave',
+            innerWidth: c.width,
+            innerHeight: c.height,
+            dpr: c.pixelRatio,
+            maxTouchPoints: c.maxTouchPoints,
+            hardwareConcurrency: c.hardwareConcurrency,
+            deviceMemory: c.deviceMemory,
+            vendor: c.vendor,
+            high,
+          },
+          'windows'
+        ),
+        expect: expectedUAWindows({
+          ua: c.ua,
+          browser: c.browser,
+          browserVersion: high.fullVersion,
+          deviceType: c.deviceType,
+          vendor: c.vendor,
+          width: c.width,
+          height: c.height,
+          pixelRatio: c.pixelRatio,
+          platformVersion: '10/11',
+          architecture: high.architecture,
+          bitness: high.bitness,
+          wow64: high.wow64,
+          brands,
+        }),
+      };
+    }),
+};
 export const platformMapsWithoutUaCH: { [key: string]: deviceInfoTests } = {
   windowsNoUACH: windowsTestsWithoutUACH,
   androidNoUACH: androidTestsWithoutUACH,
@@ -391,4 +383,11 @@ export const platformMapsWithoutUaCH: { [key: string]: deviceInfoTests } = {
   chromeOSTabletNoUACH: ChromeOSTabletWithoutUACH,
   iosNoUACH: iosWithoutUACH,
   linuxNoUACH: linuxWithoutUACH,
+};
+
+export const platformMapsWithLowUaCh: { [key: string]: deviceInfoTests } = {
+  windowsLowUACH: windowsWithLowUACh,
+};
+export const platformMapsWithHighUaCh: { [key: string]: deviceInfoTests } = {
+  windowsHighUACH: windowsWithHighUACh,
 };

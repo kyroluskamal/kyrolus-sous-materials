@@ -87,3 +87,23 @@ export type ExpectedArgs = {
   model?: string;
   brands?: readonly any[];
 };
+type UAChHighHints = Partial<{
+  architecture?: string;
+  bitness?: Bitness;
+  wow64?: boolean;
+  platformVersion?: string;
+  fullVersion?: string;
+  formFactors?: string[];
+  model?: string;
+}>;
+
+export type UAChArgs = UAMockInput & {
+  // UA-CH low bits
+  brands: readonly { brand: string; version: string }[];
+  uaChPlatform?: string;
+  mobile?: boolean;
+  navPlatform?: string;
+  brave?: boolean;
+  high?: UAChHighHints;
+};
+

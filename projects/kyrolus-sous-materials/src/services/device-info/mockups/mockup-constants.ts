@@ -1,5 +1,3 @@
-import { DeviceBrowser } from 'projects/kyrolus-sous-materials/src/models/device-info';
-
 export const PRESET_WINDOWS = {
   maxTouchPoints: 0,
   innerWidth: 1200,
@@ -141,12 +139,3 @@ export const PLATFORM_DEFAULTS: Record<
 export const DEFAULT_LANG = 'en-US';
 export const DEFAULT_LANGS = ['en-US', 'ar-EG'] as const;
 export const DEFAULT_TZ = 'Europe/Madrid';
-
-export function resolveVendor(
-  browser: DeviceBrowser,
-  override?: string
-): string {
-  if (override !== undefined) return override;
-  if (browser === 'Firefox' || browser === 'Unknown') return '';
-  return 'Google Inc.';
-}

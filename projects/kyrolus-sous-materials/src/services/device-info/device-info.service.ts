@@ -170,7 +170,7 @@ export class DeviceInfoService {
   readonly highEntropy = this.isBrowser
     ? promiseToSignal<UACHDataValues | undefined>(
         () => {
-          const ua = (navigator as any).userAgentData;
+          const ua = navigator?.userAgentData;
           return ua
             ? ua.getHighEntropyValues(HINTS as unknown as string[])
             : Promise.resolve(undefined);
@@ -200,8 +200,13 @@ export class DeviceInfoService {
       bitness: parsed?.bitness as any,
       wow64: parsed?.wow64,
     });
+
+    const isChromium = uaIsChromium(uaString);
+
     let browser =
-      mapBrowserFromBrands(client.brands) ?? parsed?.browser ?? 'Unknown';
+      parsed?.browser ?? // 1) UA أولاً
+      (isChromium ? mapBrowserFromBrands(client.brands) : null) ?? // 2) brands فقط لو Chromium
+      'Unknown';
     const platform = (parsed?.platform ??
       client.platform ??
       normalizePlatform(
@@ -611,12 +616,14 @@ function parseOSFromUA(ua: string): {
 
 // ---- tiny helpers to keep complexity out of parseBrowserFromUA ----
 type BrowserHit = { browser: DeviceBrowser; browserVersion?: string };
-
 const isBotUA = (ua: string) =>
-  /(applebot|googlebot(?:-(?:image|video|news))?|bingbot|duckduckbot|baiduspider|yandex(?:bot|images|accessibilitybot)?|petalbot|sogou|seznambot|qwantify|ia_archiver|mj12bot|ahrefsbot|semrushbot|crawler|spider)/i.test(//NOSONAR
-    //NOSONAR
+  /(applebot|googlebot(?:-(?:image|video|news))?|bingbot|duckduckbot|baiduspider|yandex(?:bot|images|accessibilitybot)?)/i.test(
+    ua
+  ) ||
+  /(petalbot|sogou|seznambot|qwantify|ia_archiver|mj12bot|ahrefsbot|semrushbot|crawler|spider)/i.test(
     ua
   );
+
 const isNonBrowserUA = (ua: string) =>
   /steam.+gameoverlay/i.test(ua) || /epicgameslauncher/i.test(ua);
 
@@ -940,4 +947,8 @@ function normalizeHardwareForContext(opts: {
   }
 
   return { arch, bitness, wow64 };
+}
+
+function uaIsChromium(ua: string): boolean {
+  return /(Edg\/|OPR\/|Chrome\/|Chromium\/|YaBrowser|Brave|Vivaldi)/i.test(ua);
 }
