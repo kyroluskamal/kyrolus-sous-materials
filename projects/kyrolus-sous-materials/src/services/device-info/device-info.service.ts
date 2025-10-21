@@ -43,7 +43,6 @@ type Hints =
   | 'model'
   | 'platformVersion'
   | 'wow64'
-  // اختياريًا لو محتاج:
   | 'uaFullVersion'
   | 'platform'
   | 'brands'
@@ -91,19 +90,30 @@ export class DeviceInfoService {
         ) ?? curr.brands;
       final.architecture = highEntropy.architecture ?? curr.architecture;
       final.model = highEntropy.model ?? curr.model;
-      final.formFactors = (highEntropy.formFactors ??
-        curr.formFactors) as string[];
+      const ffHigh = Array.isArray(highEntropy.formFactors)
+        ? highEntropy.formFactors.filter(Boolean)
+        : undefined;
+      if (ffHigh?.length) {
+        final.formFactors = ffHigh as string[];
+      } else if (Array.isArray(curr.formFactors) && curr.formFactors.length) {
+        final.formFactors = curr.formFactors;
+      } else {
+        final.formFactors = undefined;
+      }
       final.deviceType =
         deriveDeviceTypeFromHints(
           curr?.deviceType,
           highEntropy?.mobile,
-          highEntropy?.formFactors
+          highEntropy?.formFactors,
+          final.agentType
         ) ?? curr.deviceType;
 
       final.browserVersion =
         pickFullBrowserVersion(highEntropy.fullVersionList, final.browser) ??
         curr.browserVersion;
 
+      final.platform = (highEntropy.platform ??
+        curr.platform) as DeviceOperatingSystem;
       final.platformVersion =
         mapPlatformVersionToOSVersion(
           final.platform,
@@ -113,6 +123,9 @@ export class DeviceInfoService {
         curr.platform) as DeviceOperatingSystem;
       final.bitness = highEntropy.bitness ?? curr.bitness;
       final.wow64 = highEntropy.wow64 ?? curr.wow64;
+      if (final.platform !== 'Windows') {
+        final.wow64 = undefined;
+      }
     }
 
     return final;
@@ -120,10 +133,10 @@ export class DeviceInfoService {
 
   readonly languages = this.isBrowser
     ? toSignal(
-        fromEvent(window, 'languagechange').pipe(
+        fromEvent(globalThis.window, 'languagechange').pipe(
           startWith(undefined),
           map(() => {
-            const nav = window.navigator ?? navigator;
+            const nav = globalThis.window.navigator ?? navigator;
             const lang = nav.language;
             const langs = Array.isArray(nav.languages) ? nav.languages : [];
             const all = langs.length
@@ -133,7 +146,11 @@ export class DeviceInfoService {
           }),
           distinctUntilChanged((a, b) => a.join('|') === b.join('|'))
         ),
-        { initialValue: [window.navigator.language || navigator.language] }
+        {
+          initialValue: [
+            globalThis.window.navigator.language || navigator.language,
+          ],
+        }
       )
     : signal<readonly string[]>([]);
 
@@ -183,9 +200,9 @@ export class DeviceInfoService {
     : signal<UACHDataValues | undefined>(undefined);
 
   private collectSnapshot(): DeviceInfo {
-    if (!this.isBrowser || !navigator || !window || !document)
+    if (!this.isBrowser || !navigator || !globalThis.window || !document)
       return new DeviceInfo();
-    const nav = window.navigator || navigator;
+    const nav = globalThis.window.navigator || navigator;
     const client = this.getClientInfo();
 
     const uaString = client?.uaString ?? navigator.userAgent ?? '';
@@ -204,15 +221,16 @@ export class DeviceInfoService {
     const isChromium = uaIsChromium(uaString);
 
     let browser =
-      parsed?.browser ?? // 1) UA أولاً
-      (isChromium ? mapBrowserFromBrands(client.brands) : null) ?? // 2) brands فقط لو Chromium
+      parsed?.browser ??
+      (isChromium ? mapBrowserFromBrands(client.brands) : null) ??
       'Unknown';
-    const platform = (parsed?.platform ??
+    let platform = (parsed?.platform ??
       client.platform ??
       normalizePlatform(
-        ((window.navigator as any) || (navigator as any)).platform
+        ((globalThis.window.navigator as any) || (navigator as any)).platform
       ) ??
       'Unknown') as DeviceOperatingSystem;
+    if (client.mobile && platform == 'macOS') platform = 'iOS';
 
     const deviceType =
       client.mobile === true ? 'mobile' : this.getDeviceType(uaString);
@@ -265,8 +283,10 @@ export class DeviceInfoService {
     if (!this.isBrowser) return EMPTY;
 
     const sources: Observable<unknown>[] = [
-      fromEvent(window, 'resize', { passive: true }),
-      fromEvent(window as any, 'orientationchange', { passive: true }),
+      fromEvent(globalThis.window, 'resize', { passive: true }),
+      fromEvent(globalThis.window as any, 'orientationchange', {
+        passive: true,
+      }),
     ];
 
     const scr: any = screen as any;
@@ -277,29 +297,35 @@ export class DeviceInfoService {
       sources.push(fromEvent(scr.orientation, 'change'));
     }
 
-    const vv = (window as any).visualViewport as VisualViewport | undefined;
+    const vv = (globalThis.window as any).visualViewport as
+      | VisualViewport
+      | undefined;
     if (vv) {
-      sources.push(fromEvent(vv, 'resize', { passive: true }));
-      sources.push(fromEvent(vv, 'scroll', { passive: true }));
+      sources.push(
+        fromEvent(vv, 'resize', { passive: true }),
+        fromEvent(vv, 'scroll', { passive: true })
+      );
     }
     sources.push(this.createDprChange$());
     return merge(...sources);
   }
   private createDprChange$(): Observable<number> {
-    if (!this.isBrowser || typeof window.matchMedia !== 'function')
+    if (!this.isBrowser || typeof globalThis.window.matchMedia !== 'function')
       return EMPTY;
 
     return new Observable<number>((sub) => {
       let mql: MediaQueryList | null = null;
 
       const onChange = () => {
-        sub.next(window.devicePixelRatio);
+        sub.next(globalThis.window.devicePixelRatio);
         rebind();
       };
 
       const rebind = () => {
         mql?.removeEventListener?.('change', onChange as any);
-        mql = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+        mql = globalThis.window.matchMedia(
+          `(resolution: ${globalThis.window.devicePixelRatio}dppx)`
+        );
         mql.addEventListener('change', onChange as any);
       };
 
@@ -325,7 +351,7 @@ export class DeviceInfoService {
     const at = detectAgentType(uaString); // فيها preview/bot/headless, الخ...
     if (at === 'bot' || at === 'preview' || at === 'headless') return 'bot';
 
-    // 2) Windows Phone / Edge Mobile => mobile (must be before UWP rule)
+    // 2) globalThis.Windows Phone / Edge Mobile => mobile (must be before UWP rule)
     if (/(iemobile|windows phone|edge\/\d+.*mobile)/i.test(ua)) return 'mobile';
 
     // 3) UWP WebView on Windows 10 Desktop:
@@ -362,11 +388,10 @@ export class DeviceInfoService {
   }
 
   private buildScreenInfo(): DeviceScreenInfo | undefined {
-    const win = window;
+    const win = globalThis.window;
     if (!win) return undefined;
 
-    const scr: Screen | undefined =
-      typeof screen !== 'undefined' ? screen : undefined;
+    const scr: Screen | undefined = screen ?? undefined;
     const rawOrientation = scr?.orientation;
     const width = win.innerWidth || scr?.width || 0;
     const height = win.innerHeight || scr?.height || 0;
@@ -491,10 +516,18 @@ function mapPlatformVersionToOSVersion(
 function deriveDeviceTypeFromHints(
   current?: DeviceType,
   isMobile?: boolean,
-  formFactors?: readonly string[]
+  formFactors?: readonly string[],
+  agentType?: AgentType
 ): DeviceType | undefined {
-  if (isMobile) return 'mobile';
-  if (Array.isArray(formFactors) && formFactors.length) {
+  if (
+    current !== 'bot' &&
+    agentType !== 'bot' &&
+    agentType !== 'preview' &&
+    agentType !== 'headless' &&
+    Array.isArray(formFactors) &&
+    formFactors.length
+  ) {
+    if (isMobile) return 'mobile';
     const ff = formFactors.map((f) => f.toLowerCase());
     if (ff.some((f) => f.includes('mobile'))) return 'mobile';
     if (ff.some((f) => f.includes('tablet'))) return 'tablet';
@@ -561,13 +594,13 @@ function parseOSFromUA(ua: string): {
   if (m)
     return {
       platform: 'iOS',
-      platformVersion: (m[1] || m[2] || '').replace(/_/g, '.'),
+      platformVersion: (m[1] || m[2] || '').replaceAll('_', '.'),
     };
   m =
     /Windows Phone(?:\sOS)?\s([0-9.]+)/i.exec(ua) ||
     /Windows\sMobile\s([0-9.]+)/i.exec(ua);
   if (m) {
-    const ver = (m[1] || '').replace(/_/g, '.');
+    const ver = (m[1] || '').replaceAll('_', '.');
     // Map WP 10 to "10/11" to align with the rest of Windows mapping
     return {
       platform: 'Windows',
@@ -577,7 +610,7 @@ function parseOSFromUA(ua: string): {
   // Android
   m = /Android\s([0-9._]+)/i.exec(ua);
   if (m)
-    return { platform: 'Android', platformVersion: m[1].replace(/_/g, '.') };
+    return { platform: 'Android', platformVersion: m[1].replaceAll('_', '.') };
 
   // ChromeOS
   if (/CrOS/i.test(ua)) {
@@ -587,7 +620,8 @@ function parseOSFromUA(ua: string): {
 
   // macOS
   m = /Mac OS X\s([0-9_]+)/i.exec(ua);
-  if (m) return { platform: 'macOS', platformVersion: m[1].replace(/_/g, '.') };
+  if (m)
+    return { platform: 'macOS', platformVersion: m[1].replaceAll('_', '.') };
 
   // Windows
   m = /Windows NT\s([0-9.]+)/i.exec(ua);
@@ -871,12 +905,11 @@ function applyWindowsArchHeuristics(
   return current;
 }
 // EdgeHTML on desktop (legacy Edge with "Edge/" token but NOT Windows Phone)
-function isEdgeHTMLDesktopUA(ua: string): boolean {
-  const s = ua || '';
+function isEdgeHTMLDesktopUA(ua: string = ''): boolean {
   // Edge/12..18 on Windows 10 desktop, exclude Windows Phone / IEMobile
   return (
-    /\bedge\/(1[2-8])(\.|\/|\b)/i.test(s) &&
-    !/(windows phone|iemobile)/i.test(s)
+    /\bedge\/(1[2-8])(\.|\/|\b)/i.test(ua) &&
+    !/(windows phone|iemobile)/i.test(ua)
   );
 }
 

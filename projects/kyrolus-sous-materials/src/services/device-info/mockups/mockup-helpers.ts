@@ -15,6 +15,8 @@ import {
   DEFAULT_LANGS,
   DEFAULT_TZ,
   PLATFORM_DEFAULTS,
+  DEFAULT_PLATFORM_VERSION,
+  DEFAULT_BROWSER_VERSION,
 } from './mockup-constants';
 import { ExpectedArgs, Preset, UAChArgs, UAMockInput } from './mockup-types';
 
@@ -34,6 +36,13 @@ export function brandsFor(
     case 'yandex':
       return [B('YaBrowser'), B('Chromium')];
     case 'chrome':
+      return [B('Google Chrome'), B('Chromium')];
+    case 'firefox':
+      return [B('Firefox')];
+    case 'safari':
+      return [B('Safari'), B('Chromium')];
+    case 'samsung internet':
+      return [B('Samsung Internet'), B('Chromium')];
     default:
       return [B('Google Chrome'), B('Chromium')];
   }
@@ -180,7 +189,6 @@ Object.defineProperty(navigator, 'userAgentData', {
   return `${base}\n${low}`;
 }
 
-/** UA + UA-CH (HIGH): getHighEntropyValues ترجع قيم متناقضة مع UA لو عايز تثبت الأسبقية */
 export function mkNavMockWithUAChHigh(p: UAChArgs, preset: Preset = 'windows') {
   const base = mkUAMockFull(p, preset);
   const fullVersion = p.high?.fullVersion ?? '125.0.0.0';
@@ -216,3 +224,56 @@ Object.defineProperty(navigator, 'userAgentData', {
 `.trim();
   return `${base}\n${high}`;
 }
+export function bumpVersion(
+  version?: string,
+  fallback = DEFAULT_BROWSER_VERSION
+): string {
+  const source = version?.trim().length ? version : fallback;
+  const parts = source
+    .split('.')
+    .map((p) => p.trim())
+    .filter(Boolean);
+  if (!parts.length) return fallback;
+  const lastIndex = parts.length - 1;
+  const lastSegment = parts[lastIndex];
+  const numeric = Number(lastSegment);
+  parts[lastIndex] = Number.isFinite(numeric)
+    ? String(numeric + 1)
+    : `${lastSegment || ''}1`;
+  return parts.join('.');
+}
+
+export function makeHighPlatformVersion(
+  version?: string,
+  fallback = DEFAULT_PLATFORM_VERSION
+): string {
+  const source = version?.trim().length ? version : fallback;
+  const parts = source
+    .split('.')
+    .map((p) => p.trim())
+    .filter(Boolean);
+  if (!parts.length) parts.push('0');
+  while (parts.length < 3) {
+    parts.push('0');
+  }
+  const lastIndex = parts.length - 1;
+  const lastSegment = parts[lastIndex];
+  const numeric = Number(lastSegment);
+  parts[lastIndex] = Number.isFinite(numeric)
+    ? String(numeric + 1)
+    : `${lastSegment || ''}1`;
+  return parts.join('.');
+}
+
+export const formFactorsFor = (deviceType?: string): string[] | undefined => {
+  switch (deviceType) {
+    case 'mobile':
+      return ['Mobile'];
+    case 'tablet':
+      return ['Tablet'];
+    case 'desktop':
+      return ['Desktop'];
+    default:
+      return undefined;
+  }
+};

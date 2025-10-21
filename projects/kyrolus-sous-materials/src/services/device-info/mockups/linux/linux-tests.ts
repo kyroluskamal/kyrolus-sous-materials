@@ -6,9 +6,11 @@ import {
   UA_LINUX_ARCH_CHROMIUM_122_DESKTOP,
   UA_LINUX_BINGBOT_DESKTOP,
   UA_LINUX_DEBIAN_CHROME_109_DESKTOP,
+  UA_LINUX_DEBIAN_CHROMIUM_122_MIPS64_DESKTOP,
   UA_LINUX_DEBIAN_FIREFOX_115_DESKTOP,
   UA_LINUX_ELEMENTARY_FIREFOX_123_DESKTOP,
   UA_LINUX_FEDORA_CHROME_124_DESKTOP,
+  UA_LINUX_FEDORA_CHROME_124_PPC64LE_DESKTOP,
   UA_LINUX_FEDORA_FIREFOX_123_DESKTOP,
   UA_LINUX_FEDORA_OPERA_108_DESKTOP,
   UA_LINUX_GOOGLEBOT_DESKTOP,
@@ -307,5 +309,25 @@ export const LinuxCases: MockupCases[] = [
     bitness: 64,
     platformVersion: undefined,
     deviceType: 'desktop',
+  },
+  {
+    testName: 'Fedora Chrome 124 ppc64le',
+    ua: UA_LINUX_FEDORA_CHROME_124_PPC64LE_DESKTOP,
+    browser: 'Chrome',
+    browserVersion: '124.0.6367.118',
+    architecture: 'ppc', // <— ده اللي بيغطي فرع /ppc|powerpc/
+    platformVersion: undefined,
+    deviceType: 'desktop',
+    bitness: undefined, // تسيبها undefined زي ما الدالة بترجّع
+  },
+  {
+    testName: 'Debian Chromium 122 mips64',
+    ua: UA_LINUX_DEBIAN_CHROMIUM_122_MIPS64_DESKTOP,
+    browser: 'Unknown',
+    browserVersion: undefined,
+    architecture: 'mips',
+    platformVersion: undefined,
+    deviceType: 'desktop',
+    bitness: undefined,
   },
 ];

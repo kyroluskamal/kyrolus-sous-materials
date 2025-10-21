@@ -83,3 +83,5 @@ export const UA_IOS_FACEBOOK_WEBVIEW =
 
 export const UA_IOS_TWITTER_WEBVIEW =
   'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Twitter for iPhone';
+// export const IOS_SAFARI_MAC_LIKE_17_4_MOBILE =
+//   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1';

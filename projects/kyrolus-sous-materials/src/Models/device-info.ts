@@ -22,6 +22,7 @@ export type DeviceBrowser =
   | 'Yandex'
   | 'Torch'
   | 'Tor'
+  | 'Chromium'
   | 'Unknown';
 
 export type DeviceScreenInfo = {

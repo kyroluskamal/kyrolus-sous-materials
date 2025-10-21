@@ -81,3 +81,10 @@ export const UA_LINUX_BINGBOT_DESKTOP =
 
 export const UA_LINUX_HEADLESS_CHROME =
   'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/125.0.6422.76 Safari/537.36';
+// --- PowerPC (ppc64le)
+export const UA_LINUX_FEDORA_CHROME_124_PPC64LE_DESKTOP =
+  'Mozilla/5.0 (X11; Fedora; Linux ppc64le) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.118 Safari/537.36';
+
+// --- MIPS (mips64)
+export const UA_LINUX_DEBIAN_CHROMIUM_122_MIPS64_DESKTOP =
+  'Mozilla/5.0 (X11; Linux mips64) AppleWebKit/537.36 (KHTML, like Gecko) Chromium/122.0.6261.69 Safari/537.36';

@@ -139,3 +139,26 @@ export const PLATFORM_DEFAULTS: Record<
 export const DEFAULT_LANG = 'en-US';
 export const DEFAULT_LANGS = ['en-US', 'ar-EG'] as const;
 export const DEFAULT_TZ = 'Europe/Madrid';
+export const DEFAULT_BROWSER_VERSION = '125.0.0.0';
+export const DEFAULT_PLATFORM_VERSION = '0';
+export const isMobileLike = (deviceType?: string) =>
+  deviceType === 'mobile' || deviceType === 'tablet';
+
+export const modelFor = (
+  deviceType: string | undefined,
+  index: number,
+  prefix: string
+) => {
+  let base = '';
+
+  if (deviceType === 'tablet') {
+    base = 'Tablet';
+  } else if (deviceType === 'mobile') {
+    base = 'Phone';
+  } else if (deviceType === 'bot') {
+    base = 'Bot';
+  } else {
+    base = 'Device';
+  }
+  return `${prefix}${base}${index + 1}`;
+};
