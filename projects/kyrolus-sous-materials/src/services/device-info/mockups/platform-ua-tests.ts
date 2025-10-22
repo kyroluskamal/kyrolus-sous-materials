@@ -26,6 +26,7 @@ import {
   mkUAMockFull,
   modelFor,
 } from './device-info-mockup-kits';
+import { macOSCases } from './macos/macos-tests';
 
 export const expectedUAWindows = (args: Omit<ExpectedArgs, 'platform'>) =>
   expectedUA(
@@ -55,6 +56,8 @@ export const expectedUAIOS = (args: Omit<ExpectedArgs, 'platform'>) =>
   expectedUA({ ...args, platform: 'iOS' as DeviceOperatingSystem }, 'ios');
 export const expectedLinuxOS = (args: Omit<ExpectedArgs, 'platform'>) =>
   expectedUA({ ...args, platform: 'Linux' as DeviceOperatingSystem }, 'linux');
+export const expectedUAMacOS = (args: Omit<ExpectedArgs, 'platform'>) =>
+  expectedUA({ ...args, platform: 'macOS' as DeviceOperatingSystem }, 'macos');
 export const windowsTestsWithoutUACH: deviceInfoTests = {
   sectionNo: '2.1',
   sectonName: 'Windows',
@@ -272,6 +275,44 @@ export const linuxWithoutUACH: deviceInfoTests = {
       width: c.width,
       height: c.height,
       pixelRatio: c.pixelRatio,
+    }),
+  })),
+};
+export const macosWithoutUACH: deviceInfoTests = {
+  sectionNo: '2.7',
+  sectonName: 'macOS',
+  test: macOSCases.map((c) => ({
+    testName: c.testName,
+    navMock: mkUAMockFull(
+      {
+        ua: c.ua,
+        vendor: c.vendor,
+        maxTouchPoints: c.maxTouchPoints,
+        hardwareConcurrency: c.hardwareConcurrency,
+        deviceMemory: c.deviceMemory,
+        innerWidth: c.width,
+        innerHeight: c.height,
+        dpr: c.pixelRatio,
+      },
+      'macos'
+    ),
+    expect: expectedUAMacOS({
+      ua: c.ua,
+      platformVersion: c.platformVersion,
+      browser: c.browser,
+      browserVersion: c.browserVersion,
+      deviceType: c.deviceType,
+      agentType: c.agentType,
+      vendor: c.vendor,
+      maxTouchPoints: c.maxTouchPoints,
+      hardwareConcurrency: c.hardwareConcurrency,
+      deviceMemory: c.deviceMemory,
+      width: c.width,
+      height: c.height,
+      pixelRatio: c.pixelRatio,
+      architecture: c.architecture,
+      bitness: c.bitness,
+      wow64: c.wow64,
     }),
   })),
 };
@@ -569,7 +610,58 @@ export const ChromeOSTabletWithLowUACh: deviceInfoTests = {
       };
     }),
 };
-
+export const macosWithLowUACh: deviceInfoTests = {
+  sectionNo: '3.6',
+  sectonName: 'macOS + UA-CH (LOW only)',
+  test: macOSCases
+    .filter((c) => isChromiumUA(c.ua))
+    .map((c) => {
+      const brands = brandsFor(c.browser);
+      const navPlatform = c.architecture?.toLowerCase().includes('arm')
+        ? 'MacARM64'
+        : 'MacIntel';
+      return {
+        testName: `${c.testName}`,
+        navMock: mkNavMockWithUAChLow(
+          {
+            ua: c.ua,
+            brands,
+            uaChPlatform: 'macOS',
+            mobile: false,
+            navPlatform,
+            brave: c.browser.toLowerCase() === 'brave',
+            innerWidth: c.width,
+            innerHeight: c.height,
+            dpr: c.pixelRatio,
+            maxTouchPoints: c.maxTouchPoints,
+            hardwareConcurrency: c.hardwareConcurrency,
+            deviceMemory: c.deviceMemory,
+            vendor: c.vendor,
+          },
+          'macos'
+        ),
+        expect: expectedUAMacOS({
+          ua: c.ua,
+          platformVersion: c.platformVersion,
+          browser: c.browser,
+          browserVersion: c.browserVersion,
+          deviceType: c.deviceType,
+          agentType: c.agentType,
+          vendor: c.vendor,
+          maxTouchPoints: c.maxTouchPoints,
+          hardwareConcurrency: c.hardwareConcurrency,
+          deviceMemory: c.deviceMemory,
+          width: c.width,
+          height: c.height,
+          pixelRatio: c.pixelRatio,
+          architecture: c.architecture,
+          bitness: c.bitness,
+          wow64: c.wow64,
+          brands,
+        }),
+      };
+    }),
+};
 export const windowsWithHighUACh: deviceInfoTests = {
   sectionNo: '4.1',
   sectonName: 'Windows + UA-CH (HIGH, overrides UA)',
@@ -982,6 +1074,73 @@ export const linuxWithHighUACh: deviceInfoTests = {
     };
   }),
 };
+export const macosWithHighUACh: deviceInfoTests = {
+  sectionNo: '4.7',
+  sectonName: 'macOS + UA-CH (HIGH, overrides UA)',
+  test: macOSCases.map((c, index) => {
+    const brands = brandsFor(c.browser);
+    const fullVersion = bumpVersion(c.browserVersion, DEFAULT_BROWSER_VERSION);
+    const architecture = c.architecture ?? 'x64';
+    const bitness = (c.bitness ?? 64) as Bitness;
+    const platformVersion = makeHighPlatformVersion(
+      c.platformVersion,
+      c.platformVersion ?? '14.4.1'
+    );
+    const formFactors = formFactorsFor(c.deviceType) ?? ['Desktop'];
+    const navPlatform = architecture.toLowerCase().includes('arm')
+      ? 'MacARM64'
+      : 'MacIntel';
+    const model = modelFor(c.deviceType, index, 'macOS');
+    return {
+      testName: `${c.testName} — UA + HIGH UA-CH (override)`,
+      navMock: mkNavMockWithUAChHigh(
+        {
+          ua: c.ua,
+          brands,
+          uaChPlatform: 'macOS',
+          mobile: false,
+          navPlatform,
+          innerWidth: c.width,
+          innerHeight: c.height,
+          dpr: c.pixelRatio,
+          maxTouchPoints: c.maxTouchPoints,
+          hardwareConcurrency: c.hardwareConcurrency,
+          deviceMemory: c.deviceMemory,
+          vendor: c.vendor,
+          high: {
+            architecture,
+            bitness,
+            platformVersion,
+            fullVersion,
+            formFactors,
+            model,
+          },
+        },
+        'macos'
+      ),
+      expect: expectedUAMacOS({
+        ua: c.ua,
+        browser: c.browser,
+        browserVersion: fullVersion,
+        deviceType: c.deviceType,
+        vendor: c.vendor,
+        width: c.width,
+        height: c.height,
+        pixelRatio: c.pixelRatio,
+        platformVersion,
+        architecture,
+        bitness,
+        agentType: c.agentType,
+        brands,
+        formFactors: formFactors.length ? formFactors : undefined,
+        model,
+        maxTouchPoints: c.maxTouchPoints,
+        hardwareConcurrency: c.hardwareConcurrency,
+        deviceMemory: c.deviceMemory,
+      }),
+    };
+  }),
+};
 export const platformMapsWithoutUaCH: { [key: string]: deviceInfoTests } = {
   windowsNoUACH: windowsTestsWithoutUACH,
   androidNoUACH: androidTestsWithoutUACH,
@@ -989,6 +1148,7 @@ export const platformMapsWithoutUaCH: { [key: string]: deviceInfoTests } = {
   chromeOSTabletNoUACH: ChromeOSTabletWithoutUACH,
   iosNoUACH: iosWithoutUACH,
   linuxNoUACH: linuxWithoutUACH,
+  macOSNoUACH: macosWithoutUACH,
 };
 
 export const platformMapsWithLowUaCh: { [key: string]: deviceInfoTests } = {
@@ -998,6 +1158,7 @@ export const platformMapsWithLowUaCh: { [key: string]: deviceInfoTests } = {
   linuxLowUACH: linuxWithLowUACh,
   chromeOSDesktopLowUACH: ChromeOSDeskTopWithLowUACh,
   chromeOSTabletLowUACH: ChromeOSTabletWithLowUACh,
+  macOSLowUACH: macosWithLowUACh,
 };
 export const platformMapsWithHighUaCh: { [key: string]: deviceInfoTests } = {
   windowsHighUACH: windowsWithHighUACh,
@@ -1006,4 +1167,5 @@ export const platformMapsWithHighUaCh: { [key: string]: deviceInfoTests } = {
   chromeOSTabletHighUACH: chromeOSTabletWithHighUACh,
   iosHighUACH: iosWithHighUACh,
   linuxHighUACH: linuxWithHighUACh,
+  macOSHighUACH: macosWithHighUACh,
 };

@@ -45,6 +45,7 @@ export type MockupCases = {
   width?: number;
   height?: number;
   pixelRatio?: number;
+  orientation?: string;
   agentType?: AgentType;
   architecture?: string;
   bitness?: Bitness;
@@ -106,4 +107,3 @@ export type UAChArgs = UAMockInput & {
   brave?: boolean;
   high?: UAChHighHints;
 };
-

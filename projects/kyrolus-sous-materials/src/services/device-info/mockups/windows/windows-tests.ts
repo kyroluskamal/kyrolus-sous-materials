@@ -101,6 +101,9 @@ import {
   UA_WIN7_IE10_DESKTOP_WOW64,
   UA_WIN7_IE11_DESKTOP_WOW64,
   UA_WIN7_IE11_DESKTOP_ArchUndefined,
+  UA_WIN10_CHROME_WOW64_TAIL,
+  UA_WIN7_IE11_WOW64_TAIL,
+  UA_WIN10_CHROME_109_WIN64_ONLY,
 } from './windows-ua-mockups'; // adjust path
 
 // ================= WINDOWS — UA-only (NO UA-CH) =================
@@ -1043,6 +1046,38 @@ export const windowsTestCases: MockupCases[] = [
     browserVersion: '120.0.0.0',
     deviceType: 'desktop',
     architecture: 'x64',
+    bitness: 64,
+  },
+  {
+    testName: 'Windows 7 — IE11 WOW64 (fallback from UA tail)',
+    ua: UA_WIN7_IE11_WOW64_TAIL,
+    platformVersion: '7',
+    browser: 'Unknown',
+    deviceType: 'desktop',
+    architecture: 'x86',
+    bitness: 32,
+    wow64: true,
+  },
+  {
+    testName: 'Windows 10 — Chrome WOW64 (fallback from UA tail)',
+    ua: UA_WIN10_CHROME_WOW64_TAIL,
+    platformVersion: '10/11',
+    browser: 'Chrome',
+    browserVersion: '109.0.0.0',
+    deviceType: 'desktop',
+    architecture: 'x86',
+    bitness: 32,
+    wow64: true,
+  },
+  {
+    testName:
+      'Windows 10 — Chrome 109 (fallback bitness from "win64" in UA tail)',
+    ua: UA_WIN10_CHROME_109_WIN64_ONLY,
+    platformVersion: '10/11',
+    architecture: 'x64',
+    browser: 'Chrome',
+    browserVersion: '109.0.0.0',
+    deviceType: 'desktop',
     bitness: 64,
   },
 ];

@@ -1,6 +1,6 @@
 import { MockupCases } from '../mockup-types';
 import {
-  // IOS_SAFARI_MAC_LIKE_17_4_MOBILE,
+  IOS_SAFARI_MAC_LIKE_17_4_MOBILE,
   UA_IOS_14_IPAD_SAFARI_14_TABLET,
   UA_IOS_14_IPHONE_SAFARI_14_MOBILE,
   UA_IOS_15_IPHONE_CRIOS_108_MOBILE,
@@ -302,13 +302,13 @@ export const iosCases: MockupCases[] = [
     deviceType: 'mobile',
     maxTouchPoints: 5,
   },
-  // {
-  //   testName: 'iOS on moble Macintosh',
-  //   ua: IOS_SAFARI_MAC_LIKE_17_4_MOBILE,
-  //   platformVersion: '10.15',
-  //   browser: 'Safari',
-  //   browserVersion: '17.4',
-  //   deviceType: 'tablet',
-  //   maxTouchPoints: 5,
-  // },
+  {
+    testName: 'iOS on moble Macintosh',
+    ua: IOS_SAFARI_MAC_LIKE_17_4_MOBILE,
+    platformVersion: '17.4',
+    browser: 'Safari',
+    browserVersion: '17.4',
+    deviceType: 'tablet',
+    maxTouchPoints: 5,
+  },
 ];

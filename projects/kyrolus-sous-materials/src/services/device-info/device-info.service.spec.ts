@@ -11,7 +11,6 @@ import { deviceInfoTests } from './mockups/mockup-types';
 const tick = () => new Promise<void>((r) => setTimeout(r, 0));
 
 describe('DeviceInfoService', () => {
-  let service: DeviceInfoService;
   afterEach(() => cleanupNavMock());
   beforeEach(() => cleanUpBrave());
   describe('1. Test on SSR', () => {
@@ -24,7 +23,7 @@ describe('DeviceInfoService', () => {
 
   describe('2. UA only without UA-CH', () => {
     let keys = Object.keys(platformMapsWithoutUaCH);
-    for(const key of keys){
+    for (const key of keys) {
       let section = platformMapsWithoutUaCH[key];
       writeTestsForOneSection(section);
     }
@@ -55,7 +54,43 @@ describe('DeviceInfoService', () => {
     }
   });
 
-  
+  describe('5. Unkonw platform', () => {
+    let service: DeviceInfoService;
+    beforeEach(() => {
+      // UA لا يطابق iOS/Android/Windows/macOS/Linux/CrOS
+      runNavMock(`
+      // مثال FreeBSD:
+      const ua = 'Mozilla/5.0 (X11; FreeBSD amd64; rv:115.0) Gecko/20100101 Firefox/115.0';
+
+      // userAgent
+      Object.defineProperty(navigator, 'userAgent', {
+        configurable: true,
+        get: () => ua,
+      });
+
+      // لا UA-CH
+      Object.defineProperty(navigator, 'userAgentData', {
+        configurable: true,
+        value: undefined,
+      });
+
+      // platform محايد (لا يحتوي "Mac", "Win", "Linux", ... إلخ)
+      Object.defineProperty(navigator, 'platform', {
+        configurable: true,
+        value: 'X11',
+      });
+    `);
+
+
+      service = createServiceFromBasedonPltrom('browser');
+    });
+
+    it('should returns platform: "Unknown" and platformVersion: undefined', () => {
+      const d = service.device();
+      expect(d.platform).toBe('Unknown');
+      expect(d.platformVersion).toBeUndefined();
+    });
+  });
 });
 function cleanUpBrave() {
   try {

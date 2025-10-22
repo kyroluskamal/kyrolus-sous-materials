@@ -617,9 +617,12 @@ function parseOSFromUA(ua: string): {
     const v = /CrOS [^ ]+ ([\d.]+)/i.exec(ua)?.[1];
     return { platform: 'ChromeOS', platformVersion: v };
   }
-
+  if (/Macintosh/i.test(ua) && /Mobile\/\w+/i.test(ua)) {
+    const v = /Version\/([\d.]+)/i.exec(ua)?.[1];
+    return { platform: 'iOS', platformVersion: v };
+  }
   // macOS
-  m = /Mac OS X\s([0-9_]+)/i.exec(ua);
+  m = /Mac OS X\s([0-9._]+)/i.exec(ua);
   if (m)
     return { platform: 'macOS', platformVersion: m[1].replaceAll('_', '.') };
 
@@ -641,10 +644,7 @@ function parseOSFromUA(ua: string): {
   // Linux
   if (/linux/i.test(ua))
     return { platform: 'Linux', platformVersion: undefined };
-  if (/Macintosh/i.test(ua) && /Mobile\/\w+/i.test(ua)) {
-    const v = /Version\/([\d.]+)/i.exec(ua)?.[1];
-    return { platform: 'iOS', platformVersion: v };
-  }
+
   return { platform: 'Unknown', platformVersion: undefined };
 }
 
@@ -791,9 +791,7 @@ export function parseUA(uaRaw: string): UAParsed {
       arch = 'x64';
       bitness = 64;
     }
-    if (/\bwin64\b/.test(low)) {
-      bitness = 64;
-    }
+
     if (/\bwow64\b/.test(low)) {
       wow64 = true;
       arch = arch ?? 'x86';
