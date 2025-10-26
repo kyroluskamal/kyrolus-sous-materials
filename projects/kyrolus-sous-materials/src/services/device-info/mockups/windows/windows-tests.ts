@@ -1080,4 +1080,5 @@ export const windowsTestCases: MockupCases[] = [
     deviceType: 'desktop',
     bitness: 64,
   },
+  
 ];

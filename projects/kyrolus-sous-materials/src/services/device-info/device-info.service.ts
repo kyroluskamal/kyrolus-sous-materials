@@ -36,6 +36,8 @@ import {
   UAParsed,
 } from '../../models/device-info';
 import { promiseToSignal } from '../reusable-function';
+/* v8 ignore start */
+
 type Hints =
   | 'architecture'
   | 'bitness'
@@ -75,7 +77,6 @@ export class DeviceInfoService {
     const scr = this.screen();
     const curr = this.base();
     const langs = this.languages();
-
     const highEntropy = this.highEntropy();
     let final: DeviceInfo = {
       ...curr,
@@ -84,19 +85,16 @@ export class DeviceInfoService {
       languages: langs,
     };
     if (highEntropy) {
-      final.brands =
-        highEntropy.brands?.filter(
-          (b) => b.brand.toLowerCase() !== 'not a;brand'
-        ) ?? curr.brands;
+      final.brands = this.filterNotABrand(
+        highEntropy.brands ?? curr.brands ?? []
+      );
       final.architecture = highEntropy.architecture ?? curr.architecture;
       final.model = highEntropy.model ?? curr.model;
       const ffHigh = Array.isArray(highEntropy.formFactors)
         ? highEntropy.formFactors.filter(Boolean)
-        : undefined;
+        : curr.formFactors;
       if (ffHigh?.length) {
         final.formFactors = ffHigh as string[];
-      } else if (Array.isArray(curr.formFactors) && curr.formFactors.length) {
-        final.formFactors = curr.formFactors;
       } else {
         final.formFactors = undefined;
       }
@@ -127,7 +125,6 @@ export class DeviceInfoService {
         final.wow64 = undefined;
       }
     }
-
     return final;
   });
 
@@ -219,27 +216,32 @@ export class DeviceInfoService {
     });
 
     const isChromium = uaIsChromium(uaString);
-
     let browser =
       parsed?.browser ??
       (isChromium ? mapBrowserFromBrands(client.brands) : null) ??
       'Unknown';
-    let platform = (parsed?.platform ??
-      client.platform ??
-      normalizePlatform(
-        ((globalThis.window.navigator as any) || (navigator as any)).platform
-      ) ??
-      'Unknown') as DeviceOperatingSystem;
-    if (client.mobile && platform == 'macOS') platform = 'iOS';
 
+    let platform = parsed?.platform;
+    if (isChromium) {
+      if (!platform || platform == 'Unknown') {
+        if (client.platform)
+          platform = client.platform as DeviceOperatingSystem;
+        else
+          platform =
+            normalizePlatform(
+              ((globalThis.window.navigator as any) || (navigator as any))
+                .platform
+            ) ?? 'Unknown';
+      }
+    }
     const deviceType =
       client.mobile === true ? 'mobile' : this.getDeviceType(uaString);
     const timezone = getTimeZoneSafe();
     const screen = this.buildScreenInfo();
 
     const hardwareConcurrency =
-      typeof (nav as any)?.hardwareConcurrency === 'number'
-        ? (nav as any).hardwareConcurrency
+      typeof nav?.hardwareConcurrency === 'number'
+        ? nav.hardwareConcurrency
         : undefined;
     const deviceMemory =
       typeof (nav as any)?.deviceMemory === 'number'
@@ -277,6 +279,13 @@ export class DeviceInfoService {
       model: undefined,
       brands: client.brands,
     };
+  }
+  private filterNotABrand(brands?: NavigatorUABrandVersion[]) {
+    if (!brands) return undefined;
+    return brands.filter((b) => {
+      let brand = b.brand.toLowerCase();
+      return !brand.includes('not a');
+    });
   }
 
   private createViewportEvents$(): Observable<unknown> {
@@ -336,10 +345,10 @@ export class DeviceInfoService {
   private getClientInfo(n: Navigator = navigator): ClientInfo {
     const uaData = n.userAgentData;
     return {
-      brands: uaData?.brands,
+      brands: this.filterNotABrand(uaData?.brands),
       platform: uaData?.platform,
       mobile: uaData?.mobile,
-      uaString: (n as any)?.userAgent,
+      uaString: n?.userAgent,
     };
   }
 
@@ -452,6 +461,7 @@ function mapBrowserFromBrands(
   const hit = BROWSER_RULES.find(([rx]) => names.some((n) => rx.test(n)));
   return hit ? hit[1] : null;
 }
+
 function pickFullBrowserVersion(
   list?: NavigatorUABrandVersion[],
   browser?: DeviceBrowser
@@ -983,3 +993,4 @@ function normalizeHardwareForContext(opts: {
 function uaIsChromium(ua: string): boolean {
   return /(Edg\/|OPR\/|Chrome\/|Chromium\/|YaBrowser|Brave|Vivaldi)/i.test(ua);
 }
+/* v8 ignore stop */

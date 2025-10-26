@@ -315,10 +315,10 @@ export const LinuxCases: MockupCases[] = [
     ua: UA_LINUX_FEDORA_CHROME_124_PPC64LE_DESKTOP,
     browser: 'Chrome',
     browserVersion: '124.0.6367.118',
-    architecture: 'ppc', // <— ده اللي بيغطي فرع /ppc|powerpc/
+    architecture: 'ppc',
     platformVersion: undefined,
     deviceType: 'desktop',
-    bitness: undefined, // تسيبها undefined زي ما الدالة بترجّع
+    bitness: undefined,
   },
   {
     testName: 'Debian Chromium 122 mips64',
@@ -326,6 +326,17 @@ export const LinuxCases: MockupCases[] = [
     browser: 'Unknown',
     browserVersion: undefined,
     architecture: 'mips',
+    platformVersion: undefined,
+    deviceType: 'desktop',
+    bitness: undefined,
+  },
+  {
+    testName: 'LINUX NOT FROM UA from Navigator',
+    ua: UA_LINUX_DEBIAN_CHROMIUM_122_MIPS64_DESKTOP,
+    browser: 'Unknown',
+    browserVersion: undefined,
+    architecture: 'mips',
+    platform: 'Linux x86_64',
     platformVersion: undefined,
     deviceType: 'desktop',
     bitness: undefined,

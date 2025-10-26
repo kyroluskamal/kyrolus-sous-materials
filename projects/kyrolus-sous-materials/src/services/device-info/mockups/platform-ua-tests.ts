@@ -27,6 +27,7 @@ import {
   modelFor,
 } from './device-info-mockup-kits';
 import { macOSCases } from './macos/macos-tests';
+/* v8 ignore start */
 
 export const expectedUAWindows = (args: Omit<ExpectedArgs, 'platform'>) =>
   expectedUA(
@@ -339,6 +340,7 @@ export const windowsWithLowUACh: deviceInfoTests = {
             maxTouchPoints: c.maxTouchPoints,
             hardwareConcurrency: c.hardwareConcurrency,
             deviceMemory: c.deviceMemory,
+            platform: c.platform,
             vendor: c.vendor,
           },
           'windows'
@@ -389,6 +391,7 @@ export const androidWithLowUACh: deviceInfoTests = {
             hardwareConcurrency: c.hardwareConcurrency,
             deviceMemory: c.deviceMemory,
             vendor: c.vendor,
+            platform: c.platform,
           },
           'android'
         ),
@@ -438,6 +441,7 @@ export const iosWithLowUACh: deviceInfoTests = {
             hardwareConcurrency: c.hardwareConcurrency,
             deviceMemory: c.deviceMemory,
             vendor: c.vendor,
+            platform: c.platform,
           },
           'ios'
         ),
@@ -466,149 +470,146 @@ export const iosWithLowUACh: deviceInfoTests = {
 export const linuxWithLowUACh: deviceInfoTests = {
   sectionNo: '3.4',
   sectonName: 'Linux + UA-CH (LOW only)',
-  test: LinuxCases
-    .filter((c) => isChromiumUA(c.ua))
-    .map((c) => {
-      const brands = brandsFor(c.browser);
-      return {
-        testName: `${c.testName}`,
-        navMock: mkNavMockWithUAChLow(
-          {
-            ua: c.ua,
-            brands,
-            uaChPlatform: 'Linux',
-            mobile: false,
-            navPlatform: 'Linux',
-            brave: c.browser.toLowerCase() === 'brave',
-            innerWidth: c.width,
-            innerHeight: c.height,
-            dpr: c.pixelRatio,
-            maxTouchPoints: c.maxTouchPoints,
-            hardwareConcurrency: c.hardwareConcurrency,
-            deviceMemory: c.deviceMemory,
-            vendor: c.vendor,
-          },
-          'linux'
-        ),
-        expect: expectedLinuxOS({
+  test: LinuxCases.filter((c) => isChromiumUA(c.ua)).map((c) => {
+    const brands = brandsFor(c.browser);
+    return {
+      testName: `${c.testName}`,
+      navMock: mkNavMockWithUAChLow(
+        {
           ua: c.ua,
-          platformVersion: c.platformVersion,
-          browser: c.browser,
-          browserVersion: c.browserVersion,
-          deviceType: c.deviceType,
-          agentType: c.agentType,
-          vendor: c.vendor,
+          brands,
+          uaChPlatform: 'Linux',
+          mobile: false,
+          navPlatform: 'Linux',
+          brave: c.browser.toLowerCase() === 'brave',
+          innerWidth: c.width,
+          innerHeight: c.height,
+          dpr: c.pixelRatio,
           maxTouchPoints: c.maxTouchPoints,
           hardwareConcurrency: c.hardwareConcurrency,
           deviceMemory: c.deviceMemory,
-          width: c.width,
-          height: c.height,
-          pixelRatio: c.pixelRatio,
-          architecture: c.architecture,
-          bitness: c.bitness,
-          wow64: c.wow64,
-          brands,
-        }),
-      };
-    }),
+          vendor: c.vendor,
+          platform: c.platform,
+        },
+        'linux'
+      ),
+      expect: expectedLinuxOS({
+        ua: c.ua,
+        platformVersion: c.platformVersion,
+        browser: c.browser,
+        browserVersion: c.browserVersion,
+        deviceType: c.deviceType,
+        agentType: c.agentType,
+        vendor: c.vendor,
+        maxTouchPoints: c.maxTouchPoints,
+        hardwareConcurrency: c.hardwareConcurrency,
+        deviceMemory: c.deviceMemory,
+        width: c.width,
+        height: c.height,
+        pixelRatio: c.pixelRatio,
+        architecture: c.architecture,
+        bitness: c.bitness,
+        wow64: c.wow64,
+        brands,
+      }),
+    };
+  }),
 };
 export const ChromeOSDeskTopWithLowUACh: deviceInfoTests = {
   sectionNo: '3.5',
   sectonName: 'ChromeOSDeskTop + UA-CH (LOW only)',
-  test: ChromeOSDesktopCases
-    .filter((c) => isChromiumUA(c.ua))
-    .map((c) => {
-      const brands = brandsFor(c.browser);
-      return {
-        testName: `${c.testName}`,
-        navMock: mkNavMockWithUAChLow(
-          {
-            ua: c.ua,
-            brands,
-            uaChPlatform: 'ChromeOS',
-            navPlatform: 'Linux',
-            mobile: false,
-            brave: c.browser.toLowerCase() === 'brave',
-            innerWidth: c.width,
-            innerHeight: c.height,
-            dpr: c.pixelRatio,
-            maxTouchPoints: c.maxTouchPoints,
-            hardwareConcurrency: c.hardwareConcurrency,
-            deviceMemory: c.deviceMemory,
-            vendor: c.vendor,
-          },
-          'chromeOSDesktop'
-        ),
-        expect: expectedUAChromeOSDesktop({
+  test: ChromeOSDesktopCases.filter((c) => isChromiumUA(c.ua)).map((c) => {
+    const brands = brandsFor(c.browser);
+    return {
+      testName: `${c.testName}`,
+      navMock: mkNavMockWithUAChLow(
+        {
           ua: c.ua,
-          platformVersion: c.platformVersion,
-          browser: c.browser,
-          browserVersion: c.browserVersion,
-          deviceType: c.deviceType,
-          agentType: c.agentType,
-          vendor: c.vendor,
+          brands,
+          uaChPlatform: 'ChromeOS',
+          navPlatform: 'Linux',
+          mobile: false,
+          brave: c.browser.toLowerCase() === 'brave',
+          innerWidth: c.width,
+          innerHeight: c.height,
+          dpr: c.pixelRatio,
           maxTouchPoints: c.maxTouchPoints,
           hardwareConcurrency: c.hardwareConcurrency,
           deviceMemory: c.deviceMemory,
-          width: c.width,
-          height: c.height,
-          pixelRatio: c.pixelRatio,
-          architecture: c.architecture,
-          bitness: c.bitness,
-          wow64: c.wow64,
-          brands,
-        }),
-      };
-    }),
+          vendor: c.vendor,
+          platform: c.platform,
+        },
+        'chromeOSDesktop'
+      ),
+      expect: expectedUAChromeOSDesktop({
+        ua: c.ua,
+        platformVersion: c.platformVersion,
+        browser: c.browser,
+        browserVersion: c.browserVersion,
+        deviceType: c.deviceType,
+        agentType: c.agentType,
+        vendor: c.vendor,
+        maxTouchPoints: c.maxTouchPoints,
+        hardwareConcurrency: c.hardwareConcurrency,
+        deviceMemory: c.deviceMemory,
+        width: c.width,
+        height: c.height,
+        pixelRatio: c.pixelRatio,
+        architecture: c.architecture,
+        bitness: c.bitness,
+        wow64: c.wow64,
+        brands,
+      }),
+    };
+  }),
 };
 export const ChromeOSTabletWithLowUACh: deviceInfoTests = {
   sectionNo: '3.5',
   sectonName: 'ChromeOSTablet + UA-CH (LOW only)',
-  test: ChromeOSTableCases
-    .filter((c) => isChromiumUA(c.ua))
-    .map((c) => {
-      const brands = brandsFor(c.browser);
-      return {
-        testName: `${c.testName}`,
-        navMock: mkNavMockWithUAChLow(
-          {
-            ua: c.ua,
-            brands,
-            uaChPlatform: 'ChromeOS',
-            navPlatform: 'Linux',
-            mobile: false,
-            brave: c.browser.toLowerCase() === 'brave',
-            innerWidth: c.width,
-            innerHeight: c.height,
-            dpr: c.pixelRatio,
-            maxTouchPoints: c.maxTouchPoints,
-            hardwareConcurrency: c.hardwareConcurrency,
-            deviceMemory: c.deviceMemory,
-            vendor: c.vendor,
-          },
-          'chromeOSTablet'
-        ),
-        expect: expectedUAChromeOSDesktop({
+  test: ChromeOSTableCases.filter((c) => isChromiumUA(c.ua)).map((c) => {
+    const brands = brandsFor(c.browser);
+    return {
+      testName: `${c.testName}`,
+      navMock: mkNavMockWithUAChLow(
+        {
           ua: c.ua,
-          platformVersion: c.platformVersion,
-          browser: c.browser,
-          browserVersion: c.browserVersion,
-          deviceType: c.deviceType,
-          agentType: c.agentType,
-          vendor: c.vendor,
+          brands,
+          uaChPlatform: 'ChromeOS',
+          navPlatform: 'Linux',
+          mobile: false,
+          brave: c.browser.toLowerCase() === 'brave',
+          innerWidth: c.width,
+          innerHeight: c.height,
+          dpr: c.pixelRatio,
           maxTouchPoints: c.maxTouchPoints,
           hardwareConcurrency: c.hardwareConcurrency,
           deviceMemory: c.deviceMemory,
-          width: c.width,
-          height: c.height,
-          pixelRatio: c.pixelRatio,
-          architecture: c.architecture,
-          bitness: c.bitness,
-          wow64: c.wow64,
-          brands,
-        }),
-      };
-    }),
+          vendor: c.vendor,
+          platform: c.platform,
+        },
+        'chromeOSTablet'
+      ),
+      expect: expectedUAChromeOSDesktop({
+        ua: c.ua,
+        platformVersion: c.platformVersion,
+        browser: c.browser,
+        browserVersion: c.browserVersion,
+        deviceType: c.deviceType,
+        agentType: c.agentType,
+        vendor: c.vendor,
+        maxTouchPoints: c.maxTouchPoints,
+        hardwareConcurrency: c.hardwareConcurrency,
+        deviceMemory: c.deviceMemory,
+        width: c.width,
+        height: c.height,
+        pixelRatio: c.pixelRatio,
+        architecture: c.architecture,
+        bitness: c.bitness,
+        wow64: c.wow64,
+        brands,
+      }),
+    };
+  }),
 };
 export const macosWithLowUACh: deviceInfoTests = {
   sectionNo: '3.6',
@@ -637,6 +638,7 @@ export const macosWithLowUACh: deviceInfoTests = {
             hardwareConcurrency: c.hardwareConcurrency,
             deviceMemory: c.deviceMemory,
             vendor: c.vendor,
+            platform: c.platform,
           },
           'macos'
         ),
@@ -1169,3 +1171,4 @@ export const platformMapsWithHighUaCh: { [key: string]: deviceInfoTests } = {
   linuxHighUACH: linuxWithHighUACh,
   macOSHighUACH: macosWithHighUACh,
 };
+/* v8 ignore stop */

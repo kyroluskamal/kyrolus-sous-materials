@@ -88,3 +88,5 @@ export const UA_LINUX_FEDORA_CHROME_124_PPC64LE_DESKTOP =
 // --- MIPS (mips64)
 export const UA_LINUX_DEBIAN_CHROMIUM_122_MIPS64_DESKTOP =
   'Mozilla/5.0 (X11; Linux mips64) AppleWebKit/537.36 (KHTML, like Gecko) Chromium/122.0.6261.69 Safari/537.36';
+export const UA_LINUX_NOT_FROM_UA ='Mozilla/5.0 (compatible; HeadlessChrome/125.0.6422.0; +https://developers.google.com/web/tools/puppeteer)'
+

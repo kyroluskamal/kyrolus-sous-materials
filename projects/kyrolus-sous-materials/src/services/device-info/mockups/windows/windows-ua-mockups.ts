@@ -45,7 +45,6 @@ export const UA_WIN7_IE10_DESKTOP_ArchUndefined =
 export const UA_WIN7_IE11_DESKTOP_ArchUndefined =
   'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko';
 
-
 export const UA_WIN7_IE10_DESKTOP_X64 =
   'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0; Win64; x64)';
 
@@ -60,7 +59,6 @@ export const UA_WIN7_IE10_DESKTOP_WOW64 =
 // IE11 32-bit process على Windows 7 x64 (WOW64)
 export const UA_WIN7_IE11_DESKTOP_WOW64 =
   'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko';
-
 
 export const UA_WIN7_CHROME_109_DESKTOP_X64 =
   'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36';
@@ -344,11 +342,9 @@ export const UA_WIN7_TORCH_69_WOW64_DESKTOP_X86 =
   'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36 Torch/69.0.0.0';
 // windows-ua-mockups.ts
 
-// Windows 7 — IE11 مع WOW64 في ذيل الـ UA (بدون Win64 في الـ system block)
 export const UA_WIN7_IE11_WOW64_TAIL =
   'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko WOW64';
 
-// Windows 10 — Chrome 109 مع WOW64 في الذيل (اختياري لو عايز تغطية إضافية)
 export const UA_WIN10_CHROME_WOW64_TAIL =
   'Mozilla/5.0 (Windows NT 10.0; Win32; x86) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 WOW64';
 export const UA_WIN10_CHROME_109_WIN64_ONLY =

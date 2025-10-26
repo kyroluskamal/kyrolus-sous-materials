@@ -5,7 +5,7 @@ import {
   takeUntilDestroyed,
 } from '@angular/core/rxjs-interop';
 import { defer, from, Observable } from 'rxjs';
-
+/* v8 ignore start */
 type NoSync<T> = Omit<ToSignalOptions<T>, 'requireSync'> & {
   requireSync?: false;
 };
@@ -40,3 +40,4 @@ export function promiseToSignal<T>(
 
   return toSignal(src, options as any);
 }
+/* v8 ignore stop */

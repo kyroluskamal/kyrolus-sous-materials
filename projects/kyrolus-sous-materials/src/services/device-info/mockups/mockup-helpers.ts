@@ -19,7 +19,7 @@ import {
   DEFAULT_BROWSER_VERSION,
 } from './mockup-constants';
 import { ExpectedArgs, Preset, UAChArgs, UAMockInput } from './mockup-types';
-
+/* v8 ignore start */
 export function brandsFor(
   browser: string
 ): { brand: string; version: string }[] {
@@ -69,7 +69,26 @@ export function augmentNavigatorCommon(p: UAChArgs) {
         ${braveBlock}
         `.trim();
 }
-export const mkUAMockFull = (p: UAMockInput, preset: Preset = 'windows') => {
+export const mkUAMockFull = (
+  p: UAMockInput,
+  preset: Preset = 'windows',
+  overrides:
+    | Omit<
+        UAMockInput,
+        | 'vendor'
+        | 'lang'
+        | 'langs'
+        | 'timeZone'
+        | 'maxTouchPoints'
+        | 'hardwareConcurrency'
+        | 'deviceMemory'
+        | 'innerWidth'
+        | 'innerHeight'
+        | 'dpr'
+        | 'pluginsCount'
+      >
+    | undefined = undefined
+) => {
   let base: any;
   if (preset == 'android') base = PRESET_Android;
   else if (preset == 'chromeOSDesktop') base = PRESET_ChromeOS_DESKTOP;
@@ -83,6 +102,7 @@ export const mkUAMockFull = (p: UAMockInput, preset: Preset = 'windows') => {
   const lang = JSON.stringify(p.lang ?? DEFAULT_LANG);
   const langs = JSON.stringify(p.langs ?? DEFAULT_LANGS);
   const tz = JSON.stringify(p.timeZone ?? DEFAULT_TZ);
+  const platform = JSON.stringify(p.platform ?? 'Windows');
 
   const num = (val: number | undefined, fallback: number) =>
     Number.isFinite(val ?? Number.NaN) ? (val as number) : fallback;
@@ -108,6 +128,9 @@ vi.spyOn(navigator, 'vendor', 'get').mockReturnValue(${v});
 Object.defineProperty(navigator, 'maxTouchPoints', { value: ${mtp}, configurable: true });
 Object.defineProperty(navigator, 'hardwareConcurrency', { value: ${hc}, configurable: true });
 Object.defineProperty(navigator, 'deviceMemory', { value: ${dm}, configurable: true });
+Object.defineProperty(navigator, 'platform', { value: ${
+    platform == 'Windows' ? 'win32' : platform
+  }, configurable: true });
 
 // Avoid headless false-positives
 Object.defineProperty(navigator, 'plugins', { value: { length: ${plugins} }, configurable: true });
@@ -277,3 +300,4 @@ export const formFactorsFor = (deviceType?: string): string[] | undefined => {
       return undefined;
   }
 };
+/* v8 ignore stop */

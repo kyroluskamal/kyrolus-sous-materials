@@ -29,6 +29,7 @@ export type UAMockInput = {
   innerHeight?: number;
   dpr?: number;
   pluginsCount?: number;
+  platform?: string;
   orientation?: ScreenOrientation | string;
 };
 export type MockupCases = {
@@ -46,6 +47,7 @@ export type MockupCases = {
   height?: number;
   pixelRatio?: number;
   orientation?: string;
+  platform?: string;
   agentType?: AgentType;
   architecture?: string;
   bitness?: Bitness;
