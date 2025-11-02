@@ -45,6 +45,9 @@ export type MockupCases = {
   deviceMemory?: number;
   width?: number;
   height?: number;
+  uaChUndefinedArchitecture?: boolean;
+  uaChUndefinedPlatform?: boolean;
+  uaChUndefinedPlatformVersion?: boolean;
   pixelRatio?: number;
   orientation?: string;
   platform?: string;
@@ -52,8 +55,14 @@ export type MockupCases = {
   architecture?: string;
   bitness?: Bitness;
   wow64?: boolean;
+  uaLowCHUndefinedBrands?: boolean;
   language?: string;
+  usChBrowserversion?: string;
   languages?: string[];
+  uaChUndefinedBrands?: boolean;
+  uaChUndefinedBitness?: boolean;
+  uaChUndefinedWow64?: boolean;
+  fullVersionList?: NavigatorUABrandVersion[];
 };
 
 export type Preset =
@@ -104,8 +113,12 @@ export type UAChArgs = UAMockInput & {
   // UA-CH low bits
   brands: readonly { brand: string; version: string }[];
   uaChPlatform?: string;
+  uaChUndefinedPlatform: boolean;
+  uaLowCHUndefinedBrands: boolean;
+  uaChUndefinedPlatformVersion: boolean;
   mobile?: boolean;
   navPlatform?: string;
   brave?: boolean;
+  uaChUndefinedBrands: boolean;
   high?: UAChHighHints;
 };

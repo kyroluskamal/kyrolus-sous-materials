@@ -249,6 +249,8 @@ export const windowsTestCases: MockupCases[] = [
     bitness: 32,
     vendor: '',
     wow64: true,
+    uaLowCHUndefinedBrands: true,
+    uaChUndefinedBrands: true,
   },
   {
     testName: 'Win7 — IE11 token → Unknown, desktop, x64',
@@ -269,6 +271,7 @@ export const windowsTestCases: MockupCases[] = [
     deviceType: 'desktop',
     architecture: 'x64',
     bitness: 64,
+    uaChUndefinedBrands: true,
   },
   {
     testName:
@@ -281,6 +284,9 @@ export const windowsTestCases: MockupCases[] = [
     architecture: 'x86',
     bitness: 32,
     wow64: true,
+    uaChUndefinedArchitecture: true,
+    uaChUndefinedWow64: true,
+    uaChUndefinedBitness: true,
   },
   {
     testName: 'Win7 — Firefox 115 ESR → Firefox/115, desktop, x64',
@@ -636,9 +642,15 @@ export const windowsTestCases: MockupCases[] = [
     platformVersion: '10/11',
     browser: 'Chrome',
     browserVersion: '125.0.0.0',
+    usChBrowserversion: '141.0.7390.123',
     deviceType: 'desktop',
     architecture: 'x64',
     bitness: 64,
+    fullVersionList: [
+      { brand: 'Google Chrome', version: '141.0.7390.123' },
+      { brand: 'Not?A_Brand', version: '8.0.0.0' },
+      { brand: 'Chromium', version: '141.0.7390.123' },
+    ],
   },
   {
     testName: 'Win11 — Chrome 125 ARM64 → Chrome/125, desktop, arm64/64',
@@ -649,6 +661,9 @@ export const windowsTestCases: MockupCases[] = [
     deviceType: 'desktop',
     architecture: 'arm64',
     bitness: 64,
+    uaChUndefinedPlatform: true,
+    uaChUndefinedPlatformVersion: true,
+    fullVersionList: [],
   },
   {
     testName:
@@ -1080,5 +1095,4 @@ export const windowsTestCases: MockupCases[] = [
     deviceType: 'desktop',
     bitness: 64,
   },
-  
 ];

@@ -294,6 +294,7 @@ export const macosWithoutUACH: deviceInfoTests = {
         innerWidth: c.width,
         innerHeight: c.height,
         dpr: c.pixelRatio,
+        platform: 'mac',
       },
       'macos'
     ),
@@ -329,9 +330,14 @@ export const windowsWithLowUACh: deviceInfoTests = {
         navMock: mkNavMockWithUAChLow(
           {
             ua: c.ua,
+            uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
             brands,
             uaChPlatform: 'Windows',
             mobile: false,
+            uaChUndefinedPlatformVersion:
+              c.uaChUndefinedPlatformVersion ?? false,
+            uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
+            uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
             navPlatform: 'Win32',
             brave: c.browser.toLowerCase() === 'brave',
             innerWidth: c.width,
@@ -382,11 +388,16 @@ export const androidWithLowUACh: deviceInfoTests = {
             brands,
             uaChPlatform: 'Android',
             navPlatform: 'Linux',
+            uaChUndefinedPlatformVersion:
+              c.uaChUndefinedPlatformVersion ?? false,
+            uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
+            uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
             mobile: false,
             brave: c.browser.toLowerCase() === 'brave',
             innerWidth: c.width,
             innerHeight: c.height,
             dpr: c.pixelRatio,
+            uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
             maxTouchPoints: c.maxTouchPoints,
             hardwareConcurrency: c.hardwareConcurrency,
             deviceMemory: c.deviceMemory,
@@ -433,6 +444,11 @@ export const iosWithLowUACh: deviceInfoTests = {
             uaChPlatform: 'IOS',
             mobile: false,
             navPlatform: 'iPhone',
+            uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
+            uaChUndefinedPlatformVersion:
+              c.uaChUndefinedPlatformVersion ?? false,
+            uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
+            uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
             brave: c.browser.toLowerCase() === 'brave',
             innerWidth: c.width,
             innerHeight: c.height,
@@ -480,12 +496,16 @@ export const linuxWithLowUACh: deviceInfoTests = {
           brands,
           uaChPlatform: 'Linux',
           mobile: false,
+          uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
+          uaChUndefinedPlatformVersion: c.uaChUndefinedPlatformVersion ?? false,
+          uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
           navPlatform: 'Linux',
           brave: c.browser.toLowerCase() === 'brave',
           innerWidth: c.width,
           innerHeight: c.height,
           dpr: c.pixelRatio,
           maxTouchPoints: c.maxTouchPoints,
+          uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
           hardwareConcurrency: c.hardwareConcurrency,
           deviceMemory: c.deviceMemory,
           vendor: c.vendor,
@@ -531,9 +551,13 @@ export const ChromeOSDeskTopWithLowUACh: deviceInfoTests = {
           mobile: false,
           brave: c.browser.toLowerCase() === 'brave',
           innerWidth: c.width,
+          uaChUndefinedPlatformVersion: c.uaChUndefinedPlatformVersion ?? false,
+          uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
           innerHeight: c.height,
           dpr: c.pixelRatio,
+          uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
           maxTouchPoints: c.maxTouchPoints,
+          uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
           hardwareConcurrency: c.hardwareConcurrency,
           deviceMemory: c.deviceMemory,
           vendor: c.vendor,
@@ -581,6 +605,10 @@ export const ChromeOSTabletWithLowUACh: deviceInfoTests = {
           innerWidth: c.width,
           innerHeight: c.height,
           dpr: c.pixelRatio,
+          uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
+          uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
+          uaChUndefinedPlatformVersion: c.uaChUndefinedPlatformVersion ?? false,
+          uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
           maxTouchPoints: c.maxTouchPoints,
           hardwareConcurrency: c.hardwareConcurrency,
           deviceMemory: c.deviceMemory,
@@ -627,9 +655,14 @@ export const macosWithLowUACh: deviceInfoTests = {
           {
             ua: c.ua,
             brands,
+            uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
+            uaChUndefinedPlatformVersion:
+              c.uaChUndefinedPlatformVersion ?? false,
+            uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
             uaChPlatform: 'macOS',
             mobile: false,
             navPlatform,
+            uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
             brave: c.browser.toLowerCase() === 'brave',
             innerWidth: c.width,
             innerHeight: c.height,
@@ -638,7 +671,7 @@ export const macosWithLowUACh: deviceInfoTests = {
             hardwareConcurrency: c.hardwareConcurrency,
             deviceMemory: c.deviceMemory,
             vendor: c.vendor,
-            platform: c.platform,
+            platform: 'mac',
           },
           'macos'
         ),
@@ -650,6 +683,7 @@ export const macosWithLowUACh: deviceInfoTests = {
           deviceType: c.deviceType,
           agentType: c.agentType,
           vendor: c.vendor,
+
           maxTouchPoints: c.maxTouchPoints,
           hardwareConcurrency: c.hardwareConcurrency,
           deviceMemory: c.deviceMemory,
@@ -672,13 +706,16 @@ export const windowsWithHighUACh: deviceInfoTests = {
     const baseline = c.platformVersion ?? '10.0.0';
     const platformVersion = makeHighPlatformVersion(baseline, '10.0.0');
     const bitness = (c.bitness ?? (/WOW64/i.test(c.ua) ? 32 : 64)) as Bitness;
-    const architecture =
+    const architecture: string | undefined =
       c.architecture ??
       (/WOW64/i.test(c.ua) || bitness === 32
         ? ('x86' as const)
         : ('x64' as const));
     const wow64 = c.wow64 ?? /WOW64/i.test(c.ua);
-    const fullVersion = bumpVersion(c.browserVersion, DEFAULT_BROWSER_VERSION);
+    const fullVersion = bumpVersion(
+      c.usChBrowserversion ?? c.browserVersion,
+      DEFAULT_BROWSER_VERSION
+    );
     const formFactors = formFactorsFor(c.deviceType) ?? [];
     return {
       testName: `${c.testName} — UA + HIGH UA-CH (override)`,
@@ -686,6 +723,10 @@ export const windowsWithHighUACh: deviceInfoTests = {
         {
           ua: c.ua,
           brands,
+          uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
+          uaChUndefinedPlatformVersion: c.uaChUndefinedPlatformVersion ?? false,
+          uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
+          uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
           uaChPlatform: 'Windows',
           mobile: isMobileLike(c.deviceType),
           navPlatform: 'Win32',
@@ -698,9 +739,11 @@ export const windowsWithHighUACh: deviceInfoTests = {
           deviceMemory: c.deviceMemory,
           vendor: c.vendor,
           high: {
-            wow64,
-            bitness,
-            architecture,
+            wow64: c.uaChUndefinedWow64 ? undefined : wow64,
+            bitness: c.uaChUndefinedBitness ? undefined : bitness,
+            architecture: c.uaChUndefinedArchitecture
+              ? undefined
+              : architecture,
             platformVersion,
             fullVersion,
             formFactors,
@@ -720,16 +763,15 @@ export const windowsWithHighUACh: deviceInfoTests = {
         platformVersion: platformVersion.startsWith('10')
           ? '10/11'
           : platformVersion,
-        // أضف الثلاثة دول:
         maxTouchPoints: c.maxTouchPoints,
         hardwareConcurrency: c.hardwareConcurrency,
         deviceMemory: c.deviceMemory,
         architecture,
         bitness,
         wow64,
-        brands,
+        brands: c.uaChUndefinedBrands && c.uaLowCHUndefinedBrands ? [] : brands,
         agentType: c.agentType,
-        formFactors: formFactors.length ? formFactors : undefined,
+        formFactors: formFactors.length ? formFactors : [],
       }),
     };
   }),
@@ -770,8 +812,12 @@ export const androidWithHighUACh: deviceInfoTests = {
           navPlatform,
           innerWidth: c.width,
           innerHeight: c.height,
+          uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
           dpr: c.pixelRatio,
           maxTouchPoints: c.maxTouchPoints,
+          uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
+          uaChUndefinedPlatformVersion: c.uaChUndefinedPlatformVersion ?? false,
+          uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
           hardwareConcurrency: c.hardwareConcurrency,
           deviceMemory: c.deviceMemory,
           vendor: c.vendor,
@@ -802,8 +848,8 @@ export const androidWithHighUACh: deviceInfoTests = {
         architecture,
         bitness,
         agentType: c.agentType,
-        brands,
-        formFactors: formFactors.length ? formFactors : undefined,
+        brands: c.uaChUndefinedBrands && c.uaLowCHUndefinedBrands ? [] : brands,
+        formFactors: formFactors.length ? formFactors : [],
         model,
       }),
     };
@@ -832,7 +878,10 @@ export const chromeOSDesktopWithHighUACh: deviceInfoTests = {
       navMock: mkNavMockWithUAChHigh(
         {
           ua: c.ua,
+          uaChUndefinedPlatformVersion: c.uaChUndefinedPlatformVersion ?? false,
+          uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
           brands,
+          uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
           uaChPlatform: 'ChromeOS',
           mobile: false,
           navPlatform,
@@ -842,6 +891,7 @@ export const chromeOSDesktopWithHighUACh: deviceInfoTests = {
           maxTouchPoints: c.maxTouchPoints,
           hardwareConcurrency: c.hardwareConcurrency,
           deviceMemory: c.deviceMemory,
+          uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
           vendor: c.vendor,
           high: {
             architecture,
@@ -867,8 +917,8 @@ export const chromeOSDesktopWithHighUACh: deviceInfoTests = {
         architecture,
         bitness,
         agentType: c.agentType,
-        brands,
-        formFactors: formFactors.length ? formFactors : undefined,
+        brands: c.uaChUndefinedBrands && c.uaLowCHUndefinedBrands ? [] : brands,
+        formFactors: formFactors.length ? formFactors : [],
         model,
       }),
     };
@@ -899,15 +949,19 @@ export const chromeOSTabletWithHighUACh: deviceInfoTests = {
           ua: c.ua,
           brands,
           uaChPlatform: 'ChromeOS',
+          uaChUndefinedPlatformVersion: c.uaChUndefinedPlatformVersion ?? false,
+          uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
           mobile: false,
           navPlatform,
           innerWidth: c.width,
           innerHeight: c.height,
+          uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
           dpr: c.pixelRatio,
           maxTouchPoints: c.maxTouchPoints,
           hardwareConcurrency: c.hardwareConcurrency,
           deviceMemory: c.deviceMemory,
           vendor: c.vendor,
+          uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
           high: {
             architecture,
             bitness,
@@ -932,7 +986,7 @@ export const chromeOSTabletWithHighUACh: deviceInfoTests = {
         architecture,
         bitness,
         agentType: c.agentType,
-        brands,
+        brands: c.uaChUndefinedBrands && c.uaLowCHUndefinedBrands ? [] : brands,
         formFactors,
         model,
       }),
@@ -971,8 +1025,12 @@ export const iosWithHighUACh: deviceInfoTests = {
           dpr: c.pixelRatio,
           maxTouchPoints: c.maxTouchPoints,
           hardwareConcurrency: c.hardwareConcurrency,
+          uaChUndefinedPlatformVersion: c.uaChUndefinedPlatformVersion ?? false,
+          uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
           deviceMemory: c.deviceMemory,
+          uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
           vendor: c.vendor,
+          uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
           high: {
             architecture,
             bitness,
@@ -997,7 +1055,7 @@ export const iosWithHighUACh: deviceInfoTests = {
         architecture,
         bitness,
         agentType: c.agentType,
-        brands,
+        brands: c.uaChUndefinedBrands && c.uaLowCHUndefinedBrands ? [] : brands,
         formFactors: formFactors.length ? formFactors : undefined,
         model,
         maxTouchPoints: c.maxTouchPoints,
@@ -1037,9 +1095,13 @@ export const linuxWithHighUACh: deviceInfoTests = {
           navPlatform,
           innerWidth: c.width,
           innerHeight: c.height,
+          uaChUndefinedPlatformVersion: c.uaChUndefinedPlatformVersion ?? false,
+          uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
           dpr: c.pixelRatio,
+          uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
           maxTouchPoints: c.maxTouchPoints,
           hardwareConcurrency: c.hardwareConcurrency,
+          uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
           deviceMemory: c.deviceMemory,
           vendor: c.vendor,
           high: {
@@ -1066,8 +1128,8 @@ export const linuxWithHighUACh: deviceInfoTests = {
         architecture,
         bitness,
         agentType: c.agentType,
-        brands,
-        formFactors: formFactors.length ? formFactors : undefined,
+        brands: c.uaChUndefinedBrands && c.uaLowCHUndefinedBrands ? [] : brands,
+        formFactors: formFactors.length ? formFactors : [],
         model,
         maxTouchPoints: c.maxTouchPoints,
         hardwareConcurrency: c.hardwareConcurrency,
@@ -1100,7 +1162,10 @@ export const macosWithHighUACh: deviceInfoTests = {
           ua: c.ua,
           brands,
           uaChPlatform: 'macOS',
+          uaChUndefinedPlatform: c.uaChUndefinedPlatform ?? false,
           mobile: false,
+          uaChUndefinedPlatformVersion: c.uaChUndefinedPlatformVersion ?? false,
+          uaLowCHUndefinedBrands: c.uaLowCHUndefinedBrands ?? false,
           navPlatform,
           innerWidth: c.width,
           innerHeight: c.height,
@@ -1109,6 +1174,8 @@ export const macosWithHighUACh: deviceInfoTests = {
           hardwareConcurrency: c.hardwareConcurrency,
           deviceMemory: c.deviceMemory,
           vendor: c.vendor,
+          platform: 'mac',
+          uaChUndefinedBrands: c.uaChUndefinedBrands ?? false,
           high: {
             architecture,
             bitness,
@@ -1133,7 +1200,7 @@ export const macosWithHighUACh: deviceInfoTests = {
         architecture,
         bitness,
         agentType: c.agentType,
-        brands,
+        brands: c.uaChUndefinedBrands && c.uaLowCHUndefinedBrands ? [] : brands,
         formFactors: formFactors.length ? formFactors : undefined,
         model,
         maxTouchPoints: c.maxTouchPoints,

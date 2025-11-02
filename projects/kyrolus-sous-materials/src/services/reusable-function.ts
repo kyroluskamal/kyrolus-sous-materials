@@ -1,11 +1,6 @@
 import { Signal, DestroyRef } from '@angular/core';
-import {
-  toSignal,
-  ToSignalOptions,
-  takeUntilDestroyed,
-} from '@angular/core/rxjs-interop';
+import { toSignal, ToSignalOptions } from '@angular/core/rxjs-interop';
 import { defer, from, Observable } from 'rxjs';
-/* v8 ignore start */
 type NoSync<T> = Omit<ToSignalOptions<T>, 'requireSync'> & {
   requireSync?: false;
 };
@@ -34,10 +29,5 @@ export function promiseToSignal<T>(
   options?: PSOptions<T>
 ): Signal<T | undefined> {
   let src: Observable<T> = defer(() => from(factory()));
-  if (options?.destroyRef) {
-    src = src.pipe(takeUntilDestroyed(options.destroyRef));
-  }
-
   return toSignal(src, options as any);
 }
-/* v8 ignore stop */

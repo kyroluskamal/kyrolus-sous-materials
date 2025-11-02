@@ -14,7 +14,6 @@ import {
     <button ksButton routerLink="toggle-on-scroll-directive-test">
       Toggle class on scroll test
     </button>
-    <p>formFactors {{ dev().formFactors | json }}</p>
     <button ksButton routerLink="menu-test">Menu test</button>
     <button ksButton routerLink="popover-menu-tests">Popeover menu</button>
   `,

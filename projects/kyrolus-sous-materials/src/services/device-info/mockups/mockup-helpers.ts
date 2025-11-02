@@ -220,17 +220,23 @@ ${augmentNavigatorCommon(p)}
 Object.defineProperty(navigator, 'userAgentData', {
   configurable: true,
   value: {
-    brands: ${JSON.stringify(p.brands)},
+    brands: ${JSON.stringify(p.uaLowCHUndefinedBrands ? undefined : p.brands)},
     platform: ${JSON.stringify(p.uaChPlatform ?? 'Windows')},
     mobile: ${p.mobile ? 'true' : 'false'},
     getHighEntropyValues: () => Promise.resolve({
-      brands: ${JSON.stringify(p.brands)},
-      platform: ${JSON.stringify(p.uaChPlatform ?? 'Windows')},
+      brands: ${p.uaChUndefinedBrands ? undefined : JSON.stringify(p.brands)},
+      platform: ${JSON.stringify(
+        p.uaChUndefinedPlatform ? undefined : p.uaChPlatform
+      )},
       mobile: ${p.mobile ? 'true' : 'false'},
-      architecture: ${JSON.stringify(p.high?.architecture ?? 'x64')},
-      bitness: ${JSON.stringify(p.high?.bitness ?? 64)},
-      wow64: ${JSON.stringify(p.high?.wow64 ?? false)},
-      platformVersion: ${JSON.stringify(p.high?.platformVersion ?? '10.0.0')},
+      architecture: ${JSON.stringify(p.high?.architecture)},
+      bitness: ${JSON.stringify(p.high?.bitness )},
+      wow64: ${JSON.stringify(p.high?.wow64)},
+      platformVersion: ${JSON.stringify(
+        p.uaChUndefinedPlatformVersion
+          ? undefined
+          : p.high?.platformVersion ?? '10.0.0'
+      )},
       uaFullVersion: ${JSON.stringify(fullVersion)},
       fullVersionList: [
         ${JSON.stringify({ brand: 'Chromium', version: fullVersion })},

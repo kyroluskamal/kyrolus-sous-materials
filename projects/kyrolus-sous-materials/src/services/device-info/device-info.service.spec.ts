@@ -466,7 +466,7 @@ describe('DeviceInfoService', () => {
       });
 
       const srv = createServiceFromBasedonPltrom('browser');
-      expect((srv.device().screen?.orientation as any).type).toBe(
+      expect((srv.device().screen?.orientation as ScreenOrientation).type).toBe(
         'portrait-primary'
       );
 
@@ -474,7 +474,7 @@ describe('DeviceInfoService', () => {
       orientationTarget.__dispatch('change');
       await nextFrame();
 
-      expect((srv.device().screen?.orientation as any).type).toBe(
+      expect((srv.device().screen?.orientation as ScreenOrientation).type).toBe(
         'landscape-primary'
       );
     });
@@ -621,6 +621,31 @@ describe('DeviceInfoService', () => {
       expect(s.height).toBe(720);
       expect(s.orientation).toBe('landscape');
     });
+    it('7.7 window.orientationchange without drived orientation', async () => {
+      injectUAOnly(UA, 'Win32');
+
+     const orientation = new EventTarget() as any;
+     orientation.type = 'portrait-primary';
+     vi.stubGlobal('screen', { orientation });
+
+     const srv = createServiceFromBasedonPltrom('browser');
+
+     orientation.type = 'landscape-primary';
+     orientation.dispatchEvent(new Event('change'));
+     await nextFrame();
+
+     expect((srv.device().screen?.orientation as any).type).toBe(
+       'landscape-primary'
+     );
+
+     // no-op تاني لتغطية comparator
+     globalThis.window.dispatchEvent(new Event('resize'));
+     await nextFrame();
+
+      expect((srv.device().screen?.orientation as any).type).toBe(
+        'landscape-primary'
+      );
+    });
   });
 });
 function cleanUpBrave() {
@@ -699,9 +724,7 @@ function injectUAOnly(ua: string, navPlatform?: string) {
       navPlatform
         ? `
     (function(){
-      // 1) shadow على navigator نفسه (own property)
       try { Object.defineProperty(navigator, 'platform', { configurable: true, value: '${navPlatform}' }); } catch {}
-      // 2) غطّي الـ prototype كمان (لو احتاجته بيئة jsdom)
       try {
         const proto = Object.getPrototypeOf(navigator);
         try { delete proto.platform; } catch {}
@@ -776,7 +799,6 @@ function injectUAChHigh(
           architecture: '${arch}',
           bitness: ${bitness},
           wow64: ${wow64},
-          // نخليهم undefined علشان نجبر fallback من navigator.platform
           platform: undefined,
           platformVersion: undefined,
           model: undefined,
