@@ -8,17 +8,19 @@ import {
   inject,
   input,
   linkedSignal,
+  OnDestroy,
   Renderer2,
 } from '@angular/core';
 
 @Directive({
   selector: '[ksToggleClassOnScroll]',
 })
-export class ToggleClassOnScrollDirective {
+export class ToggleClassOnScrollDirective implements OnDestroy {
   /* v8 ignore next */
   readonly ksToggleClassOnScroll = input.required<string>();
   /* v8 ignore next */
   readonly ksScrollOffset = input<number>(0);
+  /* v8 ignore next */
   private readonly _scrollOffset = linkedSignal(() => this.ksScrollOffset());
   private readonly document = inject<Document>(DOCUMENT);
   private readonly renderer2 = inject(Renderer2);

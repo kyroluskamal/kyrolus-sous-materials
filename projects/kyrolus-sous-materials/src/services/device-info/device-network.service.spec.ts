@@ -1,4 +1,4 @@
-// device-network.service.spec.ts
+
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
@@ -6,7 +6,7 @@ import { PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
 import { DeviceNetworkService } from './device-network.service';
 import type { NetInfo } from '../../models/device-info';
 
-/* ================= Helpers ================= */
+
 
 function createService(platform: 'browser' | 'server' = 'browser') {
   TestBed.resetTestingModule();
@@ -43,14 +43,15 @@ class FakeConnection extends EventTarget {
   }
 }
 
-function stubNavigator(obj: any) {
-  vi.stubGlobal('navigator', obj as Navigator);
+
+function setNavigator(partial: any) {
+  const base: any = typeof navigator === 'undefined' ? {} : navigator;
+  vi.stubGlobal('navigator', { ...base, ...partial } as Navigator);
 }
 
-function stubConnOnNavigator(conn: FakeConnection | undefined) {
-  const base: any = typeof navigator === 'undefined' ? {} : navigator;
-  stubNavigator({
-    ...base,
+
+function setConnection(conn: FakeConnection | undefined) {
+  setNavigator({
     connection: conn ?? undefined,
     mozConnection: undefined,
     webkitConnection: undefined,
@@ -62,12 +63,12 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-/* ================= Tests ================= */
 
-describe('DeviceNetworkService (Signals-only)', () => {
-  /* ============ 1) Init & SSR ============ */
+
+describe('DeviceNetworkService (signals-only)', () => {
+
   describe('1) Init & SSR', () => {
-    it('1.1 SSR: online=true الافتراضي و info كلها undefined', () => {
+    it('1.1 SSR ⇒ online=true by default; info undefineds', () => {
       const svc = createService('server');
       expect(svc.online()).toBe(true);
       expect(svc.info()).toEqual({
@@ -78,8 +79,8 @@ describe('DeviceNetworkService (Signals-only)', () => {
       });
     });
 
-    it('1.2 Browser بدون navigator.connection: يقرأ navigator.onLine ويعيد info افتراضي', () => {
-      stubNavigator({ onLine: false } as any);
+    it('1.2 Browser without navigator.connection ⇒ reads onLine; default info', () => {
+      setNavigator({ onLine: false });
       const svc = createService('browser');
       expect(svc.online()).toBe(false);
       expect(svc.info()).toEqual({
@@ -91,41 +92,33 @@ describe('DeviceNetworkService (Signals-only)', () => {
     });
   });
 
-  /* ============ 2) online/offline reactivity ============ */
+
   describe('2) Online/Offline reactivity', () => {
-    it('2.1 يتفاعل مع أحداث window online/offline', async () => {
-      stubNavigator({ onLine: true } as any);
+    it('2.1 reacts to window online/offline events', async () => {
+      setNavigator({ onLine: true });
       const svc = createService('browser');
 
-      // يبدأ true
       expect(svc.online()).toBe(true);
-
-      // غيّر قيمة onLine واطلق الحدث
       (navigator as any).onLine = false;
-      window.dispatchEvent(new Event('offline'));
+      globalThis.window.dispatchEvent(new Event('offline'));
       await Promise.resolve();
       expect(svc.online()).toBe(false);
 
       (navigator as any).onLine = true;
-      window.dispatchEvent(new Event('online'));
+      globalThis.window.dispatchEvent(new Event('online'));
       await Promise.resolve();
       expect(svc.online()).toBe(true);
     });
   });
 
-  /* ============ 3) navigator.connection supported ============ */
+
   describe('3) Connection info (supported)', () => {
-    it('3.1 يقرأ الخصائص ويحدّثها عند change', async () => {
-      // online حالته مش مهمة هنا، بس نخليها true
-      stubNavigator({ onLine: true } as any);
-
-      // Fake connection مدعوم
+    it('3.1 reads properties and updates on "change"', async () => {
+      setNavigator({ onLine: true });
       const conn = new FakeConnection('4g', false, 10, 50);
-      stubConnOnNavigator(conn);
-
+      setConnection(conn);
       const svc = createService('browser');
 
-      // initial read
       expect(svc.info()).toEqual({
         effectiveType: '4g',
         saveData: false,
@@ -133,7 +126,6 @@ describe('DeviceNetworkService (Signals-only)', () => {
         rtt: 50,
       });
 
-      // update -> dispatch 'change'
       conn.set({
         effectiveType: '3g',
         saveData: true,
@@ -141,7 +133,6 @@ describe('DeviceNetworkService (Signals-only)', () => {
         rtt: 300,
       });
       await Promise.resolve();
-
       expect(svc.info()).toEqual({
         effectiveType: '3g',
         saveData: true,
@@ -150,17 +141,14 @@ describe('DeviceNetworkService (Signals-only)', () => {
       });
     });
 
-    it('3.2 effectiveType غير معروف ⇒ يتحوّل إلى "unknown"', async () => {
-      stubNavigator({ onLine: true } as any);
-      const conn = new FakeConnection('wifi-6e', false, 100, 20); // قيمة غريبة
-      stubConnOnNavigator(conn);
-
+    it('3.2 unknown effectiveType ⇒ normalized to "unknown"', async () => {
+      setNavigator({ onLine: true });
+      const conn = new FakeConnection('wifi-6e', false, 100, 20);
+      setConnection(conn);
       const svc = createService('browser');
 
-      // القراءة الأولية تُحوِّل القيمة الغريبة لـ 'unknown'
       expect(svc.info().effectiveType).toBe<'unknown'>('unknown');
 
-      // رجّعها لقيمة موثقة ثم غيّرها لغريبة
       conn.set({ effectiveType: '2g' });
       await Promise.resolve();
       expect(svc.info().effectiveType).toBe<'2g'>('2g');
@@ -169,20 +157,84 @@ describe('DeviceNetworkService (Signals-only)', () => {
       await Promise.resolve();
       expect(svc.info().effectiveType).toBe<'unknown'>('unknown');
     });
+
+    it('3.3 supports mozConnection when connection is absent', () => {
+      const conn = new FakeConnection('4g', false, 10, 50);
+      setNavigator({ onLine: true, mozConnection: conn });
+      const svc = createService('browser');
+
+      expect(svc.info()).toEqual({
+        effectiveType: '4g',
+        saveData: false,
+        downlink: 10,
+        rtt: 50,
+      });
+    });
+
+    it('3.4 type-mismatch ⇒ invalid fields normalized to undefined (but effectiveType kept)', () => {
+      setNavigator({ onLine: true });
+      const bad = new FakeConnection(
+        '4g',
+        'yes' as any,
+        '10' as any,
+        null as any
+      );
+      setConnection(bad);
+      const svc = createService('browser');
+
+      expect(svc.info()).toEqual({
+        effectiveType: '4g',
+        saveData: undefined,
+        downlink: undefined,
+        rtt: undefined,
+      });
+    });
+    it('3.5 accepts "slow-2g" as a valid effectiveType', async () => {
+      setNavigator({ onLine: true });
+      const conn = new FakeConnection('slow-2g', false, 0.1, 1200);
+      setConnection(conn);
+      const svc = createService('browser');
+
+
+      expect(svc.info().effectiveType).toBe<'slow-2g'>('slow-2g');
+
+
+      conn.set({ effectiveType: '4g' });
+      await Promise.resolve();
+      expect(svc.info().effectiveType).toBe<'4g'>('4g');
+    });
   });
 
-  /* ============ 4) Safety & fallbacks ============ */
+
   describe('4) Safety & fallbacks', () => {
-    it('4.1 لو navigator.onLine غير متاح، ي fallback إلى true بدون كراش', () => {
-      // onLine غير معرف
-      stubNavigator({} as any);
+    it('4.1 missing navigator.onLine ⇒ falls back to true', () => {
+      setNavigator({});
       const svc = createService('browser');
       expect(svc.online()).toBe(true);
     });
 
-    it('4.2 عند غياب connection تمامًا يظل info ثابتًا على undefineds', () => {
-      stubNavigator({ onLine: true } as any);
-      stubConnOnNavigator(undefined);
+    it('4.2 no connection object at all ⇒ info stays default', () => {
+      setNavigator({ onLine: true });
+      setConnection(undefined);
+      const svc = createService('browser');
+
+      expect(svc.info()).toEqual({
+        effectiveType: undefined,
+        saveData: undefined,
+        downlink: undefined,
+        rtt: undefined,
+      });
+    });
+
+    it('4.3 getter throws while reading navigator.connection ⇒ safe fallback', () => {
+      const nav: any = {};
+      Object.defineProperty(nav, 'connection', {
+        get() {
+          throw new Error('boom');
+        },
+      });
+      vi.stubGlobal('navigator', nav);
+
       const svc = createService('browser');
       expect(svc.info()).toEqual({
         effectiveType: undefined,

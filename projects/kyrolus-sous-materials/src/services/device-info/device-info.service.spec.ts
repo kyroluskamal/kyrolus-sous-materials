@@ -23,7 +23,7 @@ function makeEventTarget(initial: Record<string, any> = {}) {
     removeEventListener(type: string, cb: (e?: any) => void) {
       listeners.get(type)?.delete(cb);
     },
-    __dispatch(type: string, ev = { type }) {
+    __dispatch(type: string, ev =  type ) {
       //NOSONAR
       for (const cb of listeners.get(type) ?? []) cb(ev);
     },
@@ -357,10 +357,8 @@ describe('DeviceInfoService', () => {
     });
 
     afterEach(() => {
-      // restore globals we replaced
       (globalThis.window as any).visualViewport = prevVV;
-      if (prevMM !== undefined) {
-        //NOSONAR
+      if (prevMM) {
         Object.defineProperty(globalThis.window, 'matchMedia', {
           configurable: true,
           writable: true,

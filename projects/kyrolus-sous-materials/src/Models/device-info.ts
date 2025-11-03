@@ -43,7 +43,7 @@ export class DeviceInfo {
   browserVersion?: string = '';
   language?: string = '';
   languages?: readonly string[] = [];
-  timezone?: string = '';
+  timeZone?: string = '';
   maxTouchPoints?: number = 0;
   screen?: DeviceScreenInfo = { width: 0, height: 0, pixelRatio: 0 };
   hardwareConcurrency?: number = 0;

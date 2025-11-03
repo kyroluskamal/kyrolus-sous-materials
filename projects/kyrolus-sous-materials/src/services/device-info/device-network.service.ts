@@ -10,12 +10,11 @@ export class DeviceNetworkService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
 
-  // --- حالة الاتصال (online/offline) كسجنال
   readonly online = this.isBrowser
     ? toSignal(
         merge(
-          fromEvent(window, 'online', { passive: true }),
-          fromEvent(window, 'offline', { passive: true })
+          fromEvent(globalThis.window, 'online', { passive: true }),
+          fromEvent(globalThis.window, 'offline', { passive: true })
         ).pipe(
           startWith(null),
           map(() =>
@@ -23,18 +22,17 @@ export class DeviceNetworkService {
               ? (navigator as any).onLine
               : true
           ),
-          distinctUntilChanged() // ← جديد
+          distinctUntilChanged()
         ),
         {
           initialValue:
             typeof navigator !== 'undefined' && 'onLine' in navigator
-              ? (navigator as any).onLine
+              ? navigator.onLine
               : true,
         }
       )
     : signal(true);
 
-  // --- معلومات Network Information API (لو مدعوم)
   private readonly _info: Signal<NetInfo> = (() => {
     if (!this.isBrowser) return signal(defaultNetInfo());
 
@@ -50,11 +48,9 @@ export class DeviceNetworkService {
     }
 
     if (!conn) {
-      // غير مدعوم → قيم افتراضية آمنة
       return signal(defaultNetInfo());
     }
 
-    // مدعوم → signal يتحدّث مع حدث 'change'
     return toSignal(
       fromEvent(conn, 'change').pipe(
         startWith(undefined),
@@ -64,7 +60,6 @@ export class DeviceNetworkService {
     );
   })();
 
-  // أعرِضها باسم واضح للاستهلاك
   readonly info: Signal<NetInfo> = this._info;
 }
 
@@ -79,7 +74,6 @@ function defaultNetInfo(): NetInfo {
 }
 
 function readConnection(conn: any): NetInfo {
-  // effectiveType narrowing إلى literal union معروف أو 'unknown'
   let effective: EffectiveConnectionType | undefined = undefined;
   const et = conn?.effectiveType;
 
@@ -99,8 +93,8 @@ function readConnection(conn: any): NetInfo {
 
   return {
     effectiveType: effective,
-    saveData: typeof conn?.saveData === 'boolean' ? conn.saveData : null,
-    downlink: typeof conn?.downlink === 'number' ? conn.downlink : null,
-    rtt: typeof conn?.rtt === 'number' ? conn.rtt : null,
+    saveData: typeof conn?.saveData === 'boolean' ? conn.saveData : undefined,
+    downlink: typeof conn?.downlink === 'number' ? conn.downlink : undefined,
+    rtt: typeof conn?.rtt === 'number' ? conn.rtt : undefined,
   };
 }

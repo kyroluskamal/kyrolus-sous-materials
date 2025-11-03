@@ -192,7 +192,7 @@ export class DeviceInfoService {
 
     const deviceType =
       client.mobile === true ? 'mobile' : this.getDeviceType(uaString);
-    const timezone = getTimeZoneSafe();
+    const timeZone = getTimeZoneSafe();
     const screen = this.buildScreenInfo();
 
     const hardwareConcurrency = nav?.hardwareConcurrency;
@@ -216,7 +216,7 @@ export class DeviceInfoService {
       platformVersion: parsed?.platformVersion,
       browser,
       browserVersion: parsed?.browserVersion,
-      timezone,
+      timeZone,
       maxTouchPoints: nav?.maxTouchPoints,
       screen,
       hardwareConcurrency,

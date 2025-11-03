@@ -175,7 +175,7 @@ export function expectedUA(args: ExpectedArgs, preset: Preset): DeviceInfo {
     languages: (args.languages?.length
       ? [...args.languages]
       : [...DEFAULT_LANGS]) as readonly string[],
-    timezone: args.timeZone ?? DEFAULT_TZ,
+    timeZone: args.timeZone ?? DEFAULT_TZ,
 
     // ---- input / hardware ----
     maxTouchPoints: args.maxTouchPoints ?? base.maxTouchPoints,

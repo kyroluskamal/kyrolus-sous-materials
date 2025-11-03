@@ -1,98 +1,99 @@
-import { describe, it, expect } from 'vitest';
+// projects/kyrolus-sous-materials/src/services/device-info/device-type.coverage.spec.ts
+import { describe, it, expect, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
-import { provideZonelessChangeDetection, signal } from '@angular/core';
-
+import { PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
 import { DeviceTypeService } from './device-type.service';
 import { DeviceInfoService } from './device-info.service';
-import type { DeviceInfo } from '../../models/device-info';
+import { DeviceInfo } from '../../models/device-info';
 
-/* ===== Stub لِـ DeviceInfoService يعرض pick() كسجنال ===== */
-class DeviceInfoServiceStub {
-  constructor(private readonly info: DeviceInfo) {}
-  pick<K extends keyof DeviceInfo>(key: K) {
-    return signal(this.info[key] as any);
-  }
+function stubEnv() {
+  Object.defineProperty(globalThis.window, 'innerWidth', {
+    configurable: true,
+    get: () => 1200,
+  });
+  Object.defineProperty(globalThis.window, 'innerHeight', {
+    configurable: true,
+    get: () => 800,
+  });
+  Object.defineProperty(globalThis.window, 'devicePixelRatio', {
+    configurable: true,
+    get: () => 1,
+  });
+  vi.stubGlobal('screen', {
+    width: 1200,
+    height: 800,
+    orientation: undefined,
+  } as any);
+  vi.stubGlobal('navigator', {
+    userAgent: 'Mozilla/5.0',
+    language: 'en-US',
+    languages: ['en-US'],
+    maxTouchPoints: 0,
+  } as any);
 }
 
-/* ===== Helper لإنشاء الخدمة مع Info مخصّص ===== */
-function createServiceWith(info: DeviceInfo) {
+function setup() {
+  vi.unstubAllGlobals();
+  stubEnv();
   TestBed.resetTestingModule();
   TestBed.configureTestingModule({
     providers: [
-      DeviceTypeService,
+      { provide: PLATFORM_ID, useValue: 'browser' },
       provideZonelessChangeDetection(),
-      { provide: DeviceInfoService, useValue: new DeviceInfoServiceStub(info) },
+      DeviceInfoService,
+      DeviceTypeService,
     ],
   });
-  return TestBed.inject(DeviceTypeService);
+  const types = TestBed.inject(DeviceTypeService);
+  const info = TestBed.inject(DeviceInfoService) as any;
+  return { types, info };
 }
 
-/* ===== عينات بيانات ===== */
-const MOBILE_INFO: DeviceInfo = {
-  userAgent: 'ua',
-  vendor: 'vendor',
-  platform: 'Android',
-  deviceType: 'mobile',
-  platformVersion: '14',
-  browser: 'Chrome',
-  browserVersion: '124.0.0.0',
-  language: 'en-US',
-  languages: ['en-US'],
-  timezone: 'UTC',
-  screen: { width: 390, height: 844, pixelRatio: 3, orientation: undefined },
-  hardwareConcurrency: 8,
-  deviceMemory: 6,
-  bitness: undefined,
-  architecture: undefined,
-  formFactors: undefined,
-  model: undefined,
-  wow64: undefined,
-};
+describe('DeviceTypeService branch coverage (single instance)', () => {
+  it('flips deviceType/maxTouchPoints on the SAME instance (covers all branches)', () => {
+    const { types, info } = setup();
+    const mutate = (patch: Partial<DeviceInfo>) => {
+      const curr = info['base']() as DeviceInfo;
+      info['base'].set({ ...curr, ...patch });
+    };
 
+    mutate({ deviceType: 'mobile', maxTouchPoints: 5 });
+    expect(types.isMobile()).toBe(true);
+    expect(types.isDesktop()).toBe(false);
+    expect(types.isTablet()).toBe(false);
+    expect(types.isHandheld()).toBe(true);
+    expect(types.isTouchCapable()).toBe(true);
 
-const BOT_INFO: DeviceInfo = {
-  userAgent: 'Crawler',
-  vendor: undefined,
-  platform: 'Windows',
-  deviceType: 'bot',
-  browser: 'Unknown',
-  browserVersion: undefined,
-  language: undefined,
-  languages: [],
-  timezone: undefined,
-  screen: { width: 390, height: 844, pixelRatio: 3, orientation: undefined },
-  deviceMemory: undefined,
-  bitness: undefined,
-  architecture: undefined,
-  formFactors: undefined,
-  model: undefined,
-  wow64: false,
-};
+    mutate({ deviceType: 'mobile', maxTouchPoints: 0 });
+    expect(types.isMobile()).toBe(true);
+    expect(types.isTablet()).toBe(false);
+    expect(types.isTouchCapable()).toBe(false);
 
-describe('DeviceTypeService (Signals-only)', () => {
-  describe('1) handheld & desktop flags', () => {
-    it('1.1 mobile ⇒ handheld=true, desktop=false', () => {
-      const s = createServiceWith(MOBILE_INFO);
-      expect(s.deviceType()).toBe('mobile');
-      expect(s.isMobile()).toBe(true);
-      expect(s.isTablet()).toBe(false);
-      expect(s.isHandheld()).toBe(true);
-      expect(s.isDesktop()).toBe(false);
-      expect(s.isBot()).toBe(false);
-      expect(s.isTouchCapable()).toBe(true);
-    });
-  });
+    mutate({ deviceType: 'tablet', maxTouchPoints: undefined });
+    expect(types.isTablet()).toBe(true);
+    expect(types.isMobile()).toBe(false);
+    expect(types.isDesktop()).toBe(false);
+    expect(types.isHandheld()).toBe(true);
+    expect(types.isTouchCapable()).toBe(true);
 
-  describe('2) bot flags', () => {
-    it('2.1 bot ⇒ isBot=true والباقي false', () => {
-      const s = createServiceWith(BOT_INFO);
-      expect(s.deviceType()).toBe('bot');
-      expect(s.isMobile()).toBe(false);
-      expect(s.isTablet()).toBe(false);
-      expect(s.isHandheld()).toBe(false);
-      expect(s.isDesktop()).toBe(false);
-      expect(s.isBot()).toBe(true);
-      expect(s.isTouchCapable()).toBe(false);
-    });
+    mutate({ deviceType: 'desktop', maxTouchPoints: undefined });
+    expect(types.isDesktop()).toBe(true);
+    expect(types.isMobile()).toBe(false);
+    expect(types.isTablet()).toBe(false);
+    expect(types.isHandheld()).toBe(false);
+    expect(types.isTouchCapable()).toBe(false);
+
+    mutate({ deviceType: 'desktop', maxTouchPoints: 10 });
+    expect(types.isDesktop()).toBe(true);
+    expect(types.isMobile()).toBe(false);
+    expect(types.isTouchCapable()).toBe(true);
+
+    mutate({ deviceType: 'bot', maxTouchPoints: undefined });
+    expect(types.isBot()).toBe(true);
+    expect(types.isDesktop()).toBe(false);
+    expect(types.isMobile()).toBe(false);
+    expect(types.isTablet()).toBe(false);
+    expect(types.isHandheld()).toBe(false);
+    expect(types.isTouchCapable()).toBe(false);
   });
 });

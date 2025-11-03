@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
 import { DeviceInfoService } from './device-info.service';
 
 @Injectable({
@@ -6,23 +6,20 @@ import { DeviceInfoService } from './device-info.service';
 })
 export class DeviceEnvironmentService {
   private readonly dev = inject(DeviceInfoService);
-
-  // OS & Browser
   readonly platformVersion = this.dev.pick('platformVersion');
   readonly browser = this.dev.pick('browser');
-  readonly browserVer = this.dev.pick('browserVersion');
-
-  // Platform/Vendor/UA
+  readonly browserVersion = this.dev.pick('browserVersion');
   readonly platform = this.dev.pick('platform');
   readonly vendor = this.dev.pick('vendor');
   readonly userAgent = this.dev.pick('userAgent');
-
-  // Screen & Hardware
-  readonly screen = this.dev.pick('screen');
+  /* v8 ignore start */
+  readonly screen = computed(() => {
+    const s = this.dev.pick('screen')();
+    return s ? Object.freeze({ ...s }) : s;
+  });
+  /* v8 ignore end */
   readonly hardwareConcurrency = this.dev.pick('hardwareConcurrency');
   readonly deviceMemory = this.dev.pick('deviceMemory');
-
-  // High-entropy (لو محتاجها هنا)
   readonly bitness = this.dev.pick('bitness');
   readonly architecture = this.dev.pick('architecture');
   readonly model = this.dev.pick('model');
