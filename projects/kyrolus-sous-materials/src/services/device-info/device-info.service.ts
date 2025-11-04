@@ -85,8 +85,7 @@ export class DeviceInfoService {
         highEntropy.fullVersionList,
         final.browser
       );
-      final.platform = (highEntropy.platform ??
-        curr.platform) as DeviceOperatingSystem;
+
       final.platformVersion =
         mapPlatformVersionToOSVersion(
           final.platform,
@@ -171,10 +170,57 @@ export class DeviceInfoService {
       bitness: parsed?.bitness as any,
       wow64: parsed?.wow64,
     });
-    let browser = parsed?.browser;
-    browser ??= 'Unknown';
-    if (browser == 'Unknown') mapBrowserFromBrands(client.brands);
+    /* v8 ignore start */
+    let browser = parsed?.browser ?? 'Unknown';
+    const overlayOrLauncher =
+      /steam\s*gameoverlay/i.test(uaString) ||
+      /epicgameslauncher/i.test(uaString);
 
+    const isiOS =
+      /\b(iPhone|iPad|iPod)\b/i.test(uaString) ||
+      /cpu (?:iphone )?os\s/i.test(uaString);
+    const isFacebookIAB = /\b(FBAV|FBAN|FBIOS|FB_IAB)\b/i.test(uaString);
+    const isTwitterIAB =
+      /\bTwitter\b/i.test(uaString) && /\biPhone|iPad|iOS\b/i.test(uaString);
+
+    const forceUnknownBrowser =
+      overlayOrLauncher || (isiOS && (isFacebookIAB || isTwitterIAB));
+    if (forceUnknownBrowser) {
+      browser = 'Unknown';
+    }
+    function shouldMapBrowserFromBrands(
+      uaStr: string,
+      agent: AgentType,
+      os?: string
+    ) {
+      const ua = uaStr ?? '';
+
+      if (agent === 'bot' || agent === 'preview') return false;
+
+      if (/\b(msie|trident|edgehtml|iemobile)\b/i.test(ua)) return false;
+      if (/\b Edge\/\d+/i.test(ua)) return false;
+      if (/\bxbox\b/i.test(ua) || /\buwp\b/i.test(ua)) return false;
+
+      if (overlayOrLauncher) return false;
+      if (isiOS && (isFacebookIAB || isTwitterIAB)) return false;
+
+      const chromiumButNotChrome =
+        /\bchromium\/\d+/i.test(ua) && !/\b(?:chrome|crios)\/\d+/i.test(ua);
+      if (chromiumButNotChrome) return false;
+
+      if (isiOS && !/\bcrios\/\d+/i.test(ua)) return false;
+
+      return true;
+    }
+
+    if (
+      browser === 'Unknown' &&
+      shouldMapBrowserFromBrands(uaString, agentType, parsed?.platform)
+    ) {
+      const mapped = mapBrowserFromBrands(client.brands);
+      if (mapped) browser = mapped;
+    }
+    /* v8 ignore end */
     let platform = parsed?.platform;
     if (!platform || platform == 'Unknown') {
       /* v8 ignore next */

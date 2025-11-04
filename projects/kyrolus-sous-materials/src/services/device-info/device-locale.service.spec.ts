@@ -203,7 +203,7 @@ describe('DeviceLocaleService', () => {
       // Intl without locale → forces fallback chain (language -> languages[0] -> 'en-US')
       mockIntl({ ro: {} as any, localeRegion: undefined });
       const { svc, stub } = create('browser');
-      stub.setLanguage(undefined);
+      stub.setLanguage();
       stub.setLanguages(['es-ES', 'en-US']); // should be chosen
       expect(svc.localeOptions()!.locale).toBe('es-ES');
     });
@@ -211,7 +211,7 @@ describe('DeviceLocaleService', () => {
     it('2.12 Intl.Locale throws ⇒ region falls back to regex parsing', () => {
       // Provide locale but make Intl.Locale(...) throw to hit the catch branch
       mockIntl({ ro: { locale: 'pt-BR' } as any, localeRegion: undefined });
-      (Intl as any).Locale = class {
+      (Intl as any).Locale = class {//NOSONAR
         constructor(_: string) {
           throw new Error('boom');
         }
