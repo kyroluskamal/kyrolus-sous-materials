@@ -8,9 +8,9 @@ import {
   type Signal,
 } from '@angular/core';
 
+import { DeviceInfoService } from '../device-info/device-info.service';
+import type { DeviceInfo } from '../../../models/device-info';
 import { DeviceEnvironmentService } from './device-environment.service';
-import { DeviceInfoService } from './device-info.service';
-import type { DeviceInfo } from '../../models/device-info';
 
 const tick = () => new Promise<void>((r) => setTimeout(r, 0));
 
@@ -30,7 +30,6 @@ class DeviceInfoServiceStub {
     (this.pick(key) as any).set(val);
   }
 }
-
 
 function createServiceWith(info: Partial<DeviceInfo>) {
   const stub = new DeviceInfoServiceStub(info);
@@ -52,9 +51,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-
 describe('DeviceEnvironmentService', () => {
-
   describe('1) OS/Browser/UA/platform/vendor', () => {
     it('1.1 should expose OS & Browser metadata as signals', async () => {
       const { svc } = createServiceWith({
@@ -88,7 +85,6 @@ describe('DeviceEnvironmentService', () => {
     });
   });
 
-
   describe('2) Screen & Hardware', () => {
     it('2.1 should expose screen, hardwareConcurrency, and deviceMemory', () => {
       const { svc } = createServiceWith({
@@ -108,7 +104,6 @@ describe('DeviceEnvironmentService', () => {
     });
   });
 
-
   describe('3) High-entropy fields', () => {
     it('3.1 should pass through bitness/architecture/model/formFactors/wow64', () => {
       const { svc } = createServiceWith({
@@ -126,7 +121,6 @@ describe('DeviceEnvironmentService', () => {
       expect(svc.wow64()).toBe(false);
     });
   });
-
 
   describe('4) Reactivity', () => {
     it('4.1 updates when underlying pick() signals change', () => {

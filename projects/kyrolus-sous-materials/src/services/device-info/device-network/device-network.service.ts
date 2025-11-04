@@ -3,7 +3,7 @@ import { Injectable, Signal, signal, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { fromEvent, merge, startWith, map, distinctUntilChanged } from 'rxjs';
-import { EffectiveConnectionType, NetInfo } from '../../models/device-info';
+import { EffectiveConnectionType, NetInfo } from '../../../models/device-info';
 
 @Injectable({ providedIn: 'root' })
 export class DeviceNetworkService {

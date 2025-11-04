@@ -29,8 +29,8 @@ import {
   DeviceScreenInfo,
   DeviceType,
   UACHDataValues,
-} from '../../models/device-info';
-import { promiseToSignal } from '../reusable-function';
+} from '../../../models/device-info';
+import { promiseToSignal } from '../../reusable-function';
 import { HINTS } from './deice-type-const';
 import {
   decideVendor,

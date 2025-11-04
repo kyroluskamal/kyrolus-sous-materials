@@ -1,5 +1,5 @@
 import { computed, inject, Injectable } from '@angular/core';
-import { DeviceInfoService } from './device-info.service';
+import { DeviceInfoService } from '../device-info/device-info.service';
 
 @Injectable({
   providedIn: 'root',

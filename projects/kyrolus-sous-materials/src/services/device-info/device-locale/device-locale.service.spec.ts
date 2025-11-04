@@ -1,4 +1,3 @@
-// projects/kyrolus-sous-materials/src/services/device-info/device-locale.service.spec.ts
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import {
@@ -8,8 +7,8 @@ import {
   Signal,
 } from '@angular/core';
 
+import type { EnvLocaleOptions } from '../../../models/device-info';
 import { DeviceLocaleService } from './device-locale.service';
-import type { EnvLocaleOptions } from '../../models/device-info';
 
 /* ================= Helpers ================= */
 
@@ -31,7 +30,7 @@ class DevInfoStub {
   pick<K extends 'language' | 'languages' | 'timeZone'>(k: K): Signal<any> {
     if (k === 'language') return this.lang$ as any;
     if (k === 'languages') return this.langs$ as any;
-    if (k === 'timeZone') return this.tz$ as any; // service uses 'timeZone'
+    if (k === 'timeZone') return this.tz$ as any;
     throw new Error('unexpected key: ' + k);
   }
 }
@@ -43,7 +42,7 @@ function create(platform: 'browser' | 'server', stub = new DevInfoStub()) {
       provideZonelessChangeDetection(),
       { provide: PLATFORM_ID, useValue: platform },
       {
-        provide: require('./device-info.service').DeviceInfoService,
+        provide: require('../device-info/device-info.service').DeviceInfoService,
         useValue: stub,
       },
       DeviceLocaleService,
@@ -52,7 +51,7 @@ function create(platform: 'browser' | 'server', stub = new DevInfoStub()) {
   return { svc: TestBed.inject(DeviceLocaleService), stub };
 }
 
-// Replace Intl.DateTimeFormat and Intl.Locale for a test
+
 const origDTF = Intl.DateTimeFormat;
 const origLocale = (Intl as any).Locale;
 
@@ -60,7 +59,7 @@ function mockIntl(
   options: {
     ro?: Partial<Intl.ResolvedDateTimeFormatOptions>;
     throws?: boolean;
-    localeRegion?: string; // region returned by Intl.Locale
+    localeRegion?: string;
   } = {}
 ) {
   (Intl as any).DateTimeFormat = function () {
@@ -200,25 +199,26 @@ describe('DeviceLocaleService', () => {
       expect(typeof v.numberingSystem).toBe('string');
     });
     it('2.11 locale falls back to first item of languages[] when language is undefined', () => {
-      // Intl without locale → forces fallback chain (language -> languages[0] -> 'en-US')
+
       mockIntl({ ro: {} as any, localeRegion: undefined });
       const { svc, stub } = create('browser');
       stub.setLanguage();
-      stub.setLanguages(['es-ES', 'en-US']); // should be chosen
+      stub.setLanguages(['es-ES', 'en-US']);
       expect(svc.localeOptions()!.locale).toBe('es-ES');
     });
 
     it('2.12 Intl.Locale throws ⇒ region falls back to regex parsing', () => {
-      // Provide locale but make Intl.Locale(...) throw to hit the catch branch
       mockIntl({ ro: { locale: 'pt-BR' } as any, localeRegion: undefined });
-      (Intl as any).Locale = class {//NOSONAR
-        constructor(_: string) {
-          throw new Error('boom');
-        }
-      } as any;
+
+      type LocaleCtor = new (tag: string) => never;
+
+      const ThrowingLocale = function (this: unknown, _tag: string): never {
+        throw new Error('boom');
+      } as unknown as LocaleCtor;
+      (Intl as any).Locale = ThrowingLocale;
 
       const { svc } = create('browser');
-      expect(svc.localeOptions()!.region).toBe('BR'); // regex fallback path
+      expect(svc.localeOptions()!.region).toBe('BR');
     });
     it('2.13 hourCycle respects explicit "h11"', () => {
       mockIntl({ ro: { locale: 'en-US', hourCycle: 'h11' } as any });
@@ -226,14 +226,14 @@ describe('DeviceLocaleService', () => {
       expect(svc.localeOptions()!.hourCycle).toBe<'h11'>('h11');
     });
     it('2.14 falls back to regex when Intl.Locale is unavailable', () => {
-      // Intl provides locale but no Locale constructor → skip the try-branch entirely
+
       mockIntl({ ro: { locale: 'it-IT' } as any, localeRegion: undefined });
 
-      // Remove Intl.Locale to hit the (!region && Intl?.Locale) === false path
+
       (Intl as any).Locale = undefined;
 
       const { svc } = create('browser');
-      expect(svc.localeOptions()!.region).toBe('IT'); // regex fallback
+      expect(svc.localeOptions()!.region).toBe('IT');
     });
   });
 
@@ -247,10 +247,10 @@ describe('DeviceLocaleService', () => {
       stub.setTimeZone('America/New_York');
 
       const v = svc.localeOptions()!;
-      expect(v.locale).toBe('en-US'); // from language fallback
-      expect(v.timeZone).toBe('America/New_York'); // service tz fallback
-      expect(v.hourCycle).toBe<'h23'>('h23'); // default path
-      expect(v.region).toBe('US'); // regex path
+      expect(v.locale).toBe('en-US');
+      expect(v.timeZone).toBe('America/New_York');
+      expect(v.hourCycle).toBe<'h23'>('h23');
+      expect(v.region).toBe('US');
       expect(v.calendar).toBe('gregory');
       expect(v.numberingSystem).toBe('latn');
     });
@@ -298,14 +298,14 @@ describe('DeviceLocaleService', () => {
     it('4.6 falls back to document.dir when <html dir> is absent', () => {
       mockIntl({ ro: { locale: 'en-US' } as any });
 
-      // Make <html dir> resolve to undefined so the chain uses document.dir
+
       const html: any = document.documentElement;
       Object.defineProperty(html, 'dir', {
         configurable: true,
         get: () => undefined,
       });
 
-      // Only document.dir is set
+
       (document as any).dir = 'rtl';
 
       const { svc } = create('browser');
@@ -315,7 +315,7 @@ describe('DeviceLocaleService', () => {
     it('4.7 uses default empty-string branch when both html.dir and document.dir are undefined', () => {
       mockIntl({ ro: { locale: 'en-US' } as any });
 
-      // Force both to be undefined so the chain hits the final '' literal
+
       const html: any = document.documentElement;
       Object.defineProperty(html, 'dir', {
         configurable: true,
@@ -327,11 +327,12 @@ describe('DeviceLocaleService', () => {
       });
 
       const { svc, stub } = create('browser');
-      // With no dirs, it will infer from languages; make it LTR by default
+
       stub.setLanguages();
       stub.setLanguage();
       expect(svc.direction()).toBe<'ltr'>('ltr');
-    });it('4.8 languages drive direction when html.dir & document.dir are both undefined (rtl -> ltr on SAME instance)', () => {
+    });
+    it('4.8 languages drive direction when html.dir & document.dir are both undefined (rtl -> ltr on SAME instance)', () => {
       mockIntl({ ro: { locale: 'en-US' } as any });
 
       const html: any = document.documentElement;
@@ -352,6 +353,5 @@ describe('DeviceLocaleService', () => {
       stub.setLanguages(['en-US']);
       expect(svc.direction()).toBe<'ltr'>('ltr');
     });
-
   });
 });

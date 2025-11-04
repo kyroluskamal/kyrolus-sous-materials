@@ -5,8 +5,8 @@ import {
   platformMapsWithHighUaCh,
   platformMapsWithLowUaCh,
   platformMapsWithoutUaCH,
-} from './mockups/platform-ua-tests';
-import { deviceInfoTests } from './mockups/mockup-types';
+} from '../mockups/platform-ua-tests';
+import { deviceInfoTests } from '../mockups/mockup-types';
 
 const tick = () => new Promise<void>((r) => setTimeout(r, 0));
 // Minimal EventTarget-like object
@@ -23,7 +23,7 @@ function makeEventTarget(initial: Record<string, any> = {}) {
     removeEventListener(type: string, cb: (e?: any) => void) {
       listeners.get(type)?.delete(cb);
     },
-    __dispatch(type: string, ev =  type ) {
+    __dispatch(type: string, ev = type) {
       //NOSONAR
       for (const cb of listeners.get(type) ?? []) cb(ev);
     },
@@ -622,23 +622,23 @@ describe('DeviceInfoService', () => {
     it('7.7 window.orientationchange without drived orientation', async () => {
       injectUAOnly(UA, 'Win32');
 
-     const orientation = new EventTarget() as any;
-     orientation.type = 'portrait-primary';
-     vi.stubGlobal('screen', { orientation });
+      const orientation = new EventTarget() as any;
+      orientation.type = 'portrait-primary';
+      vi.stubGlobal('screen', { orientation });
 
-     const srv = createServiceFromBasedonPltrom('browser');
+      const srv = createServiceFromBasedonPltrom('browser');
 
-     orientation.type = 'landscape-primary';
-     orientation.dispatchEvent(new Event('change'));
-     await nextFrame();
+      orientation.type = 'landscape-primary';
+      orientation.dispatchEvent(new Event('change'));
+      await nextFrame();
 
-     expect((srv.device().screen?.orientation as any).type).toBe(
-       'landscape-primary'
-     );
+      expect((srv.device().screen?.orientation as any).type).toBe(
+        'landscape-primary'
+      );
 
-     // no-op تاني لتغطية comparator
-     globalThis.window.dispatchEvent(new Event('resize'));
-     await nextFrame();
+      // no-op تاني لتغطية comparator
+      globalThis.window.dispatchEvent(new Event('resize'));
+      await nextFrame();
 
       expect((srv.device().screen?.orientation as any).type).toBe(
         'landscape-primary'

@@ -1,14 +1,13 @@
-// test/utils/device-test-kit.ts
 import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
-import { ClientInfo, UACHDataValues } from '../../models/device-info';
+import { ClientInfo, UACHDataValues } from '../../../models/device-info';
 import { DeviceInfoService } from './device-info.service';
 
 export type NavMockBits = {
   ua?: string;
   vendor?: string;
-  client?: Partial<ClientInfo> ; // low-entropy
-  he?: Partial<UACHDataValues>; // high-entropy (لو null يبقى مفيش HE)
+  client?: Partial<ClientInfo>;
+  he?: Partial<UACHDataValues>;
   language?: string;
   languages?: readonly string[];
   webdriver?: boolean;
@@ -30,12 +29,10 @@ export async function createServiceWithNavigator(bits: NavMockBits) {
       brands: bits.client.brands,
       platform: bits.client.platform,
       mobile: bits.client.mobile,
-      // لو عايز low-entropy بس خلّيها بترجع null
       getHighEntropyValues: async () => bits.he ?? null,
     };
   }
 
-  // اربط navigator على window/jsdom
   Object.defineProperty(globalThis, 'navigator', {
     value: nav,
     configurable: true,
@@ -46,7 +43,6 @@ export async function createServiceWithNavigator(bits: NavMockBits) {
     configurable: true,
   });
 
-  // optional: شاشة بسيطة تمنع undefined
   (globalThis as any).screen = (globalThis as any).screen ?? {
     width: 1200,
     height: 800,
@@ -55,19 +51,20 @@ export async function createServiceWithNavigator(bits: NavMockBits) {
 
   TestBed.resetTestingModule();
   TestBed.configureTestingModule({
-    providers: [{ provide: PLATFORM_ID, useValue: 'browser' }, provideZonelessChangeDetection()],
+    providers: [
+      { provide: PLATFORM_ID, useValue: 'browser' },
+      provideZonelessChangeDetection(),
+    ],
   });
 
   const svc = TestBed.inject(DeviceInfoService);
 
-  // إدّي فرصة للـ promiseToSignal إنه يحل الـ HE (لو موجود)
   await Promise.resolve();
   await new Promise((r) => setTimeout(r, 0));
 
   return svc;
 }
 
-// Helper صغير لتوقع اسم المتصفح من brand
 export function expectedBrowserFromBrand(brand?: string): string | undefined {
   if (!brand) return undefined;
   const b = brand.toLowerCase();

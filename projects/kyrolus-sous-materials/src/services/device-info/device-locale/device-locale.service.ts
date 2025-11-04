@@ -6,8 +6,8 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { DeviceInfoService } from './device-info.service';
-import type { EnvLocaleOptions } from '../../models/device-info';
+import { DeviceInfoService } from '../device-info/device-info.service';
+import type { EnvLocaleOptions } from '../../../models/device-info';
 
 @Injectable({ providedIn: 'root' })
 export class DeviceLocaleService {

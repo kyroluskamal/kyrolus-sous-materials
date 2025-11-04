@@ -1,4 +1,4 @@
-import { BrowserHit, Hints, SimpleRule } from './device-service-types';
+import { Hints, SimpleRule, BrowserHit } from "./device-service-types";
 
 export const HINTS: readonly Hints[] = [
   'brands',
@@ -14,14 +14,14 @@ export const HINTS: readonly Hints[] = [
   'wow64',
 ] as const;
 export const SIMPLE_RULES: SimpleRule[] = [
-  { re: /\b(edg|edgios|edga)\/([\d.]+)/i, brand: 'Edge', verIdx: 2 }, // Chromium Edge
+  { re: /\b(edg|edgios|edga)\/([\d.]+)/i, brand: 'Edge', verIdx: 2 },
   { re: /\b(?:OPR|OPT|OPiOS)\/([\d.]+)/i, brand: 'Opera', verIdx: 1 },
-  { re: /\bHeadlessChrome\/([\d.]+)/i, brand: 'Chrome', verIdx: 1 }, // Headless Chrome
+  { re: /\bHeadlessChrome\/([\d.]+)/i, brand: 'Chrome', verIdx: 1 }, 
   { re: /\bSamsungBrowser\/([\d.]+)/i, brand: 'Samsung Internet', verIdx: 1 },
   { re: /\b(YaBrowser|YandexBrowser)\/([\d.]+)/i, brand: 'Yandex', verIdx: 2 },
   { re: /\bVivaldi\/([\d.]+)/i, brand: 'Vivaldi', verIdx: 1 },
   { re: /\bBrave\/([\d.]+)/i, brand: 'Brave', verIdx: 1 },
-  { re: /\bTorch\/([\d.]+)/i, brand: 'Torch', verIdx: 1 }, // Torch
+  { re: /\bTorch\/([\d.]+)/i, brand: 'Torch', verIdx: 1 },
 ];
 
 export const classifyBySimpleRules = (ua: string): BrowserHit | undefined => {

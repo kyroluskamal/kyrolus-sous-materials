@@ -7,7 +7,7 @@ import {
   DeviceOperatingSystem,
   DeviceType,
   UAParsed,
-} from '../../models/device-info';
+} from '../../../models/device-info';
 import {
   classifyBySimpleRules,
   parseOperaPresto,
@@ -23,9 +23,7 @@ import { isBotUA, isNonBrowserUA } from './device-service-types';
 export function getTimeZoneSafe() {
   return Intl.DateTimeFormat()?.resolvedOptions()?.timeZone;
 }
-export function normalizePlatform(
-  p?: string
-): DeviceOperatingSystem {
+export function normalizePlatform(p?: string): DeviceOperatingSystem {
   /* v8 ignore start */
   if (!p) return 'Unknown';
   const s = p.toLowerCase();
@@ -189,7 +187,7 @@ export function parseOSFromUA(ua: string): {
   platform: UAParsed['platform'];
   platformVersion?: string;
 } {
-  // iOS
+
   let m =
     /(?:iphone|ipad|ipod).*?os\s([0-9_]+)|cpu (?:iphone )?os\s([0-9_]+)/i.exec(
       ua
@@ -204,18 +202,18 @@ export function parseOSFromUA(ua: string): {
     /Windows\sMobile\s([0-9.]+)/i.exec(ua);
   if (m) {
     const ver = (m[1] || '').replaceAll('_', '.');
-    // Map WP 10 to "10/11" to align with the rest of Windows mapping
+
     return {
       platform: 'Windows',
       platformVersion: ver.startsWith('10') ? '10/11' : ver,
     };
   }
-  // Android
+
   m = /Android\s([0-9._]+)/i.exec(ua);
   if (m)
     return { platform: 'Android', platformVersion: m[1].replaceAll('_', '.') };
 
-  // ChromeOS
+
   if (/CrOS/i.test(ua)) {
     const v = /CrOS [^ ]+ ([\d.]+)/i.exec(ua)?.[1];
     return { platform: 'ChromeOS', platformVersion: v };
@@ -224,12 +222,12 @@ export function parseOSFromUA(ua: string): {
     const v = /Version\/([\d.]+)/i.exec(ua)?.[1];
     return { platform: 'iOS', platformVersion: v };
   }
-  // macOS
+
   m = /Mac OS X\s([0-9._]+)/i.exec(ua);
   if (m)
     return { platform: 'macOS', platformVersion: m[1].replaceAll('_', '.') };
 
-  // Windows
+
   m = /Windows NT\s([0-9.]+)/i.exec(ua);
   if (m) {
     const nt = m[1];
@@ -244,14 +242,14 @@ export function parseOSFromUA(ua: string): {
     return { platform: 'Windows', platformVersion: map[nt] ?? nt };
   }
 
-  // Linux
+
   if (/linux/i.test(ua))
     return { platform: 'Linux', platformVersion: undefined };
 
   return { platform: 'Unknown', platformVersion: undefined };
 }
 
-// ---- main: low-complexity orchestrator ----
+
 export function parseBrowserFromUA(uaRaw: string): {
   browser: DeviceBrowser;
   browserVersion?: string;
@@ -368,7 +366,7 @@ export function applyWindowsArchHeuristics(
   const low = ua.toLowerCase();
   const ntRaw = /Windows NT\s([0-9.]+)/i.exec(ua)?.[1];
 
-  // 0) Xbox → x64/64, always
+
   if (/xbox/i.test(ua)) {
     return {
       arch: current.arch ?? 'x64',
@@ -377,8 +375,8 @@ export function applyWindowsArchHeuristics(
     };
   }
 
-  // 1) Special-case: IE10 Touch on Windows 8 (MSIE 10.0 + NT 6.2 + Touch)
-  // Old IE tokens often include WOW64 noisily; tests expect no arch/bitness here.
+
+
   if (
     /\bMSIE\s*10\.0\b/i.test(ua) &&
     /\bWindows NT\s*6\.2\b/i.test(ua) &&
@@ -387,7 +385,7 @@ export function applyWindowsArchHeuristics(
     return { arch: undefined, bitness: undefined, wow64: false };
   }
 
-  // 2) Respect explicit tokens only
+
   if (/\bwow64\b/.test(low)) {
     return {
       arch: current.arch ?? 'x86',
@@ -410,27 +408,27 @@ export function applyWindowsArchHeuristics(
     };
   }
 
-  // 3) Win7 + (IE|Trident) heuristic → many 64-bit desktops didn't expose Win64
+
   const isIEorTrident = /\bmsie\b|\btrident\/\d+/i.test(ua);
   if (!current.wow64 && !current.arch && ntRaw === '6.1' && isIEorTrident) {
     return { arch: undefined, bitness: undefined, wow64: false };
   }
 
-  // 4) DO NOT force x64 for EdgeHTML or UWP WebView if it's not explicit.
-  //    Leaving as-is keeps tests expecting neutral arch/bitness.
+
+
 
   return current;
 }
-// EdgeHTML on desktop (legacy Edge with "Edge/" token but NOT Windows Phone)
+
 export function isEdgeHTMLDesktopUA(ua: string = ''): boolean {
-  // Edge/12..18 on Windows 10 desktop, exclude Windows Phone / IEMobile
+
   return (
     /\bedge\/(1[2-8])(\.|\/|\b)/i.test(ua) &&
     !/(windows phone|iemobile)/i.test(ua)
   );
 }
 
-// Decide vendor consistently
+
 export function decideVendor(
   ua: string,
   browser?: DeviceBrowser,
@@ -439,16 +437,16 @@ export function decideVendor(
 ): string {
   const low = (ua || '').toLowerCase();
 
-  // Bots & previews → ''
+
   if (agentType !== 'human') return '';
 
-  // Firefox-family & Unknown → ''
+
   if (browser === 'Firefox' || browser === 'Unknown') return '';
 
-  // IE / Trident / EdgeHTML desktop → ''
+
   if (/msie|trident/i.test(low) || isEdgeHTMLDesktopUA(ua)) return '';
 
-  // Everything else (Chromium-family incl. Edge-Chromium, Opera, Vivaldi, Brave, Yandex, Electron, etc.)
+
   return vendorRaw || '';
 }
 export function isEdgeHTMLWebView(ua: string): boolean {
@@ -469,22 +467,22 @@ export function normalizeHardwareForContext(opts: {
   let bitness = opts.bitness;
   let wow64 = opts.wow64;
 
-  // Bots & preview -> suppress hardware fields
+
   if (opts.agentType === 'bot' || opts.agentType === 'preview') {
     return { arch: undefined, bitness: undefined, wow64: undefined };
   }
 
-  // UWP EdgeHTML WebView -> suppress hardware
+
   if (isEdgeHTMLWebView(opts.ua)) {
     return { arch: undefined, bitness: undefined, wow64: undefined };
   }
 
-  // Epic Games Launcher (Chromium UA, not a browser) -> suppress hardware
+
   if (/epicgameslauncher/i.test(opts.ua)) {
     return { arch: undefined, bitness: undefined, wow64: undefined };
   }
 
-  // Xbox: do not assume x64 unless token explicitly present
+
   const hasExplicitHW =
     low.includes('x64') ||
     low.includes('win64') ||

@@ -1,12 +1,9 @@
-
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
 
+import type { NetInfo } from '../../../models/device-info';
 import { DeviceNetworkService } from './device-network.service';
-import type { NetInfo } from '../../models/device-info';
-
-
 
 function createService(platform: 'browser' | 'server' = 'browser') {
   TestBed.resetTestingModule();
@@ -43,12 +40,10 @@ class FakeConnection extends EventTarget {
   }
 }
 
-
 function setNavigator(partial: any) {
   const base: any = typeof navigator === 'undefined' ? {} : navigator;
   vi.stubGlobal('navigator', { ...base, ...partial } as Navigator);
 }
-
 
 function setConnection(conn: FakeConnection | undefined) {
   setNavigator({
@@ -63,10 +58,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-
-
 describe('DeviceNetworkService (signals-only)', () => {
-
   describe('1) Init & SSR', () => {
     it('1.1 SSR ⇒ online=true by default; info undefineds', () => {
       const svc = createService('server');
@@ -92,7 +84,6 @@ describe('DeviceNetworkService (signals-only)', () => {
     });
   });
 
-
   describe('2) Online/Offline reactivity', () => {
     it('2.1 reacts to window online/offline events', async () => {
       setNavigator({ onLine: true });
@@ -110,7 +101,6 @@ describe('DeviceNetworkService (signals-only)', () => {
       expect(svc.online()).toBe(true);
     });
   });
-
 
   describe('3) Connection info (supported)', () => {
     it('3.1 reads properties and updates on "change"', async () => {
@@ -195,16 +185,13 @@ describe('DeviceNetworkService (signals-only)', () => {
       setConnection(conn);
       const svc = createService('browser');
 
-
       expect(svc.info().effectiveType).toBe<'slow-2g'>('slow-2g');
-
 
       conn.set({ effectiveType: '4g' });
       await Promise.resolve();
       expect(svc.info().effectiveType).toBe<'4g'>('4g');
     });
   });
-
 
   describe('4) Safety & fallbacks', () => {
     it('4.1 missing navigator.onLine ⇒ falls back to true', () => {

@@ -2,9 +2,10 @@
 import { describe, it, expect, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
+import { DeviceInfo } from 'projects/kyrolus-sous-materials/src/models/device-info';
+import { DeviceInfoService } from '../device-info/device-info.service';
 import { DeviceTypeService } from './device-type.service';
-import { DeviceInfoService } from './device-info.service';
-import { DeviceInfo } from '../../models/device-info';
+
 
 function stubEnv() {
   Object.defineProperty(globalThis.window, 'innerWidth', {
@@ -45,7 +46,7 @@ function setup() {
     ],
   });
   const types = TestBed.inject(DeviceTypeService);
-  const info = TestBed.inject(DeviceInfoService) as any;
+  const info = TestBed.inject(DeviceInfoService) ;
   return { types, info };
 }
 
@@ -53,7 +54,7 @@ describe('DeviceTypeService branch coverage (single instance)', () => {
   it('flips deviceType/maxTouchPoints on the SAME instance (covers all branches)', () => {
     const { types, info } = setup();
     const mutate = (patch: Partial<DeviceInfo>) => {
-      const curr = info['base']() as DeviceInfo;
+      const curr = info['base']() ;
       info['base'].set({ ...curr, ...patch });
     };
 
