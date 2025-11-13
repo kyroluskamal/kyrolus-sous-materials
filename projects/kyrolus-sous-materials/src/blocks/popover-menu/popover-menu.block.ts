@@ -33,7 +33,7 @@ import { MenuAriaHandlingDirective } from '../../components/menu/menu-aria-handl
     ButtonDirective,
     FloatingUIDirective,
     NgTemplateOutlet,
-    MenuAriaHandlingDirective
+    MenuAriaHandlingDirective,
 ],
   templateUrl: './popover-menu.block.html',
   host: {

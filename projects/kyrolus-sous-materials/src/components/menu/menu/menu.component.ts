@@ -1,15 +1,20 @@
-import { Component, input } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  input,
+} from '@angular/core';
 
 @Component({
   selector: 'ks-menu',
   imports: [],
   template: `
-    <ng-content select="ks-menu-header" />
-    <ng-content select="ks-menu-section" />
-    <ng-content select="ks-menu-item" />
-    <ng-content select="[ksSeparator]" />
-    <ng-content select="ks-menu-footer" />
-    <ng-content />
+      <ng-content select="ks-menu-header" />
+      <ng-content select="ks-menu-section" />
+      <ng-content select="ks-menu-item" />
+      <ng-content select="[ksSeparator]" />
+      <ng-content select="ks-menu-footer" />
+      <ng-content />
   `,
   styles: [``],
   host: {
@@ -24,4 +29,5 @@ import { Component, input } from '@angular/core';
 export class MenuComponent {
   /* v8 ignore next */
   readonly ariaLabel = input('Menu');
+  el = inject(ElementRef);
 }

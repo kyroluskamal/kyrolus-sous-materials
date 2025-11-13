@@ -76,7 +76,6 @@ describe('MenuComponent', () => {
 
   it('2. should project ks-menu-section content', () => {
     const sectionEl = fixture.debugElement.query(By.css('ks-menu-section'));
-    debugger;
     expect(sectionEl).not.toBeNull();
     expect(sectionEl.nativeElement.textContent).toContain('Test Section');
   });

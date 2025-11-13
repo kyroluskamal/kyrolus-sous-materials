@@ -42,6 +42,7 @@ export class KsMenu {
       itemClasses?: string;
       separatorClasses?: string;
       floatngUiOffset?: string;
+      fullscreenOnMobile?: boolean;
     } = {
       iconOptions: inject(ICON_OPTIONS),
     },

@@ -35,7 +35,7 @@ export class IconDirective {
     if (this.iconOptions()?.provider === 'google') {
       const nodes = Array.from<Node>(this.elmRef.nativeElement.childNodes);
       let textNode =
-        nodes.filter((node) => node.nodeType === Node.TEXT_NODE)[0] || null;
+        nodes.find((node) => node.nodeType === Node.TEXT_NODE) || null;
       if (textNode === null) {
         this.renderer2.appendChild(
           this.elmRef.nativeElement,

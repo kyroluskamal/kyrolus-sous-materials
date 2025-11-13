@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import {
+  FullScreenDirective,
   IconDirective,
   KsMenu,
   MenuModule,
@@ -9,9 +10,12 @@ import {
 
 @Component({
   selector: 'app-popover-menu-tests',
-  imports: [PopoverMenuBlock, MenuModule, IconDirective],
+  imports: [PopoverMenuBlock, MenuModule, IconDirective, FullScreenDirective],
   template: `
     <ks-popover-menu
+      ksFullScreen
+      fullScreenMode="desktop"
+      childSelector="ks-menu"
       id="left"
       [isOpen]="true"
       [ksMenu]="menuItems"
@@ -28,7 +32,7 @@ import {
         <p>Coding Bible Menu</p>
       </ks-menu-footer>
     </ks-popover-menu>
-
+    <!--
     <ks-popover-menu
       id="right"
       [isOpen]="true"
@@ -79,7 +83,7 @@ import {
         <span ksIcon="home"> </span>
         <p>Coding Bible Menu</p>
       </ks-menu-footer>
-    </ks-popover-menu>
+    </ks-popover-menu>-->
   `,
   host: {
     class:
