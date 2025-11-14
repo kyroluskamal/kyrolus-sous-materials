@@ -1,15 +1,10 @@
-import { JsonPipe } from '@angular/common';
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import {
-  ButtonDirective,
-  DeviceInfoService,
-  DeviceTypeService,
-} from 'KyrolusSousMaterials';
+import { ButtonDirective } from 'KyrolusSousMaterials';
 
 @Component({
   selector: 'app-tests',
-  imports: [RouterLink, ButtonDirective, JsonPipe],
+  imports: [RouterLink, ButtonDirective],
   template: `
     <button ksButton routerLink="toggle-on-scroll-directive-test">
       Toggle class on scroll test
@@ -33,14 +28,4 @@ import {
 }
 `,
 })
-export class Tests {
-  deviceInfo = inject(DeviceTypeService);
-  deviceInfo2 = inject(DeviceInfoService);
-  dev = computed(() => {
-    let dev = this.deviceInfo2.device();
-    return dev;
-  });
-  eff = effect(()=>{
-    console.log(this.dev())
-  })
-}
+export class Tests {}

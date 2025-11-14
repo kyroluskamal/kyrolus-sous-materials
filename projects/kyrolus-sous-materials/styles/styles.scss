@@ -132,3 +132,20 @@ ks-dashboard-layout[ng-reflect-sidebar-mode="side"]
   overflow: auto !important;
 }
 
+*:fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  margin: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  max-height: none !important;
+  transform: none !important;
+  border-radius: 0 !important;
+  translate: none !important;
+  overflow: auto !important;
+}
+
+*::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}

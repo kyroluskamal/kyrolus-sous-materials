@@ -3,98 +3,266 @@ import {
   ComponentRef,
   createComponent,
   Directive,
+  DOCUMENT,
   ElementRef,
   EnvironmentInjector,
   inject,
   input,
   inputBinding,
+  model,
   OnDestroy,
-  output,
   Renderer2,
 } from '@angular/core';
 import { DeviceTypeService } from '../../services/device-info/device-type/device-type.service';
 import { IconDirective } from '../directives.export';
 import { ButtonComponent } from '../../components/button/button.component';
-type fullScreenMode = 'mobile' | 'tablet' | 'desktop' | 'always';
+
+type FullScreenMode = 'mobile' | 'tablet' | 'desktop' | 'always';
+type FullScreenStateChange = 'open' | 'close' | 'none';
+
 @Directive({
   selector: '[ksFullScreen]',
 })
 export class FullScreenDirective implements OnDestroy {
-  ngOnDestroy(): void {
-    this.unsetFullScreen();
-  }
+  //#region injections
   private readonly deviceType = inject(DeviceTypeService);
-  private readonly el = inject<ElementRef<HTMLElement>>(
-    ElementRef<HTMLElement>
+  private readonly hostElementRef = inject<ElementRef<HTMLElement>>(
+    ElementRef as any
   );
   private readonly renderer = inject(Renderer2);
   private readonly env = inject(EnvironmentInjector);
+  private readonly doc = inject(DOCUMENT);
+  //#endregion
 
-  readonly fullScreenClosed = output<boolean>();
-
+  //#region inputs / outputs
   readonly childSelector = input<string>('');
-  readonly fullScreenMode = input<fullScreenMode>('mobile');
+  readonly fullScreenMode = input<FullScreenMode>('mobile');
+  readonly useNativeRequestFullScreen = input<boolean>(false);
+  readonly openFullScreen = model.required<boolean>();
+  //#endregion
 
-  private buttonRef: ComponentRef<ButtonComponent> | null = null;
-  private hostButton?: HTMLElement;
-  private unlistenClick?: () => void;
+  //#region internal state
   private host: HTMLElement | null = null;
+  private lastShouldBeOpen = false;
 
-  eff = afterEveryRender(() => {
-    let child = this.childSelector()
-      ? (this.el.nativeElement.querySelector(
-          this.childSelector()
-        ) as HTMLElement)
-      : null;
-    const target = child ?? this.el.nativeElement;
+  private closeButtonRef: ComponentRef<ButtonComponent> | null = null;
+  private closeButtonHost?: HTMLElement;
+  private unlistenCloseClick?: () => void;
+  private unlistenFullscreenChange?: () => void;
 
+  eff = afterEveryRender(() => this.handleRender());
+  //#endregion
+
+  constructor() {
+    this.unlistenFullscreenChange = this.renderer.listen(
+      this.doc,
+      'fullscreenchange',
+      () => this.onFullscreenChange()
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.unsetFullScreen();
+    if (this.doc.fullscreenElement === this.host) {
+      void this.doc.exitFullscreen();
+    }
+    this.unlistenFullscreenChange?.();
+    this.unlistenFullscreenChange = undefined;
+  }
+
+  //#region render logic
+
+  private handleRender(): void {
+    const target = this.resolveHostTarget() as HTMLElement;
+    if (!target) return;
+    this.updateHost(target);
+
+    const shouldBeOpen = this.computeShouldBeOpenForDevice();
+    console.log('shouldBeOpen', shouldBeOpen);
+
+    const change = this.updateOpenState(shouldBeOpen);
+    if (change === 'none') return;
+
+    if (this.useNativeRequestFullScreen()) {
+      this.applyNativeFullScreen(change);
+    } else {
+      this.applyCssFullScreen(shouldBeOpen);
+    }
+  }
+
+  private resolveHostTarget() {
+    const root = this.hostElementRef.nativeElement;
+    const selector = this.childSelector();
+    const child = selector ? root.querySelector(selector) : null;
+    return child ?? root;
+  }
+
+  private updateHost(target: HTMLElement): void {
     if (this.host && this.host !== target) {
       this.unsetFullScreen();
     }
     this.host = target;
-    let ShouldFullScreen =
-      this.fullScreenMode() === 'always' ||
-      (this.fullScreenMode() === 'mobile' && this.deviceType.isMobile()) ||
-      (this.fullScreenMode() === 'desktop' && this.deviceType.isDesktop()) ||
-      (this.fullScreenMode() === 'tablet' && this.deviceType.isTablet());
-    let hasFullScreenClass = this.host?.classList.contains('fullscreen');
-    if (this.host && ShouldFullScreen && !hasFullScreenClass) {
+  }
+
+  private computeShouldBeOpenForDevice(): boolean {
+    const mode = this.fullScreenMode();
+    const matchesDevice =
+      mode === 'always' ||
+      (mode === 'mobile' && this.deviceType.isMobile()) ||
+      (mode === 'desktop' && this.deviceType.isDesktop()) ||
+      (mode === 'tablet' && this.deviceType.isTablet());
+
+    return this.openFullScreen() && matchesDevice;
+  }
+
+  private updateOpenState(shouldBeOpen: boolean): FullScreenStateChange {
+    const wasOpen = this.lastShouldBeOpen;
+    this.lastShouldBeOpen = shouldBeOpen;
+
+    if (shouldBeOpen && !wasOpen) return 'open';
+    if (!shouldBeOpen && wasOpen) return 'close';
+    return 'none';
+  }
+
+  //#endregion
+
+  //#region CSS fullscreen (class-based)
+
+  private applyCssFullScreen(shouldBeOpen: boolean): void {
+    if (!this.host) return;
+
+    const hasClass = this.host.classList.contains('fullscreen');
+    if (shouldBeOpen === hasClass) return;
+
+    if (shouldBeOpen) {
       this.setFullScreen();
-    } else if (!ShouldFullScreen && hasFullScreenClass) {
+    } else {
       this.unsetFullScreen();
+      this.openFullScreen.set(false);
     }
-  });
-
-  private setFullScreen() {
-    this.renderer.addClass(this.host, 'fullscreen');
-    this.ensureCleanBeforeCreate();
-    this.renderer.appendChild(this.host, this.createIconComponent());
   }
-  private ensureCleanBeforeCreate() {
-    this.unlistenClick?.();
-    this.unlistenClick = undefined;
 
-    this.buttonRef?.destroy();
-    this.buttonRef = null;
+  //#endregion
 
-    if (this.hostButton?.parentNode) {
-      this.renderer.removeChild(this.hostButton.parentNode, this.hostButton);
+  //#region native fullscreen (requestFullscreen)
+
+  private applyNativeFullScreen(change: FullScreenStateChange): void {
+    if (change === 'open') {
+      if (!this.doc.fullscreenElement) {
+        this.requestNativeFullScreen();
+      }
+      return;
     }
-    this.hostButton = undefined;
+
+    if (change === 'close') {
+      if (this.doc.fullscreenElement === this.host) {
+        this.exitNativeFullScreen();
+      }
+    }
   }
-  private createIconComponent() {
-    const host = this.renderer.createElement('button');
-    this.hostButton = host;
-    this.unlistenClick = this.renderer.listen(host, 'click', () => {
+
+  private requestNativeFullScreen(): void {
+    if (!this.host) return;
+
+    if (!this.doc.fullscreenEnabled || !this.host.requestFullscreen) {
+      this.setFullScreen();
+      return;
+    }
+
+    this.host
+      .requestFullscreen()
+      .then(() => {
+        this.detachCloseButton();
+        this.attachCloseButton();
+      })
+      .catch(() => {
+        this.setFullScreen();
+      });
+  }
+
+  private exitNativeFullScreen(): void {
+    this.doc.exitFullscreen().finally(() => {
       this.unsetFullScreen();
-      this.fullScreenClosed.emit(true);
+      this.openFullScreen.set(false);
     });
-    this.renderer.addClass(host, 'position-absolute');
-    this.renderer.setStyle(host, 'top', '10px');
-    this.renderer.setStyle(host, 'right', '10px');
-    this.buttonRef = createComponent(ButtonComponent, {
+  }
+
+  private onFullscreenChange(): void {
+    // This runs when user exits fullscreen via ESC / browser UI, etc.
+    const fullscreenEl = this.doc.fullscreenElement as HTMLElement | null;
+
+    if (
+      this.useNativeRequestFullScreen() &&
+      !fullscreenEl &&
+      this.lastShouldBeOpen
+    ) {
+      this.unsetFullScreen();
+      this.openFullScreen.set(false);
+    }
+  }
+
+  //#endregion
+
+  //#region helpers: button + class handling
+
+  private setFullScreen(): void {
+    if (!this.host) return;
+    this.host.classList.add('fullscreen');
+    this.detachCloseButton();
+    this.attachCloseButton();
+  }
+
+  private unsetFullScreen(): void {
+    this.detachCloseButton();
+    if (this.host?.classList.contains('fullscreen')) {
+      this.host.classList.remove('fullscreen');
+    }
+  }
+
+  private detachCloseButton(): void {
+    this.unlistenCloseClick?.();
+    this.unlistenCloseClick = undefined;
+
+    this.closeButtonRef?.destroy();
+    this.closeButtonRef = null;
+
+    if (this.closeButtonHost?.parentNode) {
+      this.renderer.removeChild(
+        this.closeButtonHost.parentNode,
+        this.closeButtonHost
+      );
+    }
+    this.closeButtonHost = undefined;
+  }
+
+  private attachCloseButton(): void {
+    if (!this.host) return;
+
+    this.closeButtonHost = this.renderer.createElement('button');
+
+    this.unlistenCloseClick = this.renderer.listen(
+      this.closeButtonHost,
+      'click',
+      () => {
+        if (
+          this.useNativeRequestFullScreen() &&
+          this.doc.fullscreenElement === this.host
+        ) {
+          this.exitNativeFullScreen();
+        } else {
+          this.unsetFullScreen();
+          this.openFullScreen.set(false);
+        }
+      }
+    );
+
+    this.renderer.addClass(this.closeButtonHost, 'position-absolute');
+    this.renderer.setStyle(this.closeButtonHost, 'top', '10px');
+    this.renderer.setStyle(this.closeButtonHost, 'right', '10px');
+
+    this.closeButtonRef = createComponent(ButtonComponent, {
       environmentInjector: this.env,
-      hostElement: host,
+      hostElement: this.closeButtonHost,
       bindings: [
         inputBinding('size', () => 'sm'),
         inputBinding('variant', () => 'ghost'),
@@ -111,14 +279,10 @@ export class FullScreenDirective implements OnDestroy {
         },
       ],
     });
-    this.buttonRef.changeDetectorRef.detectChanges();
-    return host;
+
+    this.closeButtonRef.changeDetectorRef.detectChanges();
+    this.renderer.appendChild(this.host, this.closeButtonHost);
   }
-  private unsetFullScreen() {
-    this.ensureCleanBeforeCreate();
-    if (this.host?.classList.contains('fullscreen')) {
-      this.renderer.removeClass(this.host, 'fullscreen');
-    }
-    this.host = null;
-  }
+
+  //#endregion
 }
