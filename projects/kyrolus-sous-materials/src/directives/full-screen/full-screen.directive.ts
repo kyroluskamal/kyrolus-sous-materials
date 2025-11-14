@@ -17,7 +17,7 @@ import { DeviceTypeService } from '../../services/device-info/device-type/device
 import { IconDirective } from '../directives.export';
 import { ButtonComponent } from '../../components/button/button.component';
 
-type FullScreenMode = 'mobile' | 'tablet' | 'desktop' | 'always';
+export type FullScreenMode = 'mobile' | 'tablet' | 'desktop' | 'always';
 type FullScreenStateChange = 'open' | 'close' | 'none';
 
 @Directive({
@@ -35,10 +35,12 @@ export class FullScreenDirective implements OnDestroy {
   //#endregion
 
   //#region inputs / outputs
-  readonly childSelector = input<string>('');
+  /* v8 ignore start */
+  readonly fullscreenChildSelector = input<string>('');
   readonly fullScreenMode = input<FullScreenMode>('mobile');
   readonly useNativeRequestFullScreen = input<boolean>(false);
   readonly openFullScreen = model.required<boolean>();
+  /* v8 ignore end */
   //#endregion
 
   //#region internal state
@@ -63,7 +65,7 @@ export class FullScreenDirective implements OnDestroy {
 
   ngOnDestroy(): void {
     this.unsetFullScreen();
-    if (this.doc.fullscreenElement === this.host) {
+    if (this.doc.fullscreenEnabled && this.doc.fullscreenElement === this.host) {
       void this.doc.exitFullscreen();
     }
     this.unlistenFullscreenChange?.();
@@ -78,8 +80,6 @@ export class FullScreenDirective implements OnDestroy {
     this.updateHost(target);
 
     const shouldBeOpen = this.computeShouldBeOpenForDevice();
-    console.log('shouldBeOpen', shouldBeOpen);
-
     const change = this.updateOpenState(shouldBeOpen);
     if (change === 'none') return;
 
@@ -92,7 +92,7 @@ export class FullScreenDirective implements OnDestroy {
 
   private resolveHostTarget() {
     const root = this.hostElementRef.nativeElement;
-    const selector = this.childSelector();
+    const selector = this.fullscreenChildSelector();
     const child = selector ? root.querySelector(selector) : null;
     return child ?? root;
   }
