@@ -4,7 +4,10 @@ import {
   provideZonelessChangeDetection,
   signal,
 } from '@angular/core';
-import { FullScreenDirective, FullScreenMode } from './full-screen.directive';
+import {
+  FullScreenConfig,
+  FullScreenDirective,
+} from './full-screen.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DeviceTypeService } from '../../services/device-info/device-type/device-type.service';
@@ -16,15 +19,13 @@ import { DeviceTypeService } from '../../services/device-info/device-type/device
   template: `<div
     [(openFullScreen)]="isOpen"
     ksFullScreen
-    [useNativeRequestFullScreen]="useNativeFullScreen()"
-    [fullScreenMode]="fullscreenMode()"
+    [fullScreenConfig]="fullScreenConfig()"
     (fullScreenClosed)="isOpen.set(false)"
   ></div>`,
 })
 export class FullScreenComponent {
   isOpen = signal(false);
-  fullscreenMode = signal<FullScreenMode>('mobile');
-  useNativeFullScreen = signal(true);
+  fullScreenConfig = signal<FullScreenConfig>({ mobile: 'native' });
 }
 @Component({
   standalone: true,
@@ -32,7 +33,7 @@ export class FullScreenComponent {
   imports: [FullScreenDirective],
   template: `<div
     ksFullScreen
-    [useNativeRequestFullScreen]="useNativeFullScreen()"
+    [fullScreenConfig]="fullScreenConfig()"
     fullscreenChildSelector="#child"
     [(openFullScreen)]="isOpen"
   >
@@ -41,8 +42,7 @@ export class FullScreenComponent {
 })
 export class ChildFullScreenComponent {
   isOpen = signal(false);
-  fullscreenMode = signal<FullScreenMode>('mobile');
-  useNativeFullScreen = signal(true);
+  fullScreenConfig = signal<FullScreenConfig>({ mobile: 'native' });
 }
 
 describe('FullScreenDirective', () => {
@@ -115,7 +115,7 @@ describe('FullScreenDirective', () => {
     });
     describe('1.2. fullscreen class', () => {
       it('1.2. should be on fullscreen using fullscreen class if not using requestFullscreen', () => {
-        fixture.componentInstance.useNativeFullScreen.set(false);
+        fixture.componentInstance.fullScreenConfig.set({ mobile: 'css' });
         fixture.detectChanges();
         fixture.componentInstance.isOpen.set(true);
         fixture.detectChanges();
@@ -126,7 +126,7 @@ describe('FullScreenDirective', () => {
       });
 
       it('1.2.2. should have close button and should be able to close the fullscreen', () => {
-        fixture.componentInstance.useNativeFullScreen.set(false);
+        fixture.componentInstance.fullScreenConfig.set({ mobile: 'css' });
         fixture.detectChanges();
         fixture.componentInstance.isOpen.set(true);
         fixture.detectChanges();
@@ -325,7 +325,7 @@ describe('FullScreenDirective', () => {
     });
     describe('2.2. fullscreen class', () => {
       it('2.2. should be on fullscreen using fullscreen class if not using requestFullscreen', () => {
-        fixture.componentInstance.useNativeFullScreen.set(false);
+        fixture.componentInstance.fullScreenConfig.set({ mobile: 'css' });
         fixture.detectChanges();
         fixture.componentInstance.isOpen.set(true);
         fixture.detectChanges();
@@ -336,7 +336,7 @@ describe('FullScreenDirective', () => {
       });
 
       it('2.2.2. should have close button and should be able to close the fullscreen', () => {
-        fixture.componentInstance.useNativeFullScreen.set(false);
+        fixture.componentInstance.fullScreenConfig.set({ mobile: 'css' });
         fixture.detectChanges();
         fixture.componentInstance.isOpen.set(true);
         fixture.detectChanges();
@@ -370,7 +370,7 @@ describe('FullScreenDirective', () => {
 
       fixture = TestBed.createComponent(FullScreenComponent);
       debugElement = fixture.debugElement;
-      fixture.componentInstance.fullscreenMode.set('desktop');
+      fixture.componentInstance.fullScreenConfig.set({ desktop: 'native' });
       directiveHtml = debugElement.query(By.directive(FullScreenDirective))
         .nativeElement as HTMLElement;
       directiveHtml.requestFullscreen = vi.fn().mockImplementation(() => {
@@ -409,6 +409,25 @@ describe('FullScreenDirective', () => {
 
       expect(document.exitFullscreen).toHaveBeenCalledTimes(1);
     });
+
+    it('3.2 should use css fullscreen when configured for desktop', () => {
+      fixture.componentInstance.fullScreenConfig.set({
+        mobile: 'native',
+        desktop: 'css',
+      });
+      fixture.detectChanges();
+
+      fixture.componentInstance.isOpen.set(true);
+      fixture.detectChanges();
+
+      expect(directiveHtml.classList.contains('fullscreen')).toBeTruthy();
+      expect(directiveHtml.requestFullscreen).not.toHaveBeenCalled();
+
+      fixture.componentInstance.isOpen.set(false);
+      fixture.detectChanges();
+
+      expect(directiveHtml.classList.contains('fullscreen')).toBeFalsy();
+    });
   });
   describe('4. tablet', () => {
     let fixture: ComponentFixture<FullScreenComponent>;
@@ -432,7 +451,7 @@ describe('FullScreenDirective', () => {
 
       fixture = TestBed.createComponent(FullScreenComponent);
       debugElement = fixture.debugElement;
-      fixture.componentInstance.fullscreenMode.set('tablet');
+      fixture.componentInstance.fullScreenConfig.set({ tablet: 'native' });
       directiveHtml = debugElement.query(By.directive(FullScreenDirective))
         .nativeElement as HTMLElement;
       directiveHtml.requestFullscreen = vi.fn().mockImplementation(() => {
@@ -494,7 +513,7 @@ describe('FullScreenDirective', () => {
 
       fixture = TestBed.createComponent(FullScreenComponent);
       debugElement = fixture.debugElement;
-      fixture.componentInstance.fullscreenMode.set('always');
+      fixture.componentInstance.fullScreenConfig.set({ default: 'native' });
       directiveHtml = debugElement.query(By.directive(FullScreenDirective))
         .nativeElement as HTMLElement;
       directiveHtml.requestFullscreen = vi.fn().mockImplementation(() => {

@@ -37,7 +37,13 @@ export const routes: Routes = [
             (m) => m.PopoverMenuTests
           ),
         title: 'Popover Menu Tests',
-      }
+      },
+      {
+        path: 'fullscreen-test',
+        loadComponent: () =>
+          import('../directive/full-screen-test').then((m) => m.FullScreenTest),
+        title: 'Fullscreen teST',
+      },
     ],
   },
 ];

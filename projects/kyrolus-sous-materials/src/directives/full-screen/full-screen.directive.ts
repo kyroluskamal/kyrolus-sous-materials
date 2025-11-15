@@ -17,8 +17,17 @@ import { DeviceTypeService } from '../../services/device-info/device-type/device
 import { IconDirective } from '../directives.export';
 import { ButtonComponent } from '../../components/button/button.component';
 
-export type FullScreenMode = 'mobile' | 'tablet' | 'desktop' | 'always';
+export type FullScreenStrategy = 'native' | 'css';
+export type FullScreenConfig = Partial<
+  Record<'mobile' | 'tablet' | 'desktop', FullScreenStrategy | false>
+> & {
+  default?: FullScreenStrategy | false;
+};
 type FullScreenStateChange = 'open' | 'close' | 'none';
+
+const DEFAULT_FULLSCREEN_CONFIG: FullScreenConfig = {
+  mobile: 'css',
+};
 
 @Directive({
   selector: '[ksFullScreen]',
@@ -37,8 +46,9 @@ export class FullScreenDirective implements OnDestroy {
   //#region inputs / outputs
   /* v8 ignore start */
   readonly fullscreenChildSelector = input<string>('');
-  readonly fullScreenMode = input<FullScreenMode>('mobile');
-  readonly useNativeRequestFullScreen = input<boolean>(false);
+  readonly fullScreenConfig = input<FullScreenConfig>(
+    DEFAULT_FULLSCREEN_CONFIG
+  );
   readonly openFullScreen = model.required<boolean>();
   /* v8 ignore end */
   //#endregion
@@ -46,6 +56,7 @@ export class FullScreenDirective implements OnDestroy {
   //#region internal state
   private host: HTMLElement | null = null;
   private lastShouldBeOpen = false;
+  private activeStrategy: FullScreenStrategy | null = null;
 
   private closeButtonRef: ComponentRef<ButtonComponent> | null = null;
   private closeButtonHost?: HTMLElement;
@@ -65,7 +76,11 @@ export class FullScreenDirective implements OnDestroy {
 
   ngOnDestroy(): void {
     this.unsetFullScreen();
-    if (this.doc.fullscreenEnabled && this.doc.fullscreenElement === this.host) {
+    this.activeStrategy = null;
+    if (
+      this.doc.fullscreenEnabled &&
+      this.doc.fullscreenElement === this.host
+    ) {
       void this.doc.exitFullscreen();
     }
     this.unlistenFullscreenChange?.();
@@ -79,14 +94,30 @@ export class FullScreenDirective implements OnDestroy {
     if (!target) return;
     this.updateHost(target);
 
-    const shouldBeOpen = this.computeShouldBeOpenForDevice();
+    const strategy = this.resolveStrategyForCurrentDevice();
+    const shouldBeOpen = Boolean(strategy) && this.openFullScreen();
     const change = this.updateOpenState(shouldBeOpen);
     if (change === 'none') return;
 
-    if (this.useNativeRequestFullScreen()) {
+    if (change === 'open') {
+      if (!strategy) return;
+      this.activeStrategy = strategy;
+    }
+
+    const activeStrategy = this.activeStrategy;
+    if (!activeStrategy) {
+      this.unsetFullScreen();
+      return;
+    }
+
+    if (activeStrategy === 'native') {
       this.applyNativeFullScreen(change);
     } else {
       this.applyCssFullScreen(shouldBeOpen);
+    }
+
+    if (change === 'close') {
+      this.activeStrategy = null;
     }
   }
 
@@ -104,15 +135,34 @@ export class FullScreenDirective implements OnDestroy {
     this.host = target;
   }
 
-  private computeShouldBeOpenForDevice(): boolean {
-    const mode = this.fullScreenMode();
-    const matchesDevice =
-      mode === 'always' ||
-      (mode === 'mobile' && this.deviceType.isMobile()) ||
-      (mode === 'desktop' && this.deviceType.isDesktop()) ||
-      (mode === 'tablet' && this.deviceType.isTablet());
+  private resolveStrategyForCurrentDevice(): FullScreenStrategy | null {
+    const config = this.fullScreenConfig();
+    if (!config) return null;
 
-    return this.openFullScreen() && matchesDevice;
+    const fallback = this.normalizeStrategy(config.default);
+
+    if (this.deviceType.isMobile()) {
+      return this.normalizeStrategy(config.mobile, fallback);
+    }
+
+    if (this.deviceType.isTablet()) {
+      return this.normalizeStrategy(config.tablet, fallback);
+    }
+
+    if (this.deviceType.isDesktop()) {
+      return this.normalizeStrategy(config.desktop, fallback);
+    }
+
+    return fallback;
+  }
+
+  private normalizeStrategy(
+    strategy?: FullScreenStrategy | false,
+    fallback: FullScreenStrategy | null = null
+  ): FullScreenStrategy | null {
+    if (strategy === false) return null;
+    if (strategy) return strategy;
+    return fallback;
   }
 
   private updateOpenState(shouldBeOpen: boolean): FullScreenStateChange {
@@ -192,11 +242,13 @@ export class FullScreenDirective implements OnDestroy {
     const fullscreenEl = this.doc.fullscreenElement as HTMLElement | null;
 
     if (
-      this.useNativeRequestFullScreen() &&
+      this.activeStrategy === 'native' &&
       !fullscreenEl &&
       this.lastShouldBeOpen
     ) {
+      console.log('exist full screem');
       this.unsetFullScreen();
+      this.activeStrategy = null;
       this.openFullScreen.set(false);
     }
   }
@@ -245,7 +297,7 @@ export class FullScreenDirective implements OnDestroy {
       'click',
       () => {
         if (
-          this.useNativeRequestFullScreen() &&
+          this.activeStrategy === 'native' &&
           this.doc.fullscreenElement === this.host
         ) {
           this.exitNativeFullScreen();

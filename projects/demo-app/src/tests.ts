@@ -11,6 +11,7 @@ import { ButtonDirective } from 'KyrolusSousMaterials';
     </button>
     <button ksButton routerLink="menu-test">Menu test</button>
     <button ksButton routerLink="popover-menu-tests">Popeover menu</button>
+    <button ksButton routerLink="fullscreen-test">FullscreenTest</button>
   `,
   styles: `
   :host {
