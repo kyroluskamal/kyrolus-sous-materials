@@ -1,0 +1,428 @@
+// ============================================================================
+// :HAS() SELECTOR UTILITIES
+// Parent selector and conditional styling utilities
+// Browser Support: Chrome 105+, Firefox 121+, Safari 15.4+
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// FORM STATE UTILITIES
+// Style parents based on form input states
+// ----------------------------------------------------------------------------
+
+// Input group with focus state
+.input-group:has(input:focus),
+.input-group:has(textarea:focus),
+.input-group:has(select:focus) {
+  --input-group-focused: 1;
+  border-color: var(--primary, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+// Form field with error
+.form-field:has(input:invalid),
+.form-field:has(textarea:invalid),
+.form-field:has(select:invalid) {
+  --field-has-error: 1;
+}
+
+.form-field:has(input:invalid) .field-label,
+.form-field:has(textarea:invalid) .field-label {
+  color: var(--error, #ef4444);
+}
+
+// Form field with valid input
+.form-field:has(input:valid:not(:placeholder-shown)),
+.form-field:has(textarea:valid:not(:placeholder-shown)) {
+  --field-is-valid: 1;
+}
+
+// Required field indicator
+.form-field:has(input:required)::before,
+.form-field:has(textarea:required)::before,
+.form-field:has(select:required)::before {
+  content: "*";
+  color: var(--error, #ef4444);
+  margin-right: 0.25rem;
+}
+
+// Disabled field styling
+.form-field:has(input:disabled),
+.form-field:has(textarea:disabled),
+.form-field:has(select:disabled) {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+// Checkbox/Radio group checked state
+.checkbox-group:has(input:checked) {
+  --checkbox-checked: 1;
+  background-color: var(--primary-light, #eff6ff);
+}
+
+.radio-group:has(input:checked) {
+  --radio-checked: 1;
+  background-color: var(--primary-light, #eff6ff);
+}
+
+// ----------------------------------------------------------------------------
+// CARD UTILITIES
+// Style cards based on their content
+// ----------------------------------------------------------------------------
+
+// Card with image
+.card:has(img) {
+  --card-has-image: 1;
+}
+
+.card:has(> img:first-child) {
+  padding-top: 0;
+
+  > img:first-child {
+    border-radius: var(--radius, 0.5rem) var(--radius, 0.5rem) 0 0;
+  }
+}
+
+// Card with video
+.card:has(video) {
+  --card-has-video: 1;
+}
+
+// Card with footer
+.card:has(.card-footer) {
+  padding-bottom: 0;
+}
+
+// Card with actions
+.card:has(.card-actions) {
+  --card-has-actions: 1;
+}
+
+// Empty card
+.card:not(:has(*)) {
+  display: none;
+}
+
+// Card with badge
+.card:has(.badge) {
+  position: relative;
+}
+
+// ----------------------------------------------------------------------------
+// NAVIGATION UTILITIES
+// Style navigation based on state
+// ----------------------------------------------------------------------------
+
+// Nav with active item
+nav:has(.active) {
+  --nav-has-active: 1;
+}
+
+// Nav item with dropdown
+.nav-item:has(.dropdown) {
+  position: relative;
+}
+
+.nav-item:has(.dropdown):hover .dropdown,
+.nav-item:has(.dropdown):focus-within .dropdown {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+
+// Sidebar expanded state
+.sidebar:has(.sidebar-toggle:checked) {
+  width: var(--sidebar-expanded-width, 280px);
+}
+
+.sidebar:has(.sidebar-toggle:not(:checked)) {
+  width: var(--sidebar-collapsed-width, 64px);
+}
+
+// ----------------------------------------------------------------------------
+// TABLE UTILITIES
+// Style tables based on content
+// ----------------------------------------------------------------------------
+
+// Table with selected rows
+table:has(tr.selected) {
+  --table-has-selection: 1;
+}
+
+// Table row with checkbox checked
+tr:has(input[type="checkbox"]:checked) {
+  background-color: var(--primary-light, #eff6ff);
+}
+
+// Table with sortable headers
+table:has(th.sortable) {
+  --table-is-sortable: 1;
+}
+
+// Empty table body
+table:has(tbody:empty)::after,
+table:has(tbody:not(:has(tr)))::after {
+  content: "No data available";
+  display: block;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+// ----------------------------------------------------------------------------
+// LIST UTILITIES
+// Style lists based on content
+// ----------------------------------------------------------------------------
+
+// List with checked items
+ul:has(li.checked),
+ol:has(li.checked) {
+  --list-has-checked: 1;
+}
+
+// Empty list
+ul:not(:has(li)),
+ol:not(:has(li)) {
+  display: none;
+}
+
+// List with nested list
+li:has(ul),
+li:has(ol) {
+  --item-has-children: 1;
+}
+
+// ----------------------------------------------------------------------------
+// MODAL/DIALOG UTILITIES
+// ----------------------------------------------------------------------------
+
+// Body when modal is open
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
+body:has(.modal.open) {
+  overflow: hidden;
+}
+
+// Page content behind modal
+.page-content:has(~ dialog[open]) {
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+// ----------------------------------------------------------------------------
+// ACCORDION/DETAILS UTILITIES
+// ----------------------------------------------------------------------------
+
+// Details group with open item
+.accordion:has(details[open]) {
+  --accordion-has-open: 1;
+}
+
+// Details with long content
+details:has(.content-long) {
+  --details-scrollable: 1;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+// ----------------------------------------------------------------------------
+// MEDIA CONTAINER UTILITIES
+// ----------------------------------------------------------------------------
+
+// Figure with caption
+figure:has(figcaption) {
+  --figure-has-caption: 1;
+  margin-bottom: 1.5rem;
+}
+
+// Video container with controls
+.video-container:has(video[controls]) {
+  --video-has-controls: 1;
+}
+
+// Audio container
+.media-container:has(audio) {
+  --media-is-audio: 1;
+  padding: 1rem;
+  background: var(--bg-muted);
+  border-radius: var(--radius);
+}
+
+// Image container with loading state
+.image-container:has(img[loading="lazy"]:not([complete])) {
+  background: var(--bg-muted);
+  min-height: 200px;
+}
+
+// ----------------------------------------------------------------------------
+// BUTTON GROUP UTILITIES
+// ----------------------------------------------------------------------------
+
+// Button group with active button
+.btn-group:has(.btn.active) {
+  --group-has-active: 1;
+}
+
+// Button group with disabled button
+.btn-group:has(.btn:disabled) {
+  --group-has-disabled: 1;
+}
+
+// Split button
+.btn-group:has(.btn-dropdown) {
+  --is-split-button: 1;
+}
+
+// ----------------------------------------------------------------------------
+// SEARCH UTILITIES
+// ----------------------------------------------------------------------------
+
+// Search container with results
+.search-container:has(.search-results:not(:empty)) {
+  --has-results: 1;
+}
+
+.search-container:has(.search-results:not(:empty)) .search-results {
+  display: block;
+}
+
+// Search with no results
+.search-container:has(.no-results) {
+  --no-results: 1;
+}
+
+// Search input with value
+.search-container:has(input:not(:placeholder-shown)) {
+  --has-search-value: 1;
+}
+
+.search-container:has(input:not(:placeholder-shown)) .clear-btn {
+  display: block;
+}
+
+// ----------------------------------------------------------------------------
+// ALERT/NOTIFICATION UTILITIES
+// ----------------------------------------------------------------------------
+
+// Container with alerts
+.alert-container:has(.alert) {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+// Alert with close button
+.alert:has(.alert-close) {
+  padding-right: 2.5rem;
+  position: relative;
+}
+
+// Alert with icon
+.alert:has(.alert-icon) {
+  padding-left: 3rem;
+  position: relative;
+}
+
+// ----------------------------------------------------------------------------
+// GRID UTILITIES
+// Style grid based on children
+// ----------------------------------------------------------------------------
+
+// Grid with single item
+.grid:has(> :only-child) {
+  grid-template-columns: 1fr;
+}
+
+// Grid with 2 items
+.grid:has(> :nth-child(2):last-child) {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+// Grid with 3+ items
+.grid:has(> :nth-child(3)) {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+// ----------------------------------------------------------------------------
+// CONDITIONAL DISPLAY
+// Show/hide based on sibling state
+// ----------------------------------------------------------------------------
+
+// Show element when input has value
+.show-when-filled {
+  display: none;
+}
+
+.container:has(input:not(:placeholder-shown)) .show-when-filled {
+  display: block;
+}
+
+// Hide element when input is empty
+.hide-when-empty {
+  display: block;
+}
+
+.container:has(input:placeholder-shown) .hide-when-empty {
+  display: none;
+}
+
+// Show when checkbox checked
+.show-when-checked {
+  display: none;
+}
+
+.container:has(input[type="checkbox"]:checked) .show-when-checked {
+  display: block;
+}
+
+// Show when radio selected
+.show-when-selected {
+  display: none;
+}
+
+.container:has(input[type="radio"]:checked) .show-when-selected {
+  display: block;
+}
+
+// ----------------------------------------------------------------------------
+// QUANTITY QUERIES WITH :HAS()
+// Style based on number of children
+// ----------------------------------------------------------------------------
+
+// Container with many items (5+)
+.container:has(> :nth-child(5)) {
+  --has-many-items: 1;
+}
+
+// Container with few items (1-3)
+.container:has(> :nth-child(1)):not(:has(> :nth-child(4))) {
+  --has-few-items: 1;
+}
+
+// ----------------------------------------------------------------------------
+// THEME DETECTION
+// ----------------------------------------------------------------------------
+
+// Dark mode detection
+html:has([data-theme="dark"]),
+html:has(.dark) {
+  --is-dark-mode: 1;
+}
+
+// Light mode detection
+html:has([data-theme="light"]),
+html:has(.light) {
+  --is-light-mode: 1;
+}
+
+// ----------------------------------------------------------------------------
+// FEATURE DETECTION
+// ----------------------------------------------------------------------------
+
+@supports selector(:has(*)) {
+  .has-selector-supported {
+    --has-selector-supported: 1;
+  }
+}

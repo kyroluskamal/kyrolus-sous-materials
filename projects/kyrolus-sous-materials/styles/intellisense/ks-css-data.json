@@ -1,0 +1,220 @@
+{
+  "version": 1.1,
+  "atDirectives": [],
+  "pseudoClasses": [],
+  "pseudoElements": [],
+  "properties": [
+    {
+      "name": "--bg",
+      "description": "Background color - changes with theme"
+    },
+    {
+      "name": "--bg-secondary",
+      "description": "Secondary background color"
+    },
+    {
+      "name": "--bg-tertiary",
+      "description": "Tertiary background color"
+    },
+    {
+      "name": "--text",
+      "description": "Primary text color"
+    },
+    {
+      "name": "--text-secondary",
+      "description": "Secondary text color"
+    },
+    {
+      "name": "--text-muted",
+      "description": "Muted text color"
+    },
+    {
+      "name": "--primary",
+      "description": "Primary brand color"
+    },
+    {
+      "name": "--primary-hover",
+      "description": "Primary color on hover"
+    },
+    {
+      "name": "--secondary",
+      "description": "Secondary brand color"
+    },
+    {
+      "name": "--accent",
+      "description": "Accent color"
+    },
+    {
+      "name": "--success",
+      "description": "Success status color"
+    },
+    {
+      "name": "--warning",
+      "description": "Warning status color"
+    },
+    {
+      "name": "--danger",
+      "description": "Danger/error status color"
+    },
+    {
+      "name": "--info",
+      "description": "Info status color"
+    },
+    {
+      "name": "--border",
+      "description": "Default border color"
+    },
+    {
+      "name": "--border-strong",
+      "description": "Strong border color"
+    },
+    {
+      "name": "--border-focus",
+      "description": "Focus state border color"
+    },
+    {
+      "name": "--surface",
+      "description": "Surface/card background"
+    },
+    {
+      "name": "--overlay",
+      "description": "Overlay/backdrop color"
+    },
+    {
+      "name": "--shadow-sm",
+      "description": "Small shadow"
+    },
+    {
+      "name": "--shadow",
+      "description": "Default shadow"
+    },
+    {
+      "name": "--shadow-md",
+      "description": "Medium shadow"
+    },
+    {
+      "name": "--shadow-lg",
+      "description": "Large shadow"
+    },
+    {
+      "name": "--shadow-xl",
+      "description": "Extra large shadow"
+    },
+    {
+      "name": "--spacing-0",
+      "description": "0 spacing"
+    },
+    {
+      "name": "--spacing-1",
+      "description": "0.25rem spacing"
+    },
+    {
+      "name": "--spacing-2",
+      "description": "0.5rem spacing"
+    },
+    {
+      "name": "--spacing-3",
+      "description": "0.75rem spacing"
+    },
+    {
+      "name": "--spacing-4",
+      "description": "1rem spacing"
+    },
+    {
+      "name": "--spacing-6",
+      "description": "1.5rem spacing"
+    },
+    {
+      "name": "--spacing-8",
+      "description": "2rem spacing"
+    },
+    {
+      "name": "--radius-sm",
+      "description": "Small border radius"
+    },
+    {
+      "name": "--radius-md",
+      "description": "Medium border radius"
+    },
+    {
+      "name": "--radius-lg",
+      "description": "Large border radius"
+    },
+    {
+      "name": "--radius-full",
+      "description": "Full/pill border radius"
+    },
+    {
+      "name": "--z-base",
+      "description": "Base z-index"
+    },
+    {
+      "name": "--z-dropdown",
+      "description": "Dropdown z-index"
+    },
+    {
+      "name": "--z-sticky",
+      "description": "Sticky element z-index"
+    },
+    {
+      "name": "--z-modal",
+      "description": "Modal z-index"
+    },
+    {
+      "name": "--z-toast",
+      "description": "Toast notification z-index"
+    },
+    {
+      "name": "color-rendering",
+      "description": "SVG/CSS property used mainly in SVG rendering contexts.",
+      "values": [
+        { "name": "auto" },
+        { "name": "optimizeSpeed" },
+        { "name": "optimizeQuality" }
+      ]
+    },
+    {
+      "name": "color-interpolation",
+      "description": "SVG/CSS property used mainly in SVG rendering contexts.",
+      "values": [
+        { "name": "auto" },
+        { "name": "sRGB" },
+        { "name": "linearRGB" }
+      ]
+    },
+    {
+      "name": "hyphenate-limit-lines",
+      "description": "Limits the number of consecutive lines that may be hyphenated.",
+      "values": [{ "name": "<integer>" }]
+    },
+    {
+      "name": "hyphenate-limit-chars",
+      "description": "Controls minimum/maximum hyphenation word fragment lengths.",
+      "values": [{ "name": "<number> <number> <number>" }]
+    },
+    {
+      "name": "-webkit-hyphenate-limit-chars",
+      "description": "WebKit-prefixed hyphenate-limit-chars.",
+      "values": [{ "name": "<number> <number> <number>" }]
+    },
+    {
+      "name": "inset-area",
+      "description": "CSS Anchor Positioning: selects the inset area used for anchored positioning.",
+      "values": [
+        { "name": "left" },
+        { "name": "right" },
+        { "name": "top" },
+        { "name": "bottom" },
+        { "name": "center" },
+        { "name": "inline-start" },
+        { "name": "inline-end" },
+        { "name": "block-start" },
+        { "name": "block-end" },
+        { "name": "top center" },
+        { "name": "bottom center" },
+        { "name": "inline-start center" },
+        { "name": "inline-end center" }
+      ]
+    }
+  ]
+}

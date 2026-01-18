@@ -1,0 +1,1119 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - VISUAL EFFECTS UTILITIES
+// =============================================================================
+// Advanced visual effects for stunning UI:
+// - CSS Shapes (shape-outside, clip-path)
+// - Mix Blend Modes
+// - 3D Transforms (perspective, rotate3d, preserve-3d)
+// - Custom Scrollbars
+// - Filters (blur, brightness, contrast, etc.)
+// - Backdrop Filters
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// CSS CLIP-PATH SHAPES
+// =============================================================================
+// Cut elements into geometric shapes
+
+// Basic shapes
+.clip-none {
+  clip-path: none;
+}
+
+.clip-circle {
+  clip-path: circle(50%);
+}
+
+.clip-ellipse {
+  clip-path: ellipse(50% 40% at 50% 50%);
+}
+
+.clip-triangle {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.clip-triangle-up {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.clip-triangle-down {
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+}
+
+.clip-triangle-left {
+  clip-path: polygon(100% 0%, 0% 50%, 100% 100%);
+}
+
+.clip-triangle-right {
+  clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+}
+
+.clip-diamond {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.clip-pentagon {
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
+.clip-hexagon {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+.clip-octagon {
+  clip-path: polygon(
+    30% 0%,
+    70% 0%,
+    100% 30%,
+    100% 70%,
+    70% 100%,
+    30% 100%,
+    0% 70%,
+    0% 30%
+  );
+}
+
+.clip-star {
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+}
+
+.clip-cross {
+  clip-path: polygon(
+    35% 0%,
+    65% 0%,
+    65% 35%,
+    100% 35%,
+    100% 65%,
+    65% 65%,
+    65% 100%,
+    35% 100%,
+    35% 65%,
+    0% 65%,
+    0% 35%,
+    35% 35%
+  );
+}
+
+.clip-arrow-right {
+  clip-path: polygon(
+    0% 20%,
+    60% 20%,
+    60% 0%,
+    100% 50%,
+    60% 100%,
+    60% 80%,
+    0% 80%
+  );
+}
+
+.clip-arrow-left {
+  clip-path: polygon(
+    40% 0%,
+    40% 20%,
+    100% 20%,
+    100% 80%,
+    40% 80%,
+    40% 100%,
+    0% 50%
+  );
+}
+
+.clip-chevron-right {
+  clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+}
+
+.clip-chevron-left {
+  clip-path: polygon(100% 0%, 75% 50%, 100% 100%, 25% 100%, 0% 50%, 25% 0%);
+}
+
+// Rounded corners with clip-path (works on any element)
+.clip-rounded {
+  clip-path: inset(0 round 8px);
+}
+
+.clip-rounded-lg {
+  clip-path: inset(0 round 16px);
+}
+
+.clip-rounded-xl {
+  clip-path: inset(0 round 24px);
+}
+
+// Notched corners
+.clip-notch-tr {
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+}
+
+.clip-notch-all {
+  clip-path: polygon(
+    20px 0,
+    calc(100% - 20px) 0,
+    100% 20px,
+    100% calc(100% - 20px),
+    calc(100% - 20px) 100%,
+    20px 100%,
+    0 calc(100% - 20px),
+    0 20px
+  );
+}
+
+// Slanted edges
+.clip-slant-right {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 40px));
+}
+
+.clip-slant-left {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 40px), 0 100%);
+}
+
+.clip-slant-both {
+  clip-path: polygon(0 40px, 100% 0, 100% calc(100% - 40px), 0 100%);
+}
+
+// Message bubble
+.clip-bubble {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 75%,
+    75% 75%,
+    75% 100%,
+    50% 75%,
+    0% 75%
+  );
+}
+
+// =============================================================================
+// SHAPE-OUTSIDE (Text wrap around shapes)
+// =============================================================================
+
+.shape-none {
+  shape-outside: none;
+}
+
+.shape-circle {
+  shape-outside: circle(50%);
+  float: left;
+}
+
+.shape-ellipse {
+  shape-outside: ellipse(40% 50%);
+  float: left;
+}
+
+.shape-margin-1 {
+  shape-margin: 0.25rem;
+}
+
+.shape-margin-2 {
+  shape-margin: 0.5rem;
+}
+
+.shape-margin-4 {
+  shape-margin: 1rem;
+}
+
+// =============================================================================
+// MIX BLEND MODES
+// =============================================================================
+// Control how elements blend with background
+
+.blend-normal {
+  mix-blend-mode: normal;
+}
+
+.blend-multiply {
+  mix-blend-mode: multiply;
+}
+
+.blend-screen {
+  mix-blend-mode: screen;
+}
+
+.blend-overlay {
+  mix-blend-mode: overlay;
+}
+
+.blend-darken {
+  mix-blend-mode: darken;
+}
+
+.blend-lighten {
+  mix-blend-mode: lighten;
+}
+
+.blend-color-dodge {
+  mix-blend-mode: color-dodge;
+}
+
+.blend-color-burn {
+  mix-blend-mode: color-burn;
+}
+
+.blend-hard-light {
+  mix-blend-mode: hard-light;
+}
+
+.blend-soft-light {
+  mix-blend-mode: soft-light;
+}
+
+.blend-difference {
+  mix-blend-mode: difference;
+}
+
+.blend-exclusion {
+  mix-blend-mode: exclusion;
+}
+
+.blend-hue {
+  mix-blend-mode: hue;
+}
+
+.blend-saturation {
+  mix-blend-mode: saturation;
+}
+
+.blend-color {
+  mix-blend-mode: color;
+}
+
+.blend-luminosity {
+  mix-blend-mode: luminosity;
+}
+
+.blend-plus-lighter {
+  mix-blend-mode: plus-lighter;
+}
+
+// Background blend modes
+.bg-blend-normal {
+  background-blend-mode: normal;
+}
+
+.bg-blend-multiply {
+  background-blend-mode: multiply;
+}
+
+.bg-blend-screen {
+  background-blend-mode: screen;
+}
+
+.bg-blend-overlay {
+  background-blend-mode: overlay;
+}
+
+.bg-blend-darken {
+  background-blend-mode: darken;
+}
+
+.bg-blend-lighten {
+  background-blend-mode: lighten;
+}
+
+.bg-blend-color-dodge {
+  background-blend-mode: color-dodge;
+}
+
+.bg-blend-color-burn {
+  background-blend-mode: color-burn;
+}
+
+.bg-blend-hard-light {
+  background-blend-mode: hard-light;
+}
+
+.bg-blend-soft-light {
+  background-blend-mode: soft-light;
+}
+
+.bg-blend-difference {
+  background-blend-mode: difference;
+}
+
+.bg-blend-exclusion {
+  background-blend-mode: exclusion;
+}
+
+.bg-blend-hue {
+  background-blend-mode: hue;
+}
+
+.bg-blend-saturation {
+  background-blend-mode: saturation;
+}
+
+.bg-blend-color {
+  background-blend-mode: color;
+}
+
+.bg-blend-luminosity {
+  background-blend-mode: luminosity;
+}
+
+// =============================================================================
+// ISOLATION
+// =============================================================================
+// Create new stacking context
+
+.isolate {
+  isolation: isolate;
+}
+
+.isolation-auto {
+  isolation: auto;
+}
+
+// =============================================================================
+// 3D TRANSFORMS
+// =============================================================================
+
+// Perspective (set on parent)
+.perspective-none {
+  perspective: none;
+}
+
+.perspective-sm {
+  perspective: 500px;
+}
+
+.perspective {
+  perspective: 1000px;
+}
+
+.perspective-lg {
+  perspective: 1500px;
+}
+
+.perspective-xl {
+  perspective: 2000px;
+}
+
+.perspective-distant {
+  perspective: 3000px;
+}
+
+// Perspective origin
+.perspective-origin-center {
+  perspective-origin: center;
+}
+
+.perspective-origin-top {
+  perspective-origin: top;
+}
+
+.perspective-origin-bottom {
+  perspective-origin: bottom;
+}
+
+.perspective-origin-left {
+  perspective-origin: left;
+}
+
+.perspective-origin-right {
+  perspective-origin: right;
+}
+
+.perspective-origin-top-left {
+  perspective-origin: top left;
+}
+
+.perspective-origin-top-right {
+  perspective-origin: top right;
+}
+
+.perspective-origin-bottom-left {
+  perspective-origin: bottom left;
+}
+
+.perspective-origin-bottom-right {
+  perspective-origin: bottom right;
+}
+
+// Transform style
+.transform-flat {
+  transform-style: flat;
+}
+
+.transform-3d {
+  transform-style: preserve-3d;
+}
+
+// Backface visibility
+.backface-visible {
+  backface-visibility: visible;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+// 3D Rotations
+.rotate-x-0 {
+  transform: rotateX(0deg);
+}
+
+.rotate-x-15 {
+  transform: rotateX(15deg);
+}
+
+.rotate-x-30 {
+  transform: rotateX(30deg);
+}
+
+.rotate-x-45 {
+  transform: rotateX(45deg);
+}
+
+.rotate-x-60 {
+  transform: rotateX(60deg);
+}
+
+.rotate-x-90 {
+  transform: rotateX(90deg);
+}
+
+.rotate-x-180 {
+  transform: rotateX(180deg);
+}
+
+.-rotate-x-15 {
+  transform: rotateX(-15deg);
+}
+
+.-rotate-x-30 {
+  transform: rotateX(-30deg);
+}
+
+.-rotate-x-45 {
+  transform: rotateX(-45deg);
+}
+
+.rotate-y-0 {
+  transform: rotateY(0deg);
+}
+
+.rotate-y-15 {
+  transform: rotateY(15deg);
+}
+
+.rotate-y-30 {
+  transform: rotateY(30deg);
+}
+
+.rotate-y-45 {
+  transform: rotateY(45deg);
+}
+
+.rotate-y-60 {
+  transform: rotateY(60deg);
+}
+
+.rotate-y-90 {
+  transform: rotateY(90deg);
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.-rotate-y-15 {
+  transform: rotateY(-15deg);
+}
+
+.-rotate-y-30 {
+  transform: rotateY(-30deg);
+}
+
+.-rotate-y-45 {
+  transform: rotateY(-45deg);
+}
+
+// Z-axis translation (depth)
+.translate-z-0 {
+  transform: translateZ(0);
+}
+
+.translate-z-4 {
+  transform: translateZ(1rem);
+}
+
+.translate-z-8 {
+  transform: translateZ(2rem);
+}
+
+.translate-z-16 {
+  transform: translateZ(4rem);
+}
+
+.-translate-z-4 {
+  transform: translateZ(-1rem);
+}
+
+.-translate-z-8 {
+  transform: translateZ(-2rem);
+}
+
+// 3D Effects
+.flip-card {
+  perspective: 1000px;
+
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  &:hover .flip-card-inner,
+  &.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+  }
+
+  .flip-card-back {
+    transform: rotateY(180deg);
+  }
+}
+
+// Tilt on hover
+.tilt-hover {
+  perspective: 1000px;
+
+  &:hover {
+    transform: rotateX(10deg) rotateY(-10deg);
+  }
+}
+
+// 3D floating effect
+.float-3d {
+  transform: perspective(1000px) rotateX(5deg) rotateY(-5deg) translateZ(10px);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(30px);
+  }
+}
+
+// =============================================================================
+// CUSTOM SCROLLBARS
+// =============================================================================
+
+// Thin scrollbar
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--border-strong);
+  }
+}
+
+// Auto-hide scrollbar (shows on hover/scroll)
+.scrollbar-auto {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+
+  &:hover {
+    scrollbar-color: var(--border) transparent;
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+  }
+}
+
+// Hidden scrollbar (but still scrollable)
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// Styled scrollbar
+.scrollbar-styled {
+  scrollbar-width: auto;
+  scrollbar-color: var(--primary) var(--surface);
+
+  &::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--surface);
+    border-radius: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 6px;
+    border: 2px solid var(--surface);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-hover);
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: var(--surface);
+  }
+}
+
+// Dark scrollbar
+.scrollbar-dark {
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.1);
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+}
+
+// Gutter color (for when scrollbar isn't needed)
+.scrollbar-gutter-stable {
+  scrollbar-gutter: stable;
+}
+
+.scrollbar-gutter-both {
+  scrollbar-gutter: stable both-edges;
+}
+
+// =============================================================================
+// CSS FILTERS
+// =============================================================================
+
+// Blur
+.blur-none {
+  filter: blur(0);
+}
+
+.blur-sm {
+  filter: blur(4px);
+}
+
+.blur {
+  filter: blur(8px);
+}
+
+.blur-md {
+  filter: blur(12px);
+}
+
+.blur-lg {
+  filter: blur(16px);
+}
+
+.blur-xl {
+  filter: blur(24px);
+}
+
+.blur-2xl {
+  filter: blur(40px);
+}
+
+.blur-3xl {
+  filter: blur(64px);
+}
+
+// Brightness
+.brightness-0 {
+  filter: brightness(0);
+}
+
+.brightness-50 {
+  filter: brightness(0.5);
+}
+
+.brightness-75 {
+  filter: brightness(0.75);
+}
+
+.brightness-90 {
+  filter: brightness(0.9);
+}
+
+.brightness-95 {
+  filter: brightness(0.95);
+}
+
+.brightness-100 {
+  filter: brightness(1);
+}
+
+.brightness-105 {
+  filter: brightness(1.05);
+}
+
+.brightness-110 {
+  filter: brightness(1.1);
+}
+
+.brightness-125 {
+  filter: brightness(1.25);
+}
+
+.brightness-150 {
+  filter: brightness(1.5);
+}
+
+.brightness-200 {
+  filter: brightness(2);
+}
+
+// Contrast
+.contrast-0 {
+  filter: contrast(0);
+}
+
+.contrast-50 {
+  filter: contrast(0.5);
+}
+
+.contrast-75 {
+  filter: contrast(0.75);
+}
+
+.contrast-100 {
+  filter: contrast(1);
+}
+
+.contrast-125 {
+  filter: contrast(1.25);
+}
+
+.contrast-150 {
+  filter: contrast(1.5);
+}
+
+.contrast-200 {
+  filter: contrast(2);
+}
+
+// Grayscale
+.grayscale-0 {
+  filter: grayscale(0);
+}
+
+.grayscale {
+  filter: grayscale(100%);
+}
+
+.grayscale-50 {
+  filter: grayscale(50%);
+}
+
+// Hue rotate
+.hue-rotate-0 {
+  filter: hue-rotate(0deg);
+}
+
+.hue-rotate-15 {
+  filter: hue-rotate(15deg);
+}
+
+.hue-rotate-30 {
+  filter: hue-rotate(30deg);
+}
+
+.hue-rotate-60 {
+  filter: hue-rotate(60deg);
+}
+
+.hue-rotate-90 {
+  filter: hue-rotate(90deg);
+}
+
+.hue-rotate-180 {
+  filter: hue-rotate(180deg);
+}
+
+.-hue-rotate-15 {
+  filter: hue-rotate(-15deg);
+}
+
+.-hue-rotate-30 {
+  filter: hue-rotate(-30deg);
+}
+
+.-hue-rotate-60 {
+  filter: hue-rotate(-60deg);
+}
+
+.-hue-rotate-90 {
+  filter: hue-rotate(-90deg);
+}
+
+// Invert
+.invert-0 {
+  filter: invert(0);
+}
+
+.invert {
+  filter: invert(100%);
+}
+
+.invert-50 {
+  filter: invert(50%);
+}
+
+// Saturate
+.saturate-0 {
+  filter: saturate(0);
+}
+
+.saturate-50 {
+  filter: saturate(0.5);
+}
+
+.saturate-100 {
+  filter: saturate(1);
+}
+
+.saturate-150 {
+  filter: saturate(1.5);
+}
+
+.saturate-200 {
+  filter: saturate(2);
+}
+
+// Sepia
+.sepia-0 {
+  filter: sepia(0);
+}
+
+.sepia {
+  filter: sepia(100%);
+}
+
+.sepia-50 {
+  filter: sepia(50%);
+}
+
+// Drop shadow (filter-based, works on transparent images)
+.drop-shadow-none {
+  filter: drop-shadow(0 0 0 transparent);
+}
+
+.drop-shadow-sm {
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.05));
+}
+
+.drop-shadow {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))
+    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.06));
+}
+
+.drop-shadow-md {
+  filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07))
+    drop-shadow(0 2px 2px rgba(0, 0, 0, 0.06));
+}
+
+.drop-shadow-lg {
+  filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04))
+    drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+}
+
+.drop-shadow-xl {
+  filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03))
+    drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08));
+}
+
+.drop-shadow-2xl {
+  filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15));
+}
+
+// =============================================================================
+// BACKDROP FILTERS
+// =============================================================================
+
+.backdrop-blur-none {
+  backdrop-filter: blur(0);
+}
+
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+.backdrop-blur {
+  backdrop-filter: blur(8px);
+}
+
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
+}
+
+.backdrop-blur-lg {
+  backdrop-filter: blur(16px);
+}
+
+.backdrop-blur-xl {
+  backdrop-filter: blur(24px);
+}
+
+.backdrop-blur-2xl {
+  backdrop-filter: blur(40px);
+}
+
+.backdrop-blur-3xl {
+  backdrop-filter: blur(64px);
+}
+
+.backdrop-brightness-0 {
+  backdrop-filter: brightness(0);
+}
+
+.backdrop-brightness-50 {
+  backdrop-filter: brightness(0.5);
+}
+
+.backdrop-brightness-75 {
+  backdrop-filter: brightness(0.75);
+}
+
+.backdrop-brightness-100 {
+  backdrop-filter: brightness(1);
+}
+
+.backdrop-brightness-125 {
+  backdrop-filter: brightness(1.25);
+}
+
+.backdrop-brightness-150 {
+  backdrop-filter: brightness(1.5);
+}
+
+.backdrop-contrast-0 {
+  backdrop-filter: contrast(0);
+}
+
+.backdrop-contrast-50 {
+  backdrop-filter: contrast(0.5);
+}
+
+.backdrop-contrast-100 {
+  backdrop-filter: contrast(1);
+}
+
+.backdrop-contrast-150 {
+  backdrop-filter: contrast(1.5);
+}
+
+.backdrop-grayscale-0 {
+  backdrop-filter: grayscale(0);
+}
+
+.backdrop-grayscale {
+  backdrop-filter: grayscale(100%);
+}
+
+.backdrop-invert-0 {
+  backdrop-filter: invert(0);
+}
+
+.backdrop-invert {
+  backdrop-filter: invert(100%);
+}
+
+.backdrop-saturate-0 {
+  backdrop-filter: saturate(0);
+}
+
+.backdrop-saturate-100 {
+  backdrop-filter: saturate(1);
+}
+
+.backdrop-saturate-150 {
+  backdrop-filter: saturate(1.5);
+}
+
+.backdrop-saturate-200 {
+  backdrop-filter: saturate(2);
+}
+
+.backdrop-sepia-0 {
+  backdrop-filter: sepia(0);
+}
+
+.backdrop-sepia {
+  backdrop-filter: sepia(100%);
+}
+
+// Combined backdrop effects
+.backdrop-frosted {
+  backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.backdrop-frosted-dark {
+  backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(0, 0, 0, 0.7);
+}

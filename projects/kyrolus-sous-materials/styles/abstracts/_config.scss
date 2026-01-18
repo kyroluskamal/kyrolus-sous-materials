@@ -1,0 +1,408 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - CONFIGURATION SYSTEM
+// =============================================================================
+// Customize the framework by overriding these defaults BEFORE importing.
+//
+// USAGE:
+// ------
+// In your app's styles.scss:
+//
+// // Override defaults
+// $ks-enable-dark-mode: true;
+// $ks-enable-rtl: true;
+// $ks-primary-color: #your-brand-color;
+//
+// // Then import the framework
+// @use "kyrolus-sous-materials/styles/styles";
+// =============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "sass:math";
+@use "sass:list";
+
+// =============================================================================
+// FEATURE FLAGS
+// =============================================================================
+// Enable/disable entire feature sets to reduce CSS output size
+
+$ks-enable-dark-mode: true !default;
+$ks-enable-rtl: true !default;
+$ks-enable-print-styles: true !default;
+$ks-enable-container-queries: true !default;
+$ks-enable-animations: true !default;
+$ks-enable-glassmorphism: true !default;
+$ks-enable-gradients: true !default;
+
+// Utility generation flags
+$ks-generate-responsive-utilities: true !default;
+$ks-generate-hover-utilities: true !default;
+$ks-generate-focus-utilities: true !default;
+$ks-generate-active-utilities: true !default;
+$ks-generate-dark-utilities: true !default;
+$ks-generate-group-utilities: true !default;
+$ks-generate-peer-utilities: true !default;
+
+// =============================================================================
+// BRAND COLORS
+// =============================================================================
+// Override these with your brand colors
+
+$ks-primary-color: #2563eb !default; // Blue-600
+$ks-secondary-color: #9db44f !default;
+$ks-accent-color: #7c3aed !default; // Violet-600
+$ks-success-color: #10b981 !default; // Emerald-500
+$ks-warning-color: #f59e0b !default; // Amber-500
+$ks-error-color: #dc2626 !default; // Red-600
+$ks-info-color: #3b82f6 !default; // Blue-500
+
+// =============================================================================
+// TYPOGRAPHY CONFIGURATION
+// =============================================================================
+
+$ks-font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  "Helvetica Neue", Arial, "Noto Sans", sans-serif !default;
+$ks-font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif !default;
+$ks-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+  "Liberation Mono", "Courier New", monospace !default;
+
+$ks-base-font-size: 16px !default;
+$ks-base-line-height: 1.5 !default;
+
+// Fluid typography viewport range
+$ks-fluid-min-viewport: 320 !default;
+$ks-fluid-max-viewport: 1440 !default;
+
+// =============================================================================
+// SPACING CONFIGURATION
+// =============================================================================
+
+$ks-spacing-base: 0.25rem !default; // 4px
+
+// Custom spacing scale (extend or override)
+$ks-custom-spacing: () !default;
+
+// =============================================================================
+// BREAKPOINTS CONFIGURATION
+// =============================================================================
+// Customize responsive breakpoints
+
+$ks-breakpoints: (
+  "xs": 0,
+  "sm": 640px,
+  "md": 768px,
+  "lg": 1024px,
+  "xl": 1280px,
+  "2xl": 1536px,
+  "3xl": 1920px,
+) !default;
+
+// Container breakpoints
+$ks-container-breakpoints: (
+  "xs": 320px,
+  "sm": 384px,
+  "md": 448px,
+  "lg": 512px,
+  "xl": 576px,
+  "2xl": 672px,
+  "3xl": 768px,
+  "4xl": 896px,
+  "5xl": 1024px,
+) !default;
+
+// =============================================================================
+// BORDER RADIUS CONFIGURATION
+// =============================================================================
+
+$ks-radius-none: 0 !default;
+$ks-radius-sm: 0.125rem !default;
+$ks-radius-base: 0.25rem !default;
+$ks-radius-md: 0.375rem !default;
+$ks-radius-lg: 0.5rem !default;
+$ks-radius-xl: 0.75rem !default;
+$ks-radius-2xl: 1rem !default;
+$ks-radius-3xl: 1.5rem !default;
+$ks-radius-full: 9999px !default;
+
+// =============================================================================
+// Z-INDEX CONFIGURATION
+// =============================================================================
+
+$ks-z-index: (
+  "dropdown": 1000,
+  "sticky": 1020,
+  "fixed": 1030,
+  "backdrop": 1040,
+  "modal": 1050,
+  "popover": 1060,
+  "tooltip": 1070,
+  "toast": 1080,
+  "max": 9999,
+) !default;
+
+// =============================================================================
+// TRANSITION CONFIGURATION
+// =============================================================================
+
+$ks-transition-fast: 150ms !default;
+$ks-transition-normal: 200ms !default;
+$ks-transition-slow: 300ms !default;
+
+$ks-easing-default: cubic-bezier(0.4, 0, 0.2, 1) !default;
+$ks-easing-in: cubic-bezier(0.4, 0, 1, 1) !default;
+$ks-easing-out: cubic-bezier(0, 0, 0.2, 1) !default;
+$ks-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1) !default;
+
+// =============================================================================
+// COLOR PALETTE CONFIGURATION
+// =============================================================================
+// Select which color palettes to include (reduces CSS size)
+
+$ks-include-palettes: (
+  "slate",
+  "gray",
+  "zinc",
+  "neutral",
+  "stone",
+  "red",
+  "orange",
+  "amber",
+  "yellow",
+  "lime",
+  "green",
+  "emerald",
+  "teal",
+  "cyan",
+  "sky",
+  "blue",
+  "indigo",
+  "violet",
+  "purple",
+  "fuchsia",
+  "pink",
+  "rose"
+) !default;
+
+// Color shades to generate (reduce for smaller output)
+$ks-color-shades: (
+  50,
+  100,
+  200,
+  300,
+  400,
+  500,
+  600,
+  700,
+  800,
+  900,
+  950
+) !default;
+
+// =============================================================================
+// UTILITY GENERATION CONFIGURATION
+// =============================================================================
+// Select which utility categories to generate
+
+$ks-utilities: (
+  "display": true,
+  "flexbox": true,
+  "grid": true,
+  "spacing": true,
+  "sizing": true,
+  "typography": true,
+  "colors": true,
+  "backgrounds": true,
+  "borders": true,
+  "effects": true,
+  "filters": true,
+  "transitions": true,
+  "transforms": true,
+  "animations": true,
+  "interactivity": true,
+  "accessibility": true,
+) !default;
+
+// =============================================================================
+// COMPONENT CONFIGURATION
+// =============================================================================
+
+$ks-button-border-radius: $ks-radius-md !default;
+$ks-input-border-radius: $ks-radius-md !default;
+$ks-card-border-radius: $ks-radius-lg !default;
+$ks-modal-border-radius: $ks-radius-xl !default;
+
+// =============================================================================
+// DARK MODE CONFIGURATION
+// =============================================================================
+
+$ks-dark-mode-selector: "[data-theme='dark']" !default;
+$ks-dark-mode-class: ".dark" !default;
+
+// =============================================================================
+// HELPER FUNCTIONS
+// =============================================================================
+
+/// Check if a feature is enabled
+/// @param {String} $feature - Feature name
+/// @return {Boolean}
+@function ks-feature-enabled($feature) {
+  @if $feature == "dark-mode" {
+    @return $ks-enable-dark-mode;
+  } @else if $feature == "rtl" {
+    @return $ks-enable-rtl;
+  } @else if $feature == "print" {
+    @return $ks-enable-print-styles;
+  } @else if $feature == "container-queries" {
+    @return $ks-enable-container-queries;
+  } @else if $feature == "animations" {
+    @return $ks-enable-animations;
+  } @else if $feature == "glassmorphism" {
+    @return $ks-enable-glassmorphism;
+  } @else if $feature == "gradients" {
+    @return $ks-enable-gradients;
+  }
+  @return false;
+}
+
+/// Check if a utility category is enabled
+/// @param {String} $category - Utility category name
+/// @return {Boolean}
+@function ks-utility-enabled($category) {
+  @return map.get($ks-utilities, $category) == true;
+}
+
+/// Check if a palette should be included
+/// @param {String} $palette - Palette name
+/// @return {Boolean}
+@function ks-palette-included($palette) {
+  @return list.index($ks-include-palettes, $palette) != null;
+}
+
+/// Get breakpoint value
+/// @param {String} $name - Breakpoint name
+/// @return {Length}
+@function ks-breakpoint($name) {
+  @return map.get($ks-breakpoints, $name);
+}
+
+/// Get z-index value
+/// @param {String} $name - Z-index name
+/// @return {Number}
+@function ks-z($name) {
+  @return map.get($ks-z-index, $name);
+}
+
+// =============================================================================
+// HELPER MIXINS
+// =============================================================================
+
+/// Apply styles only if feature is enabled
+/// @param {String} $feature - Feature name
+@mixin ks-if-feature($feature) {
+  @if ks-feature-enabled($feature) {
+    @content;
+  }
+}
+
+/// Apply styles only if utility is enabled
+/// @param {String} $category - Utility category
+@mixin ks-if-utility($category) {
+  @if ks-utility-enabled($category) {
+    @content;
+  }
+}
+
+/// Generate responsive variants of utilities
+/// @param {String} $class - Base class name
+@mixin ks-responsive($class) {
+  @if $ks-generate-responsive-utilities {
+    @each $bp-name, $bp-value in $ks-breakpoints {
+      @if $bp-value > 0 {
+        @media (min-width: $bp-value) {
+          .#{$bp-name}\:#{$class} {
+            @content;
+          }
+        }
+      }
+    }
+  }
+}
+
+/// Generate hover variant
+/// @param {String} $class - Base class name
+@mixin ks-hover($class) {
+  @if $ks-generate-hover-utilities {
+    .hover\:#{$class}:hover {
+      @content;
+    }
+  }
+}
+
+/// Generate focus variant
+/// @param {String} $class - Base class name
+@mixin ks-focus($class) {
+  @if $ks-generate-focus-utilities {
+    .focus\:#{$class}:focus {
+      @content;
+    }
+    .focus-visible\:#{$class}:focus-visible {
+      @content;
+    }
+  }
+}
+
+/// Generate active variant
+/// @param {String} $class - Base class name
+@mixin ks-active($class) {
+  @if $ks-generate-active-utilities {
+    .active\:#{$class}:active {
+      @content;
+    }
+  }
+}
+
+/// Generate dark mode variant
+/// @param {String} $class - Base class name
+@mixin ks-dark($class) {
+  @if $ks-generate-dark-utilities and $ks-enable-dark-mode {
+    #{$ks-dark-mode-selector} .dark\:#{$class},
+    #{$ks-dark-mode-class} .dark\:#{$class} {
+      @content;
+    }
+  }
+}
+
+/// Generate all state variants for a utility
+/// @param {String} $class - Base class name
+@mixin ks-with-states($class) {
+  .#{$class} {
+    @content;
+  }
+  @include ks-hover($class) {
+    @content;
+  }
+  @include ks-focus($class) {
+    @content;
+  }
+  @include ks-active($class) {
+    @content;
+  }
+  @include ks-dark($class) {
+    @content;
+  }
+}
+
+// =============================================================================
+// PRINT CONFIGURATION MESSAGE
+// =============================================================================
+// Uncomment to see configuration in compiled CSS (for debugging)
+//
+// /*
+// Kyrolus Sous Materials Configuration:
+// - Dark Mode: #{$ks-enable-dark-mode}
+// - RTL: #{$ks-enable-rtl}
+// - Animations: #{$ks-enable-animations}
+// - Responsive Utilities: #{$ks-generate-responsive-utilities}
+// - Hover Utilities: #{$ks-generate-hover-utilities}
+// - Dark Utilities: #{$ks-generate-dark-utilities}
+// */

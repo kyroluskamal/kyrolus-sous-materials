@@ -1,0 +1,859 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - ADVANCED TYPOGRAPHY UTILITIES
+// =============================================================================
+// Comprehensive typography control:
+// - Multi-column Layout
+// - Line Clamp (text truncation)
+// - Hyphens (auto hyphenation)
+// - Writing Modes (vertical text, CJK support)
+// - Word Break / Overflow Wrap
+// - Text decoration & transform
+// - Font features (OpenType)
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// MULTI-COLUMN LAYOUT
+// =============================================================================
+// Newspaper-style columns for text content
+
+// Column count
+.columns-1 {
+  columns: 1;
+}
+
+.columns-2 {
+  columns: 2;
+}
+
+.columns-3 {
+  columns: 3;
+}
+
+.columns-4 {
+  columns: 4;
+}
+
+.columns-5 {
+  columns: 5;
+}
+
+.columns-6 {
+  columns: 6;
+}
+
+.columns-auto {
+  columns: auto;
+}
+
+// Column width (auto column count based on width)
+.columns-3xs {
+  columns: 16rem;
+}
+
+.columns-2xs {
+  columns: 18rem;
+}
+
+.columns-xs {
+  columns: 20rem;
+}
+
+.columns-sm {
+  columns: 24rem;
+}
+
+.columns-md {
+  columns: 28rem;
+}
+
+.columns-lg {
+  columns: 32rem;
+}
+
+.columns-xl {
+  columns: 36rem;
+}
+
+// Column gap
+.column-gap-0 {
+  column-gap: 0;
+}
+
+.column-gap-1 {
+  column-gap: 0.25rem;
+}
+
+.column-gap-2 {
+  column-gap: 0.5rem;
+}
+
+.column-gap-4 {
+  column-gap: 1rem;
+}
+
+.column-gap-6 {
+  column-gap: 1.5rem;
+}
+
+.column-gap-8 {
+  column-gap: 2rem;
+}
+
+.column-gap-10 {
+  column-gap: 2.5rem;
+}
+
+.column-gap-12 {
+  column-gap: 3rem;
+}
+
+.column-gap-normal {
+  column-gap: normal;
+}
+
+// Column rule (line between columns)
+.column-rule-none {
+  column-rule: none;
+}
+
+.column-rule {
+  column-rule: 1px solid var(--border);
+}
+
+.column-rule-2 {
+  column-rule: 2px solid var(--border);
+}
+
+.column-rule-dashed {
+  column-rule: 1px dashed var(--border);
+}
+
+.column-rule-dotted {
+  column-rule: 1px dotted var(--border);
+}
+
+.column-rule-primary {
+  column-rule: 1px solid var(--primary);
+}
+
+// Column span (for headings that span all columns)
+.column-span-none {
+  column-span: none;
+}
+
+.column-span-all {
+  column-span: all;
+}
+
+// Column fill
+.column-fill-auto {
+  column-fill: auto;
+}
+
+.column-fill-balance {
+  column-fill: balance;
+}
+
+// Break control
+.break-after-auto {
+  break-after: auto;
+}
+
+.break-after-avoid {
+  break-after: avoid;
+}
+
+.break-after-column {
+  break-after: column;
+}
+
+.break-after-page {
+  break-after: page;
+}
+
+.break-before-auto {
+  break-before: auto;
+}
+
+.break-before-avoid {
+  break-before: avoid;
+}
+
+.break-before-column {
+  break-before: column;
+}
+
+.break-before-page {
+  break-before: page;
+}
+
+.break-inside-auto {
+  break-inside: auto;
+}
+
+.break-inside-avoid {
+  break-inside: avoid;
+}
+
+.break-inside-avoid-column {
+  break-inside: avoid-column;
+}
+
+.break-inside-avoid-page {
+  break-inside: avoid-page;
+}
+
+// =============================================================================
+// LINE CLAMP (Text Truncation)
+// =============================================================================
+// Truncate text to specific number of lines
+
+.line-clamp-none {
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  overflow: visible;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-5 {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-6 {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Single line truncation with ellipsis
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Text overflow
+.text-ellipsis {
+  text-overflow: ellipsis;
+}
+
+.text-clip {
+  text-overflow: clip;
+}
+
+// =============================================================================
+// HYPHENS
+// =============================================================================
+// Automatic word hyphenation for better text flow
+
+.hyphens-none {
+  hyphens: none;
+}
+
+.hyphens-manual {
+  hyphens: manual;
+}
+
+.hyphens-auto {
+  hyphens: auto;
+}
+
+// Hyphenation limit (how many characters before/after hyphen)
+// NOTE: These are vendor-specific/experimental properties
+// See: https://developer.mozilla.org/en-US/docs/Web/CSS/hyphenate-limit-chars
+.hyphenate-limit-chars {
+  -webkit-hyphenate-limit-chars: 6 3 2;
+  hyphenate-limit-chars: 6 3 2;
+}
+
+.hyphenate-limit-lines {
+  -webkit-hyphenate-limit-lines: 2;
+  hyphenate-limit-lines: 2;
+}
+
+// =============================================================================
+// WRITING MODE
+// =============================================================================
+// For vertical text and different writing systems
+
+.writing-horizontal-tb {
+  writing-mode: horizontal-tb;
+}
+
+.writing-vertical-rl {
+  writing-mode: vertical-rl;
+}
+
+.writing-vertical-lr {
+  writing-mode: vertical-lr;
+}
+
+// Sideways (experimental)
+.writing-sideways-rl {
+  writing-mode: sideways-rl;
+}
+
+.writing-sideways-lr {
+  writing-mode: sideways-lr;
+}
+
+// Text orientation (for vertical writing)
+.text-orientation-mixed {
+  text-orientation: mixed;
+}
+
+.text-orientation-upright {
+  text-orientation: upright;
+}
+
+.text-orientation-sideways {
+  text-orientation: sideways;
+}
+
+// Text combine upright (for horizontal text in vertical layout)
+.text-combine-none {
+  text-combine-upright: none;
+}
+
+.text-combine-all {
+  text-combine-upright: all;
+}
+
+// =============================================================================
+// WORD BREAK & OVERFLOW WRAP
+// =============================================================================
+
+// Word break
+.break-normal {
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.break-words {
+  overflow-wrap: break-word;
+}
+
+.break-all {
+  word-break: break-all;
+}
+
+.break-keep {
+  word-break: keep-all;
+}
+
+// Overflow wrap (formerly word-wrap)
+.overflow-wrap-normal {
+  overflow-wrap: normal;
+}
+
+.overflow-wrap-break {
+  overflow-wrap: break-word;
+}
+
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+}
+
+// =============================================================================
+// WHITESPACE
+// =============================================================================
+
+.whitespace-normal {
+  white-space: normal;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
+.whitespace-pre {
+  white-space: pre;
+}
+
+.whitespace-pre-line {
+  white-space: pre-line;
+}
+
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.whitespace-break-spaces {
+  white-space: break-spaces;
+}
+
+// =============================================================================
+// TEXT INDENT
+// =============================================================================
+
+.indent-0 {
+  text-indent: 0;
+}
+
+.indent-1 {
+  text-indent: 0.25rem;
+}
+
+.indent-2 {
+  text-indent: 0.5rem;
+}
+
+.indent-4 {
+  text-indent: 1rem;
+}
+
+.indent-6 {
+  text-indent: 1.5rem;
+}
+
+.indent-8 {
+  text-indent: 2rem;
+}
+
+// First line indent (for paragraphs)
+.first-line-indent {
+  text-indent: 2em;
+
+  &::first-letter {
+    // Drop cap style - optional enhancement for paragraphs
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+}
+
+// Hanging indent (for lists, references)
+.hanging-indent {
+  text-indent: -2em;
+  padding-left: 2em;
+}
+
+// =============================================================================
+// TEXT DECORATION
+// =============================================================================
+
+// Decoration line
+.decoration-none {
+  text-decoration-line: none;
+}
+
+.underline {
+  text-decoration-line: underline;
+}
+
+.overline {
+  text-decoration-line: overline;
+}
+
+.line-through {
+  text-decoration-line: line-through;
+}
+
+.decoration-underline-overline {
+  text-decoration-line: underline overline;
+}
+
+// Decoration style
+.decoration-solid {
+  text-decoration-style: solid;
+}
+
+.decoration-double {
+  text-decoration-style: double;
+}
+
+.decoration-dotted {
+  text-decoration-style: dotted;
+}
+
+.decoration-dashed {
+  text-decoration-style: dashed;
+}
+
+.decoration-wavy {
+  text-decoration-style: wavy;
+}
+
+// Decoration thickness
+.decoration-auto {
+  text-decoration-thickness: auto;
+}
+
+.decoration-from-font {
+  text-decoration-thickness: from-font;
+}
+
+.decoration-0 {
+  text-decoration-thickness: 0px;
+}
+
+.decoration-1 {
+  text-decoration-thickness: 1px;
+}
+
+.decoration-2 {
+  text-decoration-thickness: 2px;
+}
+
+.decoration-4 {
+  text-decoration-thickness: 4px;
+}
+
+.decoration-8 {
+  text-decoration-thickness: 8px;
+}
+
+// Decoration color
+.decoration-transparent {
+  text-decoration-color: transparent;
+}
+
+.decoration-current {
+  text-decoration-color: currentColor;
+}
+
+.decoration-primary {
+  text-decoration-color: var(--primary);
+}
+
+.decoration-secondary {
+  text-decoration-color: var(--secondary);
+}
+
+.decoration-success {
+  text-decoration-color: var(--success);
+}
+
+.decoration-warning {
+  text-decoration-color: var(--warning);
+}
+
+.decoration-danger {
+  text-decoration-color: var(--danger);
+}
+
+// Underline offset
+.underline-offset-auto {
+  text-underline-offset: auto;
+}
+
+.underline-offset-0 {
+  text-underline-offset: 0px;
+}
+
+.underline-offset-1 {
+  text-underline-offset: 1px;
+}
+
+.underline-offset-2 {
+  text-underline-offset: 2px;
+}
+
+.underline-offset-4 {
+  text-underline-offset: 4px;
+}
+
+.underline-offset-8 {
+  text-underline-offset: 8px;
+}
+
+// =============================================================================
+// TEXT TRANSFORM
+// =============================================================================
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.normal-case {
+  text-transform: none;
+}
+
+// Full-width (for CJK)
+.full-width {
+  text-transform: full-width;
+}
+
+// =============================================================================
+// FONT VARIANT & FEATURES
+// =============================================================================
+
+// Font variant numeric
+.normal-nums {
+  font-variant-numeric: normal;
+}
+
+.ordinal {
+  font-variant-numeric: ordinal;
+}
+
+.slashed-zero {
+  font-variant-numeric: slashed-zero;
+}
+
+.lining-nums {
+  font-variant-numeric: lining-nums;
+}
+
+.oldstyle-nums {
+  font-variant-numeric: oldstyle-nums;
+}
+
+.proportional-nums {
+  font-variant-numeric: proportional-nums;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.diagonal-fractions {
+  font-variant-numeric: diagonal-fractions;
+}
+
+.stacked-fractions {
+  font-variant-numeric: stacked-fractions;
+}
+
+// Font variant caps
+.small-caps {
+  font-variant-caps: small-caps;
+}
+
+.all-small-caps {
+  font-variant-caps: all-small-caps;
+}
+
+.petite-caps {
+  font-variant-caps: petite-caps;
+}
+
+.unicase {
+  font-variant-caps: unicase;
+}
+
+.titling-caps {
+  font-variant-caps: titling-caps;
+}
+
+// Font feature settings (OpenType features)
+.font-feature-normal {
+  font-feature-settings: normal;
+}
+
+.font-feature-liga {
+  font-feature-settings: "liga" 1;
+}
+
+.font-feature-dlig {
+  font-feature-settings: "dlig" 1;
+}
+
+.font-feature-smcp {
+  font-feature-settings: "smcp" 1;
+}
+
+.font-feature-kern {
+  font-feature-settings: "kern" 1;
+}
+
+.font-feature-calt {
+  font-feature-settings: "calt" 1;
+}
+
+.font-feature-ss01 {
+  font-feature-settings: "ss01" 1;
+}
+
+.font-feature-ss02 {
+  font-feature-settings: "ss02" 1;
+}
+
+// =============================================================================
+// LETTER & WORD SPACING
+// =============================================================================
+
+// Letter spacing
+.tracking-tighter {
+  letter-spacing: -0.05em;
+}
+
+.tracking-tight {
+  letter-spacing: -0.025em;
+}
+
+.tracking-normal {
+  letter-spacing: 0;
+}
+
+.tracking-wide {
+  letter-spacing: 0.025em;
+}
+
+.tracking-wider {
+  letter-spacing: 0.05em;
+}
+
+.tracking-widest {
+  letter-spacing: 0.1em;
+}
+
+// Word spacing
+.word-spacing-normal {
+  word-spacing: normal;
+}
+
+.word-spacing-tight {
+  word-spacing: -0.05em;
+}
+
+.word-spacing-wide {
+  word-spacing: 0.1em;
+}
+
+.word-spacing-wider {
+  word-spacing: 0.25em;
+}
+
+// =============================================================================
+// VERTICAL ALIGN
+// =============================================================================
+
+.align-baseline {
+  vertical-align: baseline;
+}
+
+.align-top {
+  vertical-align: top;
+}
+
+.align-middle {
+  vertical-align: middle;
+}
+
+.align-bottom {
+  vertical-align: bottom;
+}
+
+.align-text-top {
+  vertical-align: text-top;
+}
+
+.align-text-bottom {
+  vertical-align: text-bottom;
+}
+
+.align-sub {
+  vertical-align: sub;
+}
+
+.align-super {
+  vertical-align: super;
+}
+
+// =============================================================================
+// CONTENT & QUOTES
+// =============================================================================
+
+// Quotes style
+.quotes-none {
+  quotes: none;
+}
+
+.quotes-auto {
+  quotes: auto;
+}
+
+.quotes-english {
+  quotes: """ """ "'" "'";
+}
+
+.quotes-french {
+  quotes: "«" "»" "‹" "›";
+}
+
+.quotes-german {
+  quotes: "„" """ "‚" "'";
+}
+
+// =============================================================================
+// TEXT RENDERING
+// =============================================================================
+
+.text-rendering-auto {
+  text-rendering: auto;
+}
+
+.text-rendering-speed {
+  text-rendering: optimizeSpeed;
+}
+
+.text-rendering-legibility {
+  text-rendering: optimizeLegibility;
+}
+
+.text-rendering-precision {
+  text-rendering: geometricPrecision;
+}
+
+// =============================================================================
+// FONT SMOOTHING
+// =============================================================================
+
+.antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.subpixel-antialiased {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}

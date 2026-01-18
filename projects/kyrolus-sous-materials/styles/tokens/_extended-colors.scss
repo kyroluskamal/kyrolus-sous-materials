@@ -1,0 +1,632 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - EXTENDED COLOR UTILITIES
+// =============================================================================
+// Additional color utilities for borders, dividers, placeholders, carets,
+// accents, fill, stroke, and opacity color combinations.
+// =============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "primitives" as *;
+
+// =============================================================================
+// BORDER COLOR UTILITIES
+// =============================================================================
+
+// Full border color palette
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .border-#{$palette-name}-#{$shade} {
+      border-color: var(--color-#{$palette-name}-#{$shade});
+    }
+    // Individual sides
+    .border-t-#{$palette-name}-#{$shade} {
+      border-top-color: var(--color-#{$palette-name}-#{$shade});
+    }
+    .border-r-#{$palette-name}-#{$shade} {
+      border-right-color: var(--color-#{$palette-name}-#{$shade});
+    }
+    .border-b-#{$palette-name}-#{$shade} {
+      border-bottom-color: var(--color-#{$palette-name}-#{$shade});
+    }
+    .border-l-#{$palette-name}-#{$shade} {
+      border-left-color: var(--color-#{$palette-name}-#{$shade});
+    }
+    // Logical properties
+    .border-s-#{$palette-name}-#{$shade} {
+      border-inline-start-color: var(--color-#{$palette-name}-#{$shade});
+    }
+    .border-e-#{$palette-name}-#{$shade} {
+      border-inline-end-color: var(--color-#{$palette-name}-#{$shade});
+    }
+    // X and Y axis
+    .border-x-#{$palette-name}-#{$shade} {
+      border-left-color: var(--color-#{$palette-name}-#{$shade});
+      border-right-color: var(--color-#{$palette-name}-#{$shade});
+    }
+    .border-y-#{$palette-name}-#{$shade} {
+      border-top-color: var(--color-#{$palette-name}-#{$shade});
+      border-bottom-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+// Special border colors
+.border-transparent {
+  border-color: transparent;
+}
+.border-current {
+  border-color: currentColor;
+}
+.border-white {
+  border-color: #ffffff;
+}
+.border-black {
+  border-color: #000000;
+}
+.border-inherit {
+  border-color: inherit;
+}
+
+// Semantic border colors
+.border-default {
+  border-color: var(--border);
+}
+.border-strong {
+  border-color: var(--border-strong);
+}
+.border-subtle {
+  border-color: var(--border-subtle);
+}
+.border-focus {
+  border-color: var(--border-focus);
+}
+
+// =============================================================================
+// DIVIDE COLOR UTILITIES
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .divide-#{$palette-name}-#{$shade} > * + * {
+      border-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.divide-transparent > * + * {
+  border-color: transparent;
+}
+.divide-current > * + * {
+  border-color: currentColor;
+}
+.divide-white > * + * {
+  border-color: #ffffff;
+}
+.divide-black > * + * {
+  border-color: #000000;
+}
+
+// =============================================================================
+// RING COLOR UTILITIES
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .ring-#{$palette-name}-#{$shade} {
+      --ring-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.ring-transparent {
+  --ring-color: transparent;
+}
+.ring-current {
+  --ring-color: currentColor;
+}
+.ring-white {
+  --ring-color: #ffffff;
+}
+.ring-black {
+  --ring-color: #000000;
+}
+
+// Ring offset colors
+@each $palette-name, $palette in $color-palettes {
+  .ring-offset-#{$palette-name}-50 {
+    --ring-offset-color: var(--color-#{$palette-name}-50);
+  }
+  .ring-offset-#{$palette-name}-100 {
+    --ring-offset-color: var(--color-#{$palette-name}-100);
+  }
+  .ring-offset-#{$palette-name}-900 {
+    --ring-offset-color: var(--color-#{$palette-name}-900);
+  }
+}
+
+.ring-offset-white {
+  --ring-offset-color: #ffffff;
+}
+.ring-offset-black {
+  --ring-offset-color: #000000;
+}
+
+// =============================================================================
+// PLACEHOLDER COLOR UTILITIES
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .placeholder-#{$palette-name}-#{$shade}::placeholder {
+      color: var(--color-#{$palette-name}-#{$shade});
+      opacity: 1;
+    }
+  }
+}
+
+.placeholder-transparent::placeholder {
+  color: transparent;
+}
+.placeholder-current::placeholder {
+  color: currentColor;
+}
+.placeholder-white::placeholder {
+  color: #ffffff;
+}
+.placeholder-black::placeholder {
+  color: #000000;
+}
+
+// =============================================================================
+// CARET COLOR UTILITIES
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .caret-#{$palette-name}-#{$shade} {
+      caret-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.caret-transparent {
+  caret-color: transparent;
+}
+.caret-current {
+  caret-color: currentColor;
+}
+.caret-white {
+  caret-color: #ffffff;
+}
+.caret-black {
+  caret-color: #000000;
+}
+.caret-inherit {
+  caret-color: inherit;
+}
+.caret-auto {
+  caret-color: auto;
+}
+
+// =============================================================================
+// ACCENT COLOR UTILITIES (Form controls)
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .accent-#{$palette-name}-#{$shade} {
+      accent-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.accent-auto {
+  accent-color: auto;
+}
+.accent-inherit {
+  accent-color: inherit;
+}
+.accent-current {
+  accent-color: currentColor;
+}
+.accent-transparent {
+  accent-color: transparent;
+}
+.accent-white {
+  accent-color: #ffffff;
+}
+.accent-black {
+  accent-color: #000000;
+}
+
+// =============================================================================
+// TEXT DECORATION COLOR UTILITIES
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .decoration-#{$palette-name}-#{$shade} {
+      text-decoration-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.decoration-transparent {
+  text-decoration-color: transparent;
+}
+.decoration-current {
+  text-decoration-color: currentColor;
+}
+.decoration-white {
+  text-decoration-color: #ffffff;
+}
+.decoration-black {
+  text-decoration-color: #000000;
+}
+.decoration-inherit {
+  text-decoration-color: inherit;
+}
+
+// =============================================================================
+// OUTLINE COLOR UTILITIES
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .outline-#{$palette-name}-#{$shade} {
+      outline-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.outline-transparent {
+  outline-color: transparent;
+}
+.outline-current {
+  outline-color: currentColor;
+}
+.outline-white {
+  outline-color: #ffffff;
+}
+.outline-black {
+  outline-color: #000000;
+}
+.outline-inherit {
+  outline-color: inherit;
+}
+
+// =============================================================================
+// SVG FILL COLOR UTILITIES
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .fill-#{$palette-name}-#{$shade} {
+      fill: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.fill-none {
+  fill: none;
+}
+.fill-transparent {
+  fill: transparent;
+}
+.fill-current {
+  fill: currentColor;
+}
+.fill-white {
+  fill: #ffffff;
+}
+.fill-black {
+  fill: #000000;
+}
+.fill-inherit {
+  fill: inherit;
+}
+
+// =============================================================================
+// SVG STROKE COLOR UTILITIES
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .stroke-#{$palette-name}-#{$shade} {
+      stroke: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.stroke-none {
+  stroke: none;
+}
+.stroke-transparent {
+  stroke: transparent;
+}
+.stroke-current {
+  stroke: currentColor;
+}
+.stroke-white {
+  stroke: #ffffff;
+}
+.stroke-black {
+  stroke: #000000;
+}
+.stroke-inherit {
+  stroke: inherit;
+}
+
+// Stroke width utilities
+.stroke-0 {
+  stroke-width: 0;
+}
+.stroke-1 {
+  stroke-width: 1;
+}
+.stroke-2 {
+  stroke-width: 2;
+}
+
+// =============================================================================
+// SHADOW COLOR UTILITIES
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  .shadow-#{$palette-name}-500\/20 {
+    --shadow-color: var(--color-#{$palette-name}-500);
+    box-shadow: 0 4px 14px 0 rgba(var(--color-#{$palette-name}-500), 0.2);
+  }
+  .shadow-#{$palette-name}-500\/30 {
+    box-shadow: 0 4px 14px 0 rgba(map.get($palette, 500), 0.3);
+  }
+  .shadow-#{$palette-name}-500\/40 {
+    box-shadow: 0 4px 14px 0 rgba(map.get($palette, 500), 0.4);
+  }
+  .shadow-#{$palette-name}-500\/50 {
+    box-shadow: 0 4px 14px 0 rgba(map.get($palette, 500), 0.5);
+  }
+}
+
+// =============================================================================
+// CHILD SELECTOR UTILITIES
+// =============================================================================
+
+// First child
+.first\:mt-0:first-child {
+  margin-top: 0;
+}
+.first\:mb-0:first-child {
+  margin-bottom: 0;
+}
+.first\:ml-0:first-child {
+  margin-left: 0;
+}
+.first\:mr-0:first-child {
+  margin-right: 0;
+}
+.first\:pt-0:first-child {
+  padding-top: 0;
+}
+.first\:pb-0:first-child {
+  padding-bottom: 0;
+}
+.first\:pl-0:first-child {
+  padding-left: 0;
+}
+.first\:pr-0:first-child {
+  padding-right: 0;
+}
+.first\:rounded-t-none:first-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.first\:rounded-l-none:first-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.first\:border-t-0:first-child {
+  border-top-width: 0;
+}
+.first\:border-l-0:first-child {
+  border-left-width: 0;
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .first\:bg-#{$palette-name}-50:first-child {
+    background-color: var(--color-#{$palette-name}-50);
+  }
+  .first\:bg-#{$palette-name}-100:first-child {
+    background-color: var(--color-#{$palette-name}-100);
+  }
+}
+
+// Last child
+.last\:mt-0:last-child {
+  margin-top: 0;
+}
+.last\:mb-0:last-child {
+  margin-bottom: 0;
+}
+.last\:ml-0:last-child {
+  margin-left: 0;
+}
+.last\:mr-0:last-child {
+  margin-right: 0;
+}
+.last\:pt-0:last-child {
+  padding-top: 0;
+}
+.last\:pb-0:last-child {
+  padding-bottom: 0;
+}
+.last\:pl-0:last-child {
+  padding-left: 0;
+}
+.last\:pr-0:last-child {
+  padding-right: 0;
+}
+.last\:rounded-b-none:last-child {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.last\:rounded-r-none:last-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.last\:border-b-0:last-child {
+  border-bottom-width: 0;
+}
+.last\:border-r-0:last-child {
+  border-right-width: 0;
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .last\:bg-#{$palette-name}-50:last-child {
+    background-color: var(--color-#{$palette-name}-50);
+  }
+  .last\:bg-#{$palette-name}-100:last-child {
+    background-color: var(--color-#{$palette-name}-100);
+  }
+}
+
+// Odd children
+.odd\:bg-transparent:nth-child(odd) {
+  background-color: transparent;
+}
+.odd\:bg-white:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .odd\:bg-#{$palette-name}-50:nth-child(odd) {
+    background-color: var(--color-#{$palette-name}-50);
+  }
+  .odd\:bg-#{$palette-name}-100:nth-child(odd) {
+    background-color: var(--color-#{$palette-name}-100);
+  }
+}
+
+// Even children
+.even\:bg-transparent:nth-child(even) {
+  background-color: transparent;
+}
+.even\:bg-white:nth-child(even) {
+  background-color: #ffffff;
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .even\:bg-#{$palette-name}-50:nth-child(even) {
+    background-color: var(--color-#{$palette-name}-50);
+  }
+  .even\:bg-#{$palette-name}-100:nth-child(even) {
+    background-color: var(--color-#{$palette-name}-100);
+  }
+}
+
+// Only child
+.only\:block:only-child {
+  display: block;
+}
+.only\:hidden:only-child {
+  display: none;
+}
+.only\:m-0:only-child {
+  margin: 0;
+}
+
+// First of type
+.first-of-type\:mt-0:first-of-type {
+  margin-top: 0;
+}
+.first-of-type\:border-t-0:first-of-type {
+  border-top-width: 0;
+}
+
+// Last of type
+.last-of-type\:mb-0:last-of-type {
+  margin-bottom: 0;
+}
+.last-of-type\:border-b-0:last-of-type {
+  border-bottom-width: 0;
+}
+
+// =============================================================================
+// COLOR OPACITY UTILITIES
+// =============================================================================
+// Format: text-{color}-{shade}/{opacity} e.g., text-blue-500/50
+
+$opacity-values: (0, 5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95);
+
+// Background with opacity
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    @each $opacity in $opacity-values {
+      .bg-#{$palette-name}-#{$shade}\/#{$opacity} {
+        background-color: rgba(
+          #{map.get($palette, $shade)},
+          calc(#{$opacity} / 100)
+        );
+      }
+    }
+  }
+}
+
+// Common white/black with opacity
+@each $opacity in $opacity-values {
+  .bg-white\/#{$opacity} {
+    background-color: rgba(255, 255, 255, calc(#{$opacity} / 100));
+  }
+  .bg-black\/#{$opacity} {
+    background-color: rgba(0, 0, 0, calc(#{$opacity} / 100));
+  }
+}
+
+// Text with opacity
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    @each $opacity in $opacity-values {
+      .text-#{$palette-name}-#{$shade}\/#{$opacity} {
+        color: rgba(#{map.get($palette, $shade)}, calc(#{$opacity} / 100));
+      }
+    }
+  }
+}
+
+@each $opacity in $opacity-values {
+  .text-white\/#{$opacity} {
+    color: rgba(255, 255, 255, calc(#{$opacity} / 100));
+  }
+  .text-black\/#{$opacity} {
+    color: rgba(0, 0, 0, calc(#{$opacity} / 100));
+  }
+}
+
+// Border with opacity
+@each $palette-name, $palette in $color-palettes {
+  @each $opacity in $opacity-values {
+    .border-#{$palette-name}-500\/#{$opacity} {
+      border-color: rgba(#{map.get($palette, 500)}, calc(#{$opacity} / 100));
+    }
+  }
+}
+
+@each $opacity in $opacity-values {
+  .border-white\/#{$opacity} {
+    border-color: rgba(255, 255, 255, calc(#{$opacity} / 100));
+  }
+  .border-black\/#{$opacity} {
+    border-color: rgba(0, 0, 0, calc(#{$opacity} / 100));
+  }
+}
+
+// Divide with opacity
+@each $opacity in $opacity-values {
+  .divide-white\/#{$opacity} > * + * {
+    border-color: rgba(255, 255, 255, calc(#{$opacity} / 100));
+  }
+  .divide-black\/#{$opacity} > * + * {
+    border-color: rgba(0, 0, 0, calc(#{$opacity} / 100));
+  }
+}

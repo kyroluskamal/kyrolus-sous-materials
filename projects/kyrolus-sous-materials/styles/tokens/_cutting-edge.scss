@@ -1,0 +1,1320 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - CUTTING-EDGE CSS FEATURES
+// =============================================================================
+// Revolutionary CSS features that NO other framework provides:
+// - CSS Anchor Positioning (2024)
+// - :has() Parent Selector Utilities
+// - @starting-style Entry Animations
+// - Native light-dark() Function
+// - Container Style Queries
+// - CSS @scope Rules
+// - text-wrap: balance/pretty
+// - field-sizing: content
+// - CSS Masonry Grid
+// - Relative Color Syntax (color-mix, oklch)
+//
+// NOTE: Some features are experimental. Check browser support at caniuse.com
+// =============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "primitives" as *;
+
+// =============================================================================
+// 1. CSS ANCHOR POSITIONING (Chrome 125+)
+// =============================================================================
+// Position elements relative to other elements WITHOUT JavaScript!
+// Usage: .anchor-trigger on the anchor, .anchored-element on positioned element
+
+// Anchor names (register anchor points)
+.anchor {
+  anchor-name: --anchor;
+}
+
+@for $i from 1 through 10 {
+  .anchor-#{$i} {
+    anchor-name: --anchor-#{$i};
+  }
+}
+
+// Named anchors for common patterns
+.anchor-trigger {
+  anchor-name: --trigger;
+}
+.anchor-menu {
+  anchor-name: --menu;
+}
+.anchor-tooltip {
+  anchor-name: --tooltip-anchor;
+}
+.anchor-popover {
+  anchor-name: --popover-anchor;
+}
+
+// Anchored positioning utilities
+.anchored {
+  position: absolute;
+  position-anchor: --anchor;
+}
+
+.anchored-trigger {
+  position: absolute;
+  position-anchor: --trigger;
+}
+
+// Anchor positioning - position relative to anchor
+.anchor-top {
+  position: absolute;
+  position-anchor: --anchor;
+  bottom: anchor(top);
+  left: anchor(center);
+  translate: -50% 0;
+}
+
+.anchor-bottom {
+  position: absolute;
+  position-anchor: --anchor;
+  top: anchor(bottom);
+  left: anchor(center);
+  translate: -50% 0;
+}
+
+.anchor-left {
+  position: absolute;
+  position-anchor: --anchor;
+  right: anchor(left);
+  top: anchor(center);
+  translate: 0 -50%;
+}
+
+.anchor-right {
+  position: absolute;
+  position-anchor: --anchor;
+  left: anchor(right);
+  top: anchor(center);
+  translate: 0 -50%;
+}
+
+// Anchor with offset
+.anchor-top-start {
+  position: absolute;
+  position-anchor: --anchor;
+  bottom: anchor(top);
+  left: anchor(left);
+}
+
+.anchor-top-end {
+  position: absolute;
+  position-anchor: --anchor;
+  bottom: anchor(top);
+  right: anchor(right);
+}
+
+.anchor-bottom-start {
+  position: absolute;
+  position-anchor: --anchor;
+  top: anchor(bottom);
+  left: anchor(left);
+}
+
+.anchor-bottom-end {
+  position: absolute;
+  position-anchor: --anchor;
+  top: anchor(bottom);
+  right: anchor(right);
+}
+
+// Anchor size matching - match width/height to anchor
+.anchor-match-width {
+  width: anchor-size(width);
+}
+
+.anchor-match-height {
+  height: anchor-size(height);
+}
+
+.anchor-match-size {
+  width: anchor-size(width);
+  height: anchor-size(height);
+}
+
+// Anchor with gap/offset
+$anchor-offsets: (0, 4px, 8px, 12px, 16px, 24px);
+
+@each $offset in $anchor-offsets {
+  $name: if($offset == 0, "0", "#{$offset}");
+
+  .anchor-top-offset-#{$name} {
+    position: absolute;
+    position-anchor: --anchor;
+    bottom: calc(anchor(top) + #{$offset});
+    left: anchor(center);
+    translate: -50% 0;
+  }
+
+  .anchor-bottom-offset-#{$name} {
+    position: absolute;
+    position-anchor: --anchor;
+    top: calc(anchor(bottom) + #{$offset});
+    left: anchor(center);
+    translate: -50% 0;
+  }
+}
+
+// Anchor fallback positioning (position-try)
+@position-try --flip-to-bottom {
+  top: anchor(bottom);
+  bottom: auto;
+}
+
+@position-try --flip-to-top {
+  bottom: anchor(top);
+  top: auto;
+}
+
+@position-try --flip-to-left {
+  right: anchor(left);
+  left: auto;
+}
+
+@position-try --flip-to-right {
+  left: anchor(right);
+  right: auto;
+}
+
+.anchor-flip-y {
+  position-try-fallbacks: --flip-to-bottom, --flip-to-top;
+}
+
+.anchor-flip-x {
+  position-try-fallbacks: --flip-to-left, --flip-to-right;
+}
+
+.anchor-flip-all {
+  position-try-fallbacks: flip-block, flip-inline;
+}
+
+// =============================================================================
+// 2. :has() PARENT SELECTOR UTILITIES
+// =============================================================================
+// Style parent elements based on their children - CSS's most requested feature!
+
+// Has focused child
+.has-focus:has(:focus) {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.has-focus-within:has(:focus-visible) {
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+// Has checked input
+.has-checked:has(input:checked) {
+  background-color: var(--primary-subtle, rgba(37, 99, 235, 0.1));
+  border-color: var(--primary);
+}
+
+.has-checked-highlight:has(input:checked) {
+  --highlight-color: var(--primary);
+  box-shadow: inset 0 0 0 2px var(--highlight-color);
+}
+
+// Has invalid input
+.has-invalid:has(:invalid) {
+  border-color: var(--danger);
+}
+
+.has-invalid-shake:has(:invalid:not(:focus)) {
+  animation: shake 0.3s ease-in-out;
+}
+
+// Has valid input
+.has-valid:has(:valid:not(:placeholder-shown)) {
+  border-color: var(--success);
+}
+
+// Has empty content
+.has-empty:has(:empty) {
+  display: none;
+}
+
+.has-no-empty:has(:not(:empty)) {
+  display: block;
+}
+
+// Has specific elements
+.has-img:has(img) {
+  overflow: hidden;
+}
+
+.has-video:has(video) {
+  aspect-ratio: 16/9;
+}
+
+.has-link:has(a) {
+  cursor: pointer;
+}
+
+// Form container states
+.form-group:has(input:focus) {
+  .form-label {
+    color: var(--primary);
+    transform: translateY(-2px);
+  }
+}
+
+.form-group:has(input:invalid:not(:placeholder-shown)) {
+  .form-label {
+    color: var(--danger);
+  }
+  .form-hint {
+    display: block;
+    color: var(--danger);
+  }
+}
+
+// Card with interactive child
+.card:has(button:hover, a:hover) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+// Table row with checkbox
+tr:has(input[type="checkbox"]:checked) {
+  background-color: var(--primary-subtle, rgba(37, 99, 235, 0.05));
+}
+
+// Navigation with active link
+nav:has(.active) {
+  --nav-indicator-opacity: 1;
+}
+
+// Sidebar state
+.sidebar:has(.sidebar-item.active) {
+  --sidebar-accent: var(--primary);
+}
+
+// Has sibling selectors
+.has-next-error:has(+ .error) {
+  margin-bottom: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+// Quantity selector pattern
+.quantity:has(input:invalid) button {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+// =============================================================================
+// 3. @starting-style - ENTRY ANIMATIONS
+// =============================================================================
+// Animate elements when they first appear (from display: none)
+// This is CSS-only entry animations - NO JavaScript needed!
+
+// Fade in from display none
+.appear-fade {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+// Scale in
+.appear-scale {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+// Slide in from top
+.appear-slide-down {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+// Slide in from bottom
+.appear-slide-up {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+// Slide in from left
+.appear-slide-right {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+
+// Slide in from right
+.appear-slide-left {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+
+// Zoom in
+.appear-zoom {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.2s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+// Flip in
+.appear-flip {
+  opacity: 1;
+  transform: perspective(400px) rotateX(0);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+
+  @starting-style {
+    opacity: 0;
+    transform: perspective(400px) rotateX(-90deg);
+  }
+}
+
+// Blur in
+.appear-blur {
+  opacity: 1;
+  filter: blur(0);
+  transition: opacity 0.3s ease, filter 0.3s ease;
+
+  @starting-style {
+    opacity: 0;
+    filter: blur(10px);
+  }
+}
+
+// Dialog/Modal specific (works with <dialog> and popover)
+dialog,
+[popover] {
+  &.appear-dialog {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    transition: opacity 0.3s ease,
+      transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      overlay 0.3s allow-discrete, display 0.3s allow-discrete;
+
+    @starting-style {
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+    }
+  }
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.3s ease;
+
+    @starting-style {
+      background: rgba(0, 0, 0, 0);
+    }
+  }
+
+  &[open]::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+// Dropdown appear
+.appear-dropdown {
+  opacity: 1;
+  transform: scaleY(1);
+  transform-origin: top center;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+
+  @starting-style {
+    opacity: 0;
+    transform: scaleY(0.8);
+  }
+}
+
+// Toast notification appear
+.appear-toast {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+// Staggered children animation with @starting-style
+.appear-stagger > * {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i}) {
+      transition-delay: #{($i - 1) * 0.05}s;
+    }
+  }
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+// =============================================================================
+// 4. NATIVE light-dark() FUNCTION
+// =============================================================================
+// Single declaration for both themes - cleaner than media queries!
+
+// Background utilities using light-dark()
+.bg-adaptive {
+  background-color: light-dark(#ffffff, #1e293b);
+}
+
+.bg-adaptive-subtle {
+  background-color: light-dark(#f8fafc, #0f172a);
+}
+
+.bg-adaptive-elevated {
+  background-color: light-dark(#ffffff, #334155);
+}
+
+.bg-adaptive-sunken {
+  background-color: light-dark(#f1f5f9, #0f172a);
+}
+
+// Text utilities using light-dark()
+.text-adaptive {
+  color: light-dark(#1e293b, #f1f5f9);
+}
+
+.text-adaptive-muted {
+  color: light-dark(#64748b, #94a3b8);
+}
+
+.text-adaptive-inverted {
+  color: light-dark(#f1f5f9, #1e293b);
+}
+
+// Border utilities using light-dark()
+.border-adaptive {
+  border-color: light-dark(#e2e8f0, #334155);
+}
+
+.border-adaptive-strong {
+  border-color: light-dark(#cbd5e1, #475569);
+}
+
+// Shadow utilities using light-dark()
+.shadow-adaptive {
+  box-shadow: light-dark(
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.4)
+  );
+}
+
+.shadow-adaptive-lg {
+  box-shadow: light-dark(
+    0 10px 15px rgba(0, 0, 0, 0.1),
+    0 10px 15px rgba(0, 0, 0, 0.4)
+  );
+}
+
+// Overlay using light-dark()
+.overlay-adaptive {
+  background-color: light-dark(rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.8));
+}
+
+// =============================================================================
+// 5. CONTAINER STYLE QUERIES
+// =============================================================================
+// Query based on CSS custom property VALUES, not just size!
+// This enables theme-aware and state-aware container styling.
+
+// Container that exposes style queries
+.style-container {
+  container-type: inline-size;
+  --container-variant: default;
+  --container-density: normal;
+  --container-state: idle;
+}
+
+// Variant-based styling
+.style-container[data-variant="primary"] {
+  --container-variant: primary;
+}
+.style-container[data-variant="secondary"] {
+  --container-variant: secondary;
+}
+.style-container[data-variant="danger"] {
+  --container-variant: danger;
+}
+
+// Style query: respond to container's variant
+@container style(--container-variant: primary) {
+  .style-child {
+    background-color: var(--primary);
+    color: var(--on-primary);
+  }
+
+  .style-child-outline {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+}
+
+@container style(--container-variant: secondary) {
+  .style-child {
+    background-color: var(--secondary);
+    color: var(--on-secondary);
+  }
+}
+
+@container style(--container-variant: danger) {
+  .style-child {
+    background-color: var(--danger);
+    color: var(--on-danger);
+  }
+}
+
+// Density-based styling
+.style-container[data-density="compact"] {
+  --container-density: compact;
+}
+.style-container[data-density="comfortable"] {
+  --container-density: comfortable;
+}
+
+@container style(--container-density: compact) {
+  .style-child {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--text-sm);
+    gap: var(--spacing-1);
+  }
+}
+
+@container style(--container-density: comfortable) {
+  .style-child {
+    padding: var(--spacing-4) var(--spacing-6);
+    font-size: var(--text-lg);
+    gap: var(--spacing-4);
+  }
+}
+
+// State-based styling
+.style-container[data-state="loading"] {
+  --container-state: loading;
+}
+.style-container[data-state="error"] {
+  --container-state: error;
+}
+.style-container[data-state="success"] {
+  --container-state: success;
+}
+
+@container style(--container-state: loading) {
+  .style-child {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .style-loader {
+    display: flex;
+  }
+}
+
+@container style(--container-state: error) {
+  .style-child {
+    border-color: var(--danger);
+    background-color: var(--danger-light);
+  }
+
+  .style-error-message {
+    display: block;
+  }
+}
+
+@container style(--container-state: success) {
+  .style-child {
+    border-color: var(--success);
+  }
+
+  .style-success-icon {
+    display: inline-flex;
+  }
+}
+
+// =============================================================================
+// 6. CSS @scope RULES
+// =============================================================================
+// Scoped styling without Shadow DOM - limit where styles apply!
+// NOTE: @scope is native CSS. SCSS passes it through but IDE may show warnings.
+// Browser support: Chrome 118+, Safari 17.4+
+
+// Alternative class-based scoping (works everywhere)
+// Use these instead of @scope if you need broader browser support
+
+// Scoped card styles
+.card-scope {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+
+  // Styles stop at .card-content boundary
+  > *:not(.card-content),
+  > *:not(.card-content) * {
+    h2,
+    h3,
+    h4 {
+      margin-top: 0;
+      color: var(--text);
+    }
+
+    p {
+      color: var(--text-secondary);
+    }
+
+    a {
+      color: var(--primary);
+    }
+  }
+}
+
+// Scoped form styles
+.form-scope {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+
+  > *:not(.form-actions) {
+    label {
+      font-weight: var(--font-medium);
+      color: var(--text);
+      margin-bottom: var(--spacing-1);
+    }
+
+    input,
+    select,
+    textarea {
+      padding: var(--spacing-2) var(--spacing-3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--input-bg);
+    }
+  }
+}
+
+// Scoped prose/article styles (rich text content)
+.prose-scope {
+  line-height: 1.75;
+  color: var(--text);
+
+  // Exclude aside and .not-prose from styling
+  > *:not(aside):not(.not-prose),
+  > *:not(aside):not(.not-prose) *:not(aside):not(.not-prose) {
+    &h1,
+    h1 {
+      font-size: 2.25em;
+      margin-top: 0;
+      margin-bottom: 0.8em;
+    }
+    &h2,
+    h2 {
+      font-size: 1.5em;
+      margin-top: 2em;
+      margin-bottom: 1em;
+    }
+    &h3,
+    h3 {
+      font-size: 1.25em;
+      margin-top: 1.6em;
+      margin-bottom: 0.6em;
+    }
+  }
+
+  p:not(.not-prose) {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+
+  a:not(.not-prose) {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  ul:not(.not-prose),
+  ol:not(.not-prose) {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    padding-left: 1.625em;
+  }
+
+  li:not(.not-prose) {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  blockquote:not(.not-prose) {
+    font-style: italic;
+    border-left: 3px solid var(--primary);
+    padding-left: 1em;
+    margin-left: 0;
+  }
+
+  code:not(.not-prose) {
+    background: var(--bg-tertiary);
+    padding: 0.2em 0.4em;
+    border-radius: var(--radius-sm);
+    font-size: 0.875em;
+  }
+
+  pre:not(.not-prose) {
+    background: var(--bg-tertiary);
+    padding: 1em;
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+
+    code {
+      background: transparent;
+      padding: 0;
+    }
+  }
+
+  img:not(.not-prose) {
+    border-radius: var(--radius-md);
+    max-width: 100%;
+  }
+
+  hr:not(.not-prose) {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 3em 0;
+  }
+}
+
+// Native @scope CSS (for browsers that support it)
+// Uncomment and use in a .css file for native @scope support:
+/*
+@scope (.card-scope) to (.card-content) {
+  :scope { background: var(--surface); border-radius: var(--radius-lg); }
+  h2, h3, h4 { margin-top: 0; color: var(--text); }
+  p { color: var(--text-secondary); }
+  a { color: var(--primary); }
+}
+
+@scope (.prose-scope) to (aside, .not-prose) {
+  :scope { line-height: 1.75; color: var(--text); }
+  h1 { font-size: 2.25em; margin-top: 0; }
+  p { margin: 1.25em 0; }
+  a { color: var(--primary); text-decoration: underline; }
+}
+*/
+
+// =============================================================================
+// 7. TEXT-WRAP: BALANCE / PRETTY
+// =============================================================================
+// Modern text wrapping for beautiful typography
+
+// Balanced text (equal line lengths) - great for headings
+.text-balance {
+  text-wrap: balance;
+}
+
+// Pretty text (avoids orphans/widows) - great for paragraphs
+.text-pretty {
+  text-wrap: pretty;
+}
+
+// Stable text (no reflow on dynamic content)
+.text-stable {
+  text-wrap: stable;
+}
+
+// No wrap
+.text-nowrap {
+  text-wrap: nowrap;
+}
+
+// Heading utilities with balance
+h1,
+h2,
+h3,
+.heading {
+  &.balanced {
+    text-wrap: balance;
+    max-inline-size: 25ch; // Optimal for balance
+  }
+}
+
+// Paragraph utilities with pretty
+p,
+.paragraph {
+  &.pretty {
+    text-wrap: pretty;
+  }
+}
+
+// Headlines container
+.headlines {
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+// Content area with pretty paragraphs
+.content-pretty {
+  p {
+    text-wrap: pretty;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+}
+
+// =============================================================================
+// 8. FIELD-SIZING: CONTENT
+// =============================================================================
+// Auto-sizing inputs and textareas based on content!
+
+// Auto-sizing textarea
+.textarea-auto {
+  field-sizing: content;
+  min-height: 3lh; // Minimum 3 lines
+  max-height: 20lh; // Maximum 20 lines
+}
+
+// Auto-sizing input
+.input-auto {
+  field-sizing: content;
+  min-width: 10ch;
+  max-width: 100%;
+}
+
+// Auto-sizing select
+.select-auto {
+  field-sizing: content;
+}
+
+// Chat input pattern
+.chat-input {
+  field-sizing: content;
+  min-height: 1lh;
+  max-height: 10lh;
+  padding: var(--spacing-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  resize: none;
+  overflow-y: auto;
+}
+
+// Code editor pattern
+.code-input {
+  field-sizing: content;
+  font-family: var(--font-mono);
+  min-height: 5lh;
+  max-height: 30lh;
+  padding: var(--spacing-4);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  white-space: pre;
+  tab-size: 2;
+}
+
+// Tag/chip input
+.tag-input {
+  field-sizing: content;
+  min-width: 5ch;
+  max-width: 30ch;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+// Inline editable
+.editable-inline {
+  field-sizing: content;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 0 var(--spacing-1);
+  min-width: 1ch;
+
+  &:focus {
+    border-color: var(--primary);
+    background: var(--surface);
+  }
+}
+
+// =============================================================================
+// 9. CSS MASONRY GRID
+// =============================================================================
+// Native Pinterest-style masonry layout (experimental)
+
+// Masonry container (rows direction - column-wise filling)
+.masonry {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-rows: masonry;
+  gap: var(--spacing-4);
+}
+
+// Masonry with fixed columns
+.masonry-cols-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: masonry;
+  gap: var(--spacing-4);
+}
+
+.masonry-cols-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: masonry;
+  gap: var(--spacing-4);
+}
+
+.masonry-cols-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: masonry;
+  gap: var(--spacing-4);
+}
+
+.masonry-cols-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: masonry;
+  gap: var(--spacing-4);
+}
+
+// Masonry with column direction (row-wise filling)
+.masonry-cols {
+  display: grid;
+  grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: masonry;
+  gap: var(--spacing-4);
+}
+
+// Masonry alignment
+// NOTE: masonry-auto-flow and align-tracks are experimental properties
+// See: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Masonry_Layout
+.masonry-pack-start {
+  // Experimental: masonry-auto-flow: pack; align-tracks: start;
+  // Fallback: use align-content for supported browsers
+  align-content: start;
+  justify-items: start;
+}
+
+.masonry-pack-center {
+  // Experimental: masonry-auto-flow: pack; align-tracks: center;
+  align-content: center;
+  justify-items: center;
+}
+
+.masonry-pack-end {
+  // Experimental: masonry-auto-flow: pack; align-tracks: end;
+  align-content: end;
+  justify-items: end;
+}
+
+// Responsive masonry
+@media (max-width: 768px) {
+  .masonry,
+  .masonry-cols-3,
+  .masonry-cols-4,
+  .masonry-cols-5 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .masonry,
+  .masonry-cols-2,
+  .masonry-cols-3,
+  .masonry-cols-4,
+  .masonry-cols-5 {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto; // Fallback to regular grid
+  }
+}
+
+// =============================================================================
+// 10. RELATIVE COLOR SYNTAX (color-mix, oklch)
+// =============================================================================
+// Modern color manipulation in pure CSS!
+
+// Color-mix utilities - mix any color with another
+.bg-mix-white-10 {
+  background-color: color-mix(in srgb, currentColor, white 10%);
+}
+.bg-mix-white-25 {
+  background-color: color-mix(in srgb, currentColor, white 25%);
+}
+.bg-mix-white-50 {
+  background-color: color-mix(in srgb, currentColor, white 50%);
+}
+
+.bg-mix-black-10 {
+  background-color: color-mix(in srgb, currentColor, black 10%);
+}
+.bg-mix-black-25 {
+  background-color: color-mix(in srgb, currentColor, black 25%);
+}
+.bg-mix-black-50 {
+  background-color: color-mix(in srgb, currentColor, black 50%);
+}
+
+// Mix with primary color
+.bg-mix-primary-10 {
+  background-color: color-mix(in oklch, var(--bg), var(--primary) 10%);
+}
+.bg-mix-primary-25 {
+  background-color: color-mix(in oklch, var(--bg), var(--primary) 25%);
+}
+.bg-mix-primary-50 {
+  background-color: color-mix(in oklch, var(--bg), var(--primary) 50%);
+}
+
+// OKLCH-based color utilities (perceptually uniform)
+:root {
+  // Define colors in OKLCH for better manipulation
+  --oklch-primary: oklch(59% 0.2 264);
+  --oklch-secondary: oklch(70% 0.15 115);
+  --oklch-success: oklch(65% 0.18 155);
+  --oklch-warning: oklch(80% 0.15 75);
+  --oklch-danger: oklch(55% 0.22 25);
+
+  // Enable smooth height: auto transitions (interpolate-size)
+  interpolate-size: allow-keywords;
+}
+
+// Lightness variations (L channel)
+.bg-primary-lighter {
+  background-color: oklch(from var(--primary) calc(l + 0.2) c h);
+}
+.bg-primary-darker {
+  background-color: oklch(from var(--primary) calc(l - 0.2) c h);
+}
+
+// Saturation/chroma variations (C channel)
+.bg-primary-vivid {
+  background-color: oklch(from var(--primary) l calc(c + 0.1) h);
+}
+.bg-primary-muted {
+  background-color: oklch(from var(--primary) l calc(c - 0.1) h);
+}
+
+// Hue shift variations (H channel)
+.bg-primary-warmer {
+  background-color: oklch(from var(--primary) l c calc(h - 30));
+}
+.bg-primary-cooler {
+  background-color: oklch(from var(--primary) l c calc(h + 30));
+}
+
+// Complementary color
+.bg-primary-complement {
+  background-color: oklch(from var(--primary) l c calc(h + 180));
+}
+
+// Triadic colors
+.bg-primary-triadic-1 {
+  background-color: oklch(from var(--primary) l c calc(h + 120));
+}
+.bg-primary-triadic-2 {
+  background-color: oklch(from var(--primary) l c calc(h + 240));
+}
+
+// Analogous colors
+.bg-primary-analogous-1 {
+  background-color: oklch(from var(--primary) l c calc(h - 30));
+}
+.bg-primary-analogous-2 {
+  background-color: oklch(from var(--primary) l c calc(h + 30));
+}
+
+// Split complementary
+.bg-primary-split-1 {
+  background-color: oklch(from var(--primary) l c calc(h + 150));
+}
+.bg-primary-split-2 {
+  background-color: oklch(from var(--primary) l c calc(h + 210));
+}
+
+// Transparency with OKLCH
+.bg-primary-alpha-50 {
+  background-color: oklch(from var(--primary) l c h / 50%);
+}
+.bg-primary-alpha-25 {
+  background-color: oklch(from var(--primary) l c h / 25%);
+}
+
+// Semantic color mixing
+.bg-success-tint {
+  background-color: color-mix(in oklch, var(--success), white 85%);
+}
+.bg-warning-tint {
+  background-color: color-mix(in oklch, var(--warning), white 85%);
+}
+.bg-danger-tint {
+  background-color: color-mix(in oklch, var(--danger), white 85%);
+}
+
+// Hover states with color-mix
+.hover-lighten:hover {
+  background-color: color-mix(in oklch, currentColor, white 20%);
+}
+.hover-darken:hover {
+  background-color: color-mix(in oklch, currentColor, black 20%);
+}
+
+// Gradient with color-mix
+.gradient-mix {
+  background: linear-gradient(
+    to right,
+    var(--primary),
+    color-mix(in oklch, var(--primary), var(--secondary) 50%),
+    var(--secondary)
+  );
+}
+
+// =============================================================================
+// BONUS: INTERPOLATE-SIZE FOR SMOOTH HEIGHT TRANSITIONS
+// =============================================================================
+// Enable smooth height: auto transitions!
+// NOTE: interpolate-size is now set in the :root block above
+
+// Collapsible with smooth height
+.collapsible {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+
+  > * {
+    overflow: hidden;
+  }
+
+  &.expanded,
+  &[open] {
+    grid-template-rows: 1fr;
+  }
+}
+
+// Accordion panel
+.accordion-panel {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.3s ease;
+
+  &.open {
+    height: auto;
+  }
+}
+
+// Details/summary with smooth animation
+details {
+  &.smooth {
+    > summary ~ * {
+      overflow: hidden;
+      height: 0;
+      transition: height 0.3s ease, padding 0.3s ease;
+      padding-block: 0;
+    }
+
+    &[open] > summary ~ * {
+      height: auto;
+      padding-block: var(--spacing-4);
+    }
+  }
+}
+
+// =============================================================================
+// FEATURE DETECTION & FALLBACKS
+// =============================================================================
+
+// Anchor positioning support check
+@supports (anchor-name: --test) {
+  .anchor-supported {
+    --anchor-positioning: supported;
+  }
+}
+
+// :has() support check
+@supports selector(:has(*)) {
+  .has-supported {
+    --has-selector: supported;
+  }
+}
+
+// @starting-style support check
+@supports (transition-behavior: allow-discrete) {
+  .starting-style-supported {
+    --starting-style: supported;
+  }
+}
+
+// Container style queries support check
+@supports (container-type: inline-size) {
+  .container-queries-supported {
+    --container-queries: supported;
+  }
+}
+
+// Masonry support check
+@supports (grid-template-rows: masonry) {
+  .masonry-supported {
+    --masonry-layout: supported;
+  }
+}
+
+// Color-mix support check
+@supports (color: color-mix(in srgb, red, blue)) {
+  .color-mix-supported {
+    --color-mix: supported;
+  }
+}
+
+// Relative color syntax support check
+@supports (color: oklch(from red l c h)) {
+  .relative-color-supported {
+    --relative-color: supported;
+  }
+}

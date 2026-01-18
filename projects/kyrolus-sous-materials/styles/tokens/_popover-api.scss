@@ -1,0 +1,508 @@
+// =============================================================================
+// POPOVER API UTILITIES
+// =============================================================================
+// Native HTML Popover API styling and utilities
+// No JavaScript required for basic popover functionality
+// Browser support: Chrome 114+, Edge 114+, Safari 17+
+
+// =============================================================================
+// POPOVER BASE STYLES
+// =============================================================================
+
+/// Base popover styling
+[popover] {
+  // Reset default popover styles
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+
+  // Hidden state
+  &:not(:popover-open) {
+    display: none;
+  }
+
+  // Open state
+  &:popover-open {
+    display: block;
+  }
+}
+
+/// Styled popover container
+.popover {
+  padding: var(--popover-padding, 1rem);
+  background: var(--popover-bg, var(--surface));
+  border: 1px solid var(--popover-border, var(--border));
+  border-radius: var(--popover-radius, var(--radius-lg, 0.5rem));
+  box-shadow: var(--popover-shadow, var(--shadow-xl));
+  max-width: var(--popover-max-width, 320px);
+
+  // Positioning
+  position: fixed;
+  inset: unset;
+
+  // Default center positioning
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// =============================================================================
+// POPOVER BACKDROP
+// =============================================================================
+
+/// Popover backdrop styling
+[popover]::backdrop {
+  background: var(--popover-backdrop, rgba(0, 0, 0, 0.5));
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+[popover]:popover-open::backdrop {
+  opacity: 1;
+}
+
+/// Transparent backdrop (for tooltips, dropdowns)
+.popover-no-backdrop {
+  &::backdrop {
+    background: transparent;
+  }
+}
+
+/// Blur backdrop
+.popover-blur-backdrop {
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+  }
+}
+
+// =============================================================================
+// POPOVER ANIMATIONS
+// =============================================================================
+
+/// Fade animation
+.popover-fade {
+  opacity: 0;
+  transition: opacity 0.2s ease, display 0.2s ease allow-discrete;
+
+  &:popover-open {
+    opacity: 1;
+  }
+
+  @starting-style {
+    &:popover-open {
+      opacity: 0;
+    }
+  }
+}
+
+/// Scale animation
+.popover-scale {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.95);
+  transition: opacity 0.2s ease, transform 0.2s ease,
+    display 0.2s ease allow-discrete;
+
+  &:popover-open {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  @starting-style {
+    &:popover-open {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+  }
+}
+
+/// Slide up animation
+.popover-slide-up {
+  opacity: 0;
+  transform: translate(-50%, -40%);
+  transition: opacity 0.2s ease, transform 0.2s ease,
+    display 0.2s ease allow-discrete;
+
+  &:popover-open {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  @starting-style {
+    &:popover-open {
+      opacity: 0;
+      transform: translate(-50%, -40%);
+    }
+  }
+}
+
+/// Slide down animation
+.popover-slide-down {
+  opacity: 0;
+  transform: translate(-50%, -60%);
+  transition: opacity 0.2s ease, transform 0.2s ease,
+    display 0.2s ease allow-discrete;
+
+  &:popover-open {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  @starting-style {
+    &:popover-open {
+      opacity: 0;
+      transform: translate(-50%, -60%);
+    }
+  }
+}
+
+// =============================================================================
+// POPOVER POSITIONING
+// =============================================================================
+
+/// Top sheet (slides from top)
+.popover-top {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  max-width: 100%;
+  width: 100%;
+}
+
+/// Bottom sheet (slides from bottom)
+.popover-bottom {
+  top: auto;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  max-width: 100%;
+  width: 100%;
+}
+
+/// Left drawer
+.popover-start {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  transform: none;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  max-width: 80vw;
+  height: 100%;
+}
+
+/// Right drawer
+.popover-end {
+  top: 0;
+  right: 0;
+  left: auto;
+  bottom: 0;
+  transform: none;
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+  max-width: 80vw;
+  height: 100%;
+}
+
+/// Fullscreen popover
+.popover-fullscreen {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: none;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+// =============================================================================
+// POPOVER SIZES
+// =============================================================================
+
+.popover-sm {
+  --popover-padding: 0.75rem;
+  --popover-max-width: 240px;
+}
+
+.popover-md {
+  --popover-padding: 1rem;
+  --popover-max-width: 320px;
+}
+
+.popover-lg {
+  --popover-padding: 1.5rem;
+  --popover-max-width: 480px;
+}
+
+.popover-xl {
+  --popover-padding: 2rem;
+  --popover-max-width: 640px;
+}
+
+.popover-auto {
+  --popover-max-width: fit-content;
+}
+
+// =============================================================================
+// POPOVER VARIANTS
+// =============================================================================
+
+/// Tooltip-style popover
+.popover-tooltip {
+  --popover-padding: 0.5rem 0.75rem;
+  --popover-bg: var(--surface-inverse, #1a1a1a);
+  --popover-border: transparent;
+  --popover-radius: var(--radius-md, 0.375rem);
+  --popover-shadow: var(--shadow-md);
+
+  color: var(--text-inverse, #fff);
+  font-size: 0.875rem;
+
+  &::backdrop {
+    background: transparent;
+  }
+}
+
+/// Menu-style popover
+.popover-menu {
+  --popover-padding: 0.5rem;
+  --popover-max-width: 200px;
+
+  &::backdrop {
+    background: transparent;
+  }
+}
+
+/// Card-style popover
+.popover-card {
+  --popover-padding: 0;
+
+  .popover-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .popover-body {
+    padding: 1rem;
+  }
+
+  .popover-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--border);
+  }
+}
+
+/// Alert/notification popover
+.popover-alert {
+  --popover-max-width: 400px;
+  text-align: center;
+
+  .popover-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .popover-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .popover-message {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+}
+
+// =============================================================================
+// POPOVER TRIGGER BUTTON
+// =============================================================================
+
+/// Popover trigger styling
+[popovertarget] {
+  cursor: pointer;
+}
+
+/// Button that shows popover state
+.popover-trigger {
+  &:has(+ [popover]:popover-open) {
+    // Style when associated popover is open
+    --trigger-active: 1;
+  }
+}
+
+// =============================================================================
+// POPOVER COMPONENTS
+// =============================================================================
+
+/// Popover header
+.popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+
+  .popover-title {
+    font-weight: 600;
+    font-size: 1.125rem;
+  }
+}
+
+/// Popover close button
+.popover-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-full, 9999px);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: var(--surface-hover);
+    color: var(--text);
+  }
+}
+
+/// Popover body
+.popover-body {
+  color: var(--text);
+}
+
+/// Popover footer with actions
+.popover-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+// =============================================================================
+// AUTO VS MANUAL POPOVER HINTS
+// =============================================================================
+
+/// Visual hint for auto-dismiss popovers
+.popover-auto-hint {
+  &::after {
+    content: "";
+    display: block;
+    height: 2px;
+    background: var(--primary);
+    animation: popover-timer 5s linear forwards;
+  }
+}
+
+@keyframes popover-timer {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0;
+  }
+}
+
+// =============================================================================
+// DARK MODE SUPPORT
+// =============================================================================
+
+[data-theme="dark"] {
+  .popover {
+    --popover-bg: var(--surface-dark, #2a2a2a);
+    --popover-border: var(--border-dark, #404040);
+  }
+
+  .popover-tooltip {
+    --popover-bg: var(--surface-light, #f5f5f5);
+    color: var(--text-dark, #1a1a1a);
+  }
+}
+
+// =============================================================================
+// POPOVER MIXINS
+// =============================================================================
+
+/// Create custom popover variant
+/// @param {Color} $bg - Background color
+/// @param {Color} $border - Border color
+/// @param {Length} $padding - Padding
+@mixin popover-variant($bg, $border: transparent, $padding: 1rem) {
+  --popover-bg: #{$bg};
+  --popover-border: #{$border};
+  --popover-padding: #{$padding};
+}
+
+/// Popover animation mixin
+/// @param {String} $type - Animation type (fade, scale, slide)
+/// @param {Time} $duration - Animation duration
+@mixin popover-animation($type: fade, $duration: 0.2s) {
+  transition: opacity $duration ease, transform $duration ease,
+    display $duration ease allow-discrete;
+
+  @if $type == fade {
+    opacity: 0;
+    &:popover-open {
+      opacity: 1;
+    }
+  } @else if $type == scale {
+    opacity: 0;
+    transform: scale(0.95);
+    &:popover-open {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+// =============================================================================
+// ACCESSIBILITY
+// =============================================================================
+
+/// Focus trap indicator
+[popover]:popover-open:focus-visible {
+  outline: 2px solid var(--focus-ring, var(--primary));
+  outline-offset: 2px;
+}
+
+/// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  [popover] {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  [popover]::backdrop {
+    transition: none !important;
+  }
+}
+
+// =============================================================================
+// FEATURE DETECTION
+// =============================================================================
+
+@supports selector([popover]:popover-open) {
+  .popover-supported {
+    --popover-support: true;
+  }
+}
+
+@supports not selector([popover]:popover-open) {
+  // Fallback for browsers without popover support
+  [popover] {
+    display: none;
+
+    &.is-open {
+      display: block;
+    }
+  }
+}

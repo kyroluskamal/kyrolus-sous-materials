@@ -1,0 +1,619 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - ADVANCED ANCHOR POSITIONING
+// =============================================================================
+// Enhanced CSS Anchor Positioning with custom properties, scopes, and fallbacks
+//
+// Features:
+// - Custom anchor naming with CSS custom properties
+// - Anchor scoping for nested contexts
+// - Advanced positioning algorithms
+// - Smart fallback positioning
+// - Anchor size matching
+// - Anchor offset controls
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// CUSTOM ANCHOR PROPERTIES
+// =============================================================================
+
+:root {
+  // Default anchor offsets
+  --anchor-offset-x: 0px;
+  --anchor-offset-y: 0px;
+  --anchor-gap: 8px;
+
+  // Anchor positioning preferences
+  --anchor-alignment: center;
+  --anchor-side: bottom;
+  --anchor-flip: true;
+}
+
+// =============================================================================
+// ADVANCED ANCHOR NAMING
+// =============================================================================
+
+// Dynamic anchor naming with custom properties
+.anchor-dynamic {
+  anchor-name: var(--anchor-name, --default-anchor);
+}
+
+.anchor-menu {
+  anchor-name: --menu-anchor;
+}
+
+.anchor-tooltip {
+  anchor-name: --tooltip-anchor;
+}
+
+.anchor-dropdown {
+  anchor-name: --dropdown-anchor;
+}
+
+.anchor-popover {
+  anchor-name: --popover-anchor;
+}
+
+.anchor-modal {
+  anchor-name: --modal-anchor;
+}
+
+// Scoped anchors for nested contexts
+.anchor-scoped {
+  anchor-name: --scoped-anchor;
+  anchor-scope: parent;
+}
+
+.anchor-root {
+  anchor-name: --root-anchor;
+  anchor-scope: root;
+}
+
+// =============================================================================
+// ANCHOR POSITIONING ALGORITHMS
+// =============================================================================
+
+// Smart positioning with preference order
+.anchor-smart-bottom {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  position-area: bottom;
+  position-try-order: most-width, most-height;
+  position-try-fallbacks: flip-block, flip-inline;
+}
+
+.anchor-smart-top {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  position-area: top;
+  position-try-order: most-width, most-height;
+  position-try-fallbacks: flip-block, flip-inline;
+}
+
+.anchor-smart-left {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  position-area: left;
+  position-try-order: most-width, most-height;
+  position-try-fallbacks: flip-block, flip-inline;
+}
+
+.anchor-smart-right {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  position-area: right;
+  position-try-order: most-width, most-height;
+  position-try-fallbacks: flip-block, flip-inline;
+}
+
+// Center positioning
+.anchor-center {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  top: anchor(center);
+  left: anchor(center);
+  translate: -50% -50%;
+}
+
+.anchor-center-top {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  bottom: anchor(top);
+  left: anchor(center);
+  translate: -50% 0;
+}
+
+.anchor-center-bottom {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  top: anchor(bottom);
+  left: anchor(center);
+  translate: -50% 0;
+}
+
+.anchor-center-left {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  right: anchor(left);
+  top: anchor(center);
+  translate: 0 -50%;
+}
+
+.anchor-center-right {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  left: anchor(right);
+  top: anchor(center);
+  translate: 0 -50%;
+}
+
+// =============================================================================
+// ANCHOR OFFSET SYSTEM
+// =============================================================================
+
+// Offset variants with CSS custom properties
+.anchor-offset-small {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  bottom: calc(anchor(top) + var(--anchor-gap, 4px));
+  left: anchor(center);
+  translate: -50% 0;
+}
+
+.anchor-offset-medium {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  bottom: calc(anchor(top) + var(--anchor-gap, 8px));
+  left: anchor(center);
+  translate: -50% 0;
+}
+
+.anchor-offset-large {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  bottom: calc(anchor(top) + var(--anchor-gap, 16px));
+  left: anchor(center);
+  translate: -50% 0;
+}
+
+// Directional offsets
+.anchor-offset-top {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  bottom: calc(anchor(top) + var(--anchor-offset-y, 8px));
+  left: calc(anchor(left) + var(--anchor-offset-x, 0px));
+}
+
+.anchor-offset-right {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  left: calc(anchor(right) + var(--anchor-offset-x, 8px));
+  top: calc(anchor(top) + var(--anchor-offset-y, 0px));
+}
+
+.anchor-offset-bottom {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  top: calc(anchor(bottom) + var(--anchor-offset-y, 8px));
+  left: calc(anchor(left) + var(--anchor-offset-x, 0px));
+}
+
+.anchor-offset-left {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  right: calc(anchor(left) + var(--anchor-offset-x, 8px));
+  top: calc(anchor(top) + var(--anchor-offset-y, 0px));
+}
+
+// =============================================================================
+// ANCHOR SIZE MATCHING
+// =============================================================================
+
+// Match width to anchor
+.anchor-match-width {
+  width: anchor-size(width);
+  min-width: anchor-size(width);
+  max-width: anchor-size(width);
+}
+
+// Match height to anchor
+.anchor-match-height {
+  height: anchor-size(height);
+  min-height: anchor-size(height);
+  max-height: anchor-size(height);
+}
+
+// Match both dimensions
+.anchor-match-size {
+  width: anchor-size(width);
+  height: anchor-size(height);
+  min-width: anchor-size(width);
+  min-height: anchor-size(height);
+}
+
+// Aspect ratio matching
+.anchor-match-aspect {
+  width: anchor-size(width);
+  aspect-ratio: var(--anchor-aspect-ratio, 16/9);
+}
+
+// =============================================================================
+// SMART FALLBACK POSITIONING
+// =============================================================================
+
+// Position try fallbacks for collision avoidance
+@position-try --fallback-top {
+  top: anchor(top);
+  bottom: auto;
+  left: anchor(left);
+}
+
+@position-try --fallback-bottom {
+  bottom: anchor(bottom);
+  top: auto;
+  left: anchor(left);
+}
+
+@position-try --fallback-left {
+  left: anchor(left);
+  right: auto;
+  top: anchor(top);
+}
+
+@position-try --fallback-right {
+  right: anchor(right);
+  left: auto;
+  top: anchor(top);
+}
+
+// Apply fallbacks
+.anchor-with-fallbacks {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  position-area: bottom;
+  position-try-fallbacks: --fallback-top, --fallback-left, --fallback-right;
+}
+
+// Auto-flipping based on available space
+.anchor-auto-flip {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  position-area: bottom;
+  position-try-order: most-area;
+  position-try-fallbacks: flip-block, flip-inline, stretch-block, stretch-inline;
+}
+
+// =============================================================================
+// ANCHOR ALIGNMENT SYSTEM
+// =============================================================================
+
+// Alignment variants
+.anchor-align-start {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  bottom: anchor(top);
+  left: anchor(start);
+}
+
+.anchor-align-center {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  bottom: anchor(top);
+  left: anchor(center);
+  translate: -50% 0;
+}
+
+.anchor-align-end {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  bottom: anchor(top);
+  right: anchor(end);
+}
+
+// Baseline alignment
+.anchor-align-baseline {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  top: anchor(baseline);
+  left: anchor(start);
+}
+
+// =============================================================================
+// NESTED ANCHOR CONTEXTS
+// =============================================================================
+
+// Nested anchor containers
+.anchor-nested-container {
+  container-type: size;
+  container-name: nested-anchor-context;
+}
+
+.anchor-nested-item {
+  position: absolute;
+  position-anchor: --nested-anchor;
+  anchor-scope: nested-anchor-context;
+  bottom: anchor(top);
+  left: anchor(center);
+  translate: -50% 0;
+}
+
+// Multiple anchors in same container
+.anchor-multi-container {
+  position: relative;
+}
+
+.anchor-multi-trigger-1 {
+  anchor-name: --trigger-1;
+}
+
+.anchor-multi-trigger-2 {
+  anchor-name: --trigger-2;
+}
+
+.anchor-multi-content-1 {
+  position: absolute;
+  position-anchor: --trigger-1;
+  bottom: anchor(top);
+}
+
+.anchor-multi-content-2 {
+  position: absolute;
+  position-anchor: --trigger-2;
+  top: anchor(bottom);
+}
+
+// =============================================================================
+// ANCHOR VISUAL FEEDBACK
+// =============================================================================
+
+// Anchor visualization for debugging
+.anchor-debug {
+  position-anchor: --debug-anchor;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: anchor(top) anchor(right) anchor(bottom) anchor(left);
+    border: 2px dashed var(--primary);
+    pointer-events: none;
+    z-index: 9999;
+  }
+}
+
+.anchor-indicator {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  top: anchor(center);
+  left: anchor(center);
+  translate: -50% -50%;
+  z-index: 1000;
+}
+
+// =============================================================================
+// ANCHOR TRANSITIONS & ANIMATIONS
+// =============================================================================
+
+// Smooth anchor positioning transitions
+.anchor-smooth {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  transition: top 0.2s ease-out, left 0.2s ease-out, right 0.2s ease-out,
+    bottom 0.2s ease-out;
+}
+
+// Animated anchor movement
+.anchor-animated {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &[data-state="open"] {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  &[data-state="closed"] {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+// =============================================================================
+// ANCHOR WITH OTHER POSITIONING METHODS
+// =============================================================================
+
+// Hybrid positioning (anchor + CSS grid)
+.anchor-grid-hybrid {
+  display: grid;
+  grid-template-areas: "anchor content";
+  grid-template-columns: auto 1fr;
+
+  .anchor-element {
+    grid-area: anchor;
+    anchor-name: --grid-anchor;
+  }
+
+  .content-element {
+    grid-area: content;
+    position: absolute;
+    position-anchor: --grid-anchor;
+    left: anchor(right);
+    top: anchor(top);
+  }
+}
+
+// Flexbox with anchor positioning
+.anchor-flex-container {
+  display: flex;
+  position: relative;
+
+  .anchor-item {
+    anchor-name: --flex-anchor;
+  }
+
+  .positioned-item {
+    position: absolute;
+    position-anchor: --flex-anchor;
+    top: anchor(bottom);
+    left: anchor(left);
+  }
+}
+
+// =============================================================================
+// RESPONSIVE ANCHOR PATTERNS
+// =============================================================================
+
+// Responsive anchor positioning
+@media (max-width: 768px) {
+  .anchor-responsive {
+    position-anchor: --mobile-anchor;
+    position-area: bottom;
+    position-try-fallbacks: --fallback-top;
+  }
+}
+
+@media (min-width: 769px) {
+  .anchor-responsive {
+    position-anchor: --desktop-anchor;
+    position-area: right;
+    position-try-fallbacks: --fallback-left;
+  }
+}
+
+// Container query based anchor positioning
+@container (min-width: 400px) {
+  .anchor-container-aware {
+    position-anchor: --large-container-anchor;
+    position-area: bottom;
+  }
+}
+
+@container (max-width: 399px) {
+  .anchor-container-aware {
+    position-anchor: --small-container-anchor;
+    position-area: top;
+  }
+}
+
+// =============================================================================
+// ANCHOR UTILITY CLASSES
+// =============================================================================
+
+// Quick positioning utilities
+.anchor-top-start {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  bottom: anchor(top);
+  left: anchor(start);
+}
+
+.anchor-top-center {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  bottom: anchor(top);
+  left: anchor(center);
+  translate: -50% 0;
+}
+
+.anchor-top-end {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  bottom: anchor(top);
+  right: anchor(end);
+}
+
+.anchor-bottom-start {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  top: anchor(bottom);
+  left: anchor(start);
+}
+
+.anchor-bottom-center {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  top: anchor(bottom);
+  left: anchor(center);
+  translate: -50% 0;
+}
+
+.anchor-bottom-end {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  top: anchor(bottom);
+  right: anchor(end);
+}
+
+.anchor-left-start {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  right: anchor(left);
+  top: anchor(start);
+}
+
+.anchor-left-center {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  right: anchor(left);
+  top: anchor(center);
+  translate: 0 -50%;
+}
+
+.anchor-left-end {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  right: anchor(left);
+  bottom: anchor(end);
+}
+
+.anchor-right-start {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  left: anchor(right);
+  top: anchor(start);
+}
+
+.anchor-right-center {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  left: anchor(right);
+  top: anchor(center);
+  translate: 0 -50%;
+}
+
+.anchor-right-end {
+  position: absolute;
+  position-anchor: var(--anchor-ref, --anchor);
+  left: anchor(right);
+  bottom: anchor(end);
+}
+
+// =============================================================================
+// BROWSER SUPPORT & FALLBACKS
+// =============================================================================
+// Anchor positioning support:
+// - Chrome 125+
+// - Edge 125+
+// - Opera 111+
+//
+// Provide progressive enhancement:
+//
+// .popover {
+//   /* Fallback positioning */
+//   position: absolute;
+//   top: 100%;
+//   left: 0;
+//
+//   /* Modern anchor positioning */
+//   @supports (position-anchor: --anchor) {
+//     position-anchor: --anchor;
+//     top: anchor(bottom);
+//     left: anchor(left);
+//   }
+// }

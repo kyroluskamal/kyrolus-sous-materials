@@ -1,0 +1,642 @@
+// =============================================================================
+// TOUCH BEHAVIOR & OVERSCROLL UTILITIES
+// =============================================================================
+// Control touch gestures, overscroll behavior, and scroll behavior
+// Essential for mobile UX and native-like interactions
+// Browser support: All modern browsers
+
+// =============================================================================
+// OVERSCROLL BEHAVIOR
+// =============================================================================
+// Controls what happens when scrolling past the boundary of a scrollable area
+
+/// Overscroll auto (default browser behavior)
+.overscroll-auto {
+  overscroll-behavior: auto;
+}
+
+/// Prevent scroll chaining (contained)
+.overscroll-contain {
+  overscroll-behavior: contain;
+}
+
+/// Prevent scroll chaining and bouncing
+.overscroll-none {
+  overscroll-behavior: none;
+}
+
+// X-axis specific
+.overscroll-x-auto {
+  overscroll-behavior-x: auto;
+}
+
+.overscroll-x-contain {
+  overscroll-behavior-x: contain;
+}
+
+.overscroll-x-none {
+  overscroll-behavior-x: none;
+}
+
+// Y-axis specific
+.overscroll-y-auto {
+  overscroll-behavior-y: auto;
+}
+
+.overscroll-y-contain {
+  overscroll-behavior-y: contain;
+}
+
+.overscroll-y-none {
+  overscroll-behavior-y: none;
+}
+
+// =============================================================================
+// TOUCH ACTION
+// =============================================================================
+// Controls how touch gestures are handled by the browser
+
+/// Enable all touch actions (default)
+.touch-auto {
+  touch-action: auto;
+}
+
+/// Disable all touch actions
+.touch-none {
+  touch-action: none;
+}
+
+/// Only allow panning
+.touch-pan-x {
+  touch-action: pan-x;
+}
+
+.touch-pan-y {
+  touch-action: pan-y;
+}
+
+/// Allow panning in both directions
+.touch-pan-xy {
+  touch-action: pan-x pan-y;
+}
+
+/// Direction-specific panning
+.touch-pan-left {
+  touch-action: pan-left;
+}
+
+.touch-pan-right {
+  touch-action: pan-right;
+}
+
+.touch-pan-up {
+  touch-action: pan-up;
+}
+
+.touch-pan-down {
+  touch-action: pan-down;
+}
+
+/// Allow pinch-to-zoom
+.touch-pinch-zoom {
+  touch-action: pinch-zoom;
+}
+
+/// Allow only zooming, no panning
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+// Combination utilities
+.touch-pan-x-pinch-zoom {
+  touch-action: pan-x pinch-zoom;
+}
+
+.touch-pan-y-pinch-zoom {
+  touch-action: pan-y pinch-zoom;
+}
+
+// =============================================================================
+// SCROLL BEHAVIOR
+// =============================================================================
+
+/// Smooth scrolling
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+/// Instant scrolling (default)
+.scroll-auto {
+  scroll-behavior: auto;
+}
+
+// =============================================================================
+// SCROLL SNAP
+// =============================================================================
+
+/// Scroll snap container types
+.snap-x {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-y {
+  scroll-snap-type: y mandatory;
+}
+
+.snap-both {
+  scroll-snap-type: both mandatory;
+}
+
+.snap-x-proximity {
+  scroll-snap-type: x proximity;
+}
+
+.snap-y-proximity {
+  scroll-snap-type: y proximity;
+}
+
+.snap-none {
+  scroll-snap-type: none;
+}
+
+/// Scroll snap alignment for children
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.snap-end {
+  scroll-snap-align: end;
+}
+
+.snap-center {
+  scroll-snap-align: center;
+}
+
+.snap-align-none {
+  scroll-snap-align: none;
+}
+
+/// Scroll snap stop
+.snap-normal {
+  scroll-snap-stop: normal;
+}
+
+.snap-always {
+  scroll-snap-stop: always;
+}
+
+// =============================================================================
+// SCROLL PADDING & MARGIN
+// =============================================================================
+
+// Scroll padding (for fixed headers)
+$scroll-padding-values: (
+  "0": 0,
+  "1": 0.25rem,
+  "2": 0.5rem,
+  "3": 0.75rem,
+  "4": 1rem,
+  "5": 1.25rem,
+  "6": 1.5rem,
+  "8": 2rem,
+  "10": 2.5rem,
+  "12": 3rem,
+  "16": 4rem,
+  "20": 5rem,
+  "24": 6rem,
+);
+
+@each $name, $value in $scroll-padding-values {
+  .scroll-p-#{$name} {
+    scroll-padding: $value;
+  }
+
+  .scroll-pt-#{$name} {
+    scroll-padding-top: $value;
+  }
+
+  .scroll-pb-#{$name} {
+    scroll-padding-bottom: $value;
+  }
+
+  .scroll-pl-#{$name} {
+    scroll-padding-left: $value;
+  }
+
+  .scroll-pr-#{$name} {
+    scroll-padding-right: $value;
+  }
+
+  .scroll-px-#{$name} {
+    scroll-padding-inline: $value;
+  }
+
+  .scroll-py-#{$name} {
+    scroll-padding-block: $value;
+  }
+}
+
+// Scroll margin (for snap targets)
+@each $name, $value in $scroll-padding-values {
+  .scroll-m-#{$name} {
+    scroll-margin: $value;
+  }
+
+  .scroll-mt-#{$name} {
+    scroll-margin-top: $value;
+  }
+
+  .scroll-mb-#{$name} {
+    scroll-margin-bottom: $value;
+  }
+
+  .scroll-ml-#{$name} {
+    scroll-margin-left: $value;
+  }
+
+  .scroll-mr-#{$name} {
+    scroll-margin-right: $value;
+  }
+
+  .scroll-mx-#{$name} {
+    scroll-margin-inline: $value;
+  }
+
+  .scroll-my-#{$name} {
+    scroll-margin-block: $value;
+  }
+}
+
+// =============================================================================
+// POINTER EVENTS
+// =============================================================================
+
+/// Enable pointer events
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
+/// Disable pointer events
+.pointer-events-none {
+  pointer-events: none;
+}
+
+/// Pointer for SVG
+.pointer-events-stroke {
+  pointer-events: stroke;
+}
+
+.pointer-events-fill {
+  pointer-events: fill;
+}
+
+.pointer-events-all {
+  pointer-events: all;
+}
+
+// =============================================================================
+// USER SELECT
+// =============================================================================
+
+/// Allow text selection
+.select-auto {
+  user-select: auto;
+}
+
+/// Prevent text selection
+.select-none {
+  user-select: none;
+}
+
+/// Select all on click
+.select-all {
+  user-select: all;
+}
+
+/// Select text only
+.select-text {
+  user-select: text;
+}
+
+/// Contain selection
+.select-contain {
+  user-select: contain;
+}
+
+// =============================================================================
+// CURSOR UTILITIES
+// =============================================================================
+
+$cursors: (
+  "auto": auto,
+  "default": default,
+  "pointer": pointer,
+  "wait": wait,
+  "text": text,
+  "move": move,
+  "help": help,
+  "not-allowed": not-allowed,
+  "none": none,
+  "context-menu": context-menu,
+  "progress": progress,
+  "cell": cell,
+  "crosshair": crosshair,
+  "vertical-text": vertical-text,
+  "alias": alias,
+  "copy": copy,
+  "no-drop": no-drop,
+  "grab": grab,
+  "grabbing": grabbing,
+  "all-scroll": all-scroll,
+  "col-resize": col-resize,
+  "row-resize": row-resize,
+  "n-resize": n-resize,
+  "e-resize": e-resize,
+  "s-resize": s-resize,
+  "w-resize": w-resize,
+  "ne-resize": ne-resize,
+  "nw-resize": nw-resize,
+  "se-resize": se-resize,
+  "sw-resize": sw-resize,
+  "ew-resize": ew-resize,
+  "ns-resize": ns-resize,
+  "nesw-resize": nesw-resize,
+  "nwse-resize": nwse-resize,
+  "zoom-in": zoom-in,
+  "zoom-out": zoom-out,
+);
+
+@each $name, $value in $cursors {
+  .cursor-#{$name} {
+    cursor: $value;
+  }
+}
+
+// =============================================================================
+// RESIZE UTILITIES
+// =============================================================================
+
+.resize-none {
+  resize: none;
+}
+
+.resize {
+  resize: both;
+}
+
+.resize-x {
+  resize: horizontal;
+}
+
+.resize-y {
+  resize: vertical;
+}
+
+// =============================================================================
+// WILL-CHANGE
+// =============================================================================
+// Performance hint for animations
+
+.will-change-auto {
+  will-change: auto;
+}
+
+.will-change-scroll {
+  will-change: scroll-position;
+}
+
+.will-change-contents {
+  will-change: contents;
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+// =============================================================================
+// CONTENT VISIBILITY
+// =============================================================================
+// Performance optimization for off-screen content
+
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+.content-visibility-hidden {
+  content-visibility: hidden;
+}
+
+.content-visibility-visible {
+  content-visibility: visible;
+}
+
+// Contain intrinsic size
+.contain-intrinsic-auto {
+  contain-intrinsic-size: auto;
+}
+
+.contain-intrinsic-none {
+  contain-intrinsic-size: none;
+}
+
+// =============================================================================
+// CONTAIN
+// =============================================================================
+// CSS containment for performance
+
+.contain-none {
+  contain: none;
+}
+
+.contain-strict {
+  contain: strict;
+}
+
+.contain-content {
+  contain: content;
+}
+
+.contain-size {
+  contain: size;
+}
+
+.contain-layout {
+  contain: layout;
+}
+
+.contain-style {
+  contain: style;
+}
+
+.contain-paint {
+  contain: paint;
+}
+
+// =============================================================================
+// SCROLLBAR UTILITIES
+// =============================================================================
+
+/// Hide scrollbar but keep functionality
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/// Thin scrollbar
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb, rgba(0, 0, 0, 0.2))
+    var(--scrollbar-track, transparent);
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--scrollbar-track, transparent);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb, rgba(0, 0, 0, 0.2));
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--scrollbar-thumb-hover, rgba(0, 0, 0, 0.3));
+    }
+  }
+}
+
+/// Auto-hide scrollbar (show on hover)
+.scrollbar-auto-hide {
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb, rgba(0, 0, 0, 0.2));
+  }
+}
+
+/// Gutter utilities
+.scrollbar-gutter-auto {
+  scrollbar-gutter: auto;
+}
+
+.scrollbar-gutter-stable {
+  scrollbar-gutter: stable;
+}
+
+.scrollbar-gutter-stable-both {
+  scrollbar-gutter: stable both-edges;
+}
+
+// =============================================================================
+// MOBILE PATTERNS
+// =============================================================================
+
+/// iOS-like bounce prevention
+.no-bounce {
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/// Pull-to-refresh container
+.pull-to-refresh {
+  overscroll-behavior-y: contain;
+  overflow-y: auto;
+
+  // Prevent browser's native pull-to-refresh
+  touch-action: pan-x pan-down;
+}
+
+/// Swipeable container
+.swipeable {
+  touch-action: pan-x;
+  scroll-snap-type: x mandatory;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  > * {
+    scroll-snap-align: start;
+  }
+}
+
+/// Carousel container
+.carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 1rem;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+
+  // Hide scrollbar
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  > * {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+}
+
+// =============================================================================
+// DARK MODE
+// =============================================================================
+
+[data-theme="dark"] {
+  .scrollbar-thin {
+    --scrollbar-thumb: rgba(255, 255, 255, 0.2);
+    --scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
+  }
+}
+
+// =============================================================================
+// MIXINS
+// =============================================================================
+
+/// Disable scroll chaining
+@mixin no-scroll-chaining {
+  overscroll-behavior: contain;
+}
+
+/// Mobile scroll container
+@mixin mobile-scroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/// Snap scroll container
+@mixin snap-container($axis: x, $type: mandatory) {
+  scroll-snap-type: #{$axis} #{$type};
+  overflow-#{$axis}: auto;
+
+  > * {
+    scroll-snap-align: start;
+  }
+}
+
+// =============================================================================
+// REDUCED MOTION
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-smooth {
+    scroll-behavior: auto !important;
+  }
+}

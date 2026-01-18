@@ -1,0 +1,525 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - CONTAINER QUERY UNITS
+// =============================================================================
+// Container-relative units for truly responsive design:
+// - cqw: Container query width unit
+// - cqh: Container query height unit
+// - cqi: Container query inline size unit
+// - cqb: Container query block size unit
+// - cqmin: Container query minimum dimension
+// - cqmax: Container query maximum dimension
+//
+// These units allow elements to scale relative to their container size,
+// not just viewport size - enabling component-level responsiveness.
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// CONTAINER UNIT DIMENSIONS
+// =============================================================================
+
+// Width-based container units
+.w-10cqw {
+  width: 10cqw;
+}
+
+.w-25cqw {
+  width: 25cqw;
+}
+
+.w-50cqw {
+  width: 50cqw;
+}
+
+.w-75cqw {
+  width: 75cqw;
+}
+
+.w-100cqw {
+  width: 100cqw;
+}
+
+// Height-based container units
+.h-10cqh {
+  height: 10cqh;
+}
+
+.h-25cqh {
+  height: 25cqh;
+}
+
+.h-50cqh {
+  height: 50cqh;
+}
+
+.h-75cqh {
+  height: 75cqh;
+}
+
+.h-100cqh {
+  height: 100cqh;
+}
+
+// Inline size (width in horizontal writing modes)
+.w-10cqi {
+  width: 10cqi;
+}
+
+.w-25cqi {
+  width: 25cqi;
+}
+
+.w-50cqi {
+  width: 50cqi;
+}
+
+.w-75cqi {
+  width: 75cqi;
+}
+
+.w-100cqi {
+  width: 100cqi;
+}
+
+// Block size (height in horizontal writing modes)
+.h-10cqb {
+  height: 10cqb;
+}
+
+.h-25cqb {
+  height: 25cqb;
+}
+
+.h-50cqb {
+  height: 50cqb;
+}
+
+.h-75cqb {
+  height: 75cqb;
+}
+
+.h-100cqb {
+  height: 100cqb;
+}
+
+// Minimum/maximum dimensions
+.min-w-50cqmin {
+  min-width: 50cqmin;
+}
+
+.min-h-50cqmin {
+  min-height: 50cqmin;
+}
+
+.max-w-50cqmax {
+  max-width: 50cqmax;
+}
+
+.max-h-50cqmax {
+  max-height: 50cqmax;
+}
+
+// =============================================================================
+// FLUID TYPOGRAPHY WITH CONTAINER UNITS
+// =============================================================================
+
+// Font sizes that scale with container width
+.text-xs-cqw {
+  font-size: 2cqw;
+}
+
+.text-sm-cqw {
+  font-size: 3cqw;
+}
+
+.text-base-cqw {
+  font-size: 4cqw;
+}
+
+.text-lg-cqw {
+  font-size: 5cqw;
+}
+
+.text-xl-cqw {
+  font-size: 6cqw;
+}
+
+.text-2xl-cqw {
+  font-size: 8cqw;
+}
+
+.text-3xl-cqw {
+  font-size: 10cqw;
+}
+
+.text-4xl-cqw {
+  font-size: 12cqw;
+}
+
+.text-5xl-cqw {
+  font-size: 14cqw;
+}
+
+// Font sizes that scale with container height
+.text-xs-cqh {
+  font-size: 2cqh;
+}
+
+.text-sm-cqh {
+  font-size: 3cqh;
+}
+
+.text-base-cqh {
+  font-size: 4cqh;
+}
+
+.text-lg-cqh {
+  font-size: 5cqh;
+}
+
+.text-xl-cqh {
+  font-size: 6cqh;
+}
+
+.text-2xl-cqh {
+  font-size: 8cqh;
+}
+
+.text-3xl-cqh {
+  font-size: 10cqh;
+}
+
+.text-4xl-cqh {
+  font-size: 12cqh;
+}
+
+.text-5xl-cqh {
+  font-size: 14cqh;
+}
+
+// =============================================================================
+// SPACING WITH CONTAINER UNITS
+// =============================================================================
+
+// Padding
+.p-1cqw {
+  padding: 1cqw;
+}
+
+.p-2cqw {
+  padding: 2cqw;
+}
+
+.p-4cqw {
+  padding: 4cqw;
+}
+
+.p-8cqw {
+  padding: 8cqw;
+}
+
+.px-2cqw {
+  padding-left: 2cqw;
+  padding-right: 2cqw;
+}
+
+.py-2cqw {
+  padding-top: 2cqw;
+  padding-bottom: 2cqw;
+}
+
+.pt-2cqw {
+  padding-top: 2cqw;
+}
+
+.pr-2cqw {
+  padding-right: 2cqw;
+}
+
+.pb-2cqw {
+  padding-bottom: 2cqw;
+}
+
+.pl-2cqw {
+  padding-left: 2cqw;
+}
+
+// Margin
+.m-1cqw {
+  margin: 1cqw;
+}
+
+.m-2cqw {
+  margin: 2cqw;
+}
+
+.m-4cqw {
+  margin: 4cqw;
+}
+
+.m-8cqw {
+  margin: 8cqw;
+}
+
+.mx-2cqw {
+  margin-left: 2cqw;
+  margin-right: 2cqw;
+}
+
+.my-2cqw {
+  margin-top: 2cqw;
+  margin-bottom: 2cqw;
+}
+
+.mt-2cqw {
+  margin-top: 2cqw;
+}
+
+.mr-2cqw {
+  margin-right: 2cqw;
+}
+
+.mb-2cqw {
+  margin-bottom: 2cqw;
+}
+
+.ml-2cqw {
+  margin-left: 2cqw;
+}
+
+// Gap (for flex/grid)
+.gap-2cqw {
+  gap: 2cqw;
+}
+
+.gap-4cqw {
+  gap: 4cqw;
+}
+
+.gap-8cqw {
+  gap: 8cqw;
+}
+
+// =============================================================================
+// ADVANCED CONTAINER UNIT PATTERNS
+// =============================================================================
+
+// Aspect ratio with container units
+.aspect-video-cqw {
+  aspect-ratio: 16 / 9;
+  width: 100cqw;
+}
+
+.aspect-square-cqw {
+  aspect-ratio: 1 / 1;
+  width: 50cqw;
+}
+
+// Responsive cards that adapt to container
+.card-responsive {
+  width: min(300px, 100cqi);
+  padding: clamp(1rem, 4cqi, 2rem);
+  font-size: clamp(0.875rem, 2cqi, 1.125rem);
+}
+
+// Container-aware grid
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100cqi), 1fr));
+  gap: clamp(1rem, 4cqi, 2rem);
+}
+
+// Fluid hero section
+.hero-fluid {
+  padding: clamp(2rem, 8cqb, 6rem) clamp(1rem, 6cqi, 4rem);
+  font-size: clamp(1.5rem, 5cqi, 3rem);
+  line-height: 1.2;
+}
+
+// Container-relative borders
+.border-1cqw {
+  border-width: 1cqw;
+}
+
+.border-2cqw {
+  border-width: 2cqw;
+}
+
+.rounded-2cqw {
+  border-radius: 2cqw;
+}
+
+.rounded-4cqw {
+  border-radius: 4cqw;
+}
+
+// =============================================================================
+// CONTAINER QUERY CONTEXT UTILITIES
+// =============================================================================
+
+// Establish container context for units
+.container-query {
+  container-type: inline-size;
+}
+
+.container-query-block {
+  container-type: size;
+}
+
+.container-query-inline {
+  container-type: inline-size;
+}
+
+.container-query-style {
+  container-type: style;
+  container-name: style-container;
+}
+
+// Named containers for specific targeting
+.container-main {
+  container-name: main-container;
+  container-type: inline-size;
+}
+
+.container-sidebar {
+  container-name: sidebar-container;
+  container-type: inline-size;
+}
+
+.container-card {
+  container-name: card-container;
+  container-type: size;
+}
+
+// =============================================================================
+// CONTAINER UNIT CALCULATIONS
+// =============================================================================
+
+// Combined units with calc()
+.w-50cqw-plus-2rem {
+  width: calc(50cqw + 2rem);
+}
+
+.h-25cqh-minus-1rem {
+  height: calc(25cqh - 1rem);
+}
+
+// Complex responsive formulas
+.responsive-component {
+  width: clamp(200px, 50cqi + 2vw, 600px);
+  height: clamp(150px, 30cqb + 3vh, 400px);
+  padding: clamp(0.5rem, 2cqi, 1.5rem);
+  font-size: clamp(0.875rem, 2cqi + 0.5vw, 1.25rem);
+}
+
+// Container unit ratios
+.ratio-16-9-cqw {
+  aspect-ratio: 16 / 9;
+  width: 100cqw;
+}
+
+.ratio-4-3-cqw {
+  aspect-ratio: 4 / 3;
+  width: 100cqw;
+}
+
+.ratio-1-1-cqw {
+  aspect-ratio: 1 / 1;
+  width: 50cqw;
+}
+
+// =============================================================================
+// CONTAINER UNIT WITH OTHER UNITS
+// =============================================================================
+
+// Mix with viewport units
+.w-50cqw-25vw {
+  width: calc(50cqw + 25vw);
+}
+
+.h-25cqh-10vh {
+  height: calc(25cqh + 10vh);
+}
+
+// Mix with percentages
+.w-50cqw-25-percent {
+  width: calc(50cqw + 25%);
+}
+
+// Mix with em/rem
+.text-4cqw-05rem {
+  font-size: calc(4cqw + 0.5rem);
+}
+
+// =============================================================================
+// CONTAINER UNIT ANIMATION
+// =============================================================================
+
+// Smooth transitions with container units
+.transition-all-cqw {
+  transition: all 0.3s ease;
+}
+
+.transition-width-cqw {
+  transition: width 0.3s ease;
+}
+
+.transition-height-cqw {
+  transition: height 0.3s ease;
+}
+
+// Container unit transforms
+.scale-100cqw {
+  transform: scale(1);
+  width: 50cqw;
+}
+
+.scale-125cqw:hover {
+  transform: scale(1.25);
+  width: 50cqw;
+}
+
+// =============================================================================
+// CONTAINER UNIT DEBUGGING
+// =============================================================================
+
+// Debug utilities to visualize container boundaries
+.debug-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px dashed var(--primary);
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.debug-container-units::after {
+  content: "Container: " attr(data-width) " × " attr(data-height);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--primary);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  z-index: 1001;
+}
+
+// =============================================================================
+// BROWSER SUPPORT WARNING
+// =============================================================================
+// Container query units have good browser support:
+// - Chrome 105+
+// - Firefox 110+
+// - Safari 16+
+// - Edge 105+
+//
+// For older browsers, use feature queries or provide fallbacks:
+//
+// @supports (width: 1cqw) {
+//   .element { width: 50cqw; }
+// } @else {
+//   .element { width: 50%; }
+// }

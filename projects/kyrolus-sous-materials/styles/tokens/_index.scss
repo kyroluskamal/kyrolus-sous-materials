@@ -1,0 +1,21 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - TOKEN INDEX
+// =============================================================================
+// Central export file for all design tokens and utilities.
+// Use: @use "tokens" as *;
+// =============================================================================
+
+// Core primitives (color palettes, spacing, etc.)
+@forward "primitives";
+
+// Additional design tokens (typography, z-index, etc.)
+@forward "semantic";
+
+// Utility classes
+@forward "color-utilities";
+@forward "typography";
+@forward "spacing";
+@forward "layout";
+@forward "animations";
+@forward "effects";
+@forward "accessibility";

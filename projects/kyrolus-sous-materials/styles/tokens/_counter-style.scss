@@ -1,0 +1,515 @@
+// =============================================================================
+// @COUNTER-STYLE - CUSTOM LIST MARKERS
+// =============================================================================
+// Create custom list numbering and bullet styles
+// Define custom symbols, ranges, and fallbacks
+// Browser support: All modern browsers (Firefox 33+, Chrome 91+)
+
+// =============================================================================
+// PREDEFINED COUNTER STYLES
+// =============================================================================
+
+/// Emoji bullets
+@counter-style emoji-bullets {
+  system: cyclic;
+  symbols: "🔹" "🔸" "💠" "✨";
+  suffix: " ";
+}
+
+/// Check marks
+@counter-style checkmarks {
+  system: cyclic;
+  symbols: "✓";
+  suffix: " ";
+}
+
+/// Arrows
+@counter-style arrows {
+  system: cyclic;
+  symbols: "→" "➜" "➡" "▶";
+  suffix: " ";
+}
+
+/// Stars
+@counter-style stars {
+  system: cyclic;
+  symbols: "★" "☆";
+  suffix: " ";
+}
+
+/// Hearts
+@counter-style hearts {
+  system: cyclic;
+  symbols: "❤" "💙" "💚" "💜" "🧡";
+  suffix: " ";
+}
+
+/// Circles (filled/empty alternating)
+@counter-style circles {
+  system: cyclic;
+  symbols: "●" "○";
+  suffix: " ";
+}
+
+/// Squares
+@counter-style squares {
+  system: cyclic;
+  symbols: "■" "□";
+  suffix: " ";
+}
+
+/// Triangles
+@counter-style triangles {
+  system: cyclic;
+  symbols: "▶" "▷" "▲" "△";
+  suffix: " ";
+}
+
+/// Diamonds
+@counter-style diamonds {
+  system: cyclic;
+  symbols: "◆" "◇";
+  suffix: " ";
+}
+
+// =============================================================================
+// NUMBERED STYLES
+// =============================================================================
+
+/// Circled numbers (①②③...)
+@counter-style circled-numbers {
+  system: fixed;
+  symbols: "①" "②" "③" "④" "⑤" "⑥" "⑦" "⑧" "⑨" "⑩" "⑪" "⑫" "⑬" "⑭" "⑮" "⑯" "⑰"
+    "⑱" "⑲" "⑳";
+  suffix: " ";
+}
+
+/// Parenthesized numbers ((1)(2)(3)...)
+@counter-style parens-numbers {
+  system: fixed;
+  symbols: "⑴" "⑵" "⑶" "⑷" "⑸" "⑹" "⑺" "⑻" "⑼" "⑽" "⑾" "⑿" "⒀" "⒁" "⒂" "⒃" "⒄"
+    "⒅" "⒆" "⒇";
+  suffix: " ";
+}
+
+/// Double-circled numbers
+@counter-style double-circled {
+  system: fixed;
+  symbols: "⓵" "⓶" "⓷" "⓸" "⓹" "⓺" "⓻" "⓼" "⓽" "⓾";
+  suffix: " ";
+}
+
+/// Roman numerals (custom styled)
+@counter-style roman-styled {
+  system: additive;
+  additive-symbols: 1000 "Ⅿ", 900 "ⅭⅯ", 500 "Ⅾ", 400 "ⅭⅮ", 100 "Ⅽ", 90 "ⅩⅭ",
+    50 "Ⅼ", 40 "ⅩⅬ", 10 "Ⅹ", 9 "ⅠⅩ", 5 "Ⅴ", 4 "ⅠⅤ", 1 "Ⅰ";
+  suffix: ". ";
+}
+
+// =============================================================================
+// ALPHABETIC STYLES
+// =============================================================================
+
+/// Circled letters
+@counter-style circled-letters {
+  system: fixed;
+  symbols: "Ⓐ" "Ⓑ" "Ⓒ" "Ⓓ" "Ⓔ" "Ⓕ" "Ⓖ" "Ⓗ" "Ⓘ" "Ⓙ" "Ⓚ" "Ⓛ" "Ⓜ" "Ⓝ" "Ⓞ" "Ⓟ" "Ⓠ"
+    "Ⓡ" "Ⓢ" "Ⓣ" "Ⓤ" "Ⓥ" "Ⓦ" "Ⓧ" "Ⓨ" "Ⓩ";
+  suffix: " ";
+}
+
+/// Parenthesized letters
+@counter-style parens-letters {
+  system: fixed;
+  symbols: "⒜" "⒝" "⒞" "⒟" "⒠" "⒡" "⒢" "⒣" "⒤" "⒥" "⒦" "⒧" "⒨" "⒩" "⒪" "⒫" "⒬"
+    "⒭" "⒮" "⒯" "⒰" "⒱" "⒲" "⒳" "⒴" "⒵";
+  suffix: " ";
+}
+
+// =============================================================================
+// STATUS/PROGRESS STYLES
+// =============================================================================
+
+/// Progress indicators
+@counter-style progress {
+  system: cyclic;
+  symbols: "⏳" "⌛";
+  suffix: " ";
+}
+
+/// Status indicators
+@counter-style status-todo {
+  system: cyclic;
+  symbols: "☐";
+  suffix: " ";
+}
+
+@counter-style status-done {
+  system: cyclic;
+  symbols: "☑";
+  suffix: " ";
+}
+
+@counter-style status-cancel {
+  system: cyclic;
+  symbols: "☒";
+  suffix: " ";
+}
+
+/// Priority markers
+@counter-style priority {
+  system: cyclic;
+  symbols: "🔴" "🟠" "🟡" "🟢" "🔵";
+  suffix: " ";
+}
+
+// =============================================================================
+// STEP/PROCESS STYLES
+// =============================================================================
+
+/// Step numbers with circle
+@counter-style step-circle {
+  system: numeric;
+  symbols: "0" "1" "2" "3" "4" "5" "6" "7" "8" "9";
+  prefix: "⬤ Step ";
+  suffix: ": ";
+}
+
+/// Numbered with arrow
+@counter-style numbered-arrow {
+  system: numeric;
+  symbols: "0" "1" "2" "3" "4" "5" "6" "7" "8" "9";
+  suffix: " → ";
+}
+
+/// Question numbers
+@counter-style question-numbers {
+  system: numeric;
+  symbols: "0" "1" "2" "3" "4" "5" "6" "7" "8" "9";
+  prefix: "Q";
+  suffix: ". ";
+}
+
+// =============================================================================
+// UTILITY CLASSES FOR COUNTER STYLES
+// =============================================================================
+
+/// Emoji bullet list
+.list-emoji {
+  list-style-type: emoji-bullets;
+}
+
+/// Checkmark list
+.list-checkmarks {
+  list-style-type: checkmarks;
+}
+
+/// Arrow list
+.list-arrows {
+  list-style-type: arrows;
+}
+
+/// Star list
+.list-stars {
+  list-style-type: stars;
+}
+
+/// Heart list
+.list-hearts {
+  list-style-type: hearts;
+}
+
+/// Circle list
+.list-circles-alt {
+  list-style-type: circles;
+}
+
+/// Square list
+.list-squares-alt {
+  list-style-type: squares;
+}
+
+/// Triangle list
+.list-triangles {
+  list-style-type: triangles;
+}
+
+/// Diamond list
+.list-diamonds {
+  list-style-type: diamonds;
+}
+
+/// Circled numbers
+.list-circled-numbers {
+  list-style-type: circled-numbers;
+}
+
+/// Parenthesized numbers
+.list-parens-numbers {
+  list-style-type: parens-numbers;
+}
+
+/// Double-circled numbers
+.list-double-circled {
+  list-style-type: double-circled;
+}
+
+/// Roman styled
+.list-roman-styled {
+  list-style-type: roman-styled;
+}
+
+/// Circled letters
+.list-circled-letters {
+  list-style-type: circled-letters;
+}
+
+/// Parenthesized letters
+.list-parens-letters {
+  list-style-type: parens-letters;
+}
+
+/// Progress list
+.list-progress {
+  list-style-type: progress;
+}
+
+/// Todo list
+.list-todo {
+  list-style-type: status-todo;
+}
+
+/// Done list
+.list-done {
+  list-style-type: status-done;
+}
+
+/// Cancelled list
+.list-cancelled {
+  list-style-type: status-cancel;
+}
+
+/// Priority list
+.list-priority {
+  list-style-type: priority;
+}
+
+/// Question list
+.list-questions {
+  list-style-type: question-numbers;
+}
+
+// =============================================================================
+// LIST POSITION UTILITIES
+// =============================================================================
+
+.list-inside {
+  list-style-position: inside;
+}
+
+.list-outside {
+  list-style-position: outside;
+}
+
+// =============================================================================
+// CUSTOM MARKER STYLING
+// =============================================================================
+
+/// Marker color utilities
+.marker-primary::marker {
+  color: var(--primary);
+}
+
+.marker-secondary::marker {
+  color: var(--secondary);
+}
+
+.marker-success::marker {
+  color: var(--success);
+}
+
+.marker-warning::marker {
+  color: var(--warning);
+}
+
+.marker-danger::marker {
+  color: var(--danger);
+}
+
+.marker-info::marker {
+  color: var(--info);
+}
+
+/// Marker size
+.marker-lg::marker {
+  font-size: 1.25em;
+}
+
+.marker-xl::marker {
+  font-size: 1.5em;
+}
+
+.marker-2xl::marker {
+  font-size: 2em;
+}
+
+// =============================================================================
+// SEMANTIC LIST PATTERNS
+// =============================================================================
+
+/// Feature list
+.list-features {
+  list-style: none;
+  padding: 0;
+
+  li {
+    position: relative;
+    padding-left: 1.75rem;
+    margin-bottom: 0.5rem;
+
+    &::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: bold;
+    }
+  }
+}
+
+/// Pros list
+.list-pros {
+  list-style: none;
+  padding: 0;
+
+  li {
+    position: relative;
+    padding-left: 1.75rem;
+    margin-bottom: 0.5rem;
+
+    &::before {
+      content: "➕";
+      position: absolute;
+      left: 0;
+    }
+  }
+}
+
+/// Cons list
+.list-cons {
+  list-style: none;
+  padding: 0;
+
+  li {
+    position: relative;
+    padding-left: 1.75rem;
+    margin-bottom: 0.5rem;
+
+    &::before {
+      content: "➖";
+      position: absolute;
+      left: 0;
+    }
+  }
+}
+
+/// Timeline list
+.list-timeline {
+  list-style: none;
+  padding-left: 2rem;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+
+  li {
+    position: relative;
+    padding-bottom: 1.5rem;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: -1.625rem;
+      top: 0.375rem;
+      width: 0.75rem;
+      height: 0.75rem;
+      background: var(--primary);
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+    }
+  }
+}
+
+// =============================================================================
+// COUNTER INCREMENT UTILITIES
+// =============================================================================
+
+/// Counter for sections
+.counter-section {
+  counter-reset: section;
+
+  > h2::before {
+    counter-increment: section;
+    content: counter(section) ". ";
+  }
+}
+
+/// Counter for steps
+.counter-steps {
+  counter-reset: step;
+
+  .step::before {
+    counter-increment: step;
+    content: "Step " counter(step) ": ";
+    font-weight: bold;
+    color: var(--primary);
+  }
+}
+
+/// Counter for figures
+.counter-figures {
+  counter-reset: figure;
+
+  figure::after {
+    counter-increment: figure;
+    content: "Figure " counter(figure);
+    display: block;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+}
+
+// =============================================================================
+// DARK MODE
+// =============================================================================
+
+[data-theme="dark"],
+.dark {
+  .list-timeline::before {
+    background: var(--border-dark);
+  }
+
+  .list-timeline li::before {
+    border-color: var(--bg-dark);
+  }
+}
+
+// =============================================================================
+// PRINT STYLES
+// =============================================================================
+
+@media print {
+  [class*="list-"] {
+    list-style-position: inside;
+  }
+}

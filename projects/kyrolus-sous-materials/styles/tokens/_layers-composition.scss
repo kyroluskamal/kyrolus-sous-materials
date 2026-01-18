@@ -1,0 +1,535 @@
+/* =============================================================================
+   KYROLUS SOUS MATERIALS - CSS LAYERS COMPOSITION PATTERNS
+   =============================================================================
+   Advanced CSS Cascade Layers for complex applications:
+   - Layer composition strategies
+   - Component isolation patterns
+   - Theme layer management
+   - Override hierarchies
+   ============================================================================= */
+
+@use "sass:map";
+@use "primitives" as *;
+
+/* =============================================================================
+   LAYER ARCHITECTURE DEFINITION
+   ============================================================================= */
+
+/* Define the layer hierarchy from lowest to highest priority */
+@layer reset, base, theme, components, utilities, overrides;
+
+/* =============================================================================
+   RESET LAYER - LOWEST PRIORITY
+   ============================================================================= */
+
+@layer reset {
+  /* CSS normalization */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Remove default browser styles */
+  html {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  /* Normalize form elements */
+  button,
+  input,
+  optgroup,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+  }
+
+  /* Remove default list styles */
+  ol,
+  ul {
+    list-style: none;
+  }
+
+  /* Remove default table spacing */
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+}
+
+/* =============================================================================
+   BASE LAYER - FOUNDATION STYLES
+   ============================================================================= */
+
+@layer base {
+  /* Root variables */
+  :root {
+    --font-family-base: #{map.get($font-families, "sans")};
+    --font-size-base: #{map.get($font-sizes, "base")};
+    --line-height-base: #{map.get($line-heights, "normal")};
+    --color-text: #{map.get($colors, "gray", "900")};
+    --color-bg: #{map.get($colors, "white")};
+  }
+
+  /* Base typography */
+  html {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+  }
+
+  body {
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    font-feature-settings: "kern" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Base element styles */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: map.get($font-weights, "bold");
+    line-height: map.get($line-heights, "tight");
+    margin-bottom: 0.5em;
+  }
+
+  p {
+    margin-bottom: 1em;
+  }
+
+  a {
+    color: var(--color-primary, #{map.get($colors, "blue", "600")});
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* =============================================================================
+   THEME LAYER - THEMING SYSTEM
+   ============================================================================= */
+
+@layer theme {
+  /* Light theme (default) */
+  :root {
+    --color-primary: #{map.get($colors, "blue", "600")};
+    --color-primary-hover: #{map.get($colors, "blue", "700")};
+    --color-secondary: #{map.get($colors, "gray", "600")};
+    --color-accent: #{map.get($colors, "purple", "600")};
+
+    --surface-1: #{map.get($colors, "white")};
+    --surface-2: #{map.get($colors, "gray", "50")};
+    --surface-3: #{map.get($colors, "gray", "100")};
+
+    --border-color: #{map.get($colors, "gray", "200")};
+    --shadow-color: #{map.get($colors, "gray", "900")};
+  }
+
+  /* Dark theme */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-primary: #{map.get($colors, "blue", "400")};
+      --color-primary-hover: #{map.get($colors, "blue", "300")};
+      --color-secondary: #{map.get($colors, "gray", "400")};
+      --color-accent: #{map.get($colors, "purple", "400")};
+
+      --surface-1: #{map.get($colors, "gray", "900")};
+      --surface-2: #{map.get($colors, "gray", "800")};
+      --surface-3: #{map.get($colors, "gray", "700")};
+
+      --border-color: #{map.get($colors, "gray", "700")};
+      --shadow-color: #{map.get($colors, "black")};
+
+      --color-text: #{map.get($colors, "gray", "100")};
+      --color-bg: #{map.get($colors, "gray", "900")};
+    }
+  }
+
+  /* Manual theme switching */
+  [data-theme="dark"] {
+    --color-primary: #{map.get($colors, "blue", "400")};
+    --color-primary-hover: #{map.get($colors, "blue", "300")};
+    --color-secondary: #{map.get($colors, "gray", "400")};
+    --color-accent: #{map.get($colors, "purple", "400")};
+
+    --surface-1: #{map.get($colors, "gray", "900")};
+    --surface-2: #{map.get($colors, "gray", "800")};
+    --surface-3: #{map.get($colors, "gray", "700")};
+
+    --border-color: #{map.get($colors, "gray", "700")};
+    --shadow-color: #{map.get($colors, "black")};
+
+    --color-text: #{map.get($colors, "gray", "100")};
+    --color-bg: #{map.get($colors, "gray", "900")};
+  }
+
+  [data-theme="light"] {
+    --color-primary: #{map.get($colors, "blue", "600")};
+    --color-primary-hover: #{map.get($colors, "blue", "700")};
+    --color-secondary: #{map.get($colors, "gray", "600")};
+    --color-accent: #{map.get($colors, "purple", "600")};
+
+    --surface-1: #{map.get($colors, "white")};
+    --surface-2: #{map.get($colors, "gray", "50")};
+    --surface-3: #{map.get($colors, "gray", "100")};
+
+    --border-color: #{map.get($colors, "gray", "200")};
+    --shadow-color: #{map.get($colors, "gray", "900")};
+  }
+}
+
+/* =============================================================================
+   COMPONENTS LAYER - COMPONENT STYLES
+   ============================================================================= */
+
+@layer components {
+  /* Button component */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: var(--surface-1);
+    color: var(--color-text);
+    font-weight: map.get($font-weights, "medium");
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: var(--surface-2);
+      border-color: var(--color-primary);
+    }
+
+    &:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Primary variant */
+    &.btn-primary {
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
+      color: white;
+
+      &:hover {
+        background-color: var(--color-primary-hover);
+        border-color: var(--color-primary-hover);
+      }
+    }
+  }
+
+  /* Card component */
+  .card {
+    background-color: var(--surface-1);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-6);
+    box-shadow: var(--shadow-sm);
+
+    .card-header {
+      margin-bottom: var(--spacing-4);
+      padding-bottom: var(--spacing-4);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .card-body {
+      margin-bottom: var(--spacing-4);
+    }
+
+    .card-footer {
+      padding-top: var(--spacing-4);
+      border-top: 1px solid var(--border-color);
+    }
+  }
+
+  /* Navigation component */
+  .navbar {
+    background-color: var(--surface-1);
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--spacing-4);
+
+    .nav-list {
+      display: flex;
+      gap: var(--spacing-6);
+
+      .nav-item {
+        a {
+          color: var(--color-secondary);
+          font-weight: map.get($font-weights, "medium");
+          padding: var(--spacing-2) var(--spacing-4);
+          border-radius: var(--radius-md);
+          transition: all 0.2s ease;
+
+          &:hover,
+          &.active {
+            color: var(--color-primary);
+            background-color: var(--surface-2);
+          }
+        }
+      }
+    }
+  }
+}
+
+/* =============================================================================
+   UTILITIES LAYER - HIGH PRIORITY UTILITIES
+   ============================================================================= */
+
+@layer utilities {
+  /* Layout utilities */
+  .flex {
+    display: flex;
+  }
+  .grid {
+    display: grid;
+  }
+  .block {
+    display: block;
+  }
+  .inline {
+    display: inline;
+  }
+  .hidden {
+    display: none;
+  }
+
+  /* Flex utilities */
+  .flex-row {
+    flex-direction: row;
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .justify-center {
+    justify-content: center;
+  }
+  .gap-2 {
+    gap: var(--spacing-2);
+  }
+  .gap-4 {
+    gap: var(--spacing-4);
+  }
+  .gap-6 {
+    gap: var(--spacing-6);
+  }
+
+  /* Spacing utilities */
+  .m-0 {
+    margin: 0;
+  }
+  .m-2 {
+    margin: var(--spacing-2);
+  }
+  .m-4 {
+    margin: var(--spacing-4);
+  }
+  .p-2 {
+    padding: var(--spacing-2);
+  }
+  .p-4 {
+    padding: var(--spacing-4);
+  }
+  .p-6 {
+    padding: var(--spacing-6);
+  }
+
+  /* Typography utilities */
+  .text-sm {
+    font-size: var(--font-size-sm);
+  }
+  .text-base {
+    font-size: var(--font-size-base);
+  }
+  .text-lg {
+    font-size: var(--font-size-lg);
+  }
+  .font-bold {
+    font-weight: map.get($font-weights, "bold");
+  }
+  .text-center {
+    text-align: center;
+  }
+
+  /* Color utilities */
+  .text-primary {
+    color: var(--color-primary);
+  }
+  .bg-primary {
+    background-color: var(--color-primary);
+  }
+  .text-secondary {
+    color: var(--color-secondary);
+  }
+  .bg-secondary {
+    background-color: var(--color-secondary);
+  }
+
+  /* Important utility classes */
+  .important-hidden {
+    display: none !important;
+  }
+  .important-block {
+    display: block !important;
+  }
+  .important-flex {
+    display: flex !important;
+  }
+}
+
+/* =============================================================================
+   OVERRIDES LAYER - HIGHEST PRIORITY
+   ============================================================================= */
+
+@layer overrides {
+  /* Emergency overrides that should always win */
+  .override-hidden {
+    display: none !important;
+  }
+
+  .override-visible {
+    display: block !important;
+  }
+
+  .override-flex {
+    display: flex !important;
+  }
+
+  /* Print styles */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+
+    .print-only {
+      display: block !important;
+    }
+  }
+
+  /* High contrast mode */
+  @media (prefers-contrast: more) {
+    * {
+      border-width: 2px !important;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* =============================================================================
+   THIRD-PARTY LIBRARY INTEGRATION
+   ============================================================================= */
+
+/* Isolate third-party styles in their own layer */
+@layer vendor {
+  /* This layer is for importing external libraries */
+  /* Third-party styles get their own cascade layer */
+  /* They can be overridden by higher layers */
+
+  /* Example: Import a third-party library */
+  /* @import 'some-library/styles.css'; */
+}
+
+/* =============================================================================
+   CONDITIONAL LAYER LOADING
+   ============================================================================= */
+
+/* Load layers conditionally based on environment */
+@if $debug-mode {
+  @layer debug {
+    * {
+      outline: 1px solid red;
+    }
+
+    .layout-debug {
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 0, 0, 0.1) 10px,
+        rgba(255, 0, 0, 0.1) 20px
+      );
+    }
+  }
+}
+
+/* =============================================================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================================================= */
+
+/* Layer containment for performance */
+.layer-contained {
+  contain: layout style;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Critical rendering path optimization */
+.critical-styles {
+  /* Placeholder for critical above-the-fold styles */
+  contain: layout;
+}
+
+.non-critical-styles {
+  /* Placeholder for non-critical below-the-fold styles */
+  contain: style;
+}
+
+/* =============================================================================
+   DEBUGGING UTILITIES
+   ============================================================================= */
+
+@if $debug-mode {
+  .layer-debug {
+    position: relative;
+
+    &::before {
+      content: "Layer Debug";
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: #dc2626; /* red-600 for better contrast */
+      color: #ffffff;
+      padding: 2px 6px;
+      font-size: 10px;
+      z-index: 1000;
+    }
+  }
+}

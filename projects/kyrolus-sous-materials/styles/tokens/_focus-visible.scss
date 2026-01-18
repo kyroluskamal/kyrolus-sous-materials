@@ -1,0 +1,435 @@
+// ============================================================================
+// FOCUS-VISIBLE UTILITIES
+// Keyboard-only focus styles (no focus ring on click)
+// Browser Support: Chrome 86+, Firefox 85+, Safari 15.4+
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// BASE FOCUS VISIBLE STYLES
+// ----------------------------------------------------------------------------
+
+// Remove default outline, show only on keyboard focus
+.focus-visible-only {
+  outline: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring-color, var(--primary, #3b82f6));
+    outline-offset: 2px;
+  }
+}
+
+// Focus visible with custom ring
+.focus-ring {
+  outline: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring-color, var(--primary, #3b82f6));
+    outline-offset: var(--focus-ring-offset, 2px);
+  }
+}
+
+// Focus visible with box shadow (softer look)
+.focus-ring-shadow {
+  outline: none;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px var(--focus-ring-color, rgba(59, 130, 246, 0.5));
+  }
+}
+
+// ----------------------------------------------------------------------------
+// FOCUS RING COLORS
+// ----------------------------------------------------------------------------
+
+.focus-ring-primary {
+  --focus-ring-color: var(--primary, #3b82f6);
+}
+
+.focus-ring-secondary {
+  --focus-ring-color: var(--secondary, #8b5cf6);
+}
+
+.focus-ring-success {
+  --focus-ring-color: var(--success, #10b981);
+}
+
+.focus-ring-warning {
+  --focus-ring-color: var(--warning, #f59e0b);
+}
+
+.focus-ring-error {
+  --focus-ring-color: var(--error, #ef4444);
+}
+
+.focus-ring-info {
+  --focus-ring-color: var(--info, #0ea5e9);
+}
+
+.focus-ring-white {
+  --focus-ring-color: white;
+}
+
+.focus-ring-black {
+  --focus-ring-color: black;
+}
+
+// ----------------------------------------------------------------------------
+// FOCUS RING OFFSETS
+// ----------------------------------------------------------------------------
+
+.focus-ring-offset-0 {
+  --focus-ring-offset: 0px;
+}
+
+.focus-ring-offset-1 {
+  --focus-ring-offset: 1px;
+}
+
+.focus-ring-offset-2 {
+  --focus-ring-offset: 2px;
+}
+
+.focus-ring-offset-4 {
+  --focus-ring-offset: 4px;
+}
+
+.focus-ring-offset-8 {
+  --focus-ring-offset: 8px;
+}
+
+// Inset focus ring
+.focus-ring-inset {
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// FOCUS RING WIDTHS
+// ----------------------------------------------------------------------------
+
+.focus-ring-1 {
+  &:focus-visible {
+    outline-width: 1px;
+  }
+}
+
+.focus-ring-2 {
+  &:focus-visible {
+    outline-width: 2px;
+  }
+}
+
+.focus-ring-4 {
+  &:focus-visible {
+    outline-width: 4px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// BUTTON FOCUS STYLES
+// ----------------------------------------------------------------------------
+
+.btn-focus-ring {
+  outline: none;
+  transition: box-shadow 0.2s;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--background, white),
+      0 0 0 4px var(--focus-ring-color, var(--primary, #3b82f6));
+  }
+}
+
+.btn-focus-scale {
+  outline: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:focus-visible {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 3px var(--focus-ring-color, rgba(59, 130, 246, 0.5));
+  }
+}
+
+// ----------------------------------------------------------------------------
+// INPUT FOCUS STYLES
+// ----------------------------------------------------------------------------
+
+.input-focus-ring {
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus-visible {
+    border-color: var(--focus-ring-color, var(--primary, #3b82f6));
+    box-shadow: 0 0 0 3px var(--focus-ring-shadow, rgba(59, 130, 246, 0.2));
+  }
+}
+
+.input-focus-border {
+  outline: none;
+  transition: border-color 0.2s;
+
+  &:focus-visible {
+    border-color: var(--focus-ring-color, var(--primary, #3b82f6));
+  }
+}
+
+.input-focus-bg {
+  outline: none;
+  transition: background-color 0.2s;
+
+  &:focus-visible {
+    background-color: var(--focus-bg, rgba(59, 130, 246, 0.05));
+  }
+}
+
+// ----------------------------------------------------------------------------
+// CARD/CONTAINER FOCUS STYLES
+// ----------------------------------------------------------------------------
+
+.card-focus-ring {
+  outline: none;
+  transition: box-shadow 0.2s;
+
+  &:focus-visible {
+    box-shadow: var(--shadow, 0 1px 3px rgba(0, 0, 0, 0.1)),
+      0 0 0 3px var(--focus-ring-color, rgba(59, 130, 246, 0.5));
+  }
+}
+
+.card-focus-border {
+  outline: none;
+  transition: border-color 0.2s;
+
+  &:focus-visible {
+    border-color: var(--focus-ring-color, var(--primary, #3b82f6));
+  }
+}
+
+// ----------------------------------------------------------------------------
+// LINK FOCUS STYLES
+// ----------------------------------------------------------------------------
+
+.link-focus-underline {
+  text-decoration: none;
+
+  &:focus-visible {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
+  }
+}
+
+.link-focus-bg {
+  outline: none;
+
+  &:focus-visible {
+    background-color: var(--focus-bg, rgba(59, 130, 246, 0.1));
+    border-radius: 2px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// CHECKBOX/RADIO FOCUS STYLES
+// ----------------------------------------------------------------------------
+
+.checkbox-focus-ring {
+  outline: none;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px var(--focus-ring-color, rgba(59, 130, 246, 0.5));
+  }
+}
+
+.radio-focus-ring {
+  outline: none;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px var(--focus-ring-color, rgba(59, 130, 246, 0.5));
+  }
+}
+
+// Custom checkbox with focus
+.checkbox-custom {
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--border, #d1d5db);
+  border-radius: 0.25rem;
+  outline: none;
+  transition: all 0.2s;
+
+  &:checked {
+    background-color: var(--primary, #3b82f6);
+    border-color: var(--primary, #3b82f6);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// TAB FOCUS STYLES
+// ----------------------------------------------------------------------------
+
+.tab-focus {
+  outline: none;
+
+  &:focus-visible {
+    background-color: var(--focus-bg, rgba(59, 130, 246, 0.1));
+    border-radius: var(--radius, 0.25rem);
+  }
+}
+
+.tab-focus-border {
+  outline: none;
+
+  &:focus-visible {
+    border-bottom: 2px solid var(--focus-ring-color, var(--primary, #3b82f6));
+  }
+}
+
+// ----------------------------------------------------------------------------
+// ICON BUTTON FOCUS
+// ----------------------------------------------------------------------------
+
+.icon-btn-focus {
+  outline: none;
+  border-radius: 50%;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px var(--focus-ring-color, rgba(59, 130, 246, 0.5));
+  }
+}
+
+// ----------------------------------------------------------------------------
+// SKIP LINK (Accessibility)
+// ----------------------------------------------------------------------------
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--background, white);
+  color: var(--text, black);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius, 0.25rem);
+  text-decoration: none;
+  z-index: 9999;
+  transition: top 0.2s;
+
+  &:focus-visible {
+    top: 1rem;
+    outline: 2px solid var(--primary, #3b82f6);
+    outline-offset: 2px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// FOCUS WITHIN (Parent when child has focus)
+// ----------------------------------------------------------------------------
+
+.focus-within-ring {
+  &:focus-within {
+    outline: 2px solid var(--focus-ring-color, var(--primary, #3b82f6));
+    outline-offset: 2px;
+  }
+}
+
+.focus-within-shadow {
+  transition: box-shadow 0.2s;
+
+  &:focus-within {
+    box-shadow: 0 0 0 3px var(--focus-ring-color, rgba(59, 130, 246, 0.5));
+  }
+}
+
+.focus-within-border {
+  transition: border-color 0.2s;
+
+  &:focus-within {
+    border-color: var(--focus-ring-color, var(--primary, #3b82f6));
+  }
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE FOCUS
+// ----------------------------------------------------------------------------
+
+[data-theme="dark"],
+.dark {
+  .focus-ring {
+    --focus-ring-color: var(--primary-light, #60a5fa);
+  }
+
+  .focus-ring-shadow {
+    --focus-ring-color: rgba(96, 165, 250, 0.5);
+  }
+
+  .skip-link {
+    background: var(--background-dark, #1f2937);
+    color: var(--text-light, #f9fafb);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// GLOBAL FOCUS VISIBLE RESET
+// Apply to entire site
+// ----------------------------------------------------------------------------
+
+.focus-visible-global {
+  *:focus {
+    outline: none;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--focus-ring-color, var(--primary, #3b82f6));
+    outline-offset: 2px;
+  }
+
+  // Exclude inputs from default styling
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: none;
+    border-color: var(--focus-ring-color, var(--primary, #3b82f6));
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH CONTRAST MODE
+// ----------------------------------------------------------------------------
+
+@media (prefers-contrast: more) {
+  .focus-ring:focus-visible,
+  .focus-ring-shadow:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  .focus-ring,
+  .focus-ring-shadow,
+  .btn-focus-ring,
+  .input-focus-ring {
+    transition: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// FEATURE DETECTION
+// ----------------------------------------------------------------------------
+
+@supports selector(:focus-visible) {
+  .focus-visible-supported {
+    --focus-visible-supported: 1;
+  }
+}

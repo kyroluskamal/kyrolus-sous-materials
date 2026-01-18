@@ -1,0 +1,733 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - GROUP & PEER UTILITIES
+// =============================================================================
+// Parent-child state interactions (group) and sibling state interactions (peer).
+// These enable complex interactive patterns without JavaScript.
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// GROUP UTILITIES
+// =============================================================================
+// Apply .group to parent, use .group-* classes on children to respond to
+// parent state changes.
+//
+// Example:
+// <div class="group">
+//   <span class="group-hover:text-blue-500">Shows blue on parent hover</span>
+// </div>
+
+.group {
+  // Marker class - enables group-* utilities on descendants
+  // This class intentionally has no styles - it's used as a selector anchor
+  display: contents; // Invisible wrapper that doesn't affect layout
+}
+
+// Named groups for nested scenarios
+.group\/item {
+  // Marker for item groups in nested contexts
+  display: contents;
+}
+.group\/card {
+  // Marker for card groups
+  display: contents;
+}
+.group\/menu {
+  // Marker for menu groups
+  display: contents;
+}
+
+// =============================================================================
+// GROUP HOVER UTILITIES
+// =============================================================================
+
+// Display
+.group:hover .group-hover\:block {
+  display: block;
+}
+.group:hover .group-hover\:inline-block {
+  display: inline-block;
+}
+.group:hover .group-hover\:flex {
+  display: flex;
+}
+.group:hover .group-hover\:inline-flex {
+  display: inline-flex;
+}
+.group:hover .group-hover\:grid {
+  display: grid;
+}
+.group:hover .group-hover\:hidden {
+  display: none;
+}
+
+// Visibility
+.group:hover .group-hover\:visible {
+  visibility: visible;
+}
+.group:hover .group-hover\:invisible {
+  visibility: hidden;
+}
+
+// Opacity
+.group:hover .group-hover\:opacity-0 {
+  opacity: 0;
+}
+.group:hover .group-hover\:opacity-25 {
+  opacity: 0.25;
+}
+.group:hover .group-hover\:opacity-50 {
+  opacity: 0.5;
+}
+.group:hover .group-hover\:opacity-75 {
+  opacity: 0.75;
+}
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+// Background colors
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .group:hover .group-hover\:bg-#{$palette-name}-#{$shade} {
+      background-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.group:hover .group-hover\:bg-transparent {
+  background-color: transparent;
+}
+.group:hover .group-hover\:bg-white {
+  background-color: #ffffff;
+}
+.group:hover .group-hover\:bg-black {
+  background-color: #000000;
+}
+
+// Text colors
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .group:hover .group-hover\:text-#{$palette-name}-#{$shade} {
+      color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.group:hover .group-hover\:text-transparent {
+  color: transparent;
+}
+.group:hover .group-hover\:text-white {
+  color: #ffffff;
+}
+.group:hover .group-hover\:text-black {
+  color: #000000;
+}
+
+// Border colors
+@each $palette-name, $palette in $color-palettes {
+  .group:hover .group-hover\:border-#{$palette-name}-500 {
+    border-color: var(--color-#{$palette-name}-500);
+  }
+}
+
+// Text decoration
+.group:hover .group-hover\:underline {
+  text-decoration-line: underline;
+}
+.group:hover .group-hover\:no-underline {
+  text-decoration-line: none;
+}
+.group:hover .group-hover\:line-through {
+  text-decoration-line: line-through;
+}
+
+// Transform scale
+.group:hover .group-hover\:scale-100 {
+  transform: scale(1);
+}
+.group:hover .group-hover\:scale-105 {
+  transform: scale(1.05);
+}
+.group:hover .group-hover\:scale-110 {
+  transform: scale(1.1);
+}
+.group:hover .group-hover\:scale-125 {
+  transform: scale(1.25);
+}
+
+// Transform translate
+.group:hover .group-hover\:translate-x-0 {
+  transform: translateX(0);
+}
+.group:hover .group-hover\:translate-x-1 {
+  transform: translateX(0.25rem);
+}
+.group:hover .group-hover\:translate-x-2 {
+  transform: translateX(0.5rem);
+}
+.group:hover .group-hover\:-translate-x-1 {
+  transform: translateX(-0.25rem);
+}
+.group:hover .group-hover\:translate-y-0 {
+  transform: translateY(0);
+}
+.group:hover .group-hover\:-translate-y-1 {
+  transform: translateY(-0.25rem);
+}
+.group:hover .group-hover\:-translate-y-2 {
+  transform: translateY(-0.5rem);
+}
+
+// Transform rotate
+.group:hover .group-hover\:rotate-0 {
+  transform: rotate(0deg);
+}
+.group:hover .group-hover\:rotate-45 {
+  transform: rotate(45deg);
+}
+.group:hover .group-hover\:rotate-90 {
+  transform: rotate(90deg);
+}
+.group:hover .group-hover\:rotate-180 {
+  transform: rotate(180deg);
+}
+.group:hover .group-hover\:-rotate-45 {
+  transform: rotate(-45deg);
+}
+.group:hover .group-hover\:-rotate-90 {
+  transform: rotate(-90deg);
+}
+
+// Shadow
+.group:hover .group-hover\:shadow-none {
+  box-shadow: none;
+}
+.group:hover .group-hover\:shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+.group:hover .group-hover\:shadow {
+  box-shadow: var(--shadow-md);
+}
+.group:hover .group-hover\:shadow-md {
+  box-shadow: var(--shadow-md);
+}
+.group:hover .group-hover\:shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+.group:hover .group-hover\:shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
+
+// Filter brightness
+.group:hover .group-hover\:brightness-50 {
+  filter: brightness(0.5);
+}
+.group:hover .group-hover\:brightness-75 {
+  filter: brightness(0.75);
+}
+.group:hover .group-hover\:brightness-100 {
+  filter: brightness(1);
+}
+.group:hover .group-hover\:brightness-125 {
+  filter: brightness(1.25);
+}
+
+// Ring
+.group:hover .group-hover\:ring {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0px)
+    var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow),
+    var(--shadow, 0 0 #0000);
+}
+.group:hover .group-hover\:ring-2 {
+  --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow),
+    var(--shadow, 0 0 #0000);
+}
+
+// =============================================================================
+// GROUP FOCUS UTILITIES
+// =============================================================================
+
+// Display
+.group:focus .group-focus\:block {
+  display: block;
+}
+.group:focus .group-focus\:hidden {
+  display: none;
+}
+.group:focus .group-focus\:flex {
+  display: flex;
+}
+
+// Visibility
+.group:focus .group-focus\:visible {
+  visibility: visible;
+}
+.group:focus .group-focus\:invisible {
+  visibility: hidden;
+}
+
+// Opacity
+.group:focus .group-focus\:opacity-100 {
+  opacity: 1;
+}
+.group:focus .group-focus\:opacity-0 {
+  opacity: 0;
+}
+
+// Text colors
+@each $palette-name, $palette in $color-palettes {
+  .group:focus .group-focus\:text-#{$palette-name}-500 {
+    color: var(--color-#{$palette-name}-500);
+  }
+  .group:focus .group-focus\:text-#{$palette-name}-600 {
+    color: var(--color-#{$palette-name}-600);
+  }
+}
+
+// Ring
+.group:focus .group-focus\:ring {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0px)
+    var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow),
+    var(--shadow, 0 0 #0000);
+}
+
+// =============================================================================
+// GROUP FOCUS-WITHIN UTILITIES
+// =============================================================================
+// Triggered when any descendant of the group receives focus
+
+// Display
+.group:focus-within .group-focus-within\:block {
+  display: block;
+}
+.group:focus-within .group-focus-within\:hidden {
+  display: none;
+}
+.group:focus-within .group-focus-within\:flex {
+  display: flex;
+}
+
+// Opacity
+.group:focus-within .group-focus-within\:opacity-100 {
+  opacity: 1;
+}
+.group:focus-within .group-focus-within\:opacity-0 {
+  opacity: 0;
+}
+
+// Border colors
+@each $palette-name, $palette in $color-palettes {
+  .group:focus-within .group-focus-within\:border-#{$palette-name}-500 {
+    border-color: var(--color-#{$palette-name}-500);
+  }
+}
+
+// Ring
+.group:focus-within .group-focus-within\:ring {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0px)
+    var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow),
+    var(--shadow, 0 0 #0000);
+}
+
+// =============================================================================
+// GROUP ACTIVE UTILITIES
+// =============================================================================
+
+.group:active .group-active\:scale-95 {
+  transform: scale(0.95);
+}
+.group:active .group-active\:scale-100 {
+  transform: scale(1);
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .group:active .group-active\:bg-#{$palette-name}-600 {
+    background-color: var(--color-#{$palette-name}-600);
+  }
+  .group:active .group-active\:bg-#{$palette-name}-700 {
+    background-color: var(--color-#{$palette-name}-700);
+  }
+}
+
+// =============================================================================
+// PEER UTILITIES
+// =============================================================================
+// Apply .peer to a sibling element, use .peer-* classes on subsequent siblings
+// to respond to the peer's state changes.
+//
+// Example:
+// <input type="checkbox" class="peer" />
+// <span class="peer-checked:text-green-500">Turns green when checkbox checked</span>
+
+.peer {
+  // Marker class - enables peer-* utilities on siblings
+  // This class intentionally has no visual styles - it's used as a selector anchor
+  position: relative; // Ensure proper stacking context
+}
+
+// Named peers for complex scenarios
+.peer\/checkbox {
+  // Marker for checkbox peers in complex forms
+  position: relative;
+}
+.peer\/input {
+  // Marker for input peers
+  position: relative;
+}
+.peer\/toggle {
+  // Marker for toggle peers
+  position: relative;
+}
+
+// =============================================================================
+// PEER CHECKED UTILITIES
+// =============================================================================
+
+// Display
+.peer:checked ~ .peer-checked\:block {
+  display: block;
+}
+.peer:checked ~ .peer-checked\:hidden {
+  display: none;
+}
+.peer:checked ~ .peer-checked\:flex {
+  display: flex;
+}
+
+// Opacity
+.peer:checked ~ .peer-checked\:opacity-100 {
+  opacity: 1;
+}
+.peer:checked ~ .peer-checked\:opacity-0 {
+  opacity: 0;
+}
+
+// Background colors
+@each $palette-name, $palette in $color-palettes {
+  .peer:checked ~ .peer-checked\:bg-#{$palette-name}-50 {
+    background-color: var(--color-#{$palette-name}-50);
+  }
+  .peer:checked ~ .peer-checked\:bg-#{$palette-name}-100 {
+    background-color: var(--color-#{$palette-name}-100);
+  }
+  .peer:checked ~ .peer-checked\:bg-#{$palette-name}-500 {
+    background-color: var(--color-#{$palette-name}-500);
+  }
+}
+
+// Text colors
+@each $palette-name, $palette in $color-palettes {
+  .peer:checked ~ .peer-checked\:text-#{$palette-name}-500 {
+    color: var(--color-#{$palette-name}-500);
+  }
+  .peer:checked ~ .peer-checked\:text-#{$palette-name}-600 {
+    color: var(--color-#{$palette-name}-600);
+  }
+  .peer:checked ~ .peer-checked\:text-#{$palette-name}-700 {
+    color: var(--color-#{$palette-name}-700);
+  }
+}
+
+.peer:checked ~ .peer-checked\:text-white {
+  color: #ffffff;
+}
+
+// Border colors
+@each $palette-name, $palette in $color-palettes {
+  .peer:checked ~ .peer-checked\:border-#{$palette-name}-500 {
+    border-color: var(--color-#{$palette-name}-500);
+  }
+}
+
+// Transform
+.peer:checked ~ .peer-checked\:translate-x-full {
+  transform: translateX(100%);
+}
+.peer:checked ~ .peer-checked\:translate-x-0 {
+  transform: translateX(0);
+}
+.peer:checked ~ .peer-checked\:scale-100 {
+  transform: scale(1);
+}
+
+// Font weight
+.peer:checked ~ .peer-checked\:font-semibold {
+  font-weight: var(--font-semibold);
+}
+.peer:checked ~ .peer-checked\:font-bold {
+  font-weight: var(--font-bold);
+}
+
+// =============================================================================
+// PEER FOCUS UTILITIES
+// =============================================================================
+
+// Display
+.peer:focus ~ .peer-focus\:block {
+  display: block;
+}
+.peer:focus ~ .peer-focus\:hidden {
+  display: none;
+}
+
+// Opacity
+.peer:focus ~ .peer-focus\:opacity-100 {
+  opacity: 1;
+}
+.peer:focus ~ .peer-focus\:opacity-0 {
+  opacity: 0;
+}
+
+// Text colors
+@each $palette-name, $palette in $color-palettes {
+  .peer:focus ~ .peer-focus\:text-#{$palette-name}-500 {
+    color: var(--color-#{$palette-name}-500);
+  }
+  .peer:focus ~ .peer-focus\:text-#{$palette-name}-600 {
+    color: var(--color-#{$palette-name}-600);
+  }
+}
+
+// Border colors
+@each $palette-name, $palette in $color-palettes {
+  .peer:focus ~ .peer-focus\:border-#{$palette-name}-500 {
+    border-color: var(--color-#{$palette-name}-500);
+  }
+}
+
+// Ring
+.peer:focus ~ .peer-focus\:ring {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0px)
+    var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow),
+    var(--shadow, 0 0 #0000);
+}
+
+// =============================================================================
+// PEER HOVER UTILITIES
+// =============================================================================
+
+// Display
+.peer:hover ~ .peer-hover\:block {
+  display: block;
+}
+.peer:hover ~ .peer-hover\:hidden {
+  display: none;
+}
+
+// Opacity
+.peer:hover ~ .peer-hover\:opacity-100 {
+  opacity: 1;
+}
+.peer:hover ~ .peer-hover\:opacity-0 {
+  opacity: 0;
+}
+
+// Background colors
+@each $palette-name, $palette in $color-palettes {
+  .peer:hover ~ .peer-hover\:bg-#{$palette-name}-100 {
+    background-color: var(--color-#{$palette-name}-100);
+  }
+}
+
+// Text colors
+@each $palette-name, $palette in $color-palettes {
+  .peer:hover ~ .peer-hover\:text-#{$palette-name}-500 {
+    color: var(--color-#{$palette-name}-500);
+  }
+}
+
+// =============================================================================
+// PEER DISABLED UTILITIES
+// =============================================================================
+
+.peer:disabled ~ .peer-disabled\:opacity-50 {
+  opacity: 0.5;
+}
+.peer:disabled ~ .peer-disabled\:cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .peer:disabled ~ .peer-disabled\:text-#{$palette-name}-400 {
+    color: var(--color-#{$palette-name}-400);
+  }
+}
+
+// =============================================================================
+// PEER INVALID UTILITIES
+// =============================================================================
+
+.peer:invalid ~ .peer-invalid\:block {
+  display: block;
+}
+.peer:invalid ~ .peer-invalid\:visible {
+  visibility: visible;
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .peer:invalid ~ .peer-invalid\:text-#{$palette-name}-500 {
+    color: var(--color-#{$palette-name}-500);
+  }
+  .peer:invalid ~ .peer-invalid\:border-#{$palette-name}-500 {
+    border-color: var(--color-#{$palette-name}-500);
+  }
+}
+
+// Common red for errors
+.peer:invalid ~ .peer-invalid\:text-red-500 {
+  color: var(--color-red-500);
+}
+.peer:invalid ~ .peer-invalid\:border-red-500 {
+  border-color: var(--color-red-500);
+}
+
+// =============================================================================
+// PEER VALID UTILITIES
+// =============================================================================
+
+.peer:valid ~ .peer-valid\:block {
+  display: block;
+}
+
+.peer:valid ~ .peer-valid\:text-green-500 {
+  color: var(--color-green-500);
+}
+.peer:valid ~ .peer-valid\:border-green-500 {
+  border-color: var(--color-green-500);
+}
+
+// =============================================================================
+// PEER PLACEHOLDER-SHOWN UTILITIES
+// =============================================================================
+// Triggered when input placeholder is visible (input is empty)
+
+.peer:placeholder-shown ~ .peer-placeholder-shown\:block {
+  display: block;
+}
+.peer:placeholder-shown ~ .peer-placeholder-shown\:hidden {
+  display: none;
+}
+.peer:placeholder-shown ~ .peer-placeholder-shown\:invisible {
+  visibility: hidden;
+}
+.peer:placeholder-shown ~ .peer-placeholder-shown\:opacity-0 {
+  opacity: 0;
+}
+.peer:placeholder-shown ~ .peer-placeholder-shown\:translate-y-0 {
+  transform: translateY(0);
+}
+.peer:placeholder-shown ~ .peer-placeholder-shown\:scale-100 {
+  transform: scale(1);
+}
+
+// Useful for floating labels
+.peer:not(:placeholder-shown) ~ .peer-not-placeholder-shown\:block {
+  display: block;
+}
+.peer:not(:placeholder-shown) ~ .peer-not-placeholder-shown\:opacity-100 {
+  opacity: 1;
+}
+.peer:not(:placeholder-shown) ~ .peer-not-placeholder-shown\:-translate-y-3 {
+  transform: translateY(-0.75rem);
+}
+.peer:not(:placeholder-shown) ~ .peer-not-placeholder-shown\:scale-75 {
+  transform: scale(0.75);
+}
+.peer:not(:placeholder-shown) ~ .peer-not-placeholder-shown\:text-xs {
+  font-size: var(--text-xs);
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .peer:not(:placeholder-shown)
+    ~ .peer-not-placeholder-shown\:text-#{$palette-name}-500 {
+    color: var(--color-#{$palette-name}-500);
+  }
+}
+
+// =============================================================================
+// HAS UTILITIES (Parent contains matching child)
+// =============================================================================
+// Note: :has() has good browser support as of 2024
+
+// Has checked input
+.has-\[\:checked\]\:bg-blue-50:has(:checked) {
+  background-color: var(--color-blue-50);
+}
+.has-\[\:checked\]\:border-blue-500:has(:checked) {
+  border-color: var(--color-blue-500);
+}
+
+// Has focused input
+.has-\[\:focus\]\:ring:has(:focus) {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0px)
+    var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow),
+    var(--shadow, 0 0 #0000);
+}
+.has-\[\:focus\]\:border-blue-500:has(:focus) {
+  border-color: var(--color-blue-500);
+}
+
+// Has invalid input
+.has-\[\:invalid\]\:border-red-500:has(:invalid) {
+  border-color: var(--color-red-500);
+}
+.has-\[\:invalid\]\:ring-red-500:has(:invalid) {
+  --ring-color: var(--color-red-500);
+}
+
+// Has disabled input
+.has-\[\:disabled\]\:opacity-50:has(:disabled) {
+  opacity: 0.5;
+}
+.has-\[\:disabled\]\:bg-gray-100:has(:disabled) {
+  background-color: var(--color-gray-100);
+}
+
+// =============================================================================
+// SUPPORTS UTILITIES
+// =============================================================================
+// Feature detection using @supports
+
+// Backdrop filter support
+@supports (backdrop-filter: blur(1px)) {
+  .supports-\[backdrop-filter\]\:bg-white\/80 {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+  .supports-\[backdrop-filter\]\:backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+  }
+}
+
+// Grid support
+@supports (display: grid) {
+  .supports-\[grid\]\:grid {
+    display: grid;
+  }
+}
+
+// Container queries support
+@supports (container-type: inline-size) {
+  .supports-\[container-queries\]\:container {
+    container-type: inline-size;
+  }
+}

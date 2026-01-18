@@ -1,0 +1,485 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - PERFORMANCE UTILITIES
+// =============================================================================
+// CSS-based performance optimization utilities:
+// - CSS Containment (contain)
+// - Content-visibility (lazy rendering)
+// - Will-change (GPU hints)
+// - Rendering optimization
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// CSS CONTAINMENT
+// =============================================================================
+// Isolate parts of the page for performance optimization
+
+// Individual containment values
+.contain-none {
+  contain: none;
+}
+
+.contain-strict {
+  contain: strict;
+}
+
+.contain-content {
+  contain: content;
+}
+
+.contain-size {
+  contain: size;
+}
+
+.contain-inline-size {
+  contain: inline-size;
+}
+
+.contain-layout {
+  contain: layout;
+}
+
+.contain-style {
+  contain: style;
+}
+
+.contain-paint {
+  contain: paint;
+}
+
+// Combined containment
+.contain-layout-paint {
+  contain: layout paint;
+}
+
+.contain-layout-style {
+  contain: layout style;
+}
+
+.contain-size-layout {
+  contain: size layout;
+}
+
+.contain-size-layout-paint {
+  contain: size layout paint;
+}
+
+// Containment patterns for common use cases
+
+// Card/widget containment (good for repeated items)
+.contain-card {
+  contain: layout style paint;
+  content-visibility: auto;
+}
+
+// Offscreen content (sidebars, modals when closed)
+.contain-offscreen {
+  contain: strict;
+  content-visibility: hidden;
+}
+
+// List item containment
+.contain-list-item {
+  contain: layout style;
+}
+
+// =============================================================================
+// CONTENT-VISIBILITY
+// =============================================================================
+// Skip rendering of offscreen content
+
+.content-visible {
+  content-visibility: visible;
+}
+
+.content-auto {
+  content-visibility: auto;
+}
+
+.content-hidden {
+  content-visibility: hidden;
+}
+
+// Content visibility with intrinsic size hint
+// Use contain-intrinsic-size to prevent layout shift
+.content-auto-hint {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+// =============================================================================
+// CONTAIN INTRINSIC SIZE
+// =============================================================================
+// Placeholder size for hidden content
+
+.intrinsic-auto {
+  contain-intrinsic-size: auto;
+}
+
+.intrinsic-none {
+  contain-intrinsic-size: none;
+}
+
+// Fixed intrinsic sizes
+.intrinsic-100 {
+  contain-intrinsic-size: 100px;
+}
+
+.intrinsic-200 {
+  contain-intrinsic-size: 200px;
+}
+
+.intrinsic-300 {
+  contain-intrinsic-size: 300px;
+}
+
+.intrinsic-500 {
+  contain-intrinsic-size: 500px;
+}
+
+// Width x Height
+.intrinsic-w-full-h-200 {
+  contain-intrinsic-size: auto 100% auto 200px;
+}
+
+.intrinsic-w-full-h-300 {
+  contain-intrinsic-size: auto 100% auto 300px;
+}
+
+// Auto with fallback
+.intrinsic-auto-100 {
+  contain-intrinsic-size: auto 100px;
+}
+
+.intrinsic-auto-200 {
+  contain-intrinsic-size: auto 200px;
+}
+
+.intrinsic-auto-300 {
+  contain-intrinsic-size: auto 300px;
+}
+
+.intrinsic-auto-500 {
+  contain-intrinsic-size: auto 500px;
+}
+
+// =============================================================================
+// WILL-CHANGE
+// =============================================================================
+// Hint to browser about expected changes for GPU optimization
+
+.will-change-auto {
+  will-change: auto;
+}
+
+.will-change-scroll {
+  will-change: scroll-position;
+}
+
+.will-change-contents {
+  will-change: contents;
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.will-change-filter {
+  will-change: filter;
+}
+
+// Combined will-change
+.will-change-transform-opacity {
+  will-change: transform, opacity;
+}
+
+.will-change-all {
+  will-change: transform, opacity, filter;
+}
+
+// =============================================================================
+// RENDERING OPTIMIZATION
+// =============================================================================
+
+// Force GPU layer (use sparingly!)
+.gpu-accelerate {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+// Optimize for animations
+.optimize-animation {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+// Optimize for scroll
+.optimize-scroll {
+  will-change: scroll-position;
+  -webkit-overflow-scrolling: touch;
+}
+
+// =============================================================================
+// IMAGE RENDERING
+// =============================================================================
+
+.image-auto {
+  image-rendering: auto;
+}
+
+.image-crisp {
+  image-rendering: crisp-edges;
+}
+
+.image-pixelated {
+  image-rendering: pixelated;
+}
+
+// For high-quality downscaling
+.image-smooth {
+  image-rendering: smooth;
+}
+
+// =============================================================================
+// SHAPE RENDERING (SVG)
+// =============================================================================
+
+.shape-auto {
+  shape-rendering: auto;
+}
+
+.shape-speed {
+  shape-rendering: optimizeSpeed;
+}
+
+.shape-crisp {
+  shape-rendering: crispEdges;
+}
+
+.shape-precision {
+  shape-rendering: geometricPrecision;
+}
+
+// =============================================================================
+// COLOR RENDERING (SVG Property)
+// =============================================================================
+// NOTE: color-rendering is a valid SVG/CSS property that controls color interpolation
+// See: https://developer.mozilla.org/en-US/docs/Web/CSS/color-rendering
+// Some linters may not recognize it - safe to use in SVG contexts
+
+.color-auto {
+  /* stylelint-disable-next-line property-no-unknown */
+  color-rendering: auto;
+}
+
+.color-speed {
+  // stylelint-disable-next-line property-no-unknown
+  color-rendering: optimizeSpeed;
+}
+
+.color-quality {
+  // stylelint-disable-next-line property-no-unknown
+  color-rendering: optimizeQuality;
+}
+
+// =============================================================================
+// LAZY LOADING PATTERNS
+// =============================================================================
+
+// Lazy load container (for infinite scroll, virtual lists)
+.lazy-container {
+  contain: layout style;
+
+  > * {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 100px;
+  }
+}
+
+// Large list optimization
+.virtual-list {
+  contain: strict;
+  overflow-y: auto;
+
+  > * {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 48px; // Typical list item height
+  }
+}
+
+// Grid of cards optimization
+.lazy-grid {
+  contain: layout;
+
+  > * {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 300px;
+    contain: layout style paint;
+  }
+}
+
+// Blog/article feed optimization
+.article-feed {
+  > article {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
+    contain: layout style;
+  }
+}
+
+// =============================================================================
+// ANIMATION PERFORMANCE
+// =============================================================================
+
+// High-performance fade
+.perf-fade {
+  will-change: opacity;
+  transition: opacity 0.3s ease;
+}
+
+// High-performance transform
+.perf-transform {
+  will-change: transform;
+  transition: transform 0.3s ease;
+}
+
+// High-performance combo (most common animation pattern)
+.perf-animate {
+  will-change: transform, opacity;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translateZ(0);
+}
+
+// Remove will-change after animation (via JS toggle)
+.perf-idle {
+  will-change: auto;
+}
+
+// =============================================================================
+// OFFSCREEN OPTIMIZATION
+// =============================================================================
+
+// Hidden but preserves layout
+.offscreen-hidden {
+  content-visibility: hidden;
+  contain: strict;
+}
+
+// Completely removed from rendering
+.offscreen-skip {
+  content-visibility: hidden;
+  contain: strict;
+  height: 0;
+  overflow: hidden;
+}
+
+// Prerender (for content about to become visible)
+.offscreen-prerender {
+  content-visibility: auto;
+  contain: content;
+}
+
+// =============================================================================
+// MEDIA OPTIMIZATION
+// =============================================================================
+
+// Optimize image containers
+.img-container-optimized {
+  contain: layout paint;
+  overflow: hidden;
+
+  img {
+    will-change: auto;
+  }
+
+  &:hover img {
+    will-change: transform;
+  }
+}
+
+// Video container optimization
+.video-container-optimized {
+  contain: layout paint style;
+  overflow: hidden;
+}
+
+// =============================================================================
+// ISOLATION FOR STACKING CONTEXTS
+// =============================================================================
+
+// Create new stacking context (isolate z-index)
+.stacking-context {
+  isolation: isolate;
+}
+
+// Isolate transforms
+.transform-context {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+// =============================================================================
+// PAINT CONTAINMENT HELPERS
+// =============================================================================
+
+// Prevent paint from affecting parent
+.paint-isolated {
+  contain: paint;
+  overflow: hidden;
+}
+
+// Clip to bounds (similar to overflow: hidden but more performant)
+.clip-bounds {
+  contain: paint;
+}
+
+// =============================================================================
+// REDUCED DATA MODE
+// =============================================================================
+
+// Styles for users with data saver enabled
+@media (prefers-reduced-data: reduce) {
+  .data-saver-hide {
+    display: none !important;
+  }
+
+  .data-saver-placeholder {
+    background: var(--surface-sunken);
+
+    &::after {
+      content: "Image hidden (data saver)";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-muted);
+      font-size: var(--text-sm);
+    }
+  }
+}
+
+// =============================================================================
+// PRINT OPTIMIZATION
+// =============================================================================
+
+@media print {
+  // Remove animations for print
+  .print-static {
+    animation: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+
+  // Force visibility for print
+  .print-visible {
+    content-visibility: visible !important;
+    contain: none !important;
+  }
+}

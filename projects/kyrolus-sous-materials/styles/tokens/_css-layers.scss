@@ -1,0 +1,197 @@
+// =============================================================================
+// CSS LAYERS UTILITIES
+// =============================================================================
+// Cascade layers for precise specificity control
+// Allows organizing styles in a predictable manner
+
+// =============================================================================
+// LAYER DEFINITIONS
+// =============================================================================
+// Define layer order at the top of your stylesheet
+// Lower layers have lower specificity than higher layers
+
+/// Layer order utility mixin
+/// @example @include define-layers(reset, base, components, utilities);
+@mixin define-layers($layers...) {
+  @layer #{$layers};
+}
+
+// =============================================================================
+// LAYER WRAPPER MIXINS
+// =============================================================================
+
+/// Reset layer - lowest specificity
+@mixin layer-reset {
+  @layer reset {
+    @content;
+  }
+}
+
+/// Base/tokens layer
+@mixin layer-base {
+  @layer base {
+    @content;
+  }
+}
+
+/// Theme layer for theming
+@mixin layer-theme {
+  @layer theme {
+    @content;
+  }
+}
+
+/// Components layer
+@mixin layer-components {
+  @layer components {
+    @content;
+  }
+}
+
+/// Utilities layer
+@mixin layer-utilities {
+  @layer utilities {
+    @content;
+  }
+}
+
+/// States layer for interactive states
+@mixin layer-states {
+  @layer states {
+    @content;
+  }
+}
+
+/// Overrides layer - highest specificity
+@mixin layer-overrides {
+  @layer overrides {
+    @content;
+  }
+}
+
+// =============================================================================
+// UNLAYERED STYLES (HIGHEST SPECIFICITY)
+// =============================================================================
+
+/// Force styles outside layers for maximum specificity
+/// Use sparingly - defeats the purpose of layers
+@mixin unlayered {
+  @layer {
+    @content;
+  }
+}
+
+// =============================================================================
+// LAYER REVERT UTILITIES
+// =============================================================================
+
+/// Revert to lower layer value
+.revert-layer {
+  all: revert-layer;
+}
+
+/// Revert specific properties to layer value
+.revert-color {
+  color: revert-layer;
+}
+
+.revert-bg {
+  background: revert-layer;
+}
+
+.revert-border {
+  border: revert-layer;
+}
+
+.revert-font {
+  font: revert-layer;
+}
+
+.revert-margin {
+  margin: revert-layer;
+}
+
+.revert-padding {
+  padding: revert-layer;
+}
+
+// =============================================================================
+// LAYER PRIORITY UTILITIES
+// =============================================================================
+// These classes intentionally use higher specificity
+
+/// Force component layer priority
+.layer-component {
+  --layer-priority: component;
+}
+
+/// Force utility layer priority
+.layer-utility {
+  --layer-priority: utility;
+}
+
+/// Force override layer priority
+.layer-override {
+  --layer-priority: override;
+}
+
+// =============================================================================
+// NAMED LAYER BLOCKS
+// =============================================================================
+
+/// Framework layer for third-party styles
+@mixin layer-framework {
+  @layer framework {
+    @content;
+  }
+}
+
+/// Vendor layer for external library styles
+@mixin layer-vendor {
+  @layer vendor {
+    @content;
+  }
+}
+
+/// Custom layer for project-specific customizations
+@mixin layer-custom {
+  @layer custom {
+    @content;
+  }
+}
+
+// =============================================================================
+// LAYER DEBUGGING
+// =============================================================================
+
+/// Debug class to show layer information
+.debug-layers {
+  &::before {
+    content: "Layer: " var(--layer-priority, "default");
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 0.25rem 0.5rem;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    font-size: 0.75rem;
+    z-index: 99999;
+    pointer-events: none;
+  }
+}
+
+// =============================================================================
+// LAYER IMPORT ORDER HELPER
+// =============================================================================
+// Use this comment structure to document layer imports in your main file:
+//
+// @layer reset, tokens, theme, base, components, utilities, states, overrides;
+//
+// @layer reset { @use "reset"; }
+// @layer tokens { @use "tokens"; }
+// @layer theme { @use "theme"; }
+// @layer base { @use "base"; }
+// @layer components { @use "components"; }
+// @layer utilities { @use "utilities"; }
+// @layer states { @use "states"; }
+// @layer overrides { /* custom overrides */ }

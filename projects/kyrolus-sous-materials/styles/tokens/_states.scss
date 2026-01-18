@@ -1,0 +1,735 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - STATE VARIANT UTILITIES
+// =============================================================================
+// Comprehensive state-based utility variants including hover, focus, active,
+// disabled, and more. These mirror Tailwind's state variant system.
+// =============================================================================
+
+@use "sass:map";
+@use "sass:list";
+@use "sass:string";
+@use "primitives" as *;
+
+// =============================================================================
+// HOVER STATE UTILITIES
+// =============================================================================
+
+// Hover background colors
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .hover\:bg-#{$palette-name}-#{$shade}:hover {
+      background-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.hover\:bg-transparent:hover {
+  background-color: transparent;
+}
+.hover\:bg-current:hover {
+  background-color: currentColor;
+}
+.hover\:bg-white:hover {
+  background-color: #ffffff;
+}
+.hover\:bg-black:hover {
+  background-color: #000000;
+}
+
+// Hover text colors
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .hover\:text-#{$palette-name}-#{$shade}:hover {
+      color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.hover\:text-transparent:hover {
+  color: transparent;
+}
+.hover\:text-current:hover {
+  color: currentColor;
+}
+.hover\:text-white:hover {
+  color: #ffffff;
+}
+.hover\:text-black:hover {
+  color: #000000;
+}
+
+// Hover border colors
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .hover\:border-#{$palette-name}-#{$shade}:hover {
+      border-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.hover\:border-transparent:hover {
+  border-color: transparent;
+}
+.hover\:border-current:hover {
+  border-color: currentColor;
+}
+.hover\:border-white:hover {
+  border-color: #ffffff;
+}
+.hover\:border-black:hover {
+  border-color: #000000;
+}
+
+// Hover opacity
+$hover-opacities: (0, 5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95, 100);
+
+@each $opacity in $hover-opacities {
+  .hover\:opacity-#{$opacity}:hover {
+    opacity: calc($opacity / 100);
+  }
+}
+
+// Hover shadow
+.hover\:shadow-none:hover {
+  box-shadow: none;
+}
+.hover\:shadow-sm:hover {
+  box-shadow: var(--shadow-sm);
+}
+.hover\:shadow:hover {
+  box-shadow: var(--shadow-md);
+}
+.hover\:shadow-md:hover {
+  box-shadow: var(--shadow-md);
+}
+.hover\:shadow-lg:hover {
+  box-shadow: var(--shadow-lg);
+}
+.hover\:shadow-xl:hover {
+  box-shadow: var(--shadow-xl);
+}
+.hover\:shadow-2xl:hover {
+  box-shadow: var(--shadow-2xl);
+}
+
+// Hover underline
+.hover\:underline:hover {
+  text-decoration-line: underline;
+}
+.hover\:no-underline:hover {
+  text-decoration-line: none;
+}
+.hover\:line-through:hover {
+  text-decoration-line: line-through;
+}
+
+// Hover ring
+.hover\:ring:hover {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0px)
+    var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow),
+    var(--shadow, 0 0 #0000);
+}
+.hover\:ring-0:hover {
+  --ring-shadow: 0 0 0 0px var(--ring-color, var(--primary));
+}
+.hover\:ring-1:hover {
+  --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+}
+.hover\:ring-2:hover {
+  --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+}
+.hover\:ring-4:hover {
+  --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+}
+
+// Hover brightness
+.hover\:brightness-50:hover {
+  filter: brightness(0.5);
+}
+.hover\:brightness-75:hover {
+  filter: brightness(0.75);
+}
+.hover\:brightness-90:hover {
+  filter: brightness(0.9);
+}
+.hover\:brightness-95:hover {
+  filter: brightness(0.95);
+}
+.hover\:brightness-100:hover {
+  filter: brightness(1);
+}
+.hover\:brightness-105:hover {
+  filter: brightness(1.05);
+}
+.hover\:brightness-110:hover {
+  filter: brightness(1.1);
+}
+.hover\:brightness-125:hover {
+  filter: brightness(1.25);
+}
+.hover\:brightness-150:hover {
+  filter: brightness(1.5);
+}
+
+// =============================================================================
+// FOCUS STATE UTILITIES
+// =============================================================================
+
+// Focus background colors
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .focus\:bg-#{$palette-name}-#{$shade}:focus {
+      background-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.focus\:bg-transparent:focus {
+  background-color: transparent;
+}
+.focus\:bg-white:focus {
+  background-color: #ffffff;
+}
+.focus\:bg-black:focus {
+  background-color: #000000;
+}
+
+// Focus text colors
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .focus\:text-#{$palette-name}-#{$shade}:focus {
+      color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+// Focus border colors
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .focus\:border-#{$palette-name}-#{$shade}:focus {
+      border-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+// Focus outline
+.focus\:outline-none:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.focus\:outline:focus {
+  outline-style: solid;
+}
+
+// Focus ring
+.focus\:ring:focus {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0px)
+    var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow),
+    var(--shadow, 0 0 #0000);
+}
+.focus\:ring-0:focus {
+  --ring-shadow: 0 0 0 0px var(--ring-color, var(--primary));
+}
+.focus\:ring-1:focus {
+  --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+}
+.focus\:ring-2:focus {
+  --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+}
+.focus\:ring-4:focus {
+  --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+}
+
+// Focus ring colors
+@each $palette-name, $palette in $color-palettes {
+  .focus\:ring-#{$palette-name}-500:focus {
+    --ring-color: var(--color-#{$palette-name}-500);
+  }
+}
+
+// =============================================================================
+// FOCUS-VISIBLE STATE UTILITIES
+// =============================================================================
+// Only show focus styles when navigating with keyboard
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .focus-visible\:bg-#{$palette-name}-#{$shade}:focus-visible {
+      background-color: var(--color-#{$palette-name}-#{$shade});
+    }
+    .focus-visible\:border-#{$palette-name}-#{$shade}:focus-visible {
+      border-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.focus-visible\:outline-none:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus-visible\:ring:focus-visible {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0px)
+    var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow),
+    var(--shadow, 0 0 #0000);
+}
+.focus-visible\:ring-2:focus-visible {
+  --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px))
+    var(--ring-color, var(--primary));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow),
+    var(--shadow, 0 0 #0000);
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .focus-visible\:ring-#{$palette-name}-500:focus-visible {
+    --ring-color: var(--color-#{$palette-name}-500);
+  }
+}
+
+// =============================================================================
+// ACTIVE STATE UTILITIES
+// =============================================================================
+
+// Active background colors
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .active\:bg-#{$palette-name}-#{$shade}:active {
+      background-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+.active\:bg-transparent:active {
+  background-color: transparent;
+}
+.active\:bg-white:active {
+  background-color: #ffffff;
+}
+.active\:bg-black:active {
+  background-color: #000000;
+}
+
+// Active text colors
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .active\:text-#{$palette-name}-#{$shade}:active {
+      color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+// Active scale (common for buttons)
+.active\:scale-95:active {
+  transform: scale(0.95);
+}
+.active\:scale-100:active {
+  transform: scale(1);
+}
+.active\:scale-105:active {
+  transform: scale(1.05);
+}
+
+// Active translate
+.active\:translate-y-0:active {
+  transform: translateY(0);
+}
+.active\:translate-y-0\.5:active {
+  transform: translateY(0.125rem);
+}
+.active\:translate-y-1:active {
+  transform: translateY(0.25rem);
+}
+
+// Active shadow
+.active\:shadow-none:active {
+  box-shadow: none;
+}
+.active\:shadow-sm:active {
+  box-shadow: var(--shadow-sm);
+}
+.active\:shadow-inner:active {
+  box-shadow: var(--shadow-inner);
+}
+
+// =============================================================================
+// DISABLED STATE UTILITIES
+// =============================================================================
+
+.disabled\:opacity-50:disabled,
+.disabled\:opacity-50[disabled] {
+  opacity: 0.5;
+}
+.disabled\:opacity-60:disabled,
+.disabled\:opacity-60[disabled] {
+  opacity: 0.6;
+}
+.disabled\:opacity-75:disabled,
+.disabled\:opacity-75[disabled] {
+  opacity: 0.75;
+}
+
+.disabled\:cursor-not-allowed:disabled,
+.disabled\:cursor-not-allowed[disabled] {
+  cursor: not-allowed;
+}
+
+.disabled\:pointer-events-none:disabled,
+.disabled\:pointer-events-none[disabled] {
+  pointer-events: none;
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .disabled\:bg-#{$palette-name}-100:disabled,
+  .disabled\:bg-#{$palette-name}-100[disabled] {
+    background-color: var(--color-#{$palette-name}-100);
+  }
+  .disabled\:bg-#{$palette-name}-200:disabled,
+  .disabled\:bg-#{$palette-name}-200[disabled] {
+    background-color: var(--color-#{$palette-name}-200);
+  }
+  .disabled\:text-#{$palette-name}-400:disabled,
+  .disabled\:text-#{$palette-name}-400[disabled] {
+    color: var(--color-#{$palette-name}-400);
+  }
+}
+
+.disabled\:bg-gray-100:disabled,
+.disabled\:bg-gray-100[disabled] {
+  background-color: var(--color-gray-100);
+}
+.disabled\:text-gray-400:disabled,
+.disabled\:text-gray-400[disabled] {
+  color: var(--color-gray-400);
+}
+
+// =============================================================================
+// CHECKED STATE UTILITIES (for checkboxes, radios)
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  .checked\:bg-#{$palette-name}-500:checked,
+  .checked\:bg-#{$palette-name}-500[aria-checked="true"] {
+    background-color: var(--color-#{$palette-name}-500);
+  }
+  .checked\:bg-#{$palette-name}-600:checked,
+  .checked\:bg-#{$palette-name}-600[aria-checked="true"] {
+    background-color: var(--color-#{$palette-name}-600);
+  }
+  .checked\:border-#{$palette-name}-500:checked,
+  .checked\:border-#{$palette-name}-500[aria-checked="true"] {
+    border-color: var(--color-#{$palette-name}-500);
+  }
+}
+
+// =============================================================================
+// INDETERMINATE STATE UTILITIES
+// =============================================================================
+
+.indeterminate\:bg-gray-300:indeterminate {
+  background-color: var(--color-gray-300);
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .indeterminate\:bg-#{$palette-name}-500:indeterminate {
+    background-color: var(--color-#{$palette-name}-500);
+  }
+}
+
+// =============================================================================
+// PLACEHOLDER STATE UTILITIES
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  .placeholder\:text-#{$palette-name}-300::placeholder {
+    color: var(--color-#{$palette-name}-300);
+  }
+  .placeholder\:text-#{$palette-name}-400::placeholder {
+    color: var(--color-#{$palette-name}-400);
+  }
+  .placeholder\:text-#{$palette-name}-500::placeholder {
+    color: var(--color-#{$palette-name}-500);
+  }
+}
+
+.placeholder\:text-transparent::placeholder {
+  color: transparent;
+}
+.placeholder\:italic::placeholder {
+  font-style: italic;
+}
+
+// =============================================================================
+// SELECTION UTILITIES
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  .selection\:bg-#{$palette-name}-200::selection {
+    background-color: var(--color-#{$palette-name}-200);
+  }
+  .selection\:bg-#{$palette-name}-300::selection {
+    background-color: var(--color-#{$palette-name}-300);
+  }
+  .selection\:text-#{$palette-name}-900::selection {
+    color: var(--color-#{$palette-name}-900);
+  }
+}
+
+// =============================================================================
+// FILE INPUT BUTTON UTILITIES
+// =============================================================================
+
+.file\:mr-4::file-selector-button {
+  margin-right: 1rem;
+}
+.file\:py-2::file-selector-button {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.file\:px-4::file-selector-button {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.file\:rounded::file-selector-button {
+  border-radius: var(--radius-base);
+}
+.file\:rounded-md::file-selector-button {
+  border-radius: var(--radius-md);
+}
+.file\:rounded-lg::file-selector-button {
+  border-radius: var(--radius-lg);
+}
+.file\:border-0::file-selector-button {
+  border-width: 0;
+}
+.file\:text-sm::file-selector-button {
+  font-size: var(--text-sm);
+}
+.file\:font-medium::file-selector-button {
+  font-weight: var(--font-medium);
+}
+.file\:font-semibold::file-selector-button {
+  font-weight: var(--font-semibold);
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .file\:bg-#{$palette-name}-50::file-selector-button {
+    background-color: var(--color-#{$palette-name}-50);
+  }
+  .file\:bg-#{$palette-name}-100::file-selector-button {
+    background-color: var(--color-#{$palette-name}-100);
+  }
+  .file\:bg-#{$palette-name}-500::file-selector-button {
+    background-color: var(--color-#{$palette-name}-500);
+  }
+  .file\:text-#{$palette-name}-700::file-selector-button {
+    color: var(--color-#{$palette-name}-700);
+  }
+  .file\:text-#{$palette-name}-50::file-selector-button {
+    color: var(--color-#{$palette-name}-50);
+  }
+  .file\:hover\:bg-#{$palette-name}-100::file-selector-button:hover {
+    background-color: var(--color-#{$palette-name}-100);
+  }
+  .file\:hover\:bg-#{$palette-name}-600::file-selector-button:hover {
+    background-color: var(--color-#{$palette-name}-600);
+  }
+}
+
+// =============================================================================
+// MARKER UTILITIES (list markers)
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  .marker\:text-#{$palette-name}-500::marker {
+    color: var(--color-#{$palette-name}-500);
+  }
+  .marker\:text-#{$palette-name}-600::marker {
+    color: var(--color-#{$palette-name}-600);
+  }
+}
+
+// =============================================================================
+// BEFORE/AFTER PSEUDO-ELEMENT UTILITIES
+// =============================================================================
+
+.before\:content-\[\'\'\]::before {
+  content: "";
+}
+.after\:content-\[\'\'\]::after {
+  content: "";
+}
+
+.before\:absolute::before {
+  position: absolute;
+}
+.after\:absolute::after {
+  position: absolute;
+}
+
+.before\:inset-0::before {
+  inset: 0;
+}
+.after\:inset-0::after {
+  inset: 0;
+}
+
+.before\:block::before {
+  display: block;
+}
+.after\:block::after {
+  display: block;
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .before\:bg-#{$palette-name}-500::before {
+    background-color: var(--color-#{$palette-name}-500);
+  }
+  .after\:bg-#{$palette-name}-500::after {
+    background-color: var(--color-#{$palette-name}-500);
+  }
+}
+
+// =============================================================================
+// ARIA STATE UTILITIES
+// =============================================================================
+
+// ARIA expanded
+.aria-expanded\:rotate-180[aria-expanded="true"] {
+  transform: rotate(180deg);
+}
+.aria-expanded\:rotate-90[aria-expanded="true"] {
+  transform: rotate(90deg);
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .aria-expanded\:bg-#{$palette-name}-100[aria-expanded="true"] {
+    background-color: var(--color-#{$palette-name}-100);
+  }
+}
+
+// ARIA selected
+@each $palette-name, $palette in $color-palettes {
+  .aria-selected\:bg-#{$palette-name}-100[aria-selected="true"] {
+    background-color: var(--color-#{$palette-name}-100);
+  }
+  .aria-selected\:bg-#{$palette-name}-500[aria-selected="true"] {
+    background-color: var(--color-#{$palette-name}-500);
+  }
+  .aria-selected\:text-#{$palette-name}-900[aria-selected="true"] {
+    color: var(--color-#{$palette-name}-900);
+  }
+  .aria-selected\:text-white[aria-selected="true"] {
+    color: #ffffff;
+  }
+}
+
+.aria-selected\:font-semibold[aria-selected="true"] {
+  font-weight: var(--font-semibold);
+}
+
+// ARIA disabled
+.aria-disabled\:opacity-50[aria-disabled="true"] {
+  opacity: 0.5;
+}
+.aria-disabled\:cursor-not-allowed[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+.aria-disabled\:pointer-events-none[aria-disabled="true"] {
+  pointer-events: none;
+}
+
+// ARIA current (navigation)
+.aria-current\:font-bold[aria-current] {
+  font-weight: var(--font-bold);
+}
+
+@each $palette-name, $palette in $color-palettes {
+  .aria-current\:bg-#{$palette-name}-100[aria-current] {
+    background-color: var(--color-#{$palette-name}-100);
+  }
+  .aria-current\:text-#{$palette-name}-700[aria-current] {
+    color: var(--color-#{$palette-name}-700);
+  }
+}
+
+// =============================================================================
+// DATA ATTRIBUTE STATE UTILITIES
+// =============================================================================
+
+// data-state (common in headless UI libraries)
+.data-\[state\=open\]\:block[data-state="open"] {
+  display: block;
+}
+.data-\[state\=closed\]\:hidden[data-state="closed"] {
+  display: none;
+}
+.data-\[state\=open\]\:animate-fade-in[data-state="open"] {
+  animation: ks-fade-in 0.2s ease-out;
+}
+.data-\[state\=closed\]\:animate-fade-out[data-state="closed"] {
+  animation: ks-fade-out 0.2s ease-out;
+}
+
+// data-highlighted (dropdown menus)
+@each $palette-name, $palette in $color-palettes {
+  .data-\[highlighted\]\:bg-#{$palette-name}-100[data-highlighted] {
+    background-color: var(--color-#{$palette-name}-100);
+  }
+}
+
+// data-disabled
+.data-\[disabled\]\:opacity-50[data-disabled] {
+  opacity: 0.5;
+}
+.data-\[disabled\]\:pointer-events-none[data-disabled] {
+  pointer-events: none;
+}
+
+// =============================================================================
+// REQUIRED & OPTIONAL FORM STATE UTILITIES
+// =============================================================================
+
+.required\:border-red-500:required {
+  border-color: var(--color-red-500);
+}
+.optional\:border-gray-300:optional {
+  border-color: var(--color-gray-300);
+}
+.invalid\:border-red-500:invalid {
+  border-color: var(--color-red-500);
+}
+.valid\:border-green-500:valid {
+  border-color: var(--color-green-500);
+}
+.read-only\:bg-gray-100:read-only {
+  background-color: var(--color-gray-100);
+}
+.read-only\:cursor-not-allowed:read-only {
+  cursor: not-allowed;
+}
+
+// =============================================================================
+// EMPTY STATE UTILITIES
+// =============================================================================
+
+.empty\:hidden:empty {
+  display: none;
+}
+.empty\:invisible:empty {
+  visibility: hidden;
+}

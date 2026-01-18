@@ -1,0 +1,556 @@
+// ============================================================================
+// SCROLL SNAP UTILITIES
+// Native CSS scroll snapping for carousels, galleries, and sections
+// Browser Support: Chrome 69+, Firefox 68+, Safari 11+
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// SCROLL SNAP CONTAINER TYPES
+// ----------------------------------------------------------------------------
+
+// Mandatory snap - always snaps to a snap point
+.snap-mandatory {
+  scroll-snap-type: both mandatory;
+}
+
+.snap-x-mandatory {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-y-mandatory {
+  scroll-snap-type: y mandatory;
+}
+
+// Proximity snap - snaps when close to a point
+.snap-proximity {
+  scroll-snap-type: both proximity;
+}
+
+.snap-x-proximity {
+  scroll-snap-type: x proximity;
+}
+
+.snap-y-proximity {
+  scroll-snap-type: y proximity;
+}
+
+// No snap
+.snap-none {
+  scroll-snap-type: none;
+}
+
+// ----------------------------------------------------------------------------
+// SCROLL SNAP ALIGNMENT (Child Elements)
+// ----------------------------------------------------------------------------
+
+// Start alignment
+.snap-start {
+  scroll-snap-align: start;
+}
+
+// Center alignment
+.snap-center {
+  scroll-snap-align: center;
+}
+
+// End alignment
+.snap-end {
+  scroll-snap-align: end;
+}
+
+// No snap
+.snap-align-none {
+  scroll-snap-align: none;
+}
+
+// ----------------------------------------------------------------------------
+// SCROLL SNAP STOP
+// ----------------------------------------------------------------------------
+
+// Normal - can scroll past
+.snap-normal {
+  scroll-snap-stop: normal;
+}
+
+// Always - must stop at each snap point
+.snap-always {
+  scroll-snap-stop: always;
+}
+
+// ----------------------------------------------------------------------------
+// SCROLL PADDING (Container)
+// ----------------------------------------------------------------------------
+
+.snap-p-0 {
+  scroll-padding: 0;
+}
+
+.snap-p-1 {
+  scroll-padding: 0.25rem;
+}
+
+.snap-p-2 {
+  scroll-padding: 0.5rem;
+}
+
+.snap-p-4 {
+  scroll-padding: 1rem;
+}
+
+.snap-p-6 {
+  scroll-padding: 1.5rem;
+}
+
+.snap-p-8 {
+  scroll-padding: 2rem;
+}
+
+.snap-p-12 {
+  scroll-padding: 3rem;
+}
+
+.snap-p-16 {
+  scroll-padding: 4rem;
+}
+
+// Directional scroll padding
+.snap-pt-4 {
+  scroll-padding-top: 1rem;
+}
+.snap-pr-4 {
+  scroll-padding-right: 1rem;
+}
+.snap-pb-4 {
+  scroll-padding-bottom: 1rem;
+}
+.snap-pl-4 {
+  scroll-padding-left: 1rem;
+}
+
+.snap-px-4 {
+  scroll-padding-left: 1rem;
+  scroll-padding-right: 1rem;
+}
+
+.snap-py-4 {
+  scroll-padding-top: 1rem;
+  scroll-padding-bottom: 1rem;
+}
+
+// ----------------------------------------------------------------------------
+// SCROLL MARGIN (Child Elements)
+// ----------------------------------------------------------------------------
+
+.snap-m-0 {
+  scroll-margin: 0;
+}
+
+.snap-m-1 {
+  scroll-margin: 0.25rem;
+}
+
+.snap-m-2 {
+  scroll-margin: 0.5rem;
+}
+
+.snap-m-4 {
+  scroll-margin: 1rem;
+}
+
+.snap-m-6 {
+  scroll-margin: 1.5rem;
+}
+
+.snap-m-8 {
+  scroll-margin: 2rem;
+}
+
+// Directional scroll margin
+.snap-mt-4 {
+  scroll-margin-top: 1rem;
+}
+.snap-mr-4 {
+  scroll-margin-right: 1rem;
+}
+.snap-mb-4 {
+  scroll-margin-bottom: 1rem;
+}
+.snap-ml-4 {
+  scroll-margin-left: 1rem;
+}
+
+.snap-mx-4 {
+  scroll-margin-left: 1rem;
+  scroll-margin-right: 1rem;
+}
+
+.snap-my-4 {
+  scroll-margin-top: 1rem;
+  scroll-margin-bottom: 1rem;
+}
+
+// ----------------------------------------------------------------------------
+// HORIZONTAL CAROUSEL/SLIDER
+// ----------------------------------------------------------------------------
+
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  gap: var(--carousel-gap, 1rem);
+  padding: var(--carousel-padding, 1rem);
+
+  // Hide scrollbar
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.carousel-item {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  flex: 0 0 auto;
+  width: var(--carousel-item-width, 300px);
+}
+
+// Carousel with centered items
+.carousel-center {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scroll-padding-inline: 50%;
+
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  > * {
+    scroll-snap-align: center;
+  }
+}
+
+// Full-width slides
+.carousel-fullwidth {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  > * {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    flex: 0 0 100%;
+    width: 100%;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// VERTICAL SCROLL SECTIONS
+// ----------------------------------------------------------------------------
+
+.scroll-sections {
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.scroll-section {
+  height: 100vh;
+  height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+// Optional: proximity for softer snapping
+.scroll-sections-soft {
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  scroll-snap-type: y proximity;
+  scroll-behavior: smooth;
+}
+
+// ----------------------------------------------------------------------------
+// IMAGE GALLERY
+// ----------------------------------------------------------------------------
+
+.gallery-snap {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 90%;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 1rem;
+
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  > * {
+    scroll-snap-align: center;
+  }
+}
+
+// Thumbnail gallery
+.gallery-thumbnails {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding: 0.5rem;
+
+  > * {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// TAB CONTENT
+// ----------------------------------------------------------------------------
+
+.tabs-content-snap {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.tab-panel {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  flex: 0 0 100%;
+  width: 100%;
+  min-height: 200px;
+}
+
+// ----------------------------------------------------------------------------
+// CARD STACK (Mobile)
+// ----------------------------------------------------------------------------
+
+.card-stack {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 1rem;
+  padding: 1rem;
+
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.card-stack-item {
+  scroll-snap-align: start;
+  flex: 0 0 calc(100% - 2rem);
+  max-width: 100%;
+
+  @media (min-width: 640px) {
+    flex: 0 0 calc(50% - 1rem);
+  }
+
+  @media (min-width: 1024px) {
+    flex: 0 0 calc(33.333% - 1rem);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// TIMELINE/HORIZONTAL SCROLL
+// ----------------------------------------------------------------------------
+
+.timeline-snap {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  gap: 2rem;
+  padding: 2rem;
+
+  > * {
+    scroll-snap-align: center;
+    flex: 0 0 auto;
+    min-width: 200px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// PAGE INDICATOR DOTS
+// ----------------------------------------------------------------------------
+
+.snap-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.snap-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: all 0.2s;
+
+  &.active {
+    background: var(--primary);
+    transform: scale(1.2);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// SMOOTH SCROLLING BEHAVIOR
+// ----------------------------------------------------------------------------
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+.scroll-auto {
+  scroll-behavior: auto;
+}
+
+// ----------------------------------------------------------------------------
+// OVERSCROLL BEHAVIOR (Complementary)
+// ----------------------------------------------------------------------------
+
+.snap-overscroll-contain {
+  overscroll-behavior-x: contain;
+}
+
+.snap-overscroll-none {
+  overscroll-behavior-x: none;
+}
+
+// ----------------------------------------------------------------------------
+// RESPONSIVE SNAP
+// ----------------------------------------------------------------------------
+
+@media (min-width: 640px) {
+  .sm\:snap-x-mandatory {
+    scroll-snap-type: x mandatory;
+  }
+
+  .sm\:snap-none {
+    scroll-snap-type: none;
+  }
+
+  .sm\:snap-center {
+    scroll-snap-align: center;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:snap-x-mandatory {
+    scroll-snap-type: x mandatory;
+  }
+
+  .md\:snap-none {
+    scroll-snap-type: none;
+  }
+
+  .md\:snap-center {
+    scroll-snap-align: center;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:snap-none {
+    scroll-snap-type: none;
+  }
+
+  .lg\:snap-x-mandatory {
+    scroll-snap-type: x mandatory;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// TOUCH OPTIMIZATION
+// ----------------------------------------------------------------------------
+
+.snap-touch-optimized {
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+}
+
+.snap-touch-optimized-y {
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+// ----------------------------------------------------------------------------
+// HIDE SCROLLBAR
+// ----------------------------------------------------------------------------
+
+.snap-scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// Thin scrollbar
+.snap-scrollbar-thin {
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 3px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// SCROLL SNAP WITH INTERSECTION OBSERVER HOOKS
+// ----------------------------------------------------------------------------
+
+// Add data attributes for JS integration
+[data-snap-section] {
+  scroll-snap-align: start;
+}
+
+[data-snap-current="true"] {
+  --is-current-snap: 1;
+}
+
+// ----------------------------------------------------------------------------
+// FEATURE DETECTION
+// ----------------------------------------------------------------------------
+
+@supports (scroll-snap-type: x mandatory) {
+  .scroll-snap-supported {
+    --scroll-snap-supported: 1;
+  }
+}

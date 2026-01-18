@@ -1,0 +1,539 @@
+// ============================================================================
+// TEXT-WRAP UTILITIES
+// text-wrap: balance and text-wrap: pretty for better typography
+// Browser Support: Chrome 114+, Firefox 121+, Safari 17.5+
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// CORE TEXT-WRAP UTILITIES
+// ----------------------------------------------------------------------------
+
+// Auto - browser default
+.text-wrap-auto {
+  text-wrap: auto;
+}
+
+// Balance - evens out line lengths (great for headings)
+.text-wrap-balance {
+  text-wrap: balance;
+}
+
+// Pretty - avoids orphans and awkward breaks
+.text-wrap-pretty {
+  text-wrap: pretty;
+}
+
+// Stable - prevents layout shift during edits
+.text-wrap-stable {
+  text-wrap: stable;
+}
+
+// No wrap
+.text-nowrap {
+  text-wrap: nowrap;
+  white-space: nowrap;
+}
+
+// ----------------------------------------------------------------------------
+// HEADING UTILITIES (Balanced by default)
+// ----------------------------------------------------------------------------
+
+// All headings balanced
+.headings-balanced {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .h1,
+  .h2,
+  .h3,
+  .h4,
+  .h5,
+  .h6 {
+    text-wrap: balance;
+  }
+}
+
+// Individual heading sizes
+.h1-balanced,
+h1.balanced {
+  text-wrap: balance;
+}
+
+.h2-balanced,
+h2.balanced {
+  text-wrap: balance;
+}
+
+.h3-balanced,
+h3.balanced {
+  text-wrap: balance;
+}
+
+.h4-balanced,
+h4.balanced {
+  text-wrap: balance;
+}
+
+.h5-balanced,
+h5.balanced {
+  text-wrap: balance;
+}
+
+.h6-balanced,
+h6.balanced {
+  text-wrap: balance;
+}
+
+// ----------------------------------------------------------------------------
+// BODY TEXT UTILITIES (Pretty by default)
+// ----------------------------------------------------------------------------
+
+// Pretty text for body content
+.body-pretty {
+  p,
+  li,
+  dd,
+  blockquote {
+    text-wrap: pretty;
+  }
+}
+
+// Paragraph pretty
+.p-pretty,
+p.pretty {
+  text-wrap: pretty;
+}
+
+// List item pretty
+.li-pretty,
+li.pretty {
+  text-wrap: pretty;
+}
+
+// ----------------------------------------------------------------------------
+// COMPONENT UTILITIES
+// ----------------------------------------------------------------------------
+
+// Card title - balanced
+.card-title-balanced {
+  text-wrap: balance;
+  max-width: 100%;
+}
+
+// Button text - nowrap
+.btn-nowrap {
+  text-wrap: nowrap;
+  white-space: nowrap;
+}
+
+// Hero headline - balanced
+.hero-headline {
+  text-wrap: balance;
+  max-width: 20ch; // Limit for balance effectiveness
+}
+
+// Pull quote - balanced
+.pullquote-balanced {
+  text-wrap: balance;
+  font-style: italic;
+}
+
+// Caption - pretty
+.caption-pretty {
+  text-wrap: pretty;
+  font-size: 0.875rem;
+}
+
+// ----------------------------------------------------------------------------
+// ARTICLE/BLOG TYPOGRAPHY
+// ----------------------------------------------------------------------------
+
+.article-typography {
+  // Headings are balanced
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+  }
+
+  // Body text is pretty
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  // Blockquotes are balanced (they're usually short)
+  blockquote {
+    text-wrap: balance;
+  }
+
+  // Captions are pretty
+  figcaption {
+    text-wrap: pretty;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// MARKETING/LANDING PAGE TYPOGRAPHY
+// ----------------------------------------------------------------------------
+
+.marketing-typography {
+  // All headings balanced for impact
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  // Taglines balanced
+  .tagline,
+  .subtitle {
+    text-wrap: balance;
+  }
+
+  // Feature descriptions pretty
+  .feature-description {
+    text-wrap: pretty;
+  }
+
+  // CTA text no wrap
+  .cta {
+    text-wrap: nowrap;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// FORM LABELS AND HELPER TEXT
+// ----------------------------------------------------------------------------
+
+.label-balanced {
+  text-wrap: balance;
+}
+
+.helper-text-pretty {
+  text-wrap: pretty;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.error-text-pretty {
+  text-wrap: pretty;
+  font-size: 0.75rem;
+  color: var(--error);
+}
+
+// ----------------------------------------------------------------------------
+// TABLE CELL WRAPPING
+// ----------------------------------------------------------------------------
+
+.td-nowrap {
+  text-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.td-balanced {
+  text-wrap: balance;
+}
+
+.th-nowrap {
+  text-wrap: nowrap;
+  white-space: nowrap;
+}
+
+// ----------------------------------------------------------------------------
+// NAVIGATION
+// ----------------------------------------------------------------------------
+
+.nav-link-nowrap {
+  text-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.nav-balanced {
+  a {
+    text-wrap: nowrap;
+  }
+}
+
+// Dropdown items
+.dropdown-item-nowrap {
+  text-wrap: nowrap;
+  white-space: nowrap;
+}
+
+// ----------------------------------------------------------------------------
+// RESPONSIVE TEXT WRAP
+// ----------------------------------------------------------------------------
+
+// Balance only on larger screens
+@media (min-width: 640px) {
+  .sm\:text-wrap-balance {
+    text-wrap: balance;
+  }
+
+  .sm\:text-wrap-pretty {
+    text-wrap: pretty;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:text-wrap-balance {
+    text-wrap: balance;
+  }
+
+  .md\:text-wrap-pretty {
+    text-wrap: pretty;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:text-wrap-balance {
+    text-wrap: balance;
+  }
+
+  .lg\:text-wrap-pretty {
+    text-wrap: pretty;
+  }
+}
+
+@media (min-width: 1280px) {
+  .xl\:text-wrap-balance {
+    text-wrap: balance;
+  }
+
+  .xl\:text-wrap-pretty {
+    text-wrap: pretty;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// MAX-WIDTH FOR OPTIMAL BALANCE
+// text-wrap: balance works best with limited characters
+// ----------------------------------------------------------------------------
+
+// Balance works best under ~6 lines
+.balance-4-lines {
+  text-wrap: balance;
+  max-width: 50ch;
+}
+
+.balance-6-lines {
+  text-wrap: balance;
+  max-width: 75ch;
+}
+
+// Optimal reading width with pretty
+.readable-pretty {
+  text-wrap: pretty;
+  max-width: 65ch;
+}
+
+// ----------------------------------------------------------------------------
+// PRINT STYLES
+// ----------------------------------------------------------------------------
+
+@media print {
+  .print-balanced {
+    text-wrap: balance;
+  }
+
+  .print-pretty {
+    text-wrap: pretty;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// GLOBAL RECOMMENDED DEFAULTS
+// Apply to your root element
+// ----------------------------------------------------------------------------
+
+.typography-optimized {
+  // All headings get balanced wrapping
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  [class*="heading"],
+  [class*="title"] {
+    text-wrap: balance;
+  }
+
+  // Body content gets pretty wrapping
+  p,
+  li,
+  dd,
+  td,
+  th,
+  label,
+  span {
+    text-wrap: pretty;
+  }
+
+  // Navigation and buttons stay on one line
+  a:not([class*="block"]),
+  button,
+  [role="button"] {
+    text-wrap: nowrap;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// WORD-BREAK UTILITIES (Complementary)
+// ----------------------------------------------------------------------------
+
+.break-normal {
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.break-words {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.break-all {
+  word-break: break-all;
+}
+
+.break-keep {
+  word-break: keep-all;
+}
+
+// ----------------------------------------------------------------------------
+// HYPHENS UTILITIES (Complementary)
+// ----------------------------------------------------------------------------
+
+.hyphens-none {
+  hyphens: none;
+}
+
+.hyphens-manual {
+  hyphens: manual;
+}
+
+.hyphens-auto {
+  hyphens: auto;
+}
+
+// Combined: pretty with auto hyphens
+.text-pretty-hyphens {
+  text-wrap: pretty;
+  hyphens: auto;
+}
+
+// ----------------------------------------------------------------------------
+// OVERFLOW WRAP UTILITIES (Complementary)
+// ----------------------------------------------------------------------------
+
+.overflow-wrap-normal {
+  overflow-wrap: normal;
+}
+
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+}
+
+.overflow-wrap-break {
+  overflow-wrap: break-word;
+}
+
+// ----------------------------------------------------------------------------
+// LINE CLAMP WITH TEXT WRAP
+// ----------------------------------------------------------------------------
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: nowrap;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: pretty;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: pretty;
+}
+
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: pretty;
+}
+
+.line-clamp-5 {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: pretty;
+}
+
+// ----------------------------------------------------------------------------
+// WHITE SPACE UTILITIES (Complementary)
+// ----------------------------------------------------------------------------
+
+.whitespace-normal {
+  white-space: normal;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
+.whitespace-pre {
+  white-space: pre;
+}
+
+.whitespace-pre-line {
+  white-space: pre-line;
+}
+
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.whitespace-break-spaces {
+  white-space: break-spaces;
+}
+
+// ----------------------------------------------------------------------------
+// FEATURE DETECTION
+// ----------------------------------------------------------------------------
+
+@supports (text-wrap: balance) {
+  .text-wrap-supported {
+    --text-wrap-balance-supported: 1;
+  }
+}
+
+@supports (text-wrap: pretty) {
+  .text-wrap-pretty-supported {
+    --text-wrap-pretty-supported: 1;
+  }
+}

@@ -1,0 +1,551 @@
+// ============================================================================
+// RELATIVE COLOR SYNTAX UTILITIES
+// Dynamic color modification using the 'from' keyword
+// Browser Support: Chrome 119+, Firefox 128+, Safari 16.4+
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// BASE COLOR VARIABLES
+// ----------------------------------------------------------------------------
+
+:root {
+  // Base colors for relative modifications
+  --rc-base: var(--primary, #3b82f6);
+  --rc-base-rgb: 59 130 246;
+
+  // Modification amounts
+  --rc-lighten-amount: 20%;
+  --rc-darken-amount: 20%;
+  --rc-saturate-amount: 20%;
+  --rc-desaturate-amount: 20%;
+  --rc-opacity-amount: 50%;
+  --rc-hue-shift: 30deg;
+}
+
+// ----------------------------------------------------------------------------
+// LIGHTNESS MODIFICATIONS (Using OKLCH)
+// ----------------------------------------------------------------------------
+
+// Lighten colors
+.rc-lighten-10 {
+  --modified-color: oklch(from var(--rc-base) calc(l + 0.1) c h);
+}
+
+.rc-lighten-20 {
+  --modified-color: oklch(from var(--rc-base) calc(l + 0.2) c h);
+}
+
+.rc-lighten-30 {
+  --modified-color: oklch(from var(--rc-base) calc(l + 0.3) c h);
+}
+
+.rc-lighten-40 {
+  --modified-color: oklch(from var(--rc-base) calc(l + 0.4) c h);
+}
+
+.rc-lighten-50 {
+  --modified-color: oklch(from var(--rc-base) calc(l + 0.5) c h);
+}
+
+// Darken colors
+.rc-darken-10 {
+  --modified-color: oklch(from var(--rc-base) calc(l - 0.1) c h);
+}
+
+.rc-darken-20 {
+  --modified-color: oklch(from var(--rc-base) calc(l - 0.2) c h);
+}
+
+.rc-darken-30 {
+  --modified-color: oklch(from var(--rc-base) calc(l - 0.3) c h);
+}
+
+.rc-darken-40 {
+  --modified-color: oklch(from var(--rc-base) calc(l - 0.4) c h);
+}
+
+.rc-darken-50 {
+  --modified-color: oklch(from var(--rc-base) calc(l - 0.5) c h);
+}
+
+// ----------------------------------------------------------------------------
+// BACKGROUND WITH LIGHTNESS MODIFICATION
+// ----------------------------------------------------------------------------
+
+.bg-rc-lighten-10 {
+  background-color: oklch(
+    from var(--rc-base, var(--primary)) calc(l + 0.1) c h
+  );
+}
+
+.bg-rc-lighten-20 {
+  background-color: oklch(
+    from var(--rc-base, var(--primary)) calc(l + 0.2) c h
+  );
+}
+
+.bg-rc-lighten-30 {
+  background-color: oklch(
+    from var(--rc-base, var(--primary)) calc(l + 0.3) c h
+  );
+}
+
+.bg-rc-darken-10 {
+  background-color: oklch(
+    from var(--rc-base, var(--primary)) calc(l - 0.1) c h
+  );
+}
+
+.bg-rc-darken-20 {
+  background-color: oklch(
+    from var(--rc-base, var(--primary)) calc(l - 0.2) c h
+  );
+}
+
+.bg-rc-darken-30 {
+  background-color: oklch(
+    from var(--rc-base, var(--primary)) calc(l - 0.3) c h
+  );
+}
+
+// ----------------------------------------------------------------------------
+// CHROMA/SATURATION MODIFICATIONS
+// ----------------------------------------------------------------------------
+
+// Increase saturation
+.rc-saturate-10 {
+  --modified-color: oklch(from var(--rc-base) l calc(c + 0.05) h);
+}
+
+.rc-saturate-20 {
+  --modified-color: oklch(from var(--rc-base) l calc(c + 0.1) h);
+}
+
+.rc-saturate-30 {
+  --modified-color: oklch(from var(--rc-base) l calc(c + 0.15) h);
+}
+
+// Decrease saturation
+.rc-desaturate-10 {
+  --modified-color: oklch(from var(--rc-base) l calc(c - 0.05) h);
+}
+
+.rc-desaturate-20 {
+  --modified-color: oklch(from var(--rc-base) l calc(c - 0.1) h);
+}
+
+.rc-desaturate-30 {
+  --modified-color: oklch(from var(--rc-base) l calc(c - 0.15) h);
+}
+
+// Grayscale (remove all chroma)
+.rc-grayscale {
+  --modified-color: oklch(from var(--rc-base) l 0 h);
+}
+
+// Background saturation
+.bg-rc-saturate {
+  background-color: oklch(
+    from var(--rc-base, var(--primary)) l calc(c + 0.1) h
+  );
+}
+
+.bg-rc-desaturate {
+  background-color: oklch(
+    from var(--rc-base, var(--primary)) l calc(c - 0.1) h
+  );
+}
+
+.bg-rc-grayscale {
+  background-color: oklch(from var(--rc-base, var(--primary)) l 0 h);
+}
+
+// ----------------------------------------------------------------------------
+// HUE ROTATION
+// ----------------------------------------------------------------------------
+
+.rc-hue-shift-30 {
+  --modified-color: oklch(from var(--rc-base) l c calc(h + 30));
+}
+
+.rc-hue-shift-60 {
+  --modified-color: oklch(from var(--rc-base) l c calc(h + 60));
+}
+
+.rc-hue-shift-90 {
+  --modified-color: oklch(from var(--rc-base) l c calc(h + 90));
+}
+
+.rc-hue-shift-120 {
+  --modified-color: oklch(from var(--rc-base) l c calc(h + 120));
+}
+
+.rc-hue-shift-180 {
+  --modified-color: oklch(from var(--rc-base) l c calc(h + 180));
+}
+
+.rc-hue-shift--30 {
+  --modified-color: oklch(from var(--rc-base) l c calc(h - 30));
+}
+
+.rc-hue-shift--60 {
+  --modified-color: oklch(from var(--rc-base) l c calc(h - 60));
+}
+
+.rc-hue-shift--90 {
+  --modified-color: oklch(from var(--rc-base) l c calc(h - 90));
+}
+
+// Complementary (opposite hue)
+.rc-complementary {
+  --modified-color: oklch(from var(--rc-base) l c calc(h + 180));
+}
+
+// Background hue rotation
+.bg-rc-hue-30 {
+  background-color: oklch(from var(--rc-base, var(--primary)) l c calc(h + 30));
+}
+
+.bg-rc-hue-60 {
+  background-color: oklch(from var(--rc-base, var(--primary)) l c calc(h + 60));
+}
+
+.bg-rc-hue-90 {
+  background-color: oklch(from var(--rc-base, var(--primary)) l c calc(h + 90));
+}
+
+.bg-rc-hue-180 {
+  background-color: oklch(
+    from var(--rc-base, var(--primary)) l c calc(h + 180)
+  );
+}
+
+// ----------------------------------------------------------------------------
+// OPACITY/ALPHA MODIFICATIONS
+// ----------------------------------------------------------------------------
+
+.rc-alpha-10 {
+  --modified-color: oklch(from var(--rc-base) l c h / 0.1);
+}
+
+.rc-alpha-20 {
+  --modified-color: oklch(from var(--rc-base) l c h / 0.2);
+}
+
+.rc-alpha-30 {
+  --modified-color: oklch(from var(--rc-base) l c h / 0.3);
+}
+
+.rc-alpha-40 {
+  --modified-color: oklch(from var(--rc-base) l c h / 0.4);
+}
+
+.rc-alpha-50 {
+  --modified-color: oklch(from var(--rc-base) l c h / 0.5);
+}
+
+.rc-alpha-60 {
+  --modified-color: oklch(from var(--rc-base) l c h / 0.6);
+}
+
+.rc-alpha-70 {
+  --modified-color: oklch(from var(--rc-base) l c h / 0.7);
+}
+
+.rc-alpha-80 {
+  --modified-color: oklch(from var(--rc-base) l c h / 0.8);
+}
+
+.rc-alpha-90 {
+  --modified-color: oklch(from var(--rc-base) l c h / 0.9);
+}
+
+// Background with alpha
+.bg-rc-alpha-10 {
+  background-color: oklch(from var(--rc-base, var(--primary)) l c h / 0.1);
+}
+
+.bg-rc-alpha-20 {
+  background-color: oklch(from var(--rc-base, var(--primary)) l c h / 0.2);
+}
+
+.bg-rc-alpha-30 {
+  background-color: oklch(from var(--rc-base, var(--primary)) l c h / 0.3);
+}
+
+.bg-rc-alpha-50 {
+  background-color: oklch(from var(--rc-base, var(--primary)) l c h / 0.5);
+}
+
+.bg-rc-alpha-70 {
+  background-color: oklch(from var(--rc-base, var(--primary)) l c h / 0.7);
+}
+
+// ----------------------------------------------------------------------------
+// RGB-BASED RELATIVE COLORS
+// ----------------------------------------------------------------------------
+
+// RGB relative modifications
+.rc-rgb-red-boost {
+  --modified-color: rgb(from var(--rc-base) calc(r + 50) g b);
+}
+
+.rc-rgb-green-boost {
+  --modified-color: rgb(from var(--rc-base) r calc(g + 50) b);
+}
+
+.rc-rgb-blue-boost {
+  --modified-color: rgb(from var(--rc-base) r g calc(b + 50));
+}
+
+// RGB alpha
+.rc-rgb-alpha-50 {
+  --modified-color: rgb(from var(--rc-base) r g b / 0.5);
+}
+
+// ----------------------------------------------------------------------------
+// HSL-BASED RELATIVE COLORS
+// ----------------------------------------------------------------------------
+
+// HSL lightness
+.rc-hsl-lighten {
+  --modified-color: hsl(from var(--rc-base) h s calc(l + 20%));
+}
+
+.rc-hsl-darken {
+  --modified-color: hsl(from var(--rc-base) h s calc(l - 20%));
+}
+
+// HSL saturation
+.rc-hsl-saturate {
+  --modified-color: hsl(from var(--rc-base) h calc(s + 20%) l);
+}
+
+.rc-hsl-desaturate {
+  --modified-color: hsl(from var(--rc-base) h calc(s - 20%) l);
+}
+
+// HSL hue
+.rc-hsl-hue-rotate {
+  --modified-color: hsl(from var(--rc-base) calc(h + 30deg) s l);
+}
+
+// ----------------------------------------------------------------------------
+// COMBINED MODIFICATIONS
+// ----------------------------------------------------------------------------
+
+// Light tint (lighter + less saturated)
+.rc-tint {
+  --modified-color: oklch(from var(--rc-base) calc(l + 0.2) calc(c - 0.05) h);
+}
+
+// Dark shade (darker + more saturated)
+.rc-shade {
+  --modified-color: oklch(from var(--rc-base) calc(l - 0.2) calc(c + 0.05) h);
+}
+
+// Muted (less saturated + slightly lighter)
+.rc-muted {
+  --modified-color: oklch(from var(--rc-base) calc(l + 0.1) calc(c - 0.1) h);
+}
+
+// Vivid (more saturated + slightly darker)
+.rc-vivid {
+  --modified-color: oklch(from var(--rc-base) calc(l - 0.05) calc(c + 0.1) h);
+}
+
+// Subtle (much lighter + much less saturated)
+.rc-subtle {
+  --modified-color: oklch(from var(--rc-base) calc(l + 0.35) calc(c - 0.1) h);
+}
+
+// Intense (darker + maximum saturation)
+.rc-intense {
+  --modified-color: oklch(from var(--rc-base) calc(l - 0.15) calc(c + 0.15) h);
+}
+
+// ----------------------------------------------------------------------------
+// HOVER STATE MODIFICATIONS
+// ----------------------------------------------------------------------------
+
+.hover-rc-lighten {
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: oklch(
+      from var(--rc-base, var(--primary)) calc(l + 0.1) c h
+    );
+  }
+}
+
+.hover-rc-darken {
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: oklch(
+      from var(--rc-base, var(--primary)) calc(l - 0.1) c h
+    );
+  }
+}
+
+.hover-rc-saturate {
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: oklch(
+      from var(--rc-base, var(--primary)) l calc(c + 0.1) h
+    );
+  }
+}
+
+// ----------------------------------------------------------------------------
+// TEXT COLOR MODIFICATIONS
+// ----------------------------------------------------------------------------
+
+.text-rc-lighten {
+  color: oklch(from var(--rc-base, var(--primary)) calc(l + 0.2) c h);
+}
+
+.text-rc-darken {
+  color: oklch(from var(--rc-base, var(--primary)) calc(l - 0.2) c h);
+}
+
+.text-rc-muted {
+  color: oklch(
+    from var(--rc-base, var(--primary)) calc(l + 0.1) calc(c - 0.1) h
+  );
+}
+
+.text-rc-complementary {
+  color: oklch(from var(--rc-base, var(--primary)) l c calc(h + 180));
+}
+
+// ----------------------------------------------------------------------------
+// BORDER COLOR MODIFICATIONS
+// ----------------------------------------------------------------------------
+
+.border-rc-lighten {
+  border-color: oklch(from var(--rc-base, var(--primary)) calc(l + 0.2) c h);
+}
+
+.border-rc-darken {
+  border-color: oklch(from var(--rc-base, var(--primary)) calc(l - 0.2) c h);
+}
+
+.border-rc-muted {
+  border-color: oklch(
+    from var(--rc-base, var(--primary)) calc(l + 0.1) calc(c - 0.15) h
+  );
+}
+
+.border-rc-alpha {
+  border-color: oklch(from var(--rc-base, var(--primary)) l c h / 0.3);
+}
+
+// ----------------------------------------------------------------------------
+// COMPONENT UTILITIES
+// ----------------------------------------------------------------------------
+
+// Card with relative color
+.card-rc {
+  background-color: oklch(
+    from var(--rc-base, var(--primary)) calc(l + 0.4) calc(c - 0.1) h
+  );
+  border: 1px solid
+    oklch(from var(--rc-base, var(--primary)) calc(l + 0.2) calc(c - 0.05) h);
+}
+
+// Button with relative hover
+.btn-rc {
+  background-color: var(--rc-base, var(--primary));
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: oklch(
+      from var(--rc-base, var(--primary)) calc(l - 0.1) c h
+    );
+  }
+
+  &:active {
+    background-color: oklch(
+      from var(--rc-base, var(--primary)) calc(l - 0.2) c h
+    );
+  }
+}
+
+// Badge with automatic text color
+.badge-rc {
+  background-color: var(--rc-base, var(--primary));
+  color: oklch(from var(--rc-base, var(--primary)) calc(1 - l) 0 h);
+}
+
+// Alert with subtle background
+.alert-rc {
+  background-color: oklch(
+    from var(--rc-base, var(--primary)) calc(l + 0.35) calc(c - 0.1) h
+  );
+  border-left: 4px solid var(--rc-base, var(--primary));
+  color: oklch(from var(--rc-base, var(--primary)) calc(l - 0.3) c h);
+}
+
+// ----------------------------------------------------------------------------
+// COLOR PALETTE GENERATION
+// ----------------------------------------------------------------------------
+
+// Generate a full palette from a single color
+.palette-rc {
+  --palette-50: oklch(from var(--rc-base) 0.97 calc(c * 0.3) h);
+  --palette-100: oklch(from var(--rc-base) 0.93 calc(c * 0.5) h);
+  --palette-200: oklch(from var(--rc-base) 0.87 calc(c * 0.7) h);
+  --palette-300: oklch(from var(--rc-base) 0.78 calc(c * 0.85) h);
+  --palette-400: oklch(from var(--rc-base) 0.68 c h);
+  --palette-500: oklch(from var(--rc-base) l c h);
+  --palette-600: oklch(from var(--rc-base) calc(l - 0.1) c h);
+  --palette-700: oklch(from var(--rc-base) calc(l - 0.2) c h);
+  --palette-800: oklch(from var(--rc-base) calc(l - 0.3) calc(c * 0.9) h);
+  --palette-900: oklch(from var(--rc-base) calc(l - 0.4) calc(c * 0.8) h);
+  --palette-950: oklch(from var(--rc-base) calc(l - 0.5) calc(c * 0.7) h);
+}
+
+// ----------------------------------------------------------------------------
+// COLOR SCHEME UTILITIES
+// ----------------------------------------------------------------------------
+
+// Analogous colors (adjacent hues)
+.scheme-analogous {
+  --analogous-1: oklch(from var(--rc-base) l c calc(h - 30));
+  --analogous-2: oklch(from var(--rc-base) l c h);
+  --analogous-3: oklch(from var(--rc-base) l c calc(h + 30));
+}
+
+// Triadic colors (120° apart)
+.scheme-triadic {
+  --triadic-1: oklch(from var(--rc-base) l c h);
+  --triadic-2: oklch(from var(--rc-base) l c calc(h + 120));
+  --triadic-3: oklch(from var(--rc-base) l c calc(h + 240));
+}
+
+// Split-complementary
+.scheme-split-complementary {
+  --split-1: oklch(from var(--rc-base) l c h);
+  --split-2: oklch(from var(--rc-base) l c calc(h + 150));
+  --split-3: oklch(from var(--rc-base) l c calc(h + 210));
+}
+
+// Tetradic (rectangle)
+.scheme-tetradic {
+  --tetradic-1: oklch(from var(--rc-base) l c h);
+  --tetradic-2: oklch(from var(--rc-base) l c calc(h + 60));
+  --tetradic-3: oklch(from var(--rc-base) l c calc(h + 180));
+  --tetradic-4: oklch(from var(--rc-base) l c calc(h + 240));
+}
+
+// ----------------------------------------------------------------------------
+// FEATURE DETECTION
+// ----------------------------------------------------------------------------
+
+@supports (color: oklch(from red l c h)) {
+  .relative-color-supported {
+    --relative-color-supported: 1;
+  }
+}

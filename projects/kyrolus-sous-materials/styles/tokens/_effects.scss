@@ -1,0 +1,1181 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - MODERN EFFECTS & UTILITIES
+// =============================================================================
+// Advanced visual effects including glass morphism, gradients, filters,
+// container queries, aspect ratios, and modern CSS features.
+// =============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "primitives" as *;
+@use "semantic" as *;
+
+// =============================================================================
+// CONTAINER QUERIES
+// =============================================================================
+
+// Container type utilities
+.container-normal {
+  container-type: normal;
+}
+.container-size {
+  container-type: size;
+}
+.container-inline-size {
+  container-type: inline-size;
+}
+
+// Named containers
+.container-main {
+  container-name: main;
+}
+.container-sidebar {
+  container-name: sidebar;
+}
+.container-card {
+  container-name: card;
+}
+.container-content {
+  container-name: content;
+}
+
+// Container size breakpoints
+$container-sizes: (
+  "xs": 320px,
+  "sm": 384px,
+  "md": 448px,
+  "lg": 512px,
+  "xl": 576px,
+  "2xl": 672px,
+  "3xl": 768px,
+  "4xl": 896px,
+  "5xl": 1024px,
+);
+
+// Generate container query utilities
+@each $name, $size in $container-sizes {
+  @container (min-width: #{$size}) {
+    // Display utilities
+    .\@#{$name}\:hidden {
+      display: none;
+    }
+    .\@#{$name}\:block {
+      display: block;
+    }
+    .\@#{$name}\:flex {
+      display: flex;
+    }
+    .\@#{$name}\:grid {
+      display: grid;
+    }
+    .\@#{$name}\:inline {
+      display: inline;
+    }
+    .\@#{$name}\:inline-flex {
+      display: inline-flex;
+    }
+
+    // Grid columns
+    .\@#{$name}\:grid-cols-1 {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    .\@#{$name}\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .\@#{$name}\:grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .\@#{$name}\:grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .\@#{$name}\:grid-cols-6 {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .\@#{$name}\:grid-cols-12 {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+
+    // Flex direction
+    .\@#{$name}\:flex-row {
+      flex-direction: row;
+    }
+    .\@#{$name}\:flex-col {
+      flex-direction: column;
+    }
+
+    // Gap
+    .\@#{$name}\:gap-4 {
+      gap: 1rem;
+    }
+    .\@#{$name}\:gap-6 {
+      gap: 1.5rem;
+    }
+    .\@#{$name}\:gap-8 {
+      gap: 2rem;
+    }
+
+    // Padding
+    .\@#{$name}\:p-4 {
+      padding: 1rem;
+    }
+    .\@#{$name}\:p-6 {
+      padding: 1.5rem;
+    }
+    .\@#{$name}\:p-8 {
+      padding: 2rem;
+    }
+
+    // Text sizes
+    .\@#{$name}\:text-sm {
+      font-size: var(--text-sm);
+    }
+    .\@#{$name}\:text-base {
+      font-size: var(--text-base);
+    }
+    .\@#{$name}\:text-lg {
+      font-size: var(--text-lg);
+    }
+    .\@#{$name}\:text-xl {
+      font-size: var(--text-xl);
+    }
+    .\@#{$name}\:text-2xl {
+      font-size: var(--text-2xl);
+    }
+  }
+}
+
+// =============================================================================
+// ASPECT RATIO UTILITIES
+// =============================================================================
+@each $name, $ratio in $aspect-ratios {
+  .aspect-#{$name} {
+    aspect-ratio: $ratio;
+  }
+}
+
+// Additional common aspect ratios
+.aspect-\[1\/1\] {
+  aspect-ratio: 1 / 1;
+}
+.aspect-\[4\/3\] {
+  aspect-ratio: 4 / 3;
+}
+.aspect-\[3\/4\] {
+  aspect-ratio: 3 / 4;
+}
+.aspect-\[16\/9\] {
+  aspect-ratio: 16 / 9;
+}
+.aspect-\[9\/16\] {
+  aspect-ratio: 9 / 16;
+}
+.aspect-\[21\/9\] {
+  aspect-ratio: 21 / 9;
+}
+.aspect-\[3\/2\] {
+  aspect-ratio: 3 / 2;
+}
+.aspect-\[2\/3\] {
+  aspect-ratio: 2 / 3;
+}
+
+// =============================================================================
+// GLASSMORPHISM EFFECTS
+// =============================================================================
+
+// Light glass effects
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-heavy {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+// Dark glass effects
+.glass-dark {
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-dark-heavy {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+// Colored glass effects
+.glass-primary {
+  background: rgba(var(--color-blue-500), 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--color-blue-500), 0.2);
+}
+
+// Frosted glass
+.glass-frosted {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+// =============================================================================
+// BACKDROP FILTER UTILITIES
+// =============================================================================
+
+// Backdrop blur
+@each $name, $value in $blurs {
+  .backdrop-blur-#{$name} {
+    backdrop-filter: blur($value);
+    -webkit-backdrop-filter: blur($value);
+  }
+}
+
+// Backdrop brightness
+$backdrop-brightness: (
+  "0": 0,
+  "50": 0.5,
+  "75": 0.75,
+  "90": 0.9,
+  "95": 0.95,
+  "100": 1,
+  "105": 1.05,
+  "110": 1.1,
+  "125": 1.25,
+  "150": 1.5,
+  "200": 2,
+);
+
+@each $name, $value in $backdrop-brightness {
+  .backdrop-brightness-#{$name} {
+    backdrop-filter: brightness($value);
+    -webkit-backdrop-filter: brightness($value);
+  }
+}
+
+// Backdrop contrast
+$backdrop-contrast: (
+  "0": 0,
+  "50": 0.5,
+  "75": 0.75,
+  "100": 1,
+  "125": 1.25,
+  "150": 1.5,
+  "200": 2,
+);
+
+@each $name, $value in $backdrop-contrast {
+  .backdrop-contrast-#{$name} {
+    backdrop-filter: contrast($value);
+    -webkit-backdrop-filter: contrast($value);
+  }
+}
+
+// Backdrop grayscale
+.backdrop-grayscale {
+  backdrop-filter: grayscale(100%);
+  -webkit-backdrop-filter: grayscale(100%);
+}
+.backdrop-grayscale-0 {
+  backdrop-filter: grayscale(0);
+  -webkit-backdrop-filter: grayscale(0);
+}
+
+// Backdrop saturate
+$backdrop-saturate: (
+  "0": 0,
+  "50": 0.5,
+  "100": 1,
+  "150": 1.5,
+  "200": 2,
+);
+
+@each $name, $value in $backdrop-saturate {
+  .backdrop-saturate-#{$name} {
+    backdrop-filter: saturate($value);
+    -webkit-backdrop-filter: saturate($value);
+  }
+}
+
+// Backdrop sepia
+.backdrop-sepia {
+  backdrop-filter: sepia(100%);
+  -webkit-backdrop-filter: sepia(100%);
+}
+.backdrop-sepia-0 {
+  backdrop-filter: sepia(0);
+  -webkit-backdrop-filter: sepia(0);
+}
+
+// Backdrop invert
+.backdrop-invert {
+  backdrop-filter: invert(100%);
+  -webkit-backdrop-filter: invert(100%);
+}
+.backdrop-invert-0 {
+  backdrop-filter: invert(0);
+  -webkit-backdrop-filter: invert(0);
+}
+
+// =============================================================================
+// FILTER UTILITIES
+// =============================================================================
+
+// Blur
+@each $name, $value in $blurs {
+  .blur-#{$name} {
+    filter: blur($value);
+  }
+}
+
+// Brightness
+@each $name, $value in $backdrop-brightness {
+  .brightness-#{$name} {
+    filter: brightness($value);
+  }
+}
+
+// Contrast
+@each $name, $value in $backdrop-contrast {
+  .contrast-#{$name} {
+    filter: contrast($value);
+  }
+}
+
+// Drop shadow
+$drop-shadows: (
+  "sm": drop-shadow(0 1px 1px rgb(0 0 0 / 0.05)),
+  "": drop-shadow(0 1px 2px rgb(0 0 0 / 0.1))
+    drop-shadow(0 1px 1px rgb(0 0 0 / 0.06)),
+  "md": drop-shadow(0 4px 3px rgb(0 0 0 / 0.07))
+    drop-shadow(0 2px 2px rgb(0 0 0 / 0.06)),
+  "lg": drop-shadow(0 10px 8px rgb(0 0 0 / 0.04))
+    drop-shadow(0 4px 3px rgb(0 0 0 / 0.1)),
+  "xl": drop-shadow(0 20px 13px rgb(0 0 0 / 0.03))
+    drop-shadow(0 8px 5px rgb(0 0 0 / 0.08)),
+  "2xl": drop-shadow(0 25px 25px rgb(0 0 0 / 0.15)),
+  "none": drop-shadow(0 0 #0000),
+);
+
+@each $name, $value in $drop-shadows {
+  $class-name: if($name == "", "drop-shadow", "drop-shadow-#{$name}");
+  .#{$class-name} {
+    filter: $value;
+  }
+}
+
+// Grayscale
+.grayscale {
+  filter: grayscale(100%);
+}
+.grayscale-0 {
+  filter: grayscale(0);
+}
+
+// Hue rotate
+$hue-rotates: (
+  "0": 0deg,
+  "15": 15deg,
+  "30": 30deg,
+  "60": 60deg,
+  "90": 90deg,
+  "180": 180deg,
+);
+
+@each $name, $value in $hue-rotates {
+  .hue-rotate-#{$name} {
+    filter: hue-rotate($value);
+  }
+  .-hue-rotate-#{$name} {
+    filter: hue-rotate(-$value);
+  }
+}
+
+// Invert
+.invert {
+  filter: invert(100%);
+}
+.invert-0 {
+  filter: invert(0);
+}
+
+// Saturate
+@each $name, $value in $backdrop-saturate {
+  .saturate-#{$name} {
+    filter: saturate($value);
+  }
+}
+
+// Sepia
+.sepia {
+  filter: sepia(100%);
+}
+.sepia-0 {
+  filter: sepia(0);
+}
+
+// Filter none
+.filter-none {
+  filter: none;
+}
+
+// =============================================================================
+// GRADIENT UTILITIES
+// =============================================================================
+
+// Gradient directions
+.bg-gradient-to-t {
+  background-image: linear-gradient(to top, var(--gradient-stops));
+}
+.bg-gradient-to-tr {
+  background-image: linear-gradient(to top right, var(--gradient-stops));
+}
+.bg-gradient-to-r {
+  background-image: linear-gradient(to right, var(--gradient-stops));
+}
+.bg-gradient-to-br {
+  background-image: linear-gradient(to bottom right, var(--gradient-stops));
+}
+.bg-gradient-to-b {
+  background-image: linear-gradient(to bottom, var(--gradient-stops));
+}
+.bg-gradient-to-bl {
+  background-image: linear-gradient(to bottom left, var(--gradient-stops));
+}
+.bg-gradient-to-l {
+  background-image: linear-gradient(to left, var(--gradient-stops));
+}
+.bg-gradient-to-tl {
+  background-image: linear-gradient(to top left, var(--gradient-stops));
+}
+
+// Radial gradients
+.bg-gradient-radial {
+  background-image: radial-gradient(var(--gradient-stops));
+}
+.bg-gradient-radial-at-t {
+  background-image: radial-gradient(at top, var(--gradient-stops));
+}
+.bg-gradient-radial-at-b {
+  background-image: radial-gradient(at bottom, var(--gradient-stops));
+}
+.bg-gradient-radial-at-l {
+  background-image: radial-gradient(at left, var(--gradient-stops));
+}
+.bg-gradient-radial-at-r {
+  background-image: radial-gradient(at right, var(--gradient-stops));
+}
+.bg-gradient-radial-at-tl {
+  background-image: radial-gradient(at top left, var(--gradient-stops));
+}
+.bg-gradient-radial-at-tr {
+  background-image: radial-gradient(at top right, var(--gradient-stops));
+}
+.bg-gradient-radial-at-bl {
+  background-image: radial-gradient(at bottom left, var(--gradient-stops));
+}
+.bg-gradient-radial-at-br {
+  background-image: radial-gradient(at bottom right, var(--gradient-stops));
+}
+
+// Conic gradients
+.bg-gradient-conic {
+  background-image: conic-gradient(var(--gradient-stops));
+}
+.bg-gradient-conic-from-t {
+  background-image: conic-gradient(from 0deg at 50% 50%, var(--gradient-stops));
+}
+.bg-gradient-conic-from-r {
+  background-image: conic-gradient(
+    from 90deg at 50% 50%,
+    var(--gradient-stops)
+  );
+}
+.bg-gradient-conic-from-b {
+  background-image: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--gradient-stops)
+  );
+}
+.bg-gradient-conic-from-l {
+  background-image: conic-gradient(
+    from 270deg at 50% 50%,
+    var(--gradient-stops)
+  );
+}
+
+// Gradient color stops
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .from-#{$palette-name}-#{$shade} {
+      --gradient-from: var(--color-#{$palette-name}-#{$shade});
+      --gradient-stops: var(--gradient-from), var(--gradient-to, transparent);
+    }
+
+    .via-#{$palette-name}-#{$shade} {
+      --gradient-via: var(--color-#{$palette-name}-#{$shade});
+      --gradient-stops: var(--gradient-from), var(--gradient-via),
+        var(--gradient-to, transparent);
+    }
+
+    .to-#{$palette-name}-#{$shade} {
+      --gradient-to: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+// Special gradient stops
+.from-transparent {
+  --gradient-from: transparent;
+  --gradient-stops: var(--gradient-from), var(--gradient-to, transparent);
+}
+.via-transparent {
+  --gradient-via: transparent;
+  --gradient-stops: var(--gradient-from), var(--gradient-via),
+    var(--gradient-to, transparent);
+}
+.to-transparent {
+  --gradient-to: transparent;
+}
+
+.from-current {
+  --gradient-from: currentColor;
+  --gradient-stops: var(--gradient-from), var(--gradient-to, transparent);
+}
+.via-current {
+  --gradient-via: currentColor;
+  --gradient-stops: var(--gradient-from), var(--gradient-via),
+    var(--gradient-to, transparent);
+}
+.to-current {
+  --gradient-to: currentColor;
+}
+
+.from-white {
+  --gradient-from: #ffffff;
+  --gradient-stops: var(--gradient-from), var(--gradient-to, transparent);
+}
+.via-white {
+  --gradient-via: #ffffff;
+  --gradient-stops: var(--gradient-from), var(--gradient-via),
+    var(--gradient-to, transparent);
+}
+.to-white {
+  --gradient-to: #ffffff;
+}
+
+.from-black {
+  --gradient-from: #000000;
+  --gradient-stops: var(--gradient-from), var(--gradient-to, transparent);
+}
+.via-black {
+  --gradient-via: #000000;
+  --gradient-stops: var(--gradient-from), var(--gradient-via),
+    var(--gradient-to, transparent);
+}
+.to-black {
+  --gradient-to: #000000;
+}
+
+// Preset beautiful gradients
+$preset-gradients: (
+  "sunset": linear-gradient(135deg, #667eea 0%, #764ba2 100%),
+  "ocean": linear-gradient(135deg, #2e3192 0%, #1bffff 100%),
+  "fire": linear-gradient(135deg, #f093fb 0%, #f5576c 100%),
+  "forest": linear-gradient(135deg, #11998e 0%, #38ef7d 100%),
+  "candy": linear-gradient(135deg, #a8edea 0%, #fed6e3 100%),
+  "aurora": linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%),
+  "midnight": linear-gradient(135deg, #232526 0%, #414345 100%),
+  "royal": linear-gradient(135deg, #141e30 0%, #243b55 100%),
+  "peach": linear-gradient(135deg, #ed6ea0 0%, #ec8c69 100%),
+  "sky": linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%),
+  "lavender": linear-gradient(135deg, #e8cbc0 0%, #636fa4 100%),
+  "coral": linear-gradient(135deg, #ff9966 0%, #ff5e62 100%),
+  "mint": linear-gradient(135deg, #00b09b 0%, #96c93d 100%),
+  "grape": linear-gradient(135deg, #5433ff 0%, #20bdff 50%, #a5fecb 100%),
+  "neon": linear-gradient(135deg, #f857a6 0%, #ff5858 100%),
+  "winter": linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%),
+  "golden": linear-gradient(135deg, #f2994a 0%, #f2c94c 100%),
+  "emerald": linear-gradient(135deg, #11998e 0%, #38ef7d 100%),
+  "berry": linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%),
+  "rainbow":
+    linear-gradient(
+      90deg,
+      #ff0000,
+      #ff7f00,
+      #ffff00,
+      #00ff00,
+      #0000ff,
+      #4b0082,
+      #9400d3
+    ),
+);
+
+@each $name, $gradient in $preset-gradients {
+  .bg-gradient-#{$name} {
+    background-image: $gradient;
+  }
+}
+
+// Animated gradient
+.bg-gradient-animated {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient-animation 15s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+// =============================================================================
+// BOX SHADOW UTILITIES
+// =============================================================================
+
+// Semantic shadows (from tokens)
+.shadow-xs {
+  box-shadow: var(--shadow-xs);
+}
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+.shadow {
+  box-shadow: var(--shadow-md);
+}
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+.shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
+.shadow-2xl {
+  box-shadow: var(--shadow-2xl);
+}
+.shadow-inner {
+  box-shadow: var(--shadow-inner);
+}
+.shadow-none {
+  box-shadow: none;
+}
+
+// Ring shadow
+.shadow-ring {
+  box-shadow: var(--shadow-ring);
+}
+
+// Glow shadow
+.shadow-glow {
+  box-shadow: var(--shadow-glow);
+}
+
+// Colored shadows
+@each $palette-name, $palette in $color-palettes {
+  .shadow-#{$palette-name} {
+    box-shadow: 0 4px 14px 0 rgba(map.get($palette, 500), 0.39);
+  }
+
+  .shadow-#{$palette-name}-lg {
+    box-shadow: 0 10px 40px 0 rgba(map.get($palette, 500), 0.35);
+  }
+}
+
+// =============================================================================
+// MIX BLEND MODE UTILITIES
+// =============================================================================
+$blend-modes: (
+  "normal": normal,
+  "multiply": multiply,
+  "screen": screen,
+  "overlay": overlay,
+  "darken": darken,
+  "lighten": lighten,
+  "color-dodge": color-dodge,
+  "color-burn": color-burn,
+  "hard-light": hard-light,
+  "soft-light": soft-light,
+  "difference": difference,
+  "exclusion": exclusion,
+  "hue": hue,
+  "saturation": saturation,
+  "color": color,
+  "luminosity": luminosity,
+  "plus-lighter": plus-lighter,
+);
+
+@each $name, $value in $blend-modes {
+  .mix-blend-#{$name} {
+    mix-blend-mode: $value;
+  }
+  .bg-blend-#{$name} {
+    background-blend-mode: $value;
+  }
+}
+
+// =============================================================================
+// ISOLATION UTILITIES
+// =============================================================================
+.isolate {
+  isolation: isolate;
+}
+.isolation-auto {
+  isolation: auto;
+}
+
+// =============================================================================
+// OBJECT FIT UTILITIES
+// =============================================================================
+.object-contain {
+  object-fit: contain;
+}
+.object-cover {
+  object-fit: cover;
+}
+.object-fill {
+  object-fit: fill;
+}
+.object-none {
+  object-fit: none;
+}
+.object-scale-down {
+  object-fit: scale-down;
+}
+
+// =============================================================================
+// OBJECT POSITION UTILITIES
+// =============================================================================
+$object-positions: (
+  "bottom": bottom,
+  "center": center,
+  "left": left,
+  "left-bottom": left bottom,
+  "left-top": left top,
+  "right": right,
+  "right-bottom": right bottom,
+  "right-top": right top,
+  "top": top,
+);
+
+@each $name, $value in $object-positions {
+  .object-#{$name} {
+    object-position: $value;
+  }
+}
+
+// =============================================================================
+// BACKGROUND SIZE UTILITIES
+// =============================================================================
+.bg-auto {
+  background-size: auto;
+}
+.bg-cover {
+  background-size: cover;
+}
+.bg-contain {
+  background-size: contain;
+}
+
+// =============================================================================
+// BACKGROUND POSITION UTILITIES
+// =============================================================================
+.bg-bottom {
+  background-position: bottom;
+}
+.bg-center {
+  background-position: center;
+}
+.bg-left {
+  background-position: left;
+}
+.bg-left-bottom {
+  background-position: left bottom;
+}
+.bg-left-top {
+  background-position: left top;
+}
+.bg-right {
+  background-position: right;
+}
+.bg-right-bottom {
+  background-position: right bottom;
+}
+.bg-right-top {
+  background-position: right top;
+}
+.bg-top {
+  background-position: top;
+}
+
+// =============================================================================
+// BACKGROUND REPEAT UTILITIES
+// =============================================================================
+.bg-repeat {
+  background-repeat: repeat;
+}
+.bg-no-repeat {
+  background-repeat: no-repeat;
+}
+.bg-repeat-x {
+  background-repeat: repeat-x;
+}
+.bg-repeat-y {
+  background-repeat: repeat-y;
+}
+.bg-repeat-round {
+  background-repeat: round;
+}
+.bg-repeat-space {
+  background-repeat: space;
+}
+
+// =============================================================================
+// BACKGROUND ATTACHMENT UTILITIES
+// =============================================================================
+.bg-fixed {
+  background-attachment: fixed;
+}
+.bg-local {
+  background-attachment: local;
+}
+.bg-scroll {
+  background-attachment: scroll;
+}
+
+// =============================================================================
+// BACKGROUND CLIP UTILITIES
+// =============================================================================
+.bg-clip-border {
+  background-clip: border-box;
+}
+.bg-clip-padding {
+  background-clip: padding-box;
+}
+.bg-clip-content {
+  background-clip: content-box;
+}
+.bg-clip-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+// =============================================================================
+// BACKGROUND ORIGIN UTILITIES
+// =============================================================================
+.bg-origin-border {
+  background-origin: border-box;
+}
+.bg-origin-padding {
+  background-origin: padding-box;
+}
+.bg-origin-content {
+  background-origin: content-box;
+}
+
+// =============================================================================
+// POINTER EVENTS UTILITIES
+// =============================================================================
+.pointer-events-none {
+  pointer-events: none;
+}
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
+// =============================================================================
+// USER SELECT UTILITIES
+// =============================================================================
+.select-none {
+  user-select: none;
+}
+.select-text {
+  user-select: text;
+}
+.select-all {
+  user-select: all;
+}
+.select-auto {
+  user-select: auto;
+}
+
+// =============================================================================
+// TOUCH ACTION UTILITIES
+// =============================================================================
+.touch-auto {
+  touch-action: auto;
+}
+.touch-none {
+  touch-action: none;
+}
+.touch-pan-x {
+  touch-action: pan-x;
+}
+.touch-pan-left {
+  touch-action: pan-left;
+}
+.touch-pan-right {
+  touch-action: pan-right;
+}
+.touch-pan-y {
+  touch-action: pan-y;
+}
+.touch-pan-up {
+  touch-action: pan-up;
+}
+.touch-pan-down {
+  touch-action: pan-down;
+}
+.touch-pinch-zoom {
+  touch-action: pinch-zoom;
+}
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+// =============================================================================
+// SCROLL SNAP UTILITIES
+// =============================================================================
+.snap-start {
+  scroll-snap-align: start;
+}
+.snap-end {
+  scroll-snap-align: end;
+}
+.snap-center {
+  scroll-snap-align: center;
+}
+.snap-align-none {
+  scroll-snap-align: none;
+}
+
+.snap-normal {
+  scroll-snap-stop: normal;
+}
+.snap-always {
+  scroll-snap-stop: always;
+}
+
+.snap-none {
+  scroll-snap-type: none;
+}
+.snap-x {
+  scroll-snap-type: x var(--scroll-snap-strictness, mandatory);
+}
+.snap-y {
+  scroll-snap-type: y var(--scroll-snap-strictness, mandatory);
+}
+.snap-both {
+  scroll-snap-type: both var(--scroll-snap-strictness, mandatory);
+}
+.snap-mandatory {
+  --scroll-snap-strictness: mandatory;
+}
+.snap-proximity {
+  --scroll-snap-strictness: proximity;
+}
+
+// =============================================================================
+// SCROLL MARGIN UTILITIES
+// =============================================================================
+@each $key, $value in $spacing {
+  .scroll-m-#{$key} {
+    scroll-margin: $value;
+  }
+  .scroll-mx-#{$key} {
+    scroll-margin-left: $value;
+    scroll-margin-right: $value;
+  }
+  .scroll-my-#{$key} {
+    scroll-margin-top: $value;
+    scroll-margin-bottom: $value;
+  }
+  .scroll-mt-#{$key} {
+    scroll-margin-top: $value;
+  }
+  .scroll-mr-#{$key} {
+    scroll-margin-right: $value;
+  }
+  .scroll-mb-#{$key} {
+    scroll-margin-bottom: $value;
+  }
+  .scroll-ml-#{$key} {
+    scroll-margin-left: $value;
+  }
+}
+
+// =============================================================================
+// SCROLL PADDING UTILITIES
+// =============================================================================
+@each $key, $value in $spacing {
+  .scroll-p-#{$key} {
+    scroll-padding: $value;
+  }
+  .scroll-px-#{$key} {
+    scroll-padding-left: $value;
+    scroll-padding-right: $value;
+  }
+  .scroll-py-#{$key} {
+    scroll-padding-top: $value;
+    scroll-padding-bottom: $value;
+  }
+  .scroll-pt-#{$key} {
+    scroll-padding-top: $value;
+  }
+  .scroll-pr-#{$key} {
+    scroll-padding-right: $value;
+  }
+  .scroll-pb-#{$key} {
+    scroll-padding-bottom: $value;
+  }
+  .scroll-pl-#{$key} {
+    scroll-padding-left: $value;
+  }
+}
+
+// =============================================================================
+// OVERSCROLL BEHAVIOR UTILITIES
+// =============================================================================
+.overscroll-auto {
+  overscroll-behavior: auto;
+}
+.overscroll-contain {
+  overscroll-behavior: contain;
+}
+.overscroll-none {
+  overscroll-behavior: none;
+}
+.overscroll-x-auto {
+  overscroll-behavior-x: auto;
+}
+.overscroll-x-contain {
+  overscroll-behavior-x: contain;
+}
+.overscroll-x-none {
+  overscroll-behavior-x: none;
+}
+.overscroll-y-auto {
+  overscroll-behavior-y: auto;
+}
+.overscroll-y-contain {
+  overscroll-behavior-y: contain;
+}
+.overscroll-y-none {
+  overscroll-behavior-y: none;
+}
+
+// =============================================================================
+// RESIZE UTILITIES
+// =============================================================================
+.resize-none {
+  resize: none;
+}
+.resize-y {
+  resize: vertical;
+}
+.resize-x {
+  resize: horizontal;
+}
+.resize {
+  resize: both;
+}
+
+// =============================================================================
+// SCROLLBAR UTILITIES
+// =============================================================================
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--scrollbar-thumb-hover);
+    }
+  }
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.scrollbar-auto {
+  scrollbar-width: auto;
+}
+
+// =============================================================================
+// CARET COLOR UTILITIES
+// =============================================================================
+.caret-transparent {
+  caret-color: transparent;
+}
+.caret-current {
+  caret-color: currentColor;
+}
+.caret-primary {
+  caret-color: var(--primary);
+}
+
+// =============================================================================
+// ACCENT COLOR UTILITIES
+// =============================================================================
+.accent-auto {
+  accent-color: auto;
+}
+.accent-primary {
+  accent-color: var(--primary);
+}
+.accent-secondary {
+  accent-color: var(--secondary);
+}
+
+// =============================================================================
+// APPEARANCE UTILITIES
+// =============================================================================
+.appearance-none {
+  appearance: none;
+}
+.appearance-auto {
+  appearance: auto;
+}

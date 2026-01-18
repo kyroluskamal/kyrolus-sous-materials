@@ -1,0 +1,800 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - ADVANCED INTERACTION UTILITIES
+// =============================================================================
+// Comprehensive interaction control for modern web applications:
+// - CSS Scroll Snap (carousels, galleries without JS)
+// - Overscroll Behavior (scroll chaining control)
+// - Touch Action (mobile gesture control)
+// - Safe Area Insets (notched device support)
+// - Scroll Margin/Padding (scroll-into-view positioning)
+// - Resize (element resizing control)
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// CSS SCROLL SNAP
+// =============================================================================
+// Create carousels, image galleries, and paginated content without JavaScript!
+
+// Scroll snap type - container
+.snap-none {
+  scroll-snap-type: none;
+}
+
+.snap-x {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-x-proximity {
+  scroll-snap-type: x proximity;
+}
+
+.snap-y {
+  scroll-snap-type: y mandatory;
+}
+
+.snap-y-proximity {
+  scroll-snap-type: y proximity;
+}
+
+.snap-both {
+  scroll-snap-type: both mandatory;
+}
+
+.snap-both-proximity {
+  scroll-snap-type: both proximity;
+}
+
+// Scroll snap align - children
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.snap-end {
+  scroll-snap-align: end;
+}
+
+.snap-center {
+  scroll-snap-align: center;
+}
+
+.snap-align-none {
+  scroll-snap-align: none;
+}
+
+// Scroll snap stop
+.snap-normal {
+  scroll-snap-stop: normal;
+}
+
+.snap-always {
+  scroll-snap-stop: always;
+}
+
+// Pre-built scroll snap patterns
+
+// Horizontal carousel
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; // Firefox
+
+  &::-webkit-scrollbar {
+    display: none; // Chrome/Safari
+  }
+
+  > * {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+}
+
+// Centered carousel (items center in view)
+.carousel-center {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scroll-padding-inline: 50%;
+
+  > * {
+    scroll-snap-align: center;
+    flex-shrink: 0;
+  }
+}
+
+// Full-page vertical scroll
+.fullpage-scroll {
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  height: 100vh;
+  height: 100dvh;
+
+  > * {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
+
+// Image gallery (grid with snap)
+.gallery-snap {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+
+  > * {
+    scroll-snap-align: center;
+  }
+}
+
+// Card slider
+.card-slider {
+  display: flex;
+  gap: var(--spacing-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline-start: var(--spacing-4);
+  padding: var(--spacing-4);
+
+  > * {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 280px;
+  }
+}
+
+// Pagination dots container (pair with carousel)
+.snap-pagination {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+}
+
+.snap-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.2s ease, transform 0.2s ease;
+
+  &.active,
+  &:hover {
+    background: var(--primary);
+    transform: scale(1.2);
+  }
+}
+
+// =============================================================================
+// SCROLL MARGIN & PADDING
+// =============================================================================
+// Control scroll-into-view positioning (for sticky headers, etc.)
+
+// Scroll margin (element offset when scrolled to)
+$scroll-margins: (0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24);
+
+@each $value in $scroll-margins {
+  .scroll-m-#{$value} {
+    scroll-margin: #{$value * 0.25}rem;
+  }
+
+  .scroll-mt-#{$value} {
+    scroll-margin-top: #{$value * 0.25}rem;
+  }
+
+  .scroll-mr-#{$value} {
+    scroll-margin-right: #{$value * 0.25}rem;
+  }
+
+  .scroll-mb-#{$value} {
+    scroll-margin-bottom: #{$value * 0.25}rem;
+  }
+
+  .scroll-ml-#{$value} {
+    scroll-margin-left: #{$value * 0.25}rem;
+  }
+
+  .scroll-mx-#{$value} {
+    scroll-margin-inline: #{$value * 0.25}rem;
+  }
+
+  .scroll-my-#{$value} {
+    scroll-margin-block: #{$value * 0.25}rem;
+  }
+}
+
+// Scroll padding (container viewport offset)
+@each $value in $scroll-margins {
+  .scroll-p-#{$value} {
+    scroll-padding: #{$value * 0.25}rem;
+  }
+
+  .scroll-pt-#{$value} {
+    scroll-padding-top: #{$value * 0.25}rem;
+  }
+
+  .scroll-pr-#{$value} {
+    scroll-padding-right: #{$value * 0.25}rem;
+  }
+
+  .scroll-pb-#{$value} {
+    scroll-padding-bottom: #{$value * 0.25}rem;
+  }
+
+  .scroll-pl-#{$value} {
+    scroll-padding-left: #{$value * 0.25}rem;
+  }
+
+  .scroll-px-#{$value} {
+    scroll-padding-inline: #{$value * 0.25}rem;
+  }
+
+  .scroll-py-#{$value} {
+    scroll-padding-block: #{$value * 0.25}rem;
+  }
+}
+
+// =============================================================================
+// OVERSCROLL BEHAVIOR
+// =============================================================================
+// Control what happens when you reach the edge of a scroll container
+
+.overscroll-auto {
+  overscroll-behavior: auto;
+}
+
+.overscroll-contain {
+  overscroll-behavior: contain;
+}
+
+.overscroll-none {
+  overscroll-behavior: none;
+}
+
+// X-axis only
+.overscroll-x-auto {
+  overscroll-behavior-x: auto;
+}
+
+.overscroll-x-contain {
+  overscroll-behavior-x: contain;
+}
+
+.overscroll-x-none {
+  overscroll-behavior-x: none;
+}
+
+// Y-axis only
+.overscroll-y-auto {
+  overscroll-behavior-y: auto;
+}
+
+.overscroll-y-contain {
+  overscroll-behavior-y: contain;
+}
+
+.overscroll-y-none {
+  overscroll-behavior-y: none;
+}
+
+// Common patterns
+// Prevent pull-to-refresh on mobile
+.no-pull-refresh {
+  overscroll-behavior-y: contain;
+}
+
+// Prevent horizontal swipe navigation
+.no-swipe-nav {
+  overscroll-behavior-x: contain;
+}
+
+// Modal that doesn't scroll parent
+.modal-scroll-contain {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+// =============================================================================
+// TOUCH ACTION
+// =============================================================================
+// Control how touch gestures are handled
+
+.touch-auto {
+  touch-action: auto;
+}
+
+.touch-none {
+  touch-action: none;
+}
+
+.touch-pan-x {
+  touch-action: pan-x;
+}
+
+.touch-pan-y {
+  touch-action: pan-y;
+}
+
+.touch-pan-left {
+  touch-action: pan-left;
+}
+
+.touch-pan-right {
+  touch-action: pan-right;
+}
+
+.touch-pan-up {
+  touch-action: pan-up;
+}
+
+.touch-pan-down {
+  touch-action: pan-down;
+}
+
+.touch-pinch-zoom {
+  touch-action: pinch-zoom;
+}
+
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+// Combined actions
+.touch-pan-x-pinch {
+  touch-action: pan-x pinch-zoom;
+}
+
+.touch-pan-y-pinch {
+  touch-action: pan-y pinch-zoom;
+}
+
+// Common patterns
+// Canvas/drawing area
+.touch-draw {
+  touch-action: none;
+  user-select: none;
+}
+
+// Map/image viewer
+.touch-view {
+  touch-action: pan-x pan-y pinch-zoom;
+}
+
+// Horizontal scroll only
+.touch-scroll-x {
+  touch-action: pan-x;
+  overflow-x: auto;
+}
+
+// Vertical scroll only
+.touch-scroll-y {
+  touch-action: pan-y;
+  overflow-y: auto;
+}
+
+// =============================================================================
+// SAFE AREA INSETS
+// =============================================================================
+// Support for notched devices (iPhone X+, Android with cutouts)
+
+// Padding with safe area
+.p-safe {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+.pr-safe {
+  padding-right: env(safe-area-inset-right);
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.pl-safe {
+  padding-left: env(safe-area-inset-left);
+}
+
+.px-safe {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+.py-safe {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+// Min padding with safe area (adds safe area to existing padding)
+.pt-safe-4 {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+.pb-safe-4 {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.pl-safe-4 {
+  padding-left: max(1rem, env(safe-area-inset-left));
+}
+
+.pr-safe-4 {
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+// Margin with safe area
+.mt-safe {
+  margin-top: env(safe-area-inset-top);
+}
+
+.mb-safe {
+  margin-bottom: env(safe-area-inset-bottom);
+}
+
+.ml-safe {
+  margin-left: env(safe-area-inset-left);
+}
+
+.mr-safe {
+  margin-right: env(safe-area-inset-right);
+}
+
+// Bottom navigation safe area
+.bottom-nav-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+  bottom: 0;
+}
+
+// Fixed header with safe area
+.header-safe {
+  padding-top: env(safe-area-inset-top);
+  top: 0;
+}
+
+// Full-height with safe areas
+.h-safe-screen {
+  height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+}
+
+// Min-height with safe areas
+.min-h-safe-screen {
+  min-height: calc(
+    100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+  );
+  min-height: calc(
+    100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+  );
+}
+
+// =============================================================================
+// RESIZE
+// =============================================================================
+// Control element resizing
+
+.resize-none {
+  resize: none;
+}
+
+.resize {
+  resize: both;
+}
+
+.resize-x {
+  resize: horizontal;
+}
+
+.resize-y {
+  resize: vertical;
+}
+
+// Resizable patterns
+.resizable-panel {
+  resize: horizontal;
+  overflow: auto;
+  min-width: 200px;
+  max-width: 80%;
+}
+
+.resizable-textarea {
+  resize: vertical;
+  min-height: 100px;
+  max-height: 500px;
+}
+
+// =============================================================================
+// SCROLL BEHAVIOR
+// =============================================================================
+
+.scroll-auto {
+  scroll-behavior: auto;
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+// =============================================================================
+// POINTER EVENTS
+// =============================================================================
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
+// Clickthrough overlay (visible but doesn't block clicks)
+.clickthrough {
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
+}
+
+// =============================================================================
+// USER SELECT
+// =============================================================================
+
+.select-none {
+  user-select: none;
+}
+
+.select-text {
+  user-select: text;
+}
+
+.select-all {
+  user-select: all;
+}
+
+.select-auto {
+  user-select: auto;
+}
+
+.select-contain {
+  user-select: contain;
+}
+
+// =============================================================================
+// CURSOR UTILITIES
+// =============================================================================
+
+.cursor-auto {
+  cursor: auto;
+}
+
+.cursor-default {
+  cursor: default;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-wait {
+  cursor: wait;
+}
+
+.cursor-text {
+  cursor: text;
+}
+
+.cursor-move {
+  cursor: move;
+}
+
+.cursor-help {
+  cursor: help;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+.cursor-none {
+  cursor: none;
+}
+
+.cursor-context-menu {
+  cursor: context-menu;
+}
+
+.cursor-progress {
+  cursor: progress;
+}
+
+.cursor-cell {
+  cursor: cell;
+}
+
+.cursor-crosshair {
+  cursor: crosshair;
+}
+
+.cursor-vertical-text {
+  cursor: vertical-text;
+}
+
+.cursor-alias {
+  cursor: alias;
+}
+
+.cursor-copy {
+  cursor: copy;
+}
+
+.cursor-no-drop {
+  cursor: no-drop;
+}
+
+.cursor-grab {
+  cursor: grab;
+}
+
+.cursor-grabbing {
+  cursor: grabbing;
+}
+
+.cursor-all-scroll {
+  cursor: all-scroll;
+}
+
+.cursor-col-resize {
+  cursor: col-resize;
+}
+
+.cursor-row-resize {
+  cursor: row-resize;
+}
+
+.cursor-n-resize {
+  cursor: n-resize;
+}
+
+.cursor-e-resize {
+  cursor: e-resize;
+}
+
+.cursor-s-resize {
+  cursor: s-resize;
+}
+
+.cursor-w-resize {
+  cursor: w-resize;
+}
+
+.cursor-ne-resize {
+  cursor: ne-resize;
+}
+
+.cursor-nw-resize {
+  cursor: nw-resize;
+}
+
+.cursor-se-resize {
+  cursor: se-resize;
+}
+
+.cursor-sw-resize {
+  cursor: sw-resize;
+}
+
+.cursor-ew-resize {
+  cursor: ew-resize;
+}
+
+.cursor-ns-resize {
+  cursor: ns-resize;
+}
+
+.cursor-nesw-resize {
+  cursor: nesw-resize;
+}
+
+.cursor-nwse-resize {
+  cursor: nwse-resize;
+}
+
+.cursor-zoom-in {
+  cursor: zoom-in;
+}
+
+.cursor-zoom-out {
+  cursor: zoom-out;
+}
+
+// =============================================================================
+// CARET COLOR
+// =============================================================================
+
+.caret-transparent {
+  caret-color: transparent;
+}
+
+.caret-current {
+  caret-color: currentColor;
+}
+
+.caret-primary {
+  caret-color: var(--primary);
+}
+
+.caret-secondary {
+  caret-color: var(--secondary);
+}
+
+.caret-success {
+  caret-color: var(--success);
+}
+
+.caret-warning {
+  caret-color: var(--warning);
+}
+
+.caret-danger {
+  caret-color: var(--danger);
+}
+
+// =============================================================================
+// ACCENT COLOR
+// =============================================================================
+// Control the accent color for form elements (checkboxes, radios, range, progress)
+
+.accent-auto {
+  accent-color: auto;
+}
+
+.accent-primary {
+  accent-color: var(--primary);
+}
+
+.accent-secondary {
+  accent-color: var(--secondary);
+}
+
+.accent-success {
+  accent-color: var(--success);
+}
+
+.accent-warning {
+  accent-color: var(--warning);
+}
+
+.accent-danger {
+  accent-color: var(--danger);
+}
+
+.accent-info {
+  accent-color: var(--info);
+}
+
+// =============================================================================
+// APPEARANCE
+// =============================================================================
+
+.appearance-none {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.appearance-auto {
+  appearance: auto;
+}

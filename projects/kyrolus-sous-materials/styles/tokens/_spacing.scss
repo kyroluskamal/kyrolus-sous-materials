@@ -1,0 +1,1036 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - SPACING & SIZING SYSTEM
+// =============================================================================
+// Comprehensive spacing and sizing utilities using the token system.
+// Includes margin, padding, width, height, gap, and more.
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// SPACING UTILITY CLASSES
+// =============================================================================
+
+// Padding utilities
+@each $key, $value in $spacing {
+  // All sides
+  .p-#{$key} {
+    padding: $value;
+  }
+
+  // Individual sides
+  .pt-#{$key} {
+    padding-top: $value;
+  }
+  .pr-#{$key} {
+    padding-right: $value;
+  }
+  .pb-#{$key} {
+    padding-bottom: $value;
+  }
+  .pl-#{$key} {
+    padding-left: $value;
+  }
+
+  // Axis
+  .px-#{$key} {
+    padding-left: $value;
+    padding-right: $value;
+  }
+  .py-#{$key} {
+    padding-top: $value;
+    padding-bottom: $value;
+  }
+
+  // Logical properties
+  .ps-#{$key} {
+    padding-inline-start: $value;
+  }
+  .pe-#{$key} {
+    padding-inline-end: $value;
+  }
+  .pi-#{$key} {
+    padding-inline: $value;
+  }
+  .pbs-#{$key} {
+    padding-block-start: $value;
+  }
+  .pbe-#{$key} {
+    padding-block-end: $value;
+  }
+  .pb-logical-#{$key} {
+    padding-block: $value;
+  }
+}
+
+// Margin utilities
+@each $key, $value in $spacing {
+  // All sides
+  .m-#{$key} {
+    margin: $value;
+  }
+
+  // Individual sides
+  .mt-#{$key} {
+    margin-top: $value;
+  }
+  .mr-#{$key} {
+    margin-right: $value;
+  }
+  .mb-#{$key} {
+    margin-bottom: $value;
+  }
+  .ml-#{$key} {
+    margin-left: $value;
+  }
+
+  // Axis
+  .mx-#{$key} {
+    margin-left: $value;
+    margin-right: $value;
+  }
+  .my-#{$key} {
+    margin-top: $value;
+    margin-bottom: $value;
+  }
+
+  // Logical properties
+  .ms-#{$key} {
+    margin-inline-start: $value;
+  }
+  .me-#{$key} {
+    margin-inline-end: $value;
+  }
+  .mi-#{$key} {
+    margin-inline: $value;
+  }
+  .mbs-#{$key} {
+    margin-block-start: $value;
+  }
+  .mbe-#{$key} {
+    margin-block-end: $value;
+  }
+  .mb-logical-#{$key} {
+    margin-block: $value;
+  }
+}
+
+// Negative margin utilities
+@each $key, $value in $spacing {
+  @if $key != 0 and $key != "auto" and $key != "px" {
+    .-m-#{$key} {
+      margin: -#{$value};
+    }
+    .-mt-#{$key} {
+      margin-top: -#{$value};
+    }
+    .-mr-#{$key} {
+      margin-right: -#{$value};
+    }
+    .-mb-#{$key} {
+      margin-bottom: -#{$value};
+    }
+    .-ml-#{$key} {
+      margin-left: -#{$value};
+    }
+    .-mx-#{$key} {
+      margin-left: -#{$value};
+      margin-right: -#{$value};
+    }
+    .-my-#{$key} {
+      margin-top: -#{$value};
+      margin-bottom: -#{$value};
+    }
+  }
+}
+
+// Auto margin utilities
+.m-auto {
+  margin: auto;
+}
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.mt-auto {
+  margin-top: auto;
+}
+.mr-auto {
+  margin-right: auto;
+}
+.mb-auto {
+  margin-bottom: auto;
+}
+.ml-auto {
+  margin-left: auto;
+}
+.ms-auto {
+  margin-inline-start: auto;
+}
+.me-auto {
+  margin-inline-end: auto;
+}
+
+// =============================================================================
+// SPACE BETWEEN UTILITIES (for flex/grid children)
+// =============================================================================
+@each $key, $value in $spacing {
+  .space-x-#{$key} > * + * {
+    margin-left: $value;
+  }
+
+  .space-y-#{$key} > * + * {
+    margin-top: $value;
+  }
+
+  // Reverse variants
+  .space-x-reverse > * + * {
+    margin-left: 0;
+    margin-right: $value;
+  }
+
+  .space-y-reverse > * + * {
+    margin-top: 0;
+    margin-bottom: $value;
+  }
+}
+
+// =============================================================================
+// GAP UTILITIES
+// =============================================================================
+@each $key, $value in $spacing {
+  .gap-#{$key} {
+    gap: $value;
+  }
+  .gap-x-#{$key} {
+    column-gap: $value;
+  }
+  .gap-y-#{$key} {
+    row-gap: $value;
+  }
+}
+
+// =============================================================================
+// WIDTH UTILITIES
+// =============================================================================
+
+// Fixed widths based on spacing scale
+@each $key, $value in $spacing {
+  .w-#{$key} {
+    width: $value;
+  }
+}
+
+// Percentage widths
+$width-percentages: (
+  "0": 0%,
+  "1/2": 50%,
+  "1/3": 33.333333%,
+  "2/3": 66.666667%,
+  "1/4": 25%,
+  "2/4": 50%,
+  "3/4": 75%,
+  "1/5": 20%,
+  "2/5": 40%,
+  "3/5": 60%,
+  "4/5": 80%,
+  "1/6": 16.666667%,
+  "2/6": 33.333333%,
+  "3/6": 50%,
+  "4/6": 66.666667%,
+  "5/6": 83.333333%,
+  "1/12": 8.333333%,
+  "2/12": 16.666667%,
+  "3/12": 25%,
+  "4/12": 33.333333%,
+  "5/12": 41.666667%,
+  "6/12": 50%,
+  "7/12": 58.333333%,
+  "8/12": 66.666667%,
+  "9/12": 75%,
+  "10/12": 83.333333%,
+  "11/12": 91.666667%,
+  "full": 100%,
+);
+
+@each $name, $value in $width-percentages {
+  .w-#{$name} {
+    width: $value;
+  }
+}
+
+// Special width values
+.w-auto {
+  width: auto;
+}
+.w-screen {
+  width: 100vw;
+}
+.w-dvw {
+  width: 100dvw;
+}
+.w-svw {
+  width: 100svw;
+}
+.w-lvw {
+  width: 100lvw;
+}
+.w-min {
+  width: min-content;
+}
+.w-max {
+  width: max-content;
+}
+.w-fit {
+  width: fit-content;
+}
+
+// Min width utilities
+.min-w-0 {
+  min-width: 0px;
+}
+.min-w-full {
+  min-width: 100%;
+}
+.min-w-min {
+  min-width: min-content;
+}
+.min-w-max {
+  min-width: max-content;
+}
+.min-w-fit {
+  min-width: fit-content;
+}
+
+// Max width utilities
+$max-widths: (
+  "0": 0,
+  "none": none,
+  "xs": 20rem,
+  // 320px
+  "sm": 24rem,
+  // 384px
+  "md": 28rem,
+  // 448px
+  "lg": 32rem,
+  // 512px
+  "xl": 36rem,
+  // 576px
+  "2xl": 42rem,
+  // 672px
+  "3xl": 48rem,
+  // 768px
+  "4xl": 56rem,
+  // 896px
+  "5xl": 64rem,
+  // 1024px
+  "6xl": 72rem,
+  // 1152px
+  "7xl": 80rem,
+  // 1280px
+  "full": 100%,
+  "min": min-content,
+  "max": max-content,
+  "fit": fit-content,
+  "prose": 65ch,
+  "screen-sm": 640px,
+  "screen-md": 768px,
+  "screen-lg": 1024px,
+  "screen-xl": 1280px,
+  "screen-2xl": 1536px,
+);
+
+@each $name, $value in $max-widths {
+  .max-w-#{$name} {
+    max-width: $value;
+  }
+}
+
+// =============================================================================
+// HEIGHT UTILITIES
+// =============================================================================
+
+// Fixed heights based on spacing scale
+@each $key, $value in $spacing {
+  .h-#{$key} {
+    height: $value;
+  }
+}
+
+// Percentage heights
+$height-percentages: (
+  "0": 0%,
+  "1/2": 50%,
+  "1/3": 33.333333%,
+  "2/3": 66.666667%,
+  "1/4": 25%,
+  "2/4": 50%,
+  "3/4": 75%,
+  "1/5": 20%,
+  "2/5": 40%,
+  "3/5": 60%,
+  "4/5": 80%,
+  "1/6": 16.666667%,
+  "5/6": 83.333333%,
+  "full": 100%,
+);
+
+@each $name, $value in $height-percentages {
+  .h-#{$name} {
+    height: $value;
+  }
+}
+
+// Special height values
+.h-auto {
+  height: auto;
+}
+.h-screen {
+  height: 100vh;
+}
+.h-dvh {
+  height: 100dvh;
+}
+.h-svh {
+  height: 100svh;
+}
+.h-lvh {
+  height: 100lvh;
+}
+.h-min {
+  height: min-content;
+}
+.h-max {
+  height: max-content;
+}
+.h-fit {
+  height: fit-content;
+}
+
+// Min height utilities
+.min-h-0 {
+  min-height: 0px;
+}
+.min-h-full {
+  min-height: 100%;
+}
+.min-h-screen {
+  min-height: 100vh;
+}
+.min-h-dvh {
+  min-height: 100dvh;
+}
+.min-h-svh {
+  min-height: 100svh;
+}
+.min-h-lvh {
+  min-height: 100lvh;
+}
+.min-h-min {
+  min-height: min-content;
+}
+.min-h-max {
+  min-height: max-content;
+}
+.min-h-fit {
+  min-height: fit-content;
+}
+
+// Max height utilities
+.max-h-0 {
+  max-height: 0px;
+}
+.max-h-none {
+  max-height: none;
+}
+.max-h-full {
+  max-height: 100%;
+}
+.max-h-screen {
+  max-height: 100vh;
+}
+.max-h-dvh {
+  max-height: 100dvh;
+}
+.max-h-svh {
+  max-height: 100svh;
+}
+.max-h-lvh {
+  max-height: 100lvh;
+}
+.max-h-min {
+  max-height: min-content;
+}
+.max-h-max {
+  max-height: max-content;
+}
+.max-h-fit {
+  max-height: fit-content;
+}
+
+@each $key, $value in $spacing {
+  .max-h-#{$key} {
+    max-height: $value;
+  }
+}
+
+// =============================================================================
+// SIZE UTILITIES (width + height)
+// =============================================================================
+@each $key, $value in $spacing {
+  .size-#{$key} {
+    width: $value;
+    height: $value;
+  }
+}
+
+.size-auto {
+  width: auto;
+  height: auto;
+}
+.size-full {
+  width: 100%;
+  height: 100%;
+}
+.size-min {
+  width: min-content;
+  height: min-content;
+}
+.size-max {
+  width: max-content;
+  height: max-content;
+}
+.size-fit {
+  width: fit-content;
+  height: fit-content;
+}
+
+// =============================================================================
+// INSET UTILITIES (top, right, bottom, left)
+// =============================================================================
+@each $key, $value in $spacing {
+  .inset-#{$key} {
+    inset: $value;
+  }
+  .inset-x-#{$key} {
+    left: $value;
+    right: $value;
+  }
+  .inset-y-#{$key} {
+    top: $value;
+    bottom: $value;
+  }
+  .top-#{$key} {
+    top: $value;
+  }
+  .right-#{$key} {
+    right: $value;
+  }
+  .bottom-#{$key} {
+    bottom: $value;
+  }
+  .left-#{$key} {
+    left: $value;
+  }
+
+  // Logical inset
+  .start-#{$key} {
+    inset-inline-start: $value;
+  }
+  .end-#{$key} {
+    inset-inline-end: $value;
+  }
+}
+
+// Percentage insets
+@each $name, $value in $width-percentages {
+  .inset-#{$name} {
+    inset: $value;
+  }
+  .inset-x-#{$name} {
+    left: $value;
+    right: $value;
+  }
+  .inset-y-#{$name} {
+    top: $value;
+    bottom: $value;
+  }
+  .top-#{$name} {
+    top: $value;
+  }
+  .right-#{$name} {
+    right: $value;
+  }
+  .bottom-#{$name} {
+    bottom: $value;
+  }
+  .left-#{$name} {
+    left: $value;
+  }
+}
+
+// Auto inset
+.inset-auto {
+  inset: auto;
+}
+.inset-x-auto {
+  left: auto;
+  right: auto;
+}
+.inset-y-auto {
+  top: auto;
+  bottom: auto;
+}
+.top-auto {
+  top: auto;
+}
+.right-auto {
+  right: auto;
+}
+.bottom-auto {
+  bottom: auto;
+}
+.left-auto {
+  left: auto;
+}
+.start-auto {
+  inset-inline-start: auto;
+}
+.end-auto {
+  inset-inline-end: auto;
+}
+
+// Negative insets
+@each $key, $value in $spacing {
+  @if $key != 0 and $key != "auto" and $key != "px" {
+    .-inset-#{$key} {
+      inset: -#{$value};
+    }
+    .-inset-x-#{$key} {
+      left: -#{$value};
+      right: -#{$value};
+    }
+    .-inset-y-#{$key} {
+      top: -#{$value};
+      bottom: -#{$value};
+    }
+    .-top-#{$key} {
+      top: -#{$value};
+    }
+    .-right-#{$key} {
+      right: -#{$value};
+    }
+    .-bottom-#{$key} {
+      bottom: -#{$value};
+    }
+    .-left-#{$key} {
+      left: -#{$value};
+    }
+  }
+}
+
+// =============================================================================
+// BORDER WIDTH UTILITIES
+// =============================================================================
+$border-widths: (
+  "0": 0,
+  "": 1px,
+  "2": 2px,
+  "4": 4px,
+  "8": 8px,
+);
+
+@each $name, $value in $border-widths {
+  $class-name: if($name == "", "border", "border-#{$name}");
+
+  .#{$class-name} {
+    border-width: $value;
+  }
+  .#{$class-name}-t {
+    border-top-width: $value;
+  }
+  .#{$class-name}-r {
+    border-right-width: $value;
+  }
+  .#{$class-name}-b {
+    border-bottom-width: $value;
+  }
+  .#{$class-name}-l {
+    border-left-width: $value;
+  }
+  .#{$class-name}-x {
+    border-left-width: $value;
+    border-right-width: $value;
+  }
+  .#{$class-name}-y {
+    border-top-width: $value;
+    border-bottom-width: $value;
+  }
+  .#{$class-name}-s {
+    border-inline-start-width: $value;
+  }
+  .#{$class-name}-e {
+    border-inline-end-width: $value;
+  }
+}
+
+// =============================================================================
+// BORDER RADIUS UTILITIES
+// =============================================================================
+@each $name, $value in $border-radius {
+  .rounded-#{$name} {
+    border-radius: $value;
+  }
+  .rounded-t-#{$name} {
+    border-top-left-radius: $value;
+    border-top-right-radius: $value;
+  }
+  .rounded-r-#{$name} {
+    border-top-right-radius: $value;
+    border-bottom-right-radius: $value;
+  }
+  .rounded-b-#{$name} {
+    border-bottom-left-radius: $value;
+    border-bottom-right-radius: $value;
+  }
+  .rounded-l-#{$name} {
+    border-top-left-radius: $value;
+    border-bottom-left-radius: $value;
+  }
+  .rounded-tl-#{$name} {
+    border-top-left-radius: $value;
+  }
+  .rounded-tr-#{$name} {
+    border-top-right-radius: $value;
+  }
+  .rounded-bl-#{$name} {
+    border-bottom-left-radius: $value;
+  }
+  .rounded-br-#{$name} {
+    border-bottom-right-radius: $value;
+  }
+
+  // Logical border radius
+  .rounded-ss-#{$name} {
+    border-start-start-radius: $value;
+  }
+  .rounded-se-#{$name} {
+    border-start-end-radius: $value;
+  }
+  .rounded-es-#{$name} {
+    border-end-start-radius: $value;
+  }
+  .rounded-ee-#{$name} {
+    border-end-end-radius: $value;
+  }
+}
+
+// Shorthand radius utilities
+.rounded {
+  border-radius: var(--radius-base);
+}
+.rounded-full {
+  border-radius: 9999px;
+}
+.rounded-none {
+  border-radius: 0;
+}
+
+// =============================================================================
+// OUTLINE UTILITIES
+// =============================================================================
+$outline-widths: (
+  "0": 0,
+  "1": 1px,
+  "2": 2px,
+  "4": 4px,
+  "8": 8px,
+);
+
+@each $name, $value in $outline-widths {
+  .outline-#{$name} {
+    outline-width: $value;
+  }
+}
+
+.outline {
+  outline-style: solid;
+}
+.outline-none {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.outline-dashed {
+  outline-style: dashed;
+}
+.outline-dotted {
+  outline-style: dotted;
+}
+.outline-double {
+  outline-style: double;
+}
+
+$outline-offsets: (
+  "0": 0,
+  "1": 1px,
+  "2": 2px,
+  "4": 4px,
+  "8": 8px,
+);
+
+@each $name, $value in $outline-offsets {
+  .outline-offset-#{$name} {
+    outline-offset: $value;
+  }
+}
+
+// =============================================================================
+// RING UTILITIES
+// =============================================================================
+$ring-widths: (
+  "0": 0,
+  "1": 1px,
+  "2": 2px,
+  "": 3px,
+  "4": 4px,
+  "8": 8px,
+);
+
+@each $name, $value in $ring-widths {
+  $class-name: if($name == "", "ring", "ring-#{$name}");
+
+  .#{$class-name} {
+    --ring-offset-shadow: 0
+      0
+      0
+      var(--ring-offset-width, 0px)
+      var(--ring-offset-color, #fff);
+    --ring-shadow: 0
+      0
+      0
+      calc(#{$value} + var(--ring-offset-width, 0px))
+      var(--ring-color, var(--primary));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow),
+      var(--shadow, 0 0 #0000);
+  }
+}
+
+.ring-inset {
+  --ring-inset: inset;
+}
+
+$ring-offsets: (
+  "0": 0,
+  "1": 1px,
+  "2": 2px,
+  "4": 4px,
+  "8": 8px,
+);
+
+@each $name, $value in $ring-offsets {
+  .ring-offset-#{$name} {
+    --ring-offset-width: $value;
+  }
+}
+
+// =============================================================================
+// DIVIDE UTILITIES (borders between children)
+// =============================================================================
+@each $name, $value in $border-widths {
+  $class-name: if($name == "", "divide", "divide-#{$name}");
+
+  .#{$class-name}-x > * + * {
+    border-left-width: $value;
+    border-right-width: 0;
+  }
+
+  .#{$class-name}-y > * + * {
+    border-top-width: $value;
+    border-bottom-width: 0;
+  }
+}
+
+.divide-solid > * + * {
+  border-style: solid;
+}
+.divide-dashed > * + * {
+  border-style: dashed;
+}
+.divide-dotted > * + * {
+  border-style: dotted;
+}
+.divide-double > * + * {
+  border-style: double;
+}
+.divide-none > * + * {
+  border-style: none;
+}
+
+// Divide reverse (for flex-row-reverse, flex-col-reverse)
+.divide-x-reverse > * + * {
+  border-right-width: 1px;
+  border-left-width: 0;
+}
+
+.divide-y-reverse > * + * {
+  border-bottom-width: 1px;
+  border-top-width: 0;
+}
+
+// =============================================================================
+// BORDER STYLE UTILITIES
+// =============================================================================
+.border-solid {
+  border-style: solid;
+}
+.border-dashed {
+  border-style: dashed;
+}
+.border-dotted {
+  border-style: dotted;
+}
+.border-double {
+  border-style: double;
+}
+.border-hidden {
+  border-style: hidden;
+}
+.border-none {
+  border-style: none;
+}
+
+// =============================================================================
+// RESPONSIVE SPACING UTILITIES
+// =============================================================================
+@each $bp-name, $bp-value in $breakpoints {
+  @if $bp-value > 0 {
+    @media (min-width: $bp-value) {
+      // Padding
+      @each $key, $value in $spacing {
+        .#{$bp-name}\:p-#{$key} {
+          padding: $value;
+        }
+        .#{$bp-name}\:px-#{$key} {
+          padding-left: $value;
+          padding-right: $value;
+        }
+        .#{$bp-name}\:py-#{$key} {
+          padding-top: $value;
+          padding-bottom: $value;
+        }
+        .#{$bp-name}\:pt-#{$key} {
+          padding-top: $value;
+        }
+        .#{$bp-name}\:pr-#{$key} {
+          padding-right: $value;
+        }
+        .#{$bp-name}\:pb-#{$key} {
+          padding-bottom: $value;
+        }
+        .#{$bp-name}\:pl-#{$key} {
+          padding-left: $value;
+        }
+      }
+
+      // Margin
+      @each $key, $value in $spacing {
+        .#{$bp-name}\:m-#{$key} {
+          margin: $value;
+        }
+        .#{$bp-name}\:mx-#{$key} {
+          margin-left: $value;
+          margin-right: $value;
+        }
+        .#{$bp-name}\:my-#{$key} {
+          margin-top: $value;
+          margin-bottom: $value;
+        }
+        .#{$bp-name}\:mt-#{$key} {
+          margin-top: $value;
+        }
+        .#{$bp-name}\:mr-#{$key} {
+          margin-right: $value;
+        }
+        .#{$bp-name}\:mb-#{$key} {
+          margin-bottom: $value;
+        }
+        .#{$bp-name}\:ml-#{$key} {
+          margin-left: $value;
+        }
+      }
+
+      // Auto margins
+      .#{$bp-name}\:mx-auto {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .#{$bp-name}\:my-auto {
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+      .#{$bp-name}\:ml-auto {
+        margin-left: auto;
+      }
+      .#{$bp-name}\:mr-auto {
+        margin-right: auto;
+      }
+
+      // Gap
+      @each $key, $value in $spacing {
+        .#{$bp-name}\:gap-#{$key} {
+          gap: $value;
+        }
+        .#{$bp-name}\:gap-x-#{$key} {
+          column-gap: $value;
+        }
+        .#{$bp-name}\:gap-y-#{$key} {
+          row-gap: $value;
+        }
+      }
+
+      // Width
+      @each $name, $value in $width-percentages {
+        .#{$bp-name}\:w-#{$name} {
+          width: $value;
+        }
+      }
+      .#{$bp-name}\:w-auto {
+        width: auto;
+      }
+      .#{$bp-name}\:w-full {
+        width: 100%;
+      }
+      .#{$bp-name}\:w-screen {
+        width: 100vw;
+      }
+
+      // Height
+      @each $name, $value in $height-percentages {
+        .#{$bp-name}\:h-#{$name} {
+          height: $value;
+        }
+      }
+      .#{$bp-name}\:h-auto {
+        height: auto;
+      }
+      .#{$bp-name}\:h-full {
+        height: 100%;
+      }
+      .#{$bp-name}\:h-screen {
+        height: 100vh;
+      }
+
+      // Max width
+      @each $name, $value in $max-widths {
+        .#{$bp-name}\:max-w-#{$name} {
+          max-width: $value;
+        }
+      }
+    }
+  }
+}

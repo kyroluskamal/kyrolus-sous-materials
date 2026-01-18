@@ -1,0 +1,431 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - MODERN CSS RESET
+// =============================================================================
+// A modern, comprehensive CSS reset based on best practices from
+// Josh Comeau, Andy Bell, and modern browser defaults.
+// =============================================================================
+
+@use "tokens/primitives" as *;
+@use "tokens/semantic" as *;
+
+// =============================================================================
+// BOX SIZING
+// =============================================================================
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+// =============================================================================
+// MARGIN RESET
+// =============================================================================
+* {
+  margin: 0;
+}
+
+// =============================================================================
+// BODY DEFAULTS
+// =============================================================================
+html {
+  // Prevent font size inflation on mobile
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+
+  // Smooth scrolling
+  scroll-behavior: smooth;
+
+  // Full height
+  height: 100%;
+}
+
+body {
+  // Full height
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  // Typography defaults
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+  color: var(--text);
+  background-color: var(--background);
+
+  // Improved text rendering
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+
+  // Allow percentage-based heights
+  height: 100%;
+}
+
+// =============================================================================
+// MEDIA DEFAULTS
+// =============================================================================
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img,
+picture {
+  height: auto;
+}
+
+// =============================================================================
+// FORM ELEMENTS
+// =============================================================================
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+// Remove default button styles
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+// Remove default textarea resize
+textarea {
+  resize: vertical;
+}
+
+// Remove search input clear button in WebKit
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
+
+// Remove number input spinners
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+// =============================================================================
+// TYPOGRAPHY
+// =============================================================================
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+  text-wrap: balance;
+  font-weight: var(--font-bold);
+  line-height: 1.2;
+}
+
+p {
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+// =============================================================================
+// LINKS
+// =============================================================================
+a {
+  color: inherit;
+  text-decoration-skip-ink: auto;
+}
+
+a:not([class]) {
+  color: var(--text-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--text-link-hover);
+  }
+}
+
+// =============================================================================
+// LISTS
+// =============================================================================
+ul,
+ol {
+  padding-left: 0;
+  list-style: none;
+}
+
+// Only apply list styles when role is list
+ul[role="list"],
+ol[role="list"] {
+  padding-left: 1.5em;
+}
+
+ul[role="list"] {
+  list-style: disc;
+}
+
+ol[role="list"] {
+  list-style: decimal;
+}
+
+// =============================================================================
+// TABLES
+// =============================================================================
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+// =============================================================================
+// FOCUS STYLES
+// =============================================================================
+// Remove default focus styles for non-keyboard focus
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+// Keyboard focus styles
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+// Skip to content link
+[href="#main-content"] {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+
+  &:focus {
+    position: fixed;
+    top: var(--spacing-4);
+    left: var(--spacing-4);
+    z-index: var(--z-max);
+    padding: var(--spacing-3) var(--spacing-6);
+    background-color: var(--primary);
+    color: var(--on-primary);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-semibold);
+  }
+}
+
+// =============================================================================
+// SELECTION
+// =============================================================================
+::selection {
+  background-color: var(--selection);
+  color: var(--text);
+}
+
+// =============================================================================
+// SCROLLBAR
+// =============================================================================
+:root {
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+
+  &:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+}
+
+// =============================================================================
+// CODE ELEMENTS
+// =============================================================================
+pre,
+code,
+kbd,
+samp {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+}
+
+pre {
+  overflow-x: auto;
+  tab-size: 4;
+}
+
+// =============================================================================
+// BLOCKQUOTE
+// =============================================================================
+blockquote {
+  margin: 0;
+  padding-left: var(--spacing-4);
+  border-left: 4px solid var(--border-strong);
+}
+
+// =============================================================================
+// HR
+// =============================================================================
+hr {
+  border: none;
+  border-top: 1px solid var(--divider);
+  margin: var(--spacing-8) 0;
+}
+
+// =============================================================================
+// DETAILS/SUMMARY
+// =============================================================================
+summary {
+  cursor: pointer;
+  display: list-item;
+}
+
+details > summary {
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+// =============================================================================
+// DIALOG
+// =============================================================================
+dialog {
+  background-color: var(--surface-overlay);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: 0;
+  max-width: calc(100vw - var(--spacing-8));
+  max-height: calc(100vh - var(--spacing-8));
+
+  &::backdrop {
+    background-color: var(--overlay);
+  }
+}
+
+// =============================================================================
+// REDUCED MOTION
+// =============================================================================
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// =============================================================================
+// PRINT STYLES
+// =============================================================================
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: #fff !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]::after {
+    content: " (" attr(title) ")";
+  }
+
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
+
+// =============================================================================
+// ARIA HIDDEN CONTENT
+// =============================================================================
+[aria-hidden="true"] {
+  display: none !important;
+}
+
+// =============================================================================
+// HIDDEN UTILITY
+// =============================================================================
+[hidden] {
+  display: none !important;
+}
+
+// =============================================================================
+// DISABLED STATE
+// =============================================================================
+[disabled],
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+// =============================================================================
+// ROOT ELEMENT DEFAULTS
+// =============================================================================
+#root,
+#__next,
+#app {
+  isolation: isolate;
+  min-height: 100%;
+}

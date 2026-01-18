@@ -1,0 +1,548 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - DARK MODE UTILITY VARIANTS
+// =============================================================================
+// Dark mode variants for all color utilities. Apply these classes to change
+// appearance only when dark mode is active.
+//
+// Supports both data-theme="dark" and .dark class on html/body.
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// DARK MODE SELECTORS
+// =============================================================================
+// Define the selectors that trigger dark mode
+$dark-selectors: "[data-theme='dark']", ".dark";
+
+// =============================================================================
+// DARK MODE BACKGROUND COLORS
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    @each $selector in $dark-selectors {
+      #{$selector} .dark\:bg-#{$palette-name}-#{$shade} {
+        background-color: var(--color-#{$palette-name}-#{$shade});
+      }
+    }
+  }
+}
+
+// Special background colors
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:bg-transparent {
+    background-color: transparent;
+  }
+  #{$selector} .dark\:bg-white {
+    background-color: #ffffff;
+  }
+  #{$selector} .dark\:bg-black {
+    background-color: #000000;
+  }
+  #{$selector} .dark\:bg-current {
+    background-color: currentColor;
+  }
+  #{$selector} .dark\:bg-inherit {
+    background-color: inherit;
+  }
+}
+
+// Semantic background colors
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:bg-surface {
+    background-color: var(--surface);
+  }
+  #{$selector} .dark\:bg-surface-raised {
+    background-color: var(--surface-raised);
+  }
+  #{$selector} .dark\:bg-surface-sunken {
+    background-color: var(--surface-sunken);
+  }
+  #{$selector} .dark\:bg-background {
+    background-color: var(--bg);
+  }
+}
+
+// =============================================================================
+// DARK MODE TEXT COLORS
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    @each $selector in $dark-selectors {
+      #{$selector} .dark\:text-#{$palette-name}-#{$shade} {
+        color: var(--color-#{$palette-name}-#{$shade});
+      }
+    }
+  }
+}
+
+// Special text colors
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:text-transparent {
+    color: transparent;
+  }
+  #{$selector} .dark\:text-white {
+    color: #ffffff;
+  }
+  #{$selector} .dark\:text-black {
+    color: #000000;
+  }
+  #{$selector} .dark\:text-current {
+    color: currentColor;
+  }
+  #{$selector} .dark\:text-inherit {
+    color: inherit;
+  }
+}
+
+// Semantic text colors
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:text-primary {
+    color: var(--text);
+  }
+  #{$selector} .dark\:text-secondary {
+    color: var(--text-secondary);
+  }
+  #{$selector} .dark\:text-muted {
+    color: var(--text-muted);
+  }
+  #{$selector} .dark\:text-link {
+    color: var(--text-link);
+  }
+}
+
+// =============================================================================
+// DARK MODE BORDER COLORS
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    @each $selector in $dark-selectors {
+      #{$selector} .dark\:border-#{$palette-name}-#{$shade} {
+        border-color: var(--color-#{$palette-name}-#{$shade});
+      }
+    }
+  }
+}
+
+// Special border colors
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:border-transparent {
+    border-color: transparent;
+  }
+  #{$selector} .dark\:border-white {
+    border-color: #ffffff;
+  }
+  #{$selector} .dark\:border-black {
+    border-color: #000000;
+  }
+  #{$selector} .dark\:border-current {
+    border-color: currentColor;
+  }
+}
+
+// Semantic border colors
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:border-default {
+    border-color: var(--border);
+  }
+  #{$selector} .dark\:border-strong {
+    border-color: var(--border-strong);
+  }
+  #{$selector} .dark\:border-subtle {
+    border-color: var(--border-subtle);
+  }
+}
+
+// =============================================================================
+// DARK MODE DIVIDE COLORS
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $selector in $dark-selectors {
+    #{$selector} .dark\:divide-#{$palette-name}-700 > * + * {
+      border-color: var(--color-#{$palette-name}-700);
+    }
+    #{$selector} .dark\:divide-#{$palette-name}-800 > * + * {
+      border-color: var(--color-#{$palette-name}-800);
+    }
+  }
+}
+
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:divide-white\/10 > * + * {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  #{$selector} .dark\:divide-white\/20 > * + * {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+// =============================================================================
+// DARK MODE RING COLORS
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $selector in $dark-selectors {
+    #{$selector} .dark\:ring-#{$palette-name}-500 {
+      --ring-color: var(--color-#{$palette-name}-500);
+    }
+    #{$selector} .dark\:ring-#{$palette-name}-600 {
+      --ring-color: var(--color-#{$palette-name}-600);
+    }
+  }
+}
+
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:ring-white {
+    --ring-color: #ffffff;
+  }
+  #{$selector} .dark\:ring-white\/20 {
+    --ring-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+// =============================================================================
+// DARK MODE RING OFFSET COLORS
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $selector in $dark-selectors {
+    #{$selector} .dark\:ring-offset-#{$palette-name}-900 {
+      --ring-offset-color: var(--color-#{$palette-name}-900);
+    }
+    #{$selector} .dark\:ring-offset-#{$palette-name}-950 {
+      --ring-offset-color: var(--color-#{$palette-name}-950);
+    }
+  }
+}
+
+// =============================================================================
+// DARK MODE PLACEHOLDER COLORS
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $selector in $dark-selectors {
+    #{$selector} .dark\:placeholder-#{$palette-name}-400::placeholder {
+      color: var(--color-#{$palette-name}-400);
+    }
+    #{$selector} .dark\:placeholder-#{$palette-name}-500::placeholder {
+      color: var(--color-#{$palette-name}-500);
+    }
+  }
+}
+
+// =============================================================================
+// DARK MODE SHADOW UTILITIES
+// =============================================================================
+
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:shadow-none {
+    box-shadow: none;
+  }
+  #{$selector} .dark\:shadow-sm {
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  }
+  #{$selector} .dark\:shadow {
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+  }
+  #{$selector} .dark\:shadow-md {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  }
+  #{$selector} .dark\:shadow-lg {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.4),
+      0 4px 6px -4px rgb(0 0 0 / 0.4);
+  }
+  #{$selector} .dark\:shadow-xl {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.4),
+      0 8px 10px -6px rgb(0 0 0 / 0.4);
+  }
+  #{$selector} .dark\:shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5);
+  }
+}
+
+// =============================================================================
+// DARK MODE OPACITY
+// =============================================================================
+
+$dark-opacities: (0, 5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95, 100);
+
+@each $opacity in $dark-opacities {
+  @each $selector in $dark-selectors {
+    #{$selector} .dark\:opacity-#{$opacity} {
+      opacity: calc($opacity / 100);
+    }
+  }
+}
+
+// =============================================================================
+// DARK MODE GRADIENT STOPS
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    @each $selector in $dark-selectors {
+      #{$selector} .dark\:from-#{$palette-name}-#{$shade} {
+        --gradient-from: var(--color-#{$palette-name}-#{$shade});
+        --gradient-stops: var(--gradient-from), var(--gradient-to, transparent);
+      }
+      #{$selector} .dark\:via-#{$palette-name}-#{$shade} {
+        --gradient-via: var(--color-#{$palette-name}-#{$shade});
+        --gradient-stops: var(--gradient-from), var(--gradient-via),
+          var(--gradient-to, transparent);
+      }
+      #{$selector} .dark\:to-#{$palette-name}-#{$shade} {
+        --gradient-to: var(--color-#{$palette-name}-#{$shade});
+      }
+    }
+  }
+}
+
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:from-transparent {
+    --gradient-from: transparent;
+    --gradient-stops: var(--gradient-from), var(--gradient-to, transparent);
+  }
+  #{$selector} .dark\:to-transparent {
+    --gradient-to: transparent;
+  }
+}
+
+// =============================================================================
+// DARK MODE CARET COLORS
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $selector in $dark-selectors {
+    #{$selector} .dark\:caret-#{$palette-name}-400 {
+      caret-color: var(--color-#{$palette-name}-400);
+    }
+    #{$selector} .dark\:caret-#{$palette-name}-500 {
+      caret-color: var(--color-#{$palette-name}-500);
+    }
+  }
+}
+
+// =============================================================================
+// DARK MODE ACCENT COLORS (form controls)
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $selector in $dark-selectors {
+    #{$selector} .dark\:accent-#{$palette-name}-500 {
+      accent-color: var(--color-#{$palette-name}-500);
+    }
+  }
+}
+
+// =============================================================================
+// DARK MODE BACKDROP
+// =============================================================================
+
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+  }
+  #{$selector} .dark\:backdrop-blur {
+    backdrop-filter: blur(8px);
+  }
+  #{$selector} .dark\:backdrop-blur-md {
+    backdrop-filter: blur(12px);
+  }
+  #{$selector} .dark\:backdrop-blur-lg {
+    backdrop-filter: blur(16px);
+  }
+  #{$selector} .dark\:backdrop-brightness-50 {
+    backdrop-filter: brightness(0.5);
+  }
+  #{$selector} .dark\:backdrop-brightness-75 {
+    backdrop-filter: brightness(0.75);
+  }
+}
+
+// =============================================================================
+// DARK MODE FILTER
+// =============================================================================
+
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:brightness-50 {
+    filter: brightness(0.5);
+  }
+  #{$selector} .dark\:brightness-75 {
+    filter: brightness(0.75);
+  }
+  #{$selector} .dark\:brightness-90 {
+    filter: brightness(0.9);
+  }
+  #{$selector} .dark\:brightness-100 {
+    filter: brightness(1);
+  }
+  #{$selector} .dark\:brightness-110 {
+    filter: brightness(1.1);
+  }
+  #{$selector} .dark\:brightness-125 {
+    filter: brightness(1.25);
+  }
+  #{$selector} .dark\:invert {
+    filter: invert(100%);
+  }
+  #{$selector} .dark\:invert-0 {
+    filter: invert(0);
+  }
+}
+
+// =============================================================================
+// DARK MODE FILL & STROKE (SVG)
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    @each $selector in $dark-selectors {
+      #{$selector} .dark\:fill-#{$palette-name}-#{$shade} {
+        fill: var(--color-#{$palette-name}-#{$shade});
+      }
+      #{$selector} .dark\:stroke-#{$palette-name}-#{$shade} {
+        stroke: var(--color-#{$palette-name}-#{$shade});
+      }
+    }
+  }
+}
+
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:fill-current {
+    fill: currentColor;
+  }
+  #{$selector} .dark\:fill-white {
+    fill: #ffffff;
+  }
+  #{$selector} .dark\:fill-black {
+    fill: #000000;
+  }
+  #{$selector} .dark\:stroke-current {
+    stroke: currentColor;
+  }
+  #{$selector} .dark\:stroke-white {
+    stroke: #ffffff;
+  }
+  #{$selector} .dark\:stroke-black {
+    stroke: #000000;
+  }
+}
+
+// =============================================================================
+// DARK MODE DECORATION COLORS
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $selector in $dark-selectors {
+    #{$selector} .dark\:decoration-#{$palette-name}-500 {
+      text-decoration-color: var(--color-#{$palette-name}-500);
+    }
+  }
+}
+
+// =============================================================================
+// DARK MODE OUTLINE COLORS
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $selector in $dark-selectors {
+    #{$selector} .dark\:outline-#{$palette-name}-500 {
+      outline-color: var(--color-#{$palette-name}-500);
+    }
+  }
+}
+
+// =============================================================================
+// DARK MODE HOVER STATE COMBINATIONS
+// =============================================================================
+// Dark mode + hover state
+
+@each $palette-name, $palette in $color-palettes {
+  @each $selector in $dark-selectors {
+    #{$selector} .dark\:hover\:bg-#{$palette-name}-700:hover {
+      background-color: var(--color-#{$palette-name}-700);
+    }
+    #{$selector} .dark\:hover\:bg-#{$palette-name}-800:hover {
+      background-color: var(--color-#{$palette-name}-800);
+    }
+    #{$selector} .dark\:hover\:text-#{$palette-name}-300:hover {
+      color: var(--color-#{$palette-name}-300);
+    }
+    #{$selector} .dark\:hover\:text-#{$palette-name}-400:hover {
+      color: var(--color-#{$palette-name}-400);
+    }
+    #{$selector} .dark\:hover\:border-#{$palette-name}-600:hover {
+      border-color: var(--color-#{$palette-name}-600);
+    }
+  }
+}
+
+@each $selector in $dark-selectors {
+  #{$selector} .dark\:hover\:bg-white\/10:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  #{$selector} .dark\:hover\:bg-white\/20:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  #{$selector} .dark\:hover\:text-white:hover {
+    color: #ffffff;
+  }
+}
+
+// =============================================================================
+// DARK MODE FOCUS STATE COMBINATIONS
+// =============================================================================
+
+@each $palette-name, $palette in $color-palettes {
+  @each $selector in $dark-selectors {
+    #{$selector} .dark\:focus\:ring-#{$palette-name}-500:focus {
+      --ring-color: var(--color-#{$palette-name}-500);
+    }
+    #{$selector} .dark\:focus\:border-#{$palette-name}-500:focus {
+      border-color: var(--color-#{$palette-name}-500);
+    }
+  }
+}
+
+// =============================================================================
+// PREFERS COLOR SCHEME UTILITIES
+// =============================================================================
+// Auto dark mode based on system preference
+
+@media (prefers-color-scheme: dark) {
+  .auto\:bg-gray-900 {
+    background-color: var(--color-gray-900);
+  }
+  .auto\:bg-slate-900 {
+    background-color: var(--color-slate-900);
+  }
+  .auto\:text-white {
+    color: #ffffff;
+  }
+  .auto\:text-gray-100 {
+    color: var(--color-gray-100);
+  }
+  .auto\:border-gray-700 {
+    border-color: var(--color-gray-700);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .auto\:bg-white {
+    background-color: #ffffff;
+  }
+  .auto\:bg-gray-50 {
+    background-color: var(--color-gray-50);
+  }
+  .auto\:text-gray-900 {
+    color: var(--color-gray-900);
+  }
+  .auto\:border-gray-200 {
+    border-color: var(--color-gray-200);
+  }
+}

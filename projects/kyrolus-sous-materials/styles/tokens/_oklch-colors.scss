@@ -1,0 +1,511 @@
+// =============================================================================
+// OKLCH COLOR SYSTEM
+// =============================================================================
+// Modern perceptually uniform color space for accessible colors
+// OKLCH = Lightness, Chroma (saturation), Hue
+// Browser support: Chrome 111+, Safari 15.4+, Firefox 113+
+
+// =============================================================================
+// OKLCH COLOR DEFINITIONS
+// =============================================================================
+
+:root {
+  // Primary palette in OKLCH
+  --primary-oklch: oklch(55% 0.25 250);
+  --primary-light-oklch: oklch(75% 0.15 250);
+  --primary-dark-oklch: oklch(40% 0.25 250);
+
+  // Secondary palette in OKLCH
+  --secondary-oklch: oklch(55% 0.2 280);
+  --secondary-light-oklch: oklch(75% 0.12 280);
+  --secondary-dark-oklch: oklch(40% 0.2 280);
+
+  // Accent palette in OKLCH
+  --accent-oklch: oklch(70% 0.18 75);
+  --accent-light-oklch: oklch(85% 0.1 75);
+  --accent-dark-oklch: oklch(55% 0.18 75);
+
+  // Semantic colors in OKLCH
+  --success-oklch: oklch(65% 0.2 145);
+  --warning-oklch: oklch(75% 0.18 85);
+  --danger-oklch: oklch(55% 0.22 25);
+  --info-oklch: oklch(60% 0.15 230);
+
+  // Neutral scale in OKLCH (same hue, different lightness)
+  --gray-50-oklch: oklch(98% 0 0);
+  --gray-100-oklch: oklch(95% 0 0);
+  --gray-200-oklch: oklch(90% 0 0);
+  --gray-300-oklch: oklch(80% 0 0);
+  --gray-400-oklch: oklch(65% 0 0);
+  --gray-500-oklch: oklch(50% 0 0);
+  --gray-600-oklch: oklch(40% 0 0);
+  --gray-700-oklch: oklch(30% 0 0);
+  --gray-800-oklch: oklch(20% 0 0);
+  --gray-900-oklch: oklch(12% 0 0);
+  --gray-950-oklch: oklch(8% 0 0);
+}
+
+// =============================================================================
+// OKLCH HUE PALETTE
+// =============================================================================
+// Full hue spectrum with consistent lightness and chroma
+
+$oklch-hues: (
+  red: 25,
+  orange: 55,
+  amber: 75,
+  yellow: 95,
+  lime: 125,
+  green: 145,
+  emerald: 160,
+  teal: 175,
+  cyan: 195,
+  sky: 220,
+  blue: 250,
+  indigo: 270,
+  violet: 290,
+  purple: 300,
+  fuchsia: 320,
+  pink: 350,
+  rose: 10,
+);
+
+/// Generate hue-based color utilities
+@each $name, $hue in $oklch-hues {
+  .bg-#{$name}-oklch {
+    background-color: oklch(55% 0.2 $hue);
+  }
+
+  .text-#{$name}-oklch {
+    color: oklch(55% 0.2 $hue);
+  }
+
+  .border-#{$name}-oklch {
+    border-color: oklch(55% 0.2 $hue);
+  }
+
+  // Light variant
+  .bg-#{$name}-light-oklch {
+    background-color: oklch(85% 0.08 $hue);
+  }
+
+  // Dark variant
+  .bg-#{$name}-dark-oklch {
+    background-color: oklch(35% 0.15 $hue);
+  }
+}
+
+// =============================================================================
+// LIGHTNESS SCALE UTILITIES
+// =============================================================================
+
+/// Dynamic lightness adjustment
+@for $i from 1 through 9 {
+  $lightness: $i * 10;
+
+  .l-#{$lightness} {
+    --oklch-l: #{$lightness + 0%};
+  }
+}
+
+/// Apply lightness to element
+.bg-oklch {
+  background-color: oklch(
+    var(--oklch-l, 50%) var(--oklch-c, 0.2) var(--oklch-h, 250)
+  );
+}
+
+.text-oklch {
+  color: oklch(var(--oklch-l, 50%) var(--oklch-c, 0.2) var(--oklch-h, 250));
+}
+
+// =============================================================================
+// CHROMA (SATURATION) UTILITIES
+// =============================================================================
+
+/// Low chroma (muted)
+.c-muted {
+  --oklch-c: 0.05;
+}
+
+/// Normal chroma
+.c-normal {
+  --oklch-c: 0.15;
+}
+
+/// High chroma (vibrant)
+.c-vibrant {
+  --oklch-c: 0.25;
+}
+
+/// Maximum chroma
+.c-max {
+  --oklch-c: 0.35;
+}
+
+/// Grayscale (no chroma)
+.c-none {
+  --oklch-c: 0;
+}
+
+// =============================================================================
+// HUE UTILITIES
+// =============================================================================
+
+@each $name, $hue in $oklch-hues {
+  .h-#{$name} {
+    --oklch-h: #{$hue};
+  }
+}
+
+/// Custom hue
+.h-custom {
+  --oklch-h: var(--hue, 250);
+}
+
+// =============================================================================
+// COLOR MIX WITH OKLCH
+// =============================================================================
+
+/// Mix with white (tint)
+.tint-10 {
+  background-color: color-mix(in oklch, var(--color) 90%, white);
+}
+
+.tint-20 {
+  background-color: color-mix(in oklch, var(--color) 80%, white);
+}
+
+.tint-30 {
+  background-color: color-mix(in oklch, var(--color) 70%, white);
+}
+
+.tint-50 {
+  background-color: color-mix(in oklch, var(--color) 50%, white);
+}
+
+/// Mix with black (shade)
+.shade-10 {
+  background-color: color-mix(in oklch, var(--color) 90%, black);
+}
+
+.shade-20 {
+  background-color: color-mix(in oklch, var(--color) 80%, black);
+}
+
+.shade-30 {
+  background-color: color-mix(in oklch, var(--color) 70%, black);
+}
+
+.shade-50 {
+  background-color: color-mix(in oklch, var(--color) 50%, black);
+}
+
+/// Mix two colors
+.mix-primary-secondary {
+  background-color: color-mix(
+    in oklch,
+    var(--primary-oklch) 50%,
+    var(--secondary-oklch)
+  );
+}
+
+// =============================================================================
+// RELATIVE COLOR SYNTAX
+// =============================================================================
+// Modify colors based on another color
+
+/// Lighten current color
+.lighten-10 {
+  background-color: oklch(from var(--color) calc(l + 0.1) c h);
+}
+
+.lighten-20 {
+  background-color: oklch(from var(--color) calc(l + 0.2) c h);
+}
+
+/// Darken current color
+.darken-10 {
+  background-color: oklch(from var(--color) calc(l - 0.1) c h);
+}
+
+.darken-20 {
+  background-color: oklch(from var(--color) calc(l - 0.2) c h);
+}
+
+/// Saturate (increase chroma)
+.saturate {
+  background-color: oklch(from var(--color) l calc(c + 0.1) h);
+}
+
+/// Desaturate (decrease chroma)
+.desaturate {
+  background-color: oklch(from var(--color) l calc(c - 0.1) h);
+}
+
+/// Hue shift
+.hue-shift-30 {
+  background-color: oklch(from var(--color) l c calc(h + 30));
+}
+
+.hue-shift-60 {
+  background-color: oklch(from var(--color) l c calc(h + 60));
+}
+
+.hue-shift-180 {
+  background-color: oklch(from var(--color) l c calc(h + 180));
+}
+
+// =============================================================================
+// ACCESSIBLE COLOR PAIRS
+// =============================================================================
+// Guaranteed contrast ratios using OKLCH lightness
+
+/// Light background, dark text (AAA contrast)
+.contrast-light {
+  background-color: oklch(95% 0.02 var(--oklch-h, 250));
+  color: oklch(25% 0.05 var(--oklch-h, 250));
+}
+
+/// Dark background, light text (AAA contrast)
+.contrast-dark {
+  background-color: oklch(25% 0.05 var(--oklch-h, 250));
+  color: oklch(95% 0.02 var(--oklch-h, 250));
+}
+
+/// Medium background with high contrast text
+.contrast-medium {
+  background-color: oklch(50% 0.15 var(--oklch-h, 250));
+  color: oklch(98% 0 0);
+}
+
+/// Subtle background (low contrast for sections)
+.bg-subtle {
+  background-color: oklch(97% 0.01 var(--oklch-h, 250));
+}
+
+// =============================================================================
+// GRADIENT UTILITIES WITH OKLCH
+// =============================================================================
+
+/// Smooth OKLCH gradient (no gray zone)
+.gradient-oklch {
+  background: linear-gradient(
+    in oklch,
+    oklch(55% 0.25 250) 0%,
+    oklch(55% 0.25 320) 100%
+  );
+}
+
+/// Rainbow gradient in OKLCH
+.gradient-rainbow-oklch {
+  background: linear-gradient(
+    in oklch longer hue,
+    oklch(65% 0.2 0) 0%,
+    oklch(65% 0.2 360) 100%
+  );
+}
+
+/// Sunset gradient
+.gradient-sunset {
+  background: linear-gradient(
+    in oklch,
+    oklch(70% 0.2 50) 0%,
+    oklch(55% 0.25 350) 100%
+  );
+}
+
+/// Ocean gradient
+.gradient-ocean {
+  background: linear-gradient(
+    in oklch,
+    oklch(70% 0.15 195) 0%,
+    oklch(45% 0.2 250) 100%
+  );
+}
+
+/// Forest gradient
+.gradient-forest {
+  background: linear-gradient(
+    in oklch,
+    oklch(70% 0.2 125) 0%,
+    oklch(40% 0.15 150) 100%
+  );
+}
+
+// =============================================================================
+// DARK MODE WITH OKLCH
+// =============================================================================
+
+[data-theme="dark"] {
+  // Invert lightness while keeping hue/chroma
+  --primary-oklch: oklch(70% 0.2 250);
+  --secondary-oklch: oklch(70% 0.15 280);
+  --accent-oklch: oklch(80% 0.15 75);
+
+  --success-oklch: oklch(75% 0.15 145);
+  --warning-oklch: oklch(80% 0.15 85);
+  --danger-oklch: oklch(70% 0.18 25);
+  --info-oklch: oklch(75% 0.12 230);
+
+  // Inverted gray scale
+  --gray-50-oklch: oklch(12% 0 0);
+  --gray-100-oklch: oklch(18% 0 0);
+  --gray-200-oklch: oklch(25% 0 0);
+  --gray-300-oklch: oklch(35% 0 0);
+  --gray-400-oklch: oklch(50% 0 0);
+  --gray-500-oklch: oklch(60% 0 0);
+  --gray-600-oklch: oklch(70% 0 0);
+  --gray-700-oklch: oklch(80% 0 0);
+  --gray-800-oklch: oklch(90% 0 0);
+  --gray-900-oklch: oklch(95% 0 0);
+  --gray-950-oklch: oklch(98% 0 0);
+}
+
+// =============================================================================
+// P3 WIDE GAMUT COLORS
+// =============================================================================
+// Ultra-vivid colors for displays that support Display P3
+
+@media (color-gamut: p3) {
+  .p3-red {
+    background-color: oklch(55% 0.35 25);
+  }
+
+  .p3-green {
+    background-color: oklch(70% 0.35 145);
+  }
+
+  .p3-blue {
+    background-color: oklch(50% 0.35 265);
+  }
+
+  .p3-cyan {
+    background-color: oklch(80% 0.25 195);
+  }
+
+  .p3-magenta {
+    background-color: oklch(60% 0.35 330);
+  }
+
+  .p3-yellow {
+    background-color: oklch(90% 0.25 100);
+  }
+}
+
+// =============================================================================
+// SEMANTIC COLOR UTILITIES
+// =============================================================================
+
+.bg-primary-oklch {
+  background-color: var(--primary-oklch);
+}
+
+.bg-secondary-oklch {
+  background-color: var(--secondary-oklch);
+}
+
+.bg-accent-oklch {
+  background-color: var(--accent-oklch);
+}
+
+.bg-success-oklch {
+  background-color: var(--success-oklch);
+}
+
+.bg-warning-oklch {
+  background-color: var(--warning-oklch);
+}
+
+.bg-danger-oklch {
+  background-color: var(--danger-oklch);
+}
+
+.bg-info-oklch {
+  background-color: var(--info-oklch);
+}
+
+// Text colors
+.text-primary-oklch {
+  color: var(--primary-oklch);
+}
+
+.text-secondary-oklch {
+  color: var(--secondary-oklch);
+}
+
+.text-success-oklch {
+  color: var(--success-oklch);
+}
+
+.text-warning-oklch {
+  color: var(--warning-oklch);
+}
+
+.text-danger-oklch {
+  color: var(--danger-oklch);
+}
+
+// =============================================================================
+// COLOR SCHEME GENERATOR MIXINS
+// =============================================================================
+
+/// Generate color from OKLCH
+/// @param {Number} $lightness - Lightness (0-100)
+/// @param {Number} $chroma - Chroma (0-0.4)
+/// @param {Number} $hue - Hue angle (0-360)
+@mixin oklch-color($lightness, $chroma, $hue) {
+  color: oklch(#{$lightness + 0%} $chroma $hue);
+}
+
+/// Generate background from OKLCH
+@mixin oklch-bg($lightness, $chroma, $hue) {
+  background-color: oklch(#{$lightness + 0%} $chroma $hue);
+}
+
+/// Generate complementary color pair
+/// @param {Number} $hue - Base hue
+/// @param {Number} $lightness - Base lightness
+@mixin complementary-pair($hue, $lightness: 55) {
+  --color-1: oklch(#{$lightness + 0%} 0.2 $hue);
+  --color-2: oklch(#{$lightness + 0%} 0.2 calc(#{$hue} + 180));
+}
+
+/// Generate triadic color scheme
+/// @param {Number} $hue - Base hue
+@mixin triadic-scheme($hue) {
+  --color-1: oklch(55% 0.2 $hue);
+  --color-2: oklch(55% 0.2 calc(#{$hue} + 120));
+  --color-3: oklch(55% 0.2 calc(#{$hue} + 240));
+}
+
+/// Generate analogous color scheme
+/// @param {Number} $hue - Base hue
+@mixin analogous-scheme($hue) {
+  --color-1: oklch(55% 0.2 calc(#{$hue} - 30));
+  --color-2: oklch(55% 0.2 $hue);
+  --color-3: oklch(55% 0.2 calc(#{$hue} + 30));
+}
+
+// =============================================================================
+// FEATURE DETECTION
+// =============================================================================
+
+@supports (color: oklch(50% 0.2 250)) {
+  .oklch-supported {
+    --oklch-support: true;
+  }
+}
+
+@supports not (color: oklch(50% 0.2 250)) {
+  // Fallback to hex colors
+  :root {
+    --primary-oklch: #3b82f6;
+    --secondary-oklch: #8b5cf6;
+    --accent-oklch: #f59e0b;
+    --success-oklch: #22c55e;
+    --warning-oklch: #eab308;
+    --danger-oklch: #ef4444;
+    --info-oklch: #06b6d4;
+  }
+}

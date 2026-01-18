@@ -1,0 +1,551 @@
+// =============================================================================
+// CSS MOTION PATH UTILITIES
+// =============================================================================
+// Animate elements along custom paths using offset-path
+// Create complex movement without JavaScript
+// Browser support: Chrome 55+, Firefox 72+, Safari 16+
+
+// =============================================================================
+// OFFSET PATH DEFINITIONS
+// =============================================================================
+
+/// Circle path
+.path-circle {
+  offset-path: circle(50% at center);
+}
+
+.path-circle-sm {
+  offset-path: circle(100px at center);
+}
+
+.path-circle-lg {
+  offset-path: circle(200px at center);
+}
+
+/// Ellipse paths
+.path-ellipse {
+  offset-path: ellipse(50% 25% at center);
+}
+
+.path-ellipse-wide {
+  offset-path: ellipse(75% 25% at center);
+}
+
+.path-ellipse-tall {
+  offset-path: ellipse(25% 75% at center);
+}
+
+/// Line paths
+.path-line-horizontal {
+  offset-path: path("M 0 50 L 300 50");
+}
+
+.path-line-vertical {
+  offset-path: path("M 50 0 L 50 300");
+}
+
+.path-line-diagonal {
+  offset-path: path("M 0 0 L 300 300");
+}
+
+/// Wave path
+.path-wave {
+  offset-path: path("M 0 100 Q 75 0, 150 100 T 300 100");
+}
+
+.path-wave-double {
+  offset-path: path("M 0 50 Q 50 0, 100 50 T 200 50 T 300 50 T 400 50");
+}
+
+/// Zigzag path
+.path-zigzag {
+  offset-path: path(
+    "M 0 0 L 50 100 L 100 0 L 150 100 L 200 0 L 250 100 L 300 0"
+  );
+}
+
+/// Arc paths
+.path-arc-top {
+  offset-path: path("M 0 100 A 150 100 0 0 1 300 100");
+}
+
+.path-arc-bottom {
+  offset-path: path("M 0 0 A 150 100 0 0 0 300 0");
+}
+
+/// Figure-8 / Infinity path
+.path-infinity {
+  offset-path: path(
+    "M 150 100 C 50 0, 50 200, 150 100 C 250 0, 250 200, 150 100"
+  );
+}
+
+/// Heart path
+.path-heart {
+  offset-path: path(
+    "M 150 30 C 90 -30, 0 60, 150 180 C 300 60, 210 -30, 150 30"
+  );
+}
+
+/// Star path
+.path-star {
+  offset-path: path(
+    "M 100 10 L 130 90 L 210 90 L 145 140 L 170 220 L 100 170 L 30 220 L 55 140 L -10 90 L 70 90 Z"
+  );
+}
+
+/// Square/rectangle path
+.path-square {
+  offset-path: path("M 0 0 L 200 0 L 200 200 L 0 200 Z");
+}
+
+.path-rectangle {
+  offset-path: path("M 0 0 L 300 0 L 300 100 L 0 100 Z");
+}
+
+/// Triangle path
+.path-triangle {
+  offset-path: path("M 100 0 L 200 200 L 0 200 Z");
+}
+
+/// Spiral path (simplified)
+.path-spiral {
+  offset-path: path(
+    "M 100 100 C 120 80, 140 100, 120 120 C 100 140, 80 120, 100 100 C 130 70, 160 100, 130 130 C 100 160, 70 130, 100 100"
+  );
+}
+
+// =============================================================================
+// CUSTOM SVG PATH UTILITY
+// =============================================================================
+
+/// Use custom path via CSS variable
+.path-custom {
+  offset-path: var(--motion-path);
+}
+
+/// Path from SVG element reference
+.path-from-svg {
+  offset-path: url(#motion-path);
+}
+
+// =============================================================================
+// OFFSET DISTANCE (POSITION ON PATH)
+// =============================================================================
+
+/// Starting position
+.offset-0 {
+  offset-distance: 0%;
+}
+
+/// Quarter positions
+.offset-25 {
+  offset-distance: 25%;
+}
+
+.offset-50 {
+  offset-distance: 50%;
+}
+
+.offset-75 {
+  offset-distance: 75%;
+}
+
+/// End position
+.offset-100 {
+  offset-distance: 100%;
+}
+
+/// Fine-grained positions
+@for $i from 0 through 10 {
+  $percent: $i * 10;
+
+  .offset-#{$percent} {
+    offset-distance: #{$percent + 0%};
+  }
+}
+
+// =============================================================================
+// OFFSET ROTATION
+// =============================================================================
+
+/// Auto-rotate to follow path direction
+.offset-rotate-auto {
+  offset-rotate: auto;
+}
+
+/// Reverse auto-rotate
+.offset-rotate-reverse {
+  offset-rotate: reverse;
+}
+
+/// Fixed rotation angles
+.offset-rotate-0 {
+  offset-rotate: 0deg;
+}
+
+.offset-rotate-45 {
+  offset-rotate: 45deg;
+}
+
+.offset-rotate-90 {
+  offset-rotate: 90deg;
+}
+
+.offset-rotate-180 {
+  offset-rotate: 180deg;
+}
+
+/// Auto-rotate with offset
+.offset-rotate-auto-45 {
+  offset-rotate: auto 45deg;
+}
+
+.offset-rotate-auto-90 {
+  offset-rotate: auto 90deg;
+}
+
+// =============================================================================
+// OFFSET ANCHOR
+// =============================================================================
+
+/// Anchor point on element (where it attaches to path)
+.offset-anchor-center {
+  offset-anchor: center;
+}
+
+.offset-anchor-top {
+  offset-anchor: top center;
+}
+
+.offset-anchor-bottom {
+  offset-anchor: bottom center;
+}
+
+.offset-anchor-start {
+  offset-anchor: center left;
+}
+
+.offset-anchor-end {
+  offset-anchor: center right;
+}
+
+// =============================================================================
+// MOTION PATH ANIMATIONS
+// =============================================================================
+
+/// Basic path animation
+@keyframes motion-path-loop {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+
+/// Bounce on path
+@keyframes motion-path-bounce {
+  0%,
+  100% {
+    offset-distance: 0%;
+  }
+  50% {
+    offset-distance: 100%;
+  }
+}
+
+/// Back and forth
+@keyframes motion-path-alternate {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+/// Ease in/out motion
+@keyframes motion-path-ease {
+  0% {
+    offset-distance: 0%;
+    animation-timing-function: ease-out;
+  }
+  50% {
+    offset-distance: 50%;
+    animation-timing-function: ease-in;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+/// Pulse while moving
+@keyframes motion-path-pulse {
+  0%,
+  100% {
+    offset-distance: 0%;
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.2);
+  }
+  50% {
+    offset-distance: 50%;
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.2);
+  }
+}
+
+// =============================================================================
+// ANIMATION PRESETS
+// =============================================================================
+
+/// Continuous loop animation
+.motion-loop {
+  animation: motion-path-loop var(--motion-duration, 3s) linear infinite;
+}
+
+/// Bounce animation
+.motion-bounce {
+  animation: motion-path-bounce var(--motion-duration, 2s) ease-in-out infinite;
+}
+
+/// Alternate back and forth
+.motion-alternate {
+  animation: motion-path-alternate var(--motion-duration, 2s) ease-in-out
+    infinite alternate;
+}
+
+/// Single pass animation
+.motion-once {
+  animation: motion-path-loop var(--motion-duration, 2s) ease-in-out forwards;
+}
+
+/// Delayed start
+.motion-delay-1 {
+  animation-delay: 1s;
+}
+
+.motion-delay-2 {
+  animation-delay: 2s;
+}
+
+.motion-delay-3 {
+  animation-delay: 3s;
+}
+
+// =============================================================================
+// DURATION UTILITIES
+// =============================================================================
+
+.motion-duration-1 {
+  --motion-duration: 1s;
+}
+
+.motion-duration-2 {
+  --motion-duration: 2s;
+}
+
+.motion-duration-3 {
+  --motion-duration: 3s;
+}
+
+.motion-duration-5 {
+  --motion-duration: 5s;
+}
+
+.motion-duration-10 {
+  --motion-duration: 10s;
+}
+
+.motion-duration-slow {
+  --motion-duration: 8s;
+}
+
+.motion-duration-fast {
+  --motion-duration: 1s;
+}
+
+// =============================================================================
+// COMMON USE CASES
+// =============================================================================
+
+/// Orbiting element (around a center point)
+.orbit {
+  offset-path: circle(100px at center);
+  animation: motion-path-loop 4s linear infinite;
+  offset-rotate: 0deg; // Don't rotate while orbiting
+}
+
+.orbit-fast {
+  animation-duration: 2s;
+}
+
+.orbit-slow {
+  animation-duration: 8s;
+}
+
+/// Following a curved path
+.follow-curve {
+  offset-path: path("M 0 200 Q 150 0, 300 200");
+  offset-rotate: auto;
+  animation: motion-path-loop 3s ease-in-out infinite alternate;
+}
+
+/// Floating effect (gentle wave)
+.float-wave {
+  offset-path: path("M 0 0 Q 25 -20, 50 0 T 100 0");
+  animation: motion-path-loop 2s ease-in-out infinite;
+}
+
+/// Loader animation on circular path
+.loader-orbit {
+  offset-path: circle(30px at center);
+  animation: motion-path-loop 1s linear infinite;
+}
+
+/// Flying across screen
+.fly-across {
+  offset-path: path("M -50 50 Q 150 -50, 350 50 T 750 50");
+  offset-rotate: auto;
+  animation: motion-path-loop 4s ease-in-out forwards;
+}
+
+/// Pendulum swing
+.pendulum {
+  offset-path: path("M 0 0 A 100 100 0 0 1 200 0");
+  animation: motion-path-alternate 1.5s ease-in-out infinite alternate;
+  transform-origin: top center;
+}
+
+// =============================================================================
+// STAGGERED MOTION (MULTIPLE ELEMENTS)
+// =============================================================================
+
+/// Stagger delay for multiple elements on same path
+@for $i from 1 through 10 {
+  .motion-stagger-#{$i} {
+    animation-delay: #{($i - 1) * 0.2}s;
+  }
+}
+
+/// Chain animation (elements follow each other)
+.motion-chain {
+  @for $i from 1 through 5 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{($i - 1) * 0.5}s;
+    }
+  }
+}
+
+// =============================================================================
+// SCROLL-TRIGGERED MOTION PATH
+// =============================================================================
+
+/// Motion path driven by scroll
+.motion-scroll {
+  offset-path: path("M 0 0 L 300 300");
+  animation: motion-path-loop linear forwards;
+  animation-timeline: scroll();
+}
+
+/// Motion on view (when element enters viewport)
+.motion-on-view {
+  offset-distance: 0%;
+  animation: motion-path-loop 2s ease-out forwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+}
+
+// =============================================================================
+// MOTION PATH MIXINS
+// =============================================================================
+
+/// Apply motion path animation
+/// @param {String} $path - SVG path string
+/// @param {Time} $duration - Animation duration
+/// @param {String} $timing - Timing function
+@mixin motion-path($path, $duration: 3s, $timing: linear) {
+  offset-path: path($path);
+  animation: motion-path-loop $duration $timing infinite;
+}
+
+/// Create circular orbit
+/// @param {Length} $radius - Orbit radius
+/// @param {Time} $duration - Orbit duration
+/// @param {Bool} $clockwise - Direction
+@mixin orbit($radius, $duration: 4s, $clockwise: true) {
+  offset-path: circle($radius at center);
+  offset-rotate: 0deg;
+  animation: motion-path-loop $duration linear infinite;
+
+  @if not $clockwise {
+    animation-direction: reverse;
+  }
+}
+
+/// Apply wave motion
+/// @param {Length} $amplitude - Wave height
+/// @param {Length} $wavelength - Wave width
+/// @param {Time} $duration - Animation duration
+@mixin wave-motion($amplitude: 20px, $wavelength: 100px, $duration: 2s) {
+  offset-path: path(
+    "M 0 0 Q #{$wavelength * 0.25} #{-$amplitude}, #{$wavelength * 0.5} 0 T #{$wavelength} 0"
+  );
+  animation: motion-path-loop $duration ease-in-out infinite;
+}
+
+// =============================================================================
+// REDUCED MOTION SUPPORT
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-loop,
+  .motion-bounce,
+  .motion-alternate,
+  .motion-once,
+  .orbit,
+  .follow-curve,
+  .float-wave,
+  .loader-orbit,
+  .fly-across,
+  .pendulum {
+    animation: none !important;
+    offset-distance: 0% !important;
+  }
+}
+
+// =============================================================================
+// FEATURE DETECTION
+// =============================================================================
+
+@supports (offset-path: circle(50px)) {
+  .motion-path-supported {
+    --motion-path-support: true;
+  }
+}
+
+@supports not (offset-path: circle(50px)) {
+  // Fallback - use regular animations/transforms
+  .motion-loop,
+  .motion-bounce,
+  .orbit {
+    animation: none;
+
+    // Simple fallback animation
+    @keyframes fallback-float {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    animation: fallback-float 2s ease-in-out infinite;
+  }
+}

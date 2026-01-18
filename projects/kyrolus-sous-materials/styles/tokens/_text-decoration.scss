@@ -1,0 +1,582 @@
+// =============================================================================
+// ADVANCED TEXT DECORATION UTILITIES
+// =============================================================================
+// Modern text decoration properties for sophisticated typography
+// Underline styling, skip-ink, offset, thickness
+// Browser support: All modern browsers
+
+// =============================================================================
+// TEXT DECORATION LINE
+// =============================================================================
+
+/// No decoration
+.decoration-none {
+  text-decoration-line: none;
+}
+
+/// Underline
+.decoration-underline {
+  text-decoration-line: underline;
+}
+
+/// Overline
+.decoration-overline {
+  text-decoration-line: overline;
+}
+
+/// Line through (strikethrough)
+.decoration-line-through {
+  text-decoration-line: line-through;
+}
+
+/// Underline + overline
+.decoration-underline-overline {
+  text-decoration-line: underline overline;
+}
+
+// =============================================================================
+// TEXT DECORATION STYLE
+// =============================================================================
+
+/// Solid line (default)
+.decoration-solid {
+  text-decoration-style: solid;
+}
+
+/// Double line
+.decoration-double {
+  text-decoration-style: double;
+}
+
+/// Dotted line
+.decoration-dotted {
+  text-decoration-style: dotted;
+}
+
+/// Dashed line
+.decoration-dashed {
+  text-decoration-style: dashed;
+}
+
+/// Wavy line
+.decoration-wavy {
+  text-decoration-style: wavy;
+}
+
+// =============================================================================
+// TEXT DECORATION COLOR
+// =============================================================================
+
+/// Inherit text color
+.decoration-current {
+  text-decoration-color: currentColor;
+}
+
+/// Transparent (for animation)
+.decoration-transparent {
+  text-decoration-color: transparent;
+}
+
+/// Theme colors
+.decoration-primary {
+  text-decoration-color: var(--primary);
+}
+
+.decoration-secondary {
+  text-decoration-color: var(--secondary);
+}
+
+.decoration-accent {
+  text-decoration-color: var(--accent);
+}
+
+.decoration-success {
+  text-decoration-color: var(--success);
+}
+
+.decoration-warning {
+  text-decoration-color: var(--warning);
+}
+
+.decoration-danger {
+  text-decoration-color: var(--danger);
+}
+
+.decoration-muted {
+  text-decoration-color: var(--text-muted);
+}
+
+/// Semi-transparent colors
+.decoration-primary-50 {
+  text-decoration-color: color-mix(in srgb, var(--primary) 50%, transparent);
+}
+
+.decoration-current-50 {
+  text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
+}
+
+// =============================================================================
+// TEXT DECORATION THICKNESS
+// =============================================================================
+
+/// Auto thickness (browser default)
+.decoration-thickness-auto {
+  text-decoration-thickness: auto;
+}
+
+/// From font metrics
+.decoration-thickness-from-font {
+  text-decoration-thickness: from-font;
+}
+
+/// Fixed thicknesses
+.decoration-thickness-1 {
+  text-decoration-thickness: 1px;
+}
+
+.decoration-thickness-2 {
+  text-decoration-thickness: 2px;
+}
+
+.decoration-thickness-3 {
+  text-decoration-thickness: 3px;
+}
+
+.decoration-thickness-4 {
+  text-decoration-thickness: 4px;
+}
+
+.decoration-thickness-8 {
+  text-decoration-thickness: 8px;
+}
+
+/// Relative thicknesses
+.decoration-thickness-thin {
+  text-decoration-thickness: 0.05em;
+}
+
+.decoration-thickness-medium {
+  text-decoration-thickness: 0.1em;
+}
+
+.decoration-thickness-thick {
+  text-decoration-thickness: 0.2em;
+}
+
+.decoration-thickness-bold {
+  text-decoration-thickness: 0.3em;
+}
+
+// =============================================================================
+// TEXT UNDERLINE OFFSET
+// =============================================================================
+
+/// Auto offset
+.underline-offset-auto {
+  text-underline-offset: auto;
+}
+
+/// Fixed offsets
+.underline-offset-0 {
+  text-underline-offset: 0;
+}
+
+.underline-offset-1 {
+  text-underline-offset: 1px;
+}
+
+.underline-offset-2 {
+  text-underline-offset: 2px;
+}
+
+.underline-offset-4 {
+  text-underline-offset: 4px;
+}
+
+.underline-offset-8 {
+  text-underline-offset: 8px;
+}
+
+/// Relative offsets
+.underline-offset-sm {
+  text-underline-offset: 0.1em;
+}
+
+.underline-offset-md {
+  text-underline-offset: 0.2em;
+}
+
+.underline-offset-lg {
+  text-underline-offset: 0.3em;
+}
+
+/// Negative offsets (closer to text)
+.underline-offset-n1 {
+  text-underline-offset: -1px;
+}
+
+.underline-offset-n2 {
+  text-underline-offset: -2px;
+}
+
+// =============================================================================
+// TEXT DECORATION SKIP INK
+// =============================================================================
+
+/// Skip ink auto (default - skips descenders)
+.decoration-skip-ink-auto {
+  text-decoration-skip-ink: auto;
+}
+
+/// Don't skip descenders
+.decoration-skip-ink-none {
+  text-decoration-skip-ink: none;
+}
+
+/// All (skip all obstructing elements)
+.decoration-skip-ink-all {
+  text-decoration-skip-ink: all;
+}
+
+// =============================================================================
+// COMBINED UNDERLINE STYLES
+// =============================================================================
+
+/// Subtle underline (thin, offset)
+.underline-subtle {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, currentColor 30%, transparent);
+}
+
+/// Bold underline
+.underline-bold {
+  text-decoration-line: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 2px;
+}
+
+/// Highlight underline (thick, colored)
+.underline-highlight {
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.4em;
+  text-underline-offset: -0.1em;
+  text-decoration-color: color-mix(in srgb, var(--primary) 30%, transparent);
+  text-decoration-skip-ink: none;
+}
+
+/// Wavy error underline
+.underline-error {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--danger);
+  text-decoration-thickness: 2px;
+}
+
+/// Wavy spell-check style
+.underline-spell {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--warning);
+  text-decoration-thickness: 1px;
+}
+
+/// Strikethrough with color
+.strikethrough-colored {
+  text-decoration-line: line-through;
+  text-decoration-color: var(--danger);
+  text-decoration-thickness: 2px;
+}
+
+// =============================================================================
+// ANIMATED UNDERLINES
+// =============================================================================
+
+/// Underline on hover (grow from left)
+.underline-hover {
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  transition: background-size 0.3s ease;
+
+  &:hover {
+    background-size: 100% 2px;
+  }
+}
+
+/// Underline on hover (grow from center)
+.underline-hover-center {
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  transition: background-size 0.3s ease;
+
+  &:hover {
+    background-size: 100% 2px;
+  }
+}
+
+/// Underline on hover (grow from right)
+.underline-hover-right {
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  transition: background-size 0.3s ease;
+
+  &:hover {
+    background-size: 100% 2px;
+  }
+}
+
+/// Underline slide out on hover
+.underline-slide-out {
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 2px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  transition: background-size 0.3s ease, background-position 0.3s ease;
+
+  &:hover {
+    background-size: 0% 2px;
+    background-position: right bottom;
+  }
+}
+
+/// Color transition underline
+.underline-color-transition {
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.3s ease;
+
+  &:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+/// Thickness transition
+.underline-grow {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: text-decoration-thickness 0.3s ease;
+
+  &:hover {
+    text-decoration-thickness: 3px;
+  }
+}
+
+// =============================================================================
+// GRADIENT UNDERLINES (USING BACKGROUND)
+// =============================================================================
+
+/// Gradient underline
+.underline-gradient {
+  text-decoration: none;
+  background-image: linear-gradient(90deg, var(--primary), var(--secondary));
+  background-size: 100% 2px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  padding-bottom: 4px;
+}
+
+/// Rainbow underline
+.underline-rainbow {
+  text-decoration: none;
+  background-image: linear-gradient(
+    90deg,
+    #ff0000,
+    #ff7f00,
+    #ffff00,
+    #00ff00,
+    #0000ff,
+    #4b0082,
+    #9400d3
+  );
+  background-size: 100% 3px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  padding-bottom: 5px;
+}
+
+/// Animated gradient underline
+.underline-gradient-animated {
+  text-decoration: none;
+  background-image: linear-gradient(
+    90deg,
+    var(--primary),
+    var(--secondary),
+    var(--primary)
+  );
+  background-size: 200% 2px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  animation: underline-gradient-shift 2s linear infinite;
+}
+
+@keyframes underline-gradient-shift {
+  to {
+    background-position: -200% bottom;
+  }
+}
+
+// =============================================================================
+// LINK STYLES
+// =============================================================================
+
+/// Clean link (no underline, underline on hover)
+.link-clean {
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+/// Always underlined link
+.link-underlined {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
+
+  &:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+/// Fancy link with color change
+.link-fancy {
+  text-decoration: none;
+  background-image: linear-gradient(var(--primary), var(--primary));
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  transition: background-size 0.3s ease, color 0.3s ease;
+
+  &:hover {
+    background-size: 100% 2px;
+    color: var(--primary);
+  }
+}
+
+// =============================================================================
+// TEXT SHADOW DECORATIONS
+// =============================================================================
+
+/// Glow effect
+.text-glow {
+  text-shadow: 0 0 10px currentColor;
+}
+
+.text-glow-primary {
+  text-shadow: 0 0 10px var(--primary);
+}
+
+/// Neon effect
+.text-neon {
+  text-shadow: 0 0 5px currentColor, 0 0 10px currentColor,
+    0 0 20px currentColor;
+}
+
+/// 3D text effect
+.text-3d {
+  text-shadow: 1px 1px 0 var(--border), 2px 2px 0 var(--border),
+    3px 3px 0 var(--border);
+}
+
+/// Outline effect
+.text-outline {
+  -webkit-text-stroke: 1px currentColor;
+  color: transparent;
+}
+
+.text-outline-thick {
+  -webkit-text-stroke: 2px currentColor;
+  color: transparent;
+}
+
+// =============================================================================
+// MIXINS
+// =============================================================================
+
+/// Apply text decoration
+/// @param {String} $line - Decoration line type
+/// @param {String} $style - Decoration style
+/// @param {Color} $color - Decoration color
+/// @param {Length} $thickness - Decoration thickness
+/// @param {Length} $offset - Underline offset
+@mixin text-decoration(
+  $line: underline,
+  $style: solid,
+  $color: currentColor,
+  $thickness: auto,
+  $offset: auto
+) {
+  text-decoration-line: $line;
+  text-decoration-style: $style;
+  text-decoration-color: $color;
+  text-decoration-thickness: $thickness;
+
+  @if $line == underline {
+    text-underline-offset: $offset;
+  }
+}
+
+/// Create animated underline
+/// @param {Color} $color - Underline color
+/// @param {Length} $thickness - Underline thickness
+/// @param {String} $direction - Animation direction (left, center, right)
+@mixin animated-underline(
+  $color: currentColor,
+  $thickness: 2px,
+  $direction: left
+) {
+  text-decoration: none;
+  background-image: linear-gradient($color, $color);
+  background-size: 0% $thickness;
+  background-repeat: no-repeat;
+
+  @if $direction == center {
+    background-position: center bottom;
+  } @else if $direction == right {
+    background-position: right bottom;
+  } @else {
+    background-position: left bottom;
+  }
+
+  transition: background-size 0.3s ease;
+
+  &:hover {
+    background-size: 100% $thickness;
+  }
+}
+
+// =============================================================================
+// REDUCED MOTION
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .underline-hover,
+  .underline-hover-center,
+  .underline-hover-right,
+  .underline-slide-out,
+  .underline-color-transition,
+  .underline-grow,
+  .underline-gradient-animated,
+  .link-fancy {
+    transition: none !important;
+    animation: none !important;
+  }
+}

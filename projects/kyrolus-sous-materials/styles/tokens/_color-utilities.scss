@@ -1,0 +1,571 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - COLOR UTILITIES
+// =============================================================================
+// Comprehensive color utility classes using the design token system.
+// Generates optimized classes for background, text, border, and more.
+// =============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "primitives" as *;
+@use "semantic" as *;
+
+// =============================================================================
+// PALETTE COLOR UTILITIES
+// =============================================================================
+// Generate utility classes for all color palettes (50-950 scale)
+
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    $color-value: map.get($palette, $shade);
+
+    // Background colors
+    .bg-#{$palette-name}-#{$shade} {
+      background-color: var(--color-#{$palette-name}-#{$shade});
+    }
+
+    // Text colors
+    .text-#{$palette-name}-#{$shade} {
+      color: var(--color-#{$palette-name}-#{$shade});
+    }
+
+    // Border colors
+    .border-#{$palette-name}-#{$shade} {
+      border-color: var(--color-#{$palette-name}-#{$shade});
+    }
+
+    // Ring/Outline colors
+    .ring-#{$palette-name}-#{$shade} {
+      --ring-color: var(--color-#{$palette-name}-#{$shade});
+    }
+
+    // Accent color
+    .accent-#{$palette-name}-#{$shade} {
+      accent-color: var(--color-#{$palette-name}-#{$shade});
+    }
+
+    // Caret color
+    .caret-#{$palette-name}-#{$shade} {
+      caret-color: var(--color-#{$palette-name}-#{$shade});
+    }
+
+    // Fill (for SVGs)
+    .fill-#{$palette-name}-#{$shade} {
+      fill: var(--color-#{$palette-name}-#{$shade});
+    }
+
+    // Stroke (for SVGs)
+    .stroke-#{$palette-name}-#{$shade} {
+      stroke: var(--color-#{$palette-name}-#{$shade});
+    }
+
+    // Decoration color
+    .decoration-#{$palette-name}-#{$shade} {
+      text-decoration-color: var(--color-#{$palette-name}-#{$shade});
+    }
+
+    // Placeholder color
+    .placeholder-#{$palette-name}-#{$shade} {
+      &::placeholder {
+        color: var(--color-#{$palette-name}-#{$shade});
+      }
+    }
+
+    // Divide color (for parent containers)
+    .divide-#{$palette-name}-#{$shade} > * + * {
+      border-color: var(--color-#{$palette-name}-#{$shade});
+    }
+
+    // Outline color
+    .outline-#{$palette-name}-#{$shade} {
+      outline-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+// =============================================================================
+// SEMANTIC COLOR UTILITIES
+// =============================================================================
+
+// Primary
+.bg-primary {
+  background-color: var(--primary);
+}
+.bg-primary-hover {
+  background-color: var(--primary-hover);
+}
+.bg-primary-active {
+  background-color: var(--primary-active);
+}
+.bg-primary-subtle {
+  background-color: var(--primary-subtle);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+.text-on-primary {
+  color: var(--on-primary);
+}
+.text-primary-subtle {
+  color: var(--on-primary-subtle);
+}
+
+.border-primary {
+  border-color: var(--primary);
+}
+.ring-primary {
+  --ring-color: var(--primary);
+}
+
+// Secondary
+.bg-secondary {
+  background-color: var(--secondary);
+}
+.bg-secondary-hover {
+  background-color: var(--secondary-hover);
+}
+.bg-secondary-active {
+  background-color: var(--secondary-active);
+}
+.bg-secondary-subtle {
+  background-color: var(--secondary-subtle);
+}
+
+.text-secondary {
+  color: var(--secondary);
+}
+.text-on-secondary {
+  color: var(--on-secondary);
+}
+.text-secondary-subtle {
+  color: var(--on-secondary-subtle);
+}
+
+.border-secondary {
+  border-color: var(--secondary);
+}
+.ring-secondary {
+  --ring-color: var(--secondary);
+}
+
+// Accent
+.bg-accent {
+  background-color: var(--accent);
+}
+.bg-accent-hover {
+  background-color: var(--accent-hover);
+}
+.bg-accent-active {
+  background-color: var(--accent-active);
+}
+.bg-accent-subtle {
+  background-color: var(--accent-subtle);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+.text-on-accent {
+  color: var(--on-accent);
+}
+
+.border-accent {
+  border-color: var(--accent);
+}
+.ring-accent {
+  --ring-color: var(--accent);
+}
+
+// Success
+.bg-success {
+  background-color: var(--success);
+}
+.bg-success-hover {
+  background-color: var(--success-hover);
+}
+.bg-success-subtle {
+  background-color: var(--success-subtle);
+}
+
+.text-success {
+  color: var(--success);
+}
+.text-on-success {
+  color: var(--on-success);
+}
+
+.border-success {
+  border-color: var(--success);
+}
+.ring-success {
+  --ring-color: var(--success);
+}
+
+// Warning
+.bg-warning {
+  background-color: var(--warning);
+}
+.bg-warning-hover {
+  background-color: var(--warning-hover);
+}
+.bg-warning-subtle {
+  background-color: var(--warning-subtle);
+}
+
+.text-warning {
+  color: var(--warning);
+}
+.text-on-warning {
+  color: var(--on-warning);
+}
+
+.border-warning {
+  border-color: var(--warning);
+}
+.ring-warning {
+  --ring-color: var(--warning);
+}
+
+// Error
+.bg-error {
+  background-color: var(--error);
+}
+.bg-error-hover {
+  background-color: var(--error-hover);
+}
+.bg-error-subtle {
+  background-color: var(--error-subtle);
+}
+
+.text-error {
+  color: var(--error);
+}
+.text-on-error {
+  color: var(--on-error);
+}
+
+.border-error {
+  border-color: var(--error);
+}
+.ring-error {
+  --ring-color: var(--error);
+}
+
+// Info
+.bg-info {
+  background-color: var(--info);
+}
+.bg-info-hover {
+  background-color: var(--info-hover);
+}
+.bg-info-subtle {
+  background-color: var(--info-subtle);
+}
+
+.text-info {
+  color: var(--info);
+}
+.text-on-info {
+  color: var(--on-info);
+}
+
+.border-info {
+  border-color: var(--info);
+}
+.ring-info {
+  --ring-color: var(--info);
+}
+
+// =============================================================================
+// SURFACE & BACKGROUND UTILITIES
+// =============================================================================
+.bg-background {
+  background-color: var(--background);
+}
+.bg-background-subtle {
+  background-color: var(--background-subtle);
+}
+.bg-background-muted {
+  background-color: var(--background-muted);
+}
+
+.bg-surface {
+  background-color: var(--surface);
+}
+.bg-surface-raised {
+  background-color: var(--surface-raised);
+}
+.bg-surface-overlay {
+  background-color: var(--surface-overlay);
+}
+.bg-surface-sunken {
+  background-color: var(--surface-sunken);
+}
+.bg-surface-disabled {
+  background-color: var(--surface-disabled);
+}
+
+// =============================================================================
+// TEXT COLOR UTILITIES (Semantic)
+// =============================================================================
+.text {
+  color: var(--text);
+}
+.text-body {
+  color: var(--text);
+}
+.text-muted {
+  color: var(--text-muted);
+}
+.text-subtle {
+  color: var(--text-secondary);
+}
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+.text-disabled {
+  color: var(--text-disabled);
+}
+.text-inverse {
+  color: var(--text-inverse);
+}
+.text-link {
+  color: var(--text-link);
+}
+
+// =============================================================================
+// BORDER COLOR UTILITIES (Semantic)
+// =============================================================================
+.border {
+  border-color: var(--border);
+}
+.border-strong {
+  border-color: var(--border-strong);
+}
+.border-subtle {
+  border-color: var(--border-subtle);
+}
+.border-interactive {
+  border-color: var(--border-interactive);
+}
+.border-focus {
+  border-color: var(--border-focus);
+}
+.border-error-semantic {
+  border-color: var(--border-error);
+}
+.divide {
+  & > * + * {
+    border-color: var(--divider);
+  }
+}
+
+// =============================================================================
+// SPECIAL COLOR UTILITIES
+// =============================================================================
+
+// Transparent
+.bg-transparent {
+  background-color: transparent;
+}
+.text-transparent {
+  color: transparent;
+}
+.border-transparent {
+  border-color: transparent;
+}
+
+// Current color
+.bg-current {
+  background-color: currentColor;
+}
+.text-current {
+  color: currentColor;
+}
+.border-current {
+  border-color: currentColor;
+}
+.fill-current {
+  fill: currentColor;
+}
+.stroke-current {
+  stroke: currentColor;
+}
+
+// Inherit
+.text-inherit {
+  color: inherit;
+}
+.bg-inherit {
+  background-color: inherit;
+}
+
+// Black & White
+.bg-black {
+  background-color: #000000;
+}
+.bg-white {
+  background-color: #ffffff;
+}
+.text-black {
+  color: #000000;
+}
+.text-white {
+  color: #ffffff;
+}
+.border-black {
+  border-color: #000000;
+}
+.border-white {
+  border-color: #ffffff;
+}
+
+// =============================================================================
+// OPACITY UTILITIES
+// =============================================================================
+@each $name, $value in $opacities {
+  .opacity-#{$name} {
+    opacity: $value;
+  }
+
+  // Background opacity utilities
+  .bg-opacity-#{$name} {
+    --bg-opacity: #{$value};
+  }
+
+  // Text opacity utilities
+  .text-opacity-#{$name} {
+    --text-opacity: #{$value};
+  }
+
+  // Border opacity utilities
+  .border-opacity-#{$name} {
+    --border-opacity: #{$value};
+  }
+}
+
+// =============================================================================
+// HOVER STATE COLOR UTILITIES
+// =============================================================================
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .hover\:bg-#{$palette-name}-#{$shade}:hover {
+      background-color: var(--color-#{$palette-name}-#{$shade});
+    }
+
+    .hover\:text-#{$palette-name}-#{$shade}:hover {
+      color: var(--color-#{$palette-name}-#{$shade});
+    }
+
+    .hover\:border-#{$palette-name}-#{$shade}:hover {
+      border-color: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+// Semantic hover states
+.hover\:bg-primary:hover {
+  background-color: var(--primary);
+}
+.hover\:bg-primary-hover:hover {
+  background-color: var(--primary-hover);
+}
+.hover\:bg-secondary:hover {
+  background-color: var(--secondary);
+}
+.hover\:bg-secondary-hover:hover {
+  background-color: var(--secondary-hover);
+}
+.hover\:bg-accent:hover {
+  background-color: var(--accent);
+}
+.hover\:bg-accent-hover:hover {
+  background-color: var(--accent-hover);
+}
+
+.hover\:text-primary:hover {
+  color: var(--primary);
+}
+.hover\:text-secondary:hover {
+  color: var(--secondary);
+}
+.hover\:text-accent:hover {
+  color: var(--accent);
+}
+.hover\:text-link-hover:hover {
+  color: var(--text-link-hover);
+}
+
+// =============================================================================
+// FOCUS STATE COLOR UTILITIES
+// =============================================================================
+.focus\:bg-primary:focus {
+  background-color: var(--primary);
+}
+.focus\:border-focus:focus {
+  border-color: var(--border-focus);
+}
+.focus\:ring-primary:focus {
+  --ring-color: var(--primary);
+}
+.focus\:ring-focus:focus {
+  --ring-color: var(--focus-ring);
+}
+
+// =============================================================================
+// ACTIVE STATE COLOR UTILITIES
+// =============================================================================
+.active\:bg-primary:active {
+  background-color: var(--primary);
+}
+.active\:bg-primary-active:active {
+  background-color: var(--primary-active);
+}
+.active\:bg-secondary-active:active {
+  background-color: var(--secondary-active);
+}
+
+// =============================================================================
+// DISABLED STATE COLOR UTILITIES
+// =============================================================================
+.disabled\:bg-disabled:disabled,
+.disabled\:bg-disabled[disabled] {
+  background-color: var(--surface-disabled);
+}
+
+.disabled\:text-disabled:disabled,
+.disabled\:text-disabled[disabled] {
+  color: var(--text-disabled);
+}
+
+.disabled\:border-disabled:disabled,
+.disabled\:border-disabled[disabled] {
+  border-color: var(--border);
+}
+
+// =============================================================================
+// GROUP HOVER UTILITIES
+// =============================================================================
+.group:hover .group-hover\:bg-primary {
+  background-color: var(--primary);
+}
+.group:hover .group-hover\:text-primary {
+  color: var(--primary);
+}
+.group:hover .group-hover\:bg-primary-subtle {
+  background-color: var(--primary-subtle);
+}
+
+// =============================================================================
+// SELECTION UTILITIES
+// =============================================================================
+.selection\:bg-primary::selection,
+.selection\:bg-primary *::selection {
+  background-color: var(--selection);
+}
+
+.selection\:text-primary::selection,
+.selection\:text-primary *::selection {
+  color: var(--primary);
+}

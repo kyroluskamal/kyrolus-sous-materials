@@ -1,0 +1,639 @@
+// =============================================================================
+// OPENTYPE FONT FEATURES
+// =============================================================================
+// Advanced typography using OpenType features
+// Ligatures, numerals, small-caps, and more
+// Browser support: All modern browsers
+
+// =============================================================================
+// FONT-VARIANT-LIGATURES
+// =============================================================================
+
+/// Enable all ligatures
+.ligatures-all {
+  font-variant-ligatures: common-ligatures discretionary-ligatures
+    historical-ligatures contextual;
+}
+
+/// Common ligatures only (fi, fl, ff, ffi, ffl)
+.ligatures-common {
+  font-variant-ligatures: common-ligatures;
+}
+
+/// Disable all ligatures
+.ligatures-none {
+  font-variant-ligatures: none;
+}
+
+/// No common ligatures
+.ligatures-no-common {
+  font-variant-ligatures: no-common-ligatures;
+}
+
+/// Discretionary ligatures (decorative)
+.ligatures-discretionary {
+  font-variant-ligatures: discretionary-ligatures;
+}
+
+/// Historical ligatures
+.ligatures-historical {
+  font-variant-ligatures: historical-ligatures;
+}
+
+/// Contextual alternates
+.ligatures-contextual {
+  font-variant-ligatures: contextual;
+}
+
+// =============================================================================
+// FONT-VARIANT-NUMERIC
+// =============================================================================
+
+/// Tabular numbers (monospaced, for tables)
+.nums-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/// Proportional numbers (default, for body text)
+.nums-proportional {
+  font-variant-numeric: proportional-nums;
+}
+
+/// Lining numbers (uppercase height)
+.nums-lining {
+  font-variant-numeric: lining-nums;
+}
+
+/// Old-style numbers (varying heights, for body text)
+.nums-oldstyle {
+  font-variant-numeric: oldstyle-nums;
+}
+
+/// Slashed zero (distinguishes 0 from O)
+.nums-slashed-zero {
+  font-variant-numeric: slashed-zero;
+}
+
+/// Fractions
+.nums-diagonal-fractions {
+  font-variant-numeric: diagonal-fractions;
+}
+
+.nums-stacked-fractions {
+  font-variant-numeric: stacked-fractions;
+}
+
+/// Ordinals (1st, 2nd, 3rd)
+.nums-ordinal {
+  font-variant-numeric: ordinal;
+}
+
+/// Combined numeric features for tables
+.nums-table {
+  font-variant-numeric: tabular-nums lining-nums slashed-zero;
+}
+
+/// Combined numeric features for body text
+.nums-body {
+  font-variant-numeric: proportional-nums oldstyle-nums;
+}
+
+// =============================================================================
+// FONT-VARIANT-CAPS
+// =============================================================================
+
+/// Small caps
+.caps-small {
+  font-variant-caps: small-caps;
+}
+
+/// All small caps (including lowercase)
+.caps-all-small {
+  font-variant-caps: all-small-caps;
+}
+
+/// Petite caps (smaller than small caps)
+.caps-petite {
+  font-variant-caps: petite-caps;
+}
+
+/// All petite caps
+.caps-all-petite {
+  font-variant-caps: all-petite-caps;
+}
+
+/// Titling caps (for large headings)
+.caps-titling {
+  font-variant-caps: titling-caps;
+}
+
+/// Unicase (mixed case with uniform height)
+.caps-unicase {
+  font-variant-caps: unicase;
+}
+
+/// Normal caps (reset)
+.caps-normal {
+  font-variant-caps: normal;
+}
+
+// =============================================================================
+// FONT-VARIANT-ALTERNATES
+// =============================================================================
+
+/// Stylistic alternates (font-specific)
+.alternates-stylistic {
+  font-variant-alternates: stylistic(salt);
+}
+
+/// Historical forms
+.alternates-historical {
+  font-variant-alternates: historical-forms;
+}
+
+/// Styleset (numbered sets, font-specific)
+.alternates-set-1 {
+  font-variant-alternates: styleset(ss01);
+}
+
+.alternates-set-2 {
+  font-variant-alternates: styleset(ss02);
+}
+
+.alternates-set-3 {
+  font-variant-alternates: styleset(ss03);
+}
+
+/// Swash characters
+.alternates-swash {
+  font-variant-alternates: swash(swsh);
+}
+
+/// Ornaments
+.alternates-ornaments {
+  font-variant-alternates: ornaments(ornm);
+}
+
+// =============================================================================
+// FONT-VARIANT-POSITION
+// =============================================================================
+
+/// Superscript
+.position-super {
+  font-variant-position: super;
+}
+
+/// Subscript
+.position-sub {
+  font-variant-position: sub;
+}
+
+/// Normal position (reset)
+.position-normal {
+  font-variant-position: normal;
+}
+
+// =============================================================================
+// FONT-VARIANT-EAST-ASIAN
+// =============================================================================
+
+/// Full-width characters
+.east-asian-full-width {
+  font-variant-east-asian: full-width;
+}
+
+/// Proportional-width characters
+.east-asian-proportional-width {
+  font-variant-east-asian: proportional-width;
+}
+
+/// Ruby (annotation) characters
+.east-asian-ruby {
+  font-variant-east-asian: ruby;
+}
+
+/// Simplified Chinese forms
+.east-asian-simplified {
+  font-variant-east-asian: simplified;
+}
+
+/// Traditional Chinese forms
+.east-asian-traditional {
+  font-variant-east-asian: traditional;
+}
+
+// =============================================================================
+// FONT-FEATURE-SETTINGS (Low-level control)
+// =============================================================================
+
+/// Kerning
+.feature-kern {
+  font-feature-settings: "kern" 1;
+}
+
+.feature-no-kern {
+  font-feature-settings: "kern" 0;
+}
+
+/// Case-sensitive forms
+.feature-case {
+  font-feature-settings: "case" 1;
+}
+
+/// Capital spacing
+.feature-cpsp {
+  font-feature-settings: "cpsp" 1;
+}
+
+/// Contextual alternates
+.feature-calt {
+  font-feature-settings: "calt" 1;
+}
+
+/// Standard ligatures
+.feature-liga {
+  font-feature-settings: "liga" 1;
+}
+
+.feature-no-liga {
+  font-feature-settings: "liga" 0;
+}
+
+/// Discretionary ligatures
+.feature-dlig {
+  font-feature-settings: "dlig" 1;
+}
+
+/// Historical ligatures
+.feature-hlig {
+  font-feature-settings: "hlig" 1;
+}
+
+/// Stylistic sets
+@for $i from 1 through 20 {
+  .feature-ss#{$i} {
+    font-feature-settings: "ss#{if($i < 10, '0', '')}#{$i}" 1;
+  }
+}
+
+/// Character variants
+@for $i from 1 through 10 {
+  .feature-cv#{$i} {
+    font-feature-settings: "cv#{if($i < 10, '0', '')}#{$i}" 1;
+  }
+}
+
+/// Oldstyle figures
+.feature-onum {
+  font-feature-settings: "onum" 1;
+}
+
+/// Lining figures
+.feature-lnum {
+  font-feature-settings: "lnum" 1;
+}
+
+/// Proportional figures
+.feature-pnum {
+  font-feature-settings: "pnum" 1;
+}
+
+/// Tabular figures
+.feature-tnum {
+  font-feature-settings: "tnum" 1;
+}
+
+/// Fractions
+.feature-frac {
+  font-feature-settings: "frac" 1;
+}
+
+/// Alternative fractions
+.feature-afrc {
+  font-feature-settings: "afrc" 1;
+}
+
+/// Ordinals
+.feature-ordn {
+  font-feature-settings: "ordn" 1;
+}
+
+/// Slashed zero
+.feature-zero {
+  font-feature-settings: "zero" 1;
+}
+
+/// Superscript
+.feature-sups {
+  font-feature-settings: "sups" 1;
+}
+
+/// Subscript
+.feature-subs {
+  font-feature-settings: "subs" 1;
+}
+
+/// Small caps
+.feature-smcp {
+  font-feature-settings: "smcp" 1;
+}
+
+/// Caps to small caps
+.feature-c2sc {
+  font-feature-settings: "c2sc" 1;
+}
+
+/// Swash
+.feature-swsh {
+  font-feature-settings: "swsh" 1;
+}
+
+/// Combined features for code
+.feature-code {
+  font-feature-settings: "calt" 1, "liga" 1, "zero" 1;
+}
+
+/// Combined features for headings
+.feature-heading {
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "cpsp" 1;
+}
+
+/// Combined features for body text
+.feature-body {
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "onum" 1, "pnum" 1;
+}
+
+// =============================================================================
+// FONT-KERNING
+// =============================================================================
+
+.kerning-auto {
+  font-kerning: auto;
+}
+
+.kerning-normal {
+  font-kerning: normal;
+}
+
+.kerning-none {
+  font-kerning: none;
+}
+
+// =============================================================================
+// FONT-OPTICAL-SIZING
+// =============================================================================
+
+/// Enable optical sizing (for variable fonts)
+.optical-sizing-auto {
+  font-optical-sizing: auto;
+}
+
+/// Disable optical sizing
+.optical-sizing-none {
+  font-optical-sizing: none;
+}
+
+// =============================================================================
+// FONT-SYNTHESIS
+// =============================================================================
+
+/// Allow browser to synthesize bold/italic
+.synthesis-auto {
+  font-synthesis: weight style small-caps;
+}
+
+/// Prevent synthetic bold
+.synthesis-no-weight {
+  font-synthesis: style small-caps;
+}
+
+/// Prevent synthetic italic
+.synthesis-no-style {
+  font-synthesis: weight small-caps;
+}
+
+/// Prevent all synthesis
+.synthesis-none {
+  font-synthesis: none;
+}
+
+// =============================================================================
+// TEXT-RENDERING
+// =============================================================================
+
+/// Optimize for speed
+.render-speed {
+  text-rendering: optimizeSpeed;
+}
+
+/// Optimize for legibility
+.render-legibility {
+  text-rendering: optimizeLegibility;
+}
+
+/// Optimize for geometric precision
+.render-precision {
+  text-rendering: geometricPrecision;
+}
+
+/// Auto text rendering
+.render-auto {
+  text-rendering: auto;
+}
+
+// =============================================================================
+// FONT-SMOOTHING (Non-standard but widely used)
+// =============================================================================
+
+/// Antialiased text (smoother on macOS)
+.font-smoothing-antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/// Subpixel antialiased (default)
+.font-smoothing-auto {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
+// =============================================================================
+// WORD-SPACING & LETTER-SPACING
+// =============================================================================
+
+.tracking-tighter {
+  letter-spacing: -0.05em;
+}
+
+.tracking-tight {
+  letter-spacing: -0.025em;
+}
+
+.tracking-normal {
+  letter-spacing: 0;
+}
+
+.tracking-wide {
+  letter-spacing: 0.025em;
+}
+
+.tracking-wider {
+  letter-spacing: 0.05em;
+}
+
+.tracking-widest {
+  letter-spacing: 0.1em;
+}
+
+// Word spacing
+.word-spacing-tight {
+  word-spacing: -0.05em;
+}
+
+.word-spacing-normal {
+  word-spacing: normal;
+}
+
+.word-spacing-wide {
+  word-spacing: 0.1em;
+}
+
+.word-spacing-wider {
+  word-spacing: 0.25em;
+}
+
+// =============================================================================
+// HYPHENS
+// =============================================================================
+
+.hyphens-none {
+  hyphens: none;
+}
+
+.hyphens-manual {
+  hyphens: manual;
+}
+
+.hyphens-auto {
+  hyphens: auto;
+}
+
+// =============================================================================
+// TEXT-WRAP
+// =============================================================================
+
+/// Balance text wrapping (for headings)
+.text-wrap-balance {
+  text-wrap: balance;
+}
+
+/// Pretty text wrapping (avoids orphans)
+.text-wrap-pretty {
+  text-wrap: pretty;
+}
+
+/// Stable text wrapping
+.text-wrap-stable {
+  text-wrap: stable;
+}
+
+/// No wrapping
+.text-wrap-nowrap {
+  text-wrap: nowrap;
+}
+
+// =============================================================================
+// HANGING PUNCTUATION
+// =============================================================================
+
+.hanging-none {
+  hanging-punctuation: none;
+}
+
+.hanging-first {
+  hanging-punctuation: first;
+}
+
+.hanging-last {
+  hanging-punctuation: last;
+}
+
+.hanging-allow-end {
+  hanging-punctuation: allow-end;
+}
+
+.hanging-force-end {
+  hanging-punctuation: force-end;
+}
+
+.hanging-all {
+  hanging-punctuation: first last allow-end;
+}
+
+// =============================================================================
+// PRESET COMBINATIONS
+// =============================================================================
+
+/// Professional body text
+.type-body {
+  font-variant-ligatures: common-ligatures contextual;
+  font-variant-numeric: proportional-nums oldstyle-nums;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/// Headings with enhanced features
+.type-heading {
+  font-variant-ligatures: common-ligatures;
+  font-variant-numeric: lining-nums;
+  font-kerning: normal;
+  text-wrap: balance;
+  text-rendering: optimizeLegibility;
+}
+
+/// Code/monospace text
+.type-code {
+  font-variant-ligatures: none;
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-kerning: none;
+}
+
+/// Table numbers
+.type-table {
+  font-variant-numeric: tabular-nums lining-nums slashed-zero;
+}
+
+/// Legal/formal text with small caps
+.type-legal {
+  font-variant-caps: small-caps;
+  font-variant-numeric: lining-nums;
+  letter-spacing: 0.025em;
+}
+
+/// Decorative/display text
+.type-display {
+  font-variant-ligatures: common-ligatures discretionary-ligatures;
+  font-variant-alternates: stylistic(salt);
+  font-kerning: normal;
+}
+
+// =============================================================================
+// REDUCED MOTION
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  // Font features don't involve motion, no changes needed
+}
+
+// =============================================================================
+// PRINT STYLES
+// =============================================================================
+
+@media print {
+  .type-body,
+  .type-heading {
+    text-rendering: optimizeSpeed;
+  }
+}

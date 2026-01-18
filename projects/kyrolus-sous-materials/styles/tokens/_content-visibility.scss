@@ -1,0 +1,367 @@
+// ============================================================================
+// CONTENT-VISIBILITY UTILITIES
+// Performance optimization by skipping rendering of off-screen content
+// Browser Support: Chrome 85+, Firefox 125+, Safari (partial)
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// CORE CONTENT-VISIBILITY
+// ----------------------------------------------------------------------------
+
+// Auto - browser decides when to render
+.content-visibility-auto {
+  content-visibility: auto;
+}
+
+// Hidden - never render (like display: none but keeps layout)
+.content-visibility-hidden {
+  content-visibility: hidden;
+}
+
+// Visible - always render (default)
+.content-visibility-visible {
+  content-visibility: visible;
+}
+
+// ----------------------------------------------------------------------------
+// CONTAIN-INTRINSIC-SIZE
+// Placeholder size when content is hidden
+// ----------------------------------------------------------------------------
+
+// Fixed sizes
+.intrinsic-size-auto {
+  contain-intrinsic-size: auto;
+}
+
+.intrinsic-size-none {
+  contain-intrinsic-size: none;
+}
+
+.intrinsic-size-100 {
+  contain-intrinsic-size: 100px;
+}
+
+.intrinsic-size-200 {
+  contain-intrinsic-size: 200px;
+}
+
+.intrinsic-size-300 {
+  contain-intrinsic-size: 300px;
+}
+
+.intrinsic-size-400 {
+  contain-intrinsic-size: 400px;
+}
+
+.intrinsic-size-500 {
+  contain-intrinsic-size: 500px;
+}
+
+// Auto with fallback
+.intrinsic-size-auto-100 {
+  contain-intrinsic-size: auto 100px;
+}
+
+.intrinsic-size-auto-200 {
+  contain-intrinsic-size: auto 200px;
+}
+
+.intrinsic-size-auto-300 {
+  contain-intrinsic-size: auto 300px;
+}
+
+.intrinsic-size-auto-400 {
+  contain-intrinsic-size: auto 400px;
+}
+
+.intrinsic-size-auto-500 {
+  contain-intrinsic-size: auto 500px;
+}
+
+// Width and height separate
+.intrinsic-width-auto {
+  contain-intrinsic-width: auto;
+}
+
+.intrinsic-height-auto {
+  contain-intrinsic-height: auto;
+}
+
+.intrinsic-width-200 {
+  contain-intrinsic-width: 200px;
+}
+
+.intrinsic-height-200 {
+  contain-intrinsic-height: 200px;
+}
+
+.intrinsic-height-300 {
+  contain-intrinsic-height: 300px;
+}
+
+.intrinsic-height-400 {
+  contain-intrinsic-height: 400px;
+}
+
+// ----------------------------------------------------------------------------
+// CSS CONTAINMENT
+// ----------------------------------------------------------------------------
+
+// Layout containment
+.contain-layout {
+  contain: layout;
+}
+
+// Paint containment
+.contain-paint {
+  contain: paint;
+}
+
+// Size containment
+.contain-size {
+  contain: size;
+}
+
+// Style containment
+.contain-style {
+  contain: style;
+}
+
+// Strict - all containment
+.contain-strict {
+  contain: strict;
+}
+
+// Content - layout + paint
+.contain-content {
+  contain: content;
+}
+
+// None
+.contain-none {
+  contain: none;
+}
+
+// Inline-size only (for container queries)
+.contain-inline-size {
+  contain: inline-size;
+}
+
+// ----------------------------------------------------------------------------
+// OPTIMIZED LIST ITEMS
+// ----------------------------------------------------------------------------
+
+.list-virtualized {
+  > * {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 50px;
+  }
+}
+
+.list-virtualized-lg {
+  > * {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 100px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// OPTIMIZED CARDS
+// ----------------------------------------------------------------------------
+
+.cards-virtualized {
+  > * {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 300px;
+  }
+}
+
+.card-virtualized {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
+}
+
+// ----------------------------------------------------------------------------
+// OPTIMIZED SECTIONS
+// ----------------------------------------------------------------------------
+
+.section-virtualized {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+.section-virtualized-sm {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
+}
+
+.section-virtualized-lg {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+
+.section-virtualized-full {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100vh;
+}
+
+// ----------------------------------------------------------------------------
+// OPTIMIZED TABLE ROWS
+// ----------------------------------------------------------------------------
+
+.table-virtualized {
+  tbody tr {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 48px;
+  }
+}
+
+.table-virtualized-lg {
+  tbody tr {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 64px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// OPTIMIZED IMAGES
+// ----------------------------------------------------------------------------
+
+.image-lazy {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 200px;
+}
+
+.image-lazy-sm {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100px;
+}
+
+.image-lazy-lg {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
+}
+
+// ----------------------------------------------------------------------------
+// ARTICLE/BLOG OPTIMIZATION
+// ----------------------------------------------------------------------------
+
+.article-optimized {
+  // Each paragraph/section can be skipped
+  > section,
+  > article,
+  > .content-block {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 200px;
+  }
+}
+
+// Comments section
+.comments-virtualized {
+  .comment {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 150px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// SIDEBAR/NAVIGATION OPTIMIZATION
+// ----------------------------------------------------------------------------
+
+.sidebar-virtualized {
+  > section,
+  > .widget {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 200px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// MODAL/DIALOG OPTIMIZATION
+// ----------------------------------------------------------------------------
+
+// Hidden modal content
+.modal-hidden-content {
+  content-visibility: hidden;
+}
+
+// Show when open
+.modal.open .modal-hidden-content {
+  content-visibility: visible;
+}
+
+// Tab panels
+.tab-panel-hidden {
+  content-visibility: hidden;
+}
+
+.tab-panel-hidden.active {
+  content-visibility: visible;
+}
+
+// ----------------------------------------------------------------------------
+// ACCORDION OPTIMIZATION
+// ----------------------------------------------------------------------------
+
+.accordion-content-hidden {
+  content-visibility: hidden;
+  contain-intrinsic-size: 0;
+}
+
+details[open] .accordion-content-hidden,
+.accordion-item.open .accordion-content-hidden {
+  content-visibility: visible;
+  contain-intrinsic-size: auto;
+}
+
+// ----------------------------------------------------------------------------
+// INFINITE SCROLL OPTIMIZATION
+// ----------------------------------------------------------------------------
+
+.infinite-scroll-container {
+  > * {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 200px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// TIMELINE OPTIMIZATION
+// ----------------------------------------------------------------------------
+
+.timeline-virtualized {
+  .timeline-item {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 150px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// GRID OPTIMIZATION
+// ----------------------------------------------------------------------------
+
+.grid-virtualized {
+  > * {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 250px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// FEATURE DETECTION
+// ----------------------------------------------------------------------------
+
+@supports (content-visibility: auto) {
+  .content-visibility-supported {
+    --content-visibility-supported: 1;
+  }
+}
+
+// Fallback for unsupported browsers
+@supports not (content-visibility: auto) {
+  .content-visibility-auto,
+  .content-visibility-hidden {
+    // Use standard visibility or display as fallback
+    visibility: visible;
+  }
+}

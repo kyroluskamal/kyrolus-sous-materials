@@ -1,7 +1,6 @@
 @use "sass:map";
 @use "sass:string";
-@use "maps" as *;
-@use "variables" as *;
+@use "../tokens/primitives" as *;
 @mixin elevation($level) {
   @if map.has-key($elevations, $level) {
     box-shadow: map.get($elevations, $level);

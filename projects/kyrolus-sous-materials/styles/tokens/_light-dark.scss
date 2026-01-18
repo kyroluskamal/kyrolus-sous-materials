@@ -1,0 +1,501 @@
+// ============================================================================
+// LIGHT-DARK UTILITIES
+// CSS light-dark() function for automatic dark/light mode values
+// Browser Support: Chrome 123+, Firefox 120+, Safari 17.5+
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// ENABLE COLOR-SCHEME
+// Required for light-dark() to work
+// ----------------------------------------------------------------------------
+
+// Force light scheme
+.color-scheme-light {
+  color-scheme: light;
+}
+
+// Force dark scheme
+.color-scheme-dark {
+  color-scheme: dark;
+}
+
+// Auto (both)
+.color-scheme-auto {
+  color-scheme: light dark;
+}
+
+// ----------------------------------------------------------------------------
+// CSS VARIABLES WITH LIGHT-DARK
+// ----------------------------------------------------------------------------
+
+:root {
+  color-scheme: light dark;
+  // Text colors
+  --ld-text: light-dark(#1f2937, #f9fafb);
+  --ld-text-muted: light-dark(#6b7280, #9ca3af);
+  --ld-text-subtle: light-dark(#9ca3af, #6b7280);
+  --ld-text-inverted: light-dark(#f9fafb, #1f2937);
+
+  // Background colors
+  --ld-bg: light-dark(#ffffff, #111827);
+  --ld-bg-subtle: light-dark(#f9fafb, #1f2937);
+  --ld-bg-muted: light-dark(#f3f4f6, #374151);
+  --ld-bg-emphasis: light-dark(#e5e7eb, #4b5563);
+  --ld-bg-inverted: light-dark(#111827, #ffffff);
+
+  // Border colors
+  --ld-border: light-dark(#e5e7eb, #374151);
+  --ld-border-muted: light-dark(#f3f4f6, #1f2937);
+  --ld-border-emphasis: light-dark(#d1d5db, #4b5563);
+
+  // Shadow colors
+  --ld-shadow: light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+  --ld-shadow-lg: light-dark(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.6));
+
+  // Primary colors
+  --ld-primary: light-dark(#3b82f6, #60a5fa);
+  --ld-primary-hover: light-dark(#2563eb, #3b82f6);
+  --ld-primary-bg: light-dark(#eff6ff, #1e3a5f);
+
+  // Secondary colors
+  --ld-secondary: light-dark(#8b5cf6, #a78bfa);
+  --ld-secondary-hover: light-dark(#7c3aed, #8b5cf6);
+  --ld-secondary-bg: light-dark(#f5f3ff, #2e1a47);
+
+  // Success colors
+  --ld-success: light-dark(#10b981, #34d399);
+  --ld-success-hover: light-dark(#059669, #10b981);
+  --ld-success-bg: light-dark(#ecfdf5, #064e3b);
+
+  // Warning colors
+  --ld-warning: light-dark(#f59e0b, #fbbf24);
+  --ld-warning-hover: light-dark(#d97706, #f59e0b);
+  --ld-warning-bg: light-dark(#fffbeb, #451a03);
+
+  // Error colors
+  --ld-error: light-dark(#ef4444, #f87171);
+  --ld-error-hover: light-dark(#dc2626, #ef4444);
+  --ld-error-bg: light-dark(#fef2f2, #450a0a);
+
+  // Info colors
+  --ld-info: light-dark(#0ea5e9, #38bdf8);
+  --ld-info-hover: light-dark(#0284c7, #0ea5e9);
+  --ld-info-bg: light-dark(#f0f9ff, #0c4a6e);
+}
+
+// ----------------------------------------------------------------------------
+// TEXT COLOR UTILITIES
+// ----------------------------------------------------------------------------
+
+.text-ld {
+  color: var(--ld-text);
+}
+
+.text-ld-muted {
+  color: var(--ld-text-muted);
+}
+
+.text-ld-subtle {
+  color: var(--ld-text-subtle);
+}
+
+.text-ld-inverted {
+  color: var(--ld-text-inverted);
+}
+
+.text-ld-primary {
+  color: var(--ld-primary);
+}
+
+.text-ld-secondary {
+  color: var(--ld-secondary);
+}
+
+.text-ld-success {
+  color: var(--ld-success);
+}
+
+.text-ld-warning {
+  color: var(--ld-warning);
+}
+
+.text-ld-error {
+  color: var(--ld-error);
+}
+
+.text-ld-info {
+  color: var(--ld-info);
+}
+
+// Direct light-dark values
+.text-light-dark {
+  color: light-dark(var(--text-light, #1f2937), var(--text-dark, #f9fafb));
+}
+
+// ----------------------------------------------------------------------------
+// BACKGROUND COLOR UTILITIES
+// ----------------------------------------------------------------------------
+
+.bg-ld {
+  background-color: var(--ld-bg);
+}
+
+.bg-ld-subtle {
+  background-color: var(--ld-bg-subtle);
+}
+
+.bg-ld-muted {
+  background-color: var(--ld-bg-muted);
+}
+
+.bg-ld-emphasis {
+  background-color: var(--ld-bg-emphasis);
+}
+
+.bg-ld-inverted {
+  background-color: var(--ld-bg-inverted);
+}
+
+// Semantic backgrounds
+.bg-ld-primary {
+  background-color: var(--ld-primary-bg);
+}
+
+.bg-ld-secondary {
+  background-color: var(--ld-secondary-bg);
+}
+
+.bg-ld-success {
+  background-color: var(--ld-success-bg);
+}
+
+.bg-ld-warning {
+  background-color: var(--ld-warning-bg);
+}
+
+.bg-ld-error {
+  background-color: var(--ld-error-bg);
+}
+
+.bg-ld-info {
+  background-color: var(--ld-info-bg);
+}
+
+// Direct light-dark background
+.bg-light-dark {
+  background-color: light-dark(
+    var(--bg-light, #ffffff),
+    var(--bg-dark, #111827)
+  );
+}
+
+// ----------------------------------------------------------------------------
+// BORDER COLOR UTILITIES
+// ----------------------------------------------------------------------------
+
+.border-ld {
+  border-color: var(--ld-border);
+}
+
+.border-ld-muted {
+  border-color: var(--ld-border-muted);
+}
+
+.border-ld-emphasis {
+  border-color: var(--ld-border-emphasis);
+}
+
+.border-ld-primary {
+  border-color: var(--ld-primary);
+}
+
+.border-ld-secondary {
+  border-color: var(--ld-secondary);
+}
+
+.border-ld-success {
+  border-color: var(--ld-success);
+}
+
+.border-ld-warning {
+  border-color: var(--ld-warning);
+}
+
+.border-ld-error {
+  border-color: var(--ld-error);
+}
+
+// Direct light-dark border
+.border-light-dark {
+  border-color: light-dark(
+    var(--border-light, #e5e7eb),
+    var(--border-dark, #374151)
+  );
+}
+
+// ----------------------------------------------------------------------------
+// SHADOW UTILITIES
+// ----------------------------------------------------------------------------
+
+.shadow-ld {
+  box-shadow: 0 1px 3px var(--ld-shadow);
+}
+
+.shadow-ld-md {
+  box-shadow: 0 4px 6px var(--ld-shadow);
+}
+
+.shadow-ld-lg {
+  box-shadow: 0 10px 15px var(--ld-shadow-lg);
+}
+
+.shadow-ld-xl {
+  box-shadow: 0 20px 25px var(--ld-shadow-lg);
+}
+
+// Direct light-dark shadow
+.shadow-light-dark {
+  box-shadow: 0 4px 6px light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
+}
+
+// ----------------------------------------------------------------------------
+// COMPONENT UTILITIES
+// ----------------------------------------------------------------------------
+
+// Card with automatic light/dark styling
+.card-ld {
+  background-color: var(--ld-bg);
+  border: 1px solid var(--ld-border);
+  color: var(--ld-text);
+  box-shadow: 0 1px 3px var(--ld-shadow);
+}
+
+// Input with automatic light/dark styling
+.input-ld {
+  background-color: var(--ld-bg);
+  border: 1px solid var(--ld-border);
+  color: var(--ld-text);
+
+  &::placeholder {
+    color: var(--ld-text-muted);
+  }
+
+  &:focus {
+    border-color: var(--ld-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px
+      light-dark(rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.3));
+  }
+}
+
+// Button variants
+.btn-ld-primary {
+  background-color: var(--ld-primary);
+  color: white;
+
+  &:hover {
+    background-color: var(--ld-primary-hover);
+  }
+}
+
+.btn-ld-secondary {
+  background-color: var(--ld-secondary);
+  color: white;
+
+  &:hover {
+    background-color: var(--ld-secondary-hover);
+  }
+}
+
+.btn-ld-ghost {
+  background-color: transparent;
+  color: var(--ld-text);
+  border: 1px solid var(--ld-border);
+
+  &:hover {
+    background-color: var(--ld-bg-muted);
+  }
+}
+
+// Badge variants
+.badge-ld-primary {
+  background-color: var(--ld-primary-bg);
+  color: var(--ld-primary);
+}
+
+.badge-ld-success {
+  background-color: var(--ld-success-bg);
+  color: var(--ld-success);
+}
+
+.badge-ld-warning {
+  background-color: var(--ld-warning-bg);
+  color: var(--ld-warning);
+}
+
+.badge-ld-error {
+  background-color: var(--ld-error-bg);
+  color: var(--ld-error);
+}
+
+// Alert variants
+.alert-ld-info {
+  background-color: var(--ld-info-bg);
+  border-left: 4px solid var(--ld-info);
+  color: var(--ld-text);
+}
+
+.alert-ld-success {
+  background-color: var(--ld-success-bg);
+  border-left: 4px solid var(--ld-success);
+  color: var(--ld-text);
+}
+
+.alert-ld-warning {
+  background-color: var(--ld-warning-bg);
+  border-left: 4px solid var(--ld-warning);
+  color: var(--ld-text);
+}
+
+.alert-ld-error {
+  background-color: var(--ld-error-bg);
+  border-left: 4px solid var(--ld-error);
+  color: var(--ld-text);
+}
+
+// ----------------------------------------------------------------------------
+// SURFACE UTILITIES
+// ----------------------------------------------------------------------------
+
+// Layered surfaces
+.surface-ld-1 {
+  background-color: light-dark(#ffffff, #18181b);
+}
+
+.surface-ld-2 {
+  background-color: light-dark(#f9fafb, #27272a);
+}
+
+.surface-ld-3 {
+  background-color: light-dark(#f3f4f6, #3f3f46);
+}
+
+.surface-ld-4 {
+  background-color: light-dark(#e5e7eb, #52525b);
+}
+
+// Overlay surfaces
+.overlay-ld {
+  background-color: light-dark(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
+}
+
+.overlay-ld-light {
+  background-color: light-dark(rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.8));
+}
+
+// ----------------------------------------------------------------------------
+// CUSTOM LIGHT-DARK VALUES
+// ----------------------------------------------------------------------------
+
+// Utility to set custom light/dark values
+.ld-custom {
+  --custom-light: #ffffff;
+  --custom-dark: #000000;
+  background-color: light-dark(var(--custom-light), var(--custom-dark));
+}
+
+// Text with custom values
+.text-ld-custom {
+  color: light-dark(
+    var(--text-custom-light, #000),
+    var(--text-custom-dark, #fff)
+  );
+}
+
+// Background with custom values
+.bg-ld-custom {
+  background-color: light-dark(
+    var(--bg-custom-light, #fff),
+    var(--bg-custom-dark, #000)
+  );
+}
+
+// ----------------------------------------------------------------------------
+// TRANSITION UTILITIES
+// ----------------------------------------------------------------------------
+
+// Smooth transitions between light and dark
+.transition-ld {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.transition-ld-fast {
+  transition: background-color 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.transition-ld-slow {
+  transition: background-color 0.5s ease, color 0.5s ease,
+    border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+// ----------------------------------------------------------------------------
+// ICON/SVG UTILITIES
+// ----------------------------------------------------------------------------
+
+.icon-ld {
+  fill: var(--ld-text);
+}
+
+.icon-ld-muted {
+  fill: var(--ld-text-muted);
+}
+
+.icon-ld-primary {
+  fill: var(--ld-primary);
+}
+
+.stroke-ld {
+  stroke: var(--ld-text);
+}
+
+.stroke-ld-muted {
+  stroke: var(--ld-text-muted);
+}
+
+// ----------------------------------------------------------------------------
+// SCROLLBAR STYLING
+// ----------------------------------------------------------------------------
+
+.scrollbar-ld {
+  scrollbar-color: light-dark(#c1c1c1, #4b5563) light-dark(#f1f1f1, #1f2937);
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: light-dark(#f1f1f1, #1f2937);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: light-dark(#c1c1c1, #4b5563);
+    border-radius: 4px;
+
+    &:hover {
+      background: light-dark(#a1a1a1, #6b7280);
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// FEATURE DETECTION
+// ----------------------------------------------------------------------------
+
+@supports (color: light-dark(red, blue)) {
+  .light-dark-supported {
+    --light-dark-supported: 1;
+  }
+}

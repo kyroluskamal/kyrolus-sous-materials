@@ -1,0 +1,606 @@
+// =============================================================================
+// CSS MASKS UTILITIES
+// =============================================================================
+// Advanced masking with gradients, images, and SVG
+// Create complex reveal effects and cutouts
+// Browser support: All modern browsers (prefixed in WebKit)
+
+// =============================================================================
+// MASK IMAGE GRADIENTS
+// =============================================================================
+
+/// Fade to transparent (bottom)
+.mask-fade-bottom {
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+/// Fade to transparent (top)
+.mask-fade-top {
+  mask-image: linear-gradient(to top, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 60%, transparent 100%);
+}
+
+/// Fade to transparent (left)
+.mask-fade-left {
+  mask-image: linear-gradient(to left, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to left, black 60%, transparent 100%);
+}
+
+/// Fade to transparent (right)
+.mask-fade-right {
+  mask-image: linear-gradient(to right, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 60%, transparent 100%);
+}
+
+/// Fade both edges (horizontal)
+.mask-fade-x {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 20%,
+    black 80%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 20%,
+    black 80%,
+    transparent
+  );
+}
+
+/// Fade both edges (vertical)
+.mask-fade-y {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 20%,
+    black 80%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 20%,
+    black 80%,
+    transparent
+  );
+}
+
+/// Radial fade (center visible, edges fade)
+.mask-radial-fade {
+  mask-image: radial-gradient(circle, black 50%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle, black 50%, transparent 100%);
+}
+
+/// Radial fade (edges visible, center fade)
+.mask-radial-fade-reverse {
+  mask-image: radial-gradient(circle, transparent 30%, black 70%);
+  -webkit-mask-image: radial-gradient(circle, transparent 30%, black 70%);
+}
+
+/// Vignette effect
+.mask-vignette {
+  mask-image: radial-gradient(
+    ellipse 80% 80% at center,
+    black 50%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 80% at center,
+    black 50%,
+    transparent 100%
+  );
+}
+
+/// Spotlight effect
+.mask-spotlight {
+  mask-image: radial-gradient(
+    circle 150px at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+    black,
+    transparent
+  );
+  -webkit-mask-image: radial-gradient(
+    circle 150px at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+    black,
+    transparent
+  );
+}
+
+// =============================================================================
+// MASK SHAPES
+// =============================================================================
+
+/// Circle mask
+.mask-circle {
+  mask-image: radial-gradient(circle, black 70%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle, black 70%, transparent 70%);
+}
+
+/// Ellipse mask
+.mask-ellipse {
+  mask-image: radial-gradient(
+    ellipse 60% 40% at center,
+    black 99%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 60% 40% at center,
+    black 99%,
+    transparent 100%
+  );
+}
+
+/// Diamond mask
+.mask-diamond {
+  mask-image: linear-gradient(
+      45deg,
+      transparent 30%,
+      black 30%,
+      black 70%,
+      transparent 70%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 30%,
+      black 30%,
+      black 70%,
+      transparent 70%
+    );
+  mask-composite: intersect;
+  -webkit-mask-image: linear-gradient(
+      45deg,
+      transparent 30%,
+      black 30%,
+      black 70%,
+      transparent 70%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 30%,
+      black 30%,
+      black 70%,
+      transparent 70%
+    );
+  -webkit-mask-composite: source-in;
+}
+
+/// Triangle mask (pointing up)
+.mask-triangle-up {
+  mask-image: linear-gradient(to bottom right, transparent 50%, black 50%),
+    linear-gradient(to bottom left, transparent 50%, black 50%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+
+/// Hexagon mask
+.mask-hexagon {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,0 100,25 100,75 50,100 0,75 0,25' fill='black'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,0 100,25 100,75 50,100 0,75 0,25' fill='black'/%3E%3C/svg%3E");
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+}
+
+/// Star mask
+.mask-star {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E");
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+}
+
+/// Heart mask
+.mask-heart {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+}
+
+// =============================================================================
+// MASK PATTERNS
+// =============================================================================
+
+/// Dots pattern mask
+.mask-dots {
+  mask-image: radial-gradient(circle, black 2px, transparent 2px);
+  -webkit-mask-image: radial-gradient(circle, black 2px, transparent 2px);
+  mask-size: 10px 10px;
+  -webkit-mask-size: 10px 10px;
+}
+
+/// Dots pattern (larger)
+.mask-dots-lg {
+  mask-image: radial-gradient(circle, black 4px, transparent 4px);
+  -webkit-mask-image: radial-gradient(circle, black 4px, transparent 4px);
+  mask-size: 20px 20px;
+  -webkit-mask-size: 20px 20px;
+}
+
+/// Lines pattern (horizontal)
+.mask-lines-horizontal {
+  mask-image: repeating-linear-gradient(
+    to bottom,
+    black,
+    black 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  -webkit-mask-image: repeating-linear-gradient(
+    to bottom,
+    black,
+    black 2px,
+    transparent 2px,
+    transparent 4px
+  );
+}
+
+/// Lines pattern (vertical)
+.mask-lines-vertical {
+  mask-image: repeating-linear-gradient(
+    to right,
+    black,
+    black 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  -webkit-mask-image: repeating-linear-gradient(
+    to right,
+    black,
+    black 2px,
+    transparent 2px,
+    transparent 4px
+  );
+}
+
+/// Diagonal lines pattern
+.mask-lines-diagonal {
+  mask-image: repeating-linear-gradient(
+    45deg,
+    black,
+    black 2px,
+    transparent 2px,
+    transparent 6px
+  );
+  -webkit-mask-image: repeating-linear-gradient(
+    45deg,
+    black,
+    black 2px,
+    transparent 2px,
+    transparent 6px
+  );
+}
+
+/// Grid pattern mask
+.mask-grid {
+  mask-image: repeating-linear-gradient(
+      to right,
+      black,
+      black 1px,
+      transparent 1px,
+      transparent 10px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      black,
+      black 1px,
+      transparent 1px,
+      transparent 10px
+    );
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+
+/// Checkerboard pattern
+.mask-checkerboard {
+  mask-image: linear-gradient(45deg, black 25%, transparent 25%),
+    linear-gradient(-45deg, black 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, black 75%),
+    linear-gradient(-45deg, transparent 75%, black 75%);
+  mask-size: 20px 20px;
+  mask-position: 0 0, 0 10px, 10px -10px, -10px 0;
+  -webkit-mask-size: 20px 20px;
+  -webkit-mask-position: 0 0, 0 10px, 10px -10px, -10px 0;
+}
+
+// =============================================================================
+// MASK SIZE UTILITIES
+// =============================================================================
+
+.mask-size-auto {
+  mask-size: auto;
+  -webkit-mask-size: auto;
+}
+
+.mask-size-cover {
+  mask-size: cover;
+  -webkit-mask-size: cover;
+}
+
+.mask-size-contain {
+  mask-size: contain;
+  -webkit-mask-size: contain;
+}
+
+.mask-size-full {
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+}
+
+// =============================================================================
+// MASK POSITION UTILITIES
+// =============================================================================
+
+.mask-position-center {
+  mask-position: center;
+  -webkit-mask-position: center;
+}
+
+.mask-position-top {
+  mask-position: top center;
+  -webkit-mask-position: top center;
+}
+
+.mask-position-bottom {
+  mask-position: bottom center;
+  -webkit-mask-position: bottom center;
+}
+
+.mask-position-left {
+  mask-position: left center;
+  -webkit-mask-position: left center;
+}
+
+.mask-position-right {
+  mask-position: right center;
+  -webkit-mask-position: right center;
+}
+
+// =============================================================================
+// MASK REPEAT UTILITIES
+// =============================================================================
+
+.mask-repeat {
+  mask-repeat: repeat;
+  -webkit-mask-repeat: repeat;
+}
+
+.mask-repeat-x {
+  mask-repeat: repeat-x;
+  -webkit-mask-repeat: repeat-x;
+}
+
+.mask-repeat-y {
+  mask-repeat: repeat-y;
+  -webkit-mask-repeat: repeat-y;
+}
+
+.mask-no-repeat {
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.mask-repeat-space {
+  mask-repeat: space;
+  -webkit-mask-repeat: space;
+}
+
+.mask-repeat-round {
+  mask-repeat: round;
+  -webkit-mask-repeat: round;
+}
+
+// =============================================================================
+// MASK COMPOSITE UTILITIES
+// =============================================================================
+
+.mask-composite-add {
+  mask-composite: add;
+  -webkit-mask-composite: source-over;
+}
+
+.mask-composite-subtract {
+  mask-composite: subtract;
+  -webkit-mask-composite: source-out;
+}
+
+.mask-composite-intersect {
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+
+.mask-composite-exclude {
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+}
+
+// =============================================================================
+// ANIMATED MASKS
+// =============================================================================
+
+/// Animated gradient mask (reveal effect)
+@keyframes mask-reveal {
+  from {
+    mask-position: 100% 0;
+  }
+  to {
+    mask-position: 0 0;
+  }
+}
+
+.mask-reveal {
+  mask-image: linear-gradient(to right, black 50%, transparent 50%);
+  mask-size: 200% 100%;
+  -webkit-mask-image: linear-gradient(to right, black 50%, transparent 50%);
+  -webkit-mask-size: 200% 100%;
+  animation: mask-reveal 1s ease-out forwards;
+}
+
+/// Animated spotlight
+@keyframes mask-spotlight-move {
+  0% {
+    --spotlight-x: 20%;
+    --spotlight-y: 20%;
+  }
+  25% {
+    --spotlight-x: 80%;
+    --spotlight-y: 20%;
+  }
+  50% {
+    --spotlight-x: 80%;
+    --spotlight-y: 80%;
+  }
+  75% {
+    --spotlight-x: 20%;
+    --spotlight-y: 80%;
+  }
+  100% {
+    --spotlight-x: 20%;
+    --spotlight-y: 20%;
+  }
+}
+
+.mask-spotlight-animated {
+  mask-image: radial-gradient(
+    circle 100px at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+    black,
+    transparent
+  );
+  -webkit-mask-image: radial-gradient(
+    circle 100px at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+    black,
+    transparent
+  );
+  animation: mask-spotlight-move 5s ease-in-out infinite;
+}
+
+/// Wipe reveal
+@keyframes mask-wipe {
+  from {
+    mask-size: 0% 100%;
+  }
+  to {
+    mask-size: 100% 100%;
+  }
+}
+
+.mask-wipe {
+  mask-image: linear-gradient(to right, black, black);
+  mask-repeat: no-repeat;
+  -webkit-mask-image: linear-gradient(to right, black, black);
+  -webkit-mask-repeat: no-repeat;
+  animation: mask-wipe 1s ease-out forwards;
+}
+
+// =============================================================================
+// CUSTOM MASK IMAGE
+// =============================================================================
+
+/// Use custom mask via CSS variable
+.mask-custom {
+  mask-image: var(--mask-image);
+  -webkit-mask-image: var(--mask-image);
+  mask-size: var(--mask-size, contain);
+  -webkit-mask-size: var(--mask-size, contain);
+  mask-repeat: var(--mask-repeat, no-repeat);
+  -webkit-mask-repeat: var(--mask-repeat, no-repeat);
+  mask-position: var(--mask-position, center);
+  -webkit-mask-position: var(--mask-position, center);
+}
+
+// =============================================================================
+// MASK MIXINS
+// =============================================================================
+
+/// Apply gradient mask
+/// @param {String} $direction - Gradient direction
+/// @param {List} $stops - Color stops
+@mixin mask-gradient($direction, $stops...) {
+  $gradient: linear-gradient($direction, $stops);
+  mask-image: $gradient;
+  -webkit-mask-image: $gradient;
+}
+
+/// Apply radial mask
+/// @param {String} $shape - Shape (circle, ellipse)
+/// @param {List} $stops - Color stops
+@mixin mask-radial($shape: circle, $stops...) {
+  $gradient: radial-gradient($shape, $stops);
+  mask-image: $gradient;
+  -webkit-mask-image: $gradient;
+}
+
+/// Apply image mask
+/// @param {String} $url - Image URL
+/// @param {String} $size - Mask size
+/// @param {String} $position - Mask position
+@mixin mask-image($url, $size: contain, $position: center) {
+  mask-image: url($url);
+  -webkit-mask-image: url($url);
+  mask-size: $size;
+  -webkit-mask-size: $size;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: $position;
+  -webkit-mask-position: $position;
+}
+
+// =============================================================================
+// TEXT MASKING (GRADIENT TEXT)
+// =============================================================================
+
+/// Gradient text using background-clip
+.text-gradient-mask {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/// Animated gradient text
+.text-gradient-animated {
+  background: linear-gradient(
+    90deg,
+    var(--primary),
+    var(--secondary),
+    var(--primary)
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-shift 3s linear infinite;
+}
+
+@keyframes gradient-shift {
+  to {
+    background-position: 200% center;
+  }
+}
+
+// =============================================================================
+// REDUCED MOTION
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .mask-reveal,
+  .mask-spotlight-animated,
+  .mask-wipe,
+  .text-gradient-animated {
+    animation: none !important;
+  }
+}

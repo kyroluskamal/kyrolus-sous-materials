@@ -1,0 +1,802 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - ADVANCED CSS FEATURES
+// =============================================================================
+// Cutting-edge CSS features for modern browsers including:
+// - @property CSS registration
+// - Scroll-driven animations
+// - View Transitions API
+// - CSS Anchor Positioning (experimental)
+// - Subgrid utilities
+// - Modern viewport units
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// @PROPERTY CSS CUSTOM PROPERTY REGISTRATION
+// =============================================================================
+// Enables smooth animations of CSS custom properties
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --gradient-position {
+  syntax: "<percentage>";
+  initial-value: 0%;
+  inherits: false;
+}
+
+@property --color-mix-amount {
+  syntax: "<percentage>";
+  initial-value: 50%;
+  inherits: false;
+}
+
+@property --blur-amount {
+  syntax: "<length>";
+  initial-value: 0px;
+  inherits: false;
+}
+
+@property --scale-factor {
+  syntax: "<number>";
+  initial-value: 1;
+  inherits: false;
+}
+
+@property --rotate-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --translate-x {
+  syntax: "<length-percentage>";
+  initial-value: 0px;
+  inherits: false;
+}
+
+@property --translate-y {
+  syntax: "<length-percentage>";
+  initial-value: 0px;
+  inherits: false;
+}
+
+@property --opacity-value {
+  syntax: "<number>";
+  initial-value: 1;
+  inherits: false;
+}
+
+@property --hue-rotate {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+// =============================================================================
+// ANIMATED GRADIENT UTILITIES (Using @property)
+// =============================================================================
+
+.gradient-rotate {
+  --gradient-angle: 0deg;
+  background: linear-gradient(var(--gradient-angle), var(--gradient-stops));
+  transition: --gradient-angle 0.5s ease;
+
+  &:hover {
+    --gradient-angle: 180deg;
+  }
+}
+
+.gradient-spin {
+  --gradient-angle: 0deg;
+  background: conic-gradient(from var(--gradient-angle), var(--gradient-stops));
+  animation: gradient-spin 4s linear infinite;
+}
+
+@keyframes gradient-spin {
+  to {
+    --gradient-angle: 360deg;
+  }
+}
+
+.gradient-flow {
+  --gradient-position: 0%;
+  background: linear-gradient(
+    90deg,
+    var(--color-blue-500) var(--gradient-position),
+    var(--color-purple-500) calc(var(--gradient-position) + 50%),
+    var(--color-blue-500) calc(var(--gradient-position) + 100%)
+  );
+  background-size: 200% 100%;
+  animation: gradient-flow 3s ease infinite;
+}
+
+@keyframes gradient-flow {
+  0% {
+    --gradient-position: 0%;
+  }
+  100% {
+    --gradient-position: 100%;
+  }
+}
+
+// =============================================================================
+// SCROLL-DRIVEN ANIMATIONS
+// =============================================================================
+// Modern scroll-linked animations using CSS scroll-timeline
+
+// Scroll progress indicator
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--primary);
+  transform-origin: left;
+  animation: scroll-progress linear;
+  animation-timeline: scroll();
+}
+
+@keyframes scroll-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+// Fade in on scroll
+.scroll-fade-in {
+  opacity: 0;
+  animation: scroll-fade-in linear forwards;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
+
+@keyframes scroll-fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+// Slide up on scroll
+.scroll-slide-up {
+  opacity: 0;
+  transform: translateY(100px);
+  animation: scroll-slide-up linear forwards;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
+
+@keyframes scroll-slide-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Scale in on scroll
+.scroll-scale-in {
+  opacity: 0;
+  transform: scale(0.8);
+  animation: scroll-scale-in linear forwards;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
+
+@keyframes scroll-scale-in {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Rotate on scroll
+.scroll-rotate {
+  animation: scroll-rotate linear;
+  animation-timeline: scroll();
+}
+
+@keyframes scroll-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Parallax effect
+.scroll-parallax {
+  animation: scroll-parallax linear;
+  animation-timeline: scroll();
+}
+
+@keyframes scroll-parallax {
+  from {
+    transform: translateY(-20%);
+  }
+  to {
+    transform: translateY(20%);
+  }
+}
+
+// Blur on scroll (out of view)
+.scroll-blur-out {
+  animation: scroll-blur-out linear forwards;
+  animation-timeline: view();
+  animation-range: exit 0% exit 100%;
+}
+
+@keyframes scroll-blur-out {
+  to {
+    opacity: 0;
+    filter: blur(10px);
+  }
+}
+
+// Horizontal scroll timeline
+.scroll-horizontal-progress {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--primary) var(--scroll-progress, 0%),
+    transparent 0%
+  );
+  animation: update-scroll-progress linear;
+  animation-timeline: scroll(x);
+}
+
+@keyframes update-scroll-progress {
+  to {
+    --scroll-progress: 100%;
+  }
+}
+
+// Reveal sections
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  animation: scroll-reveal linear forwards;
+  animation-timeline: view();
+  animation-range: entry 25% cover 50%;
+}
+
+@keyframes scroll-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// =============================================================================
+// VIEW TRANSITIONS API
+// =============================================================================
+// Named view transitions for smooth page transitions
+
+// View transition names
+.view-transition-root {
+  view-transition-name: root;
+}
+
+.view-transition-header {
+  view-transition-name: header;
+}
+
+.view-transition-main {
+  view-transition-name: main;
+}
+
+.view-transition-sidebar {
+  view-transition-name: sidebar;
+}
+
+.view-transition-card {
+  view-transition-name: card;
+}
+
+.view-transition-hero {
+  view-transition-name: hero;
+}
+
+.view-transition-image {
+  view-transition-name: image;
+}
+
+.view-transition-title {
+  view-transition-name: title;
+}
+
+.view-transition-content {
+  view-transition-name: content;
+}
+
+.view-transition-nav {
+  view-transition-name: nav;
+}
+
+.view-transition-footer {
+  view-transition-name: footer;
+}
+
+// Dynamic view transition names using data attributes
+[data-view-transition] {
+  view-transition-name: attr(data-view-transition);
+}
+
+// View transition group classes
+.view-transition-group-card {
+  view-transition-name: var(--vt-name, card);
+}
+
+// View transition animation customization
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+}
+
+::view-transition-old(card),
+::view-transition-new(card) {
+  animation-duration: 0.3s;
+  animation-timing-function: var(--ease-spring);
+}
+
+// Fade transition
+::view-transition-old(fade),
+::view-transition-new(fade) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(fade) {
+  animation: vt-fade-out 0.2s ease-out both;
+}
+
+::view-transition-new(fade) {
+  animation: vt-fade-in 0.2s ease-in both;
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+// Slide transition
+::view-transition-old(slide),
+::view-transition-new(slide) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+}
+
+::view-transition-old(slide) {
+  animation-name: vt-slide-out;
+}
+
+::view-transition-new(slide) {
+  animation-name: vt-slide-in;
+}
+
+@keyframes vt-slide-out {
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes vt-slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+// Scale transition
+::view-transition-old(scale),
+::view-transition-new(scale) {
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(scale) {
+  animation-name: vt-scale-out;
+}
+
+::view-transition-new(scale) {
+  animation-name: vt-scale-in;
+}
+
+@keyframes vt-scale-out {
+  to {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+@keyframes vt-scale-in {
+  from {
+    transform: scale(1.1);
+    opacity: 0;
+  }
+}
+
+// =============================================================================
+// CSS ANCHOR POSITIONING (Experimental)
+// =============================================================================
+// Prepare for CSS Anchor Positioning (Chromium 125+)
+
+// Anchor definition utilities
+.anchor {
+  anchor-name: --anchor;
+}
+
+.anchor-menu {
+  anchor-name: --anchor-menu;
+}
+
+.anchor-tooltip {
+  anchor-name: --anchor-tooltip;
+}
+
+.anchor-popover {
+  anchor-name: --anchor-popover;
+}
+
+// Position anchor utilities (when browser support is available)
+@supports (position-anchor: --anchor) {
+  .anchored {
+    position: absolute;
+    position-anchor: --anchor;
+  }
+
+  .anchored-top {
+    position: absolute;
+    position-anchor: --anchor;
+    bottom: anchor(top);
+    left: anchor(center);
+    transform: translateX(-50%);
+  }
+
+  .anchored-bottom {
+    position: absolute;
+    position-anchor: --anchor;
+    top: anchor(bottom);
+    left: anchor(center);
+    transform: translateX(-50%);
+  }
+
+  .anchored-left {
+    position: absolute;
+    position-anchor: --anchor;
+    right: anchor(left);
+    top: anchor(center);
+    transform: translateY(-50%);
+  }
+
+  .anchored-right {
+    position: absolute;
+    position-anchor: --anchor;
+    left: anchor(right);
+    top: anchor(center);
+    transform: translateY(-50%);
+  }
+}
+
+// =============================================================================
+// SUBGRID UTILITIES
+// =============================================================================
+
+.subgrid {
+  display: grid;
+  grid-template-columns: subgrid;
+}
+
+.subgrid-rows {
+  display: grid;
+  grid-template-rows: subgrid;
+}
+
+.subgrid-both {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+}
+
+// Subgrid column span
+@for $i from 1 through 12 {
+  .subgrid-cols-#{$i} {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: span $i;
+  }
+}
+
+// Subgrid row span
+@for $i from 1 through 6 {
+  .subgrid-rows-#{$i} {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span $i;
+  }
+}
+
+// =============================================================================
+// MODERN VIEWPORT UNITS
+// =============================================================================
+
+// Dynamic viewport height
+.h-dvh {
+  height: 100dvh;
+}
+.min-h-dvh {
+  min-height: 100dvh;
+}
+.max-h-dvh {
+  max-height: 100dvh;
+}
+
+// Small viewport height
+.h-svh {
+  height: 100svh;
+}
+.min-h-svh {
+  min-height: 100svh;
+}
+.max-h-svh {
+  max-height: 100svh;
+}
+
+// Large viewport height
+.h-lvh {
+  height: 100lvh;
+}
+.min-h-lvh {
+  min-height: 100lvh;
+}
+.max-h-lvh {
+  max-height: 100lvh;
+}
+
+// Dynamic viewport width
+.w-dvw {
+  width: 100dvw;
+}
+.min-w-dvw {
+  min-width: 100dvw;
+}
+.max-w-dvw {
+  max-width: 100dvw;
+}
+
+// Small viewport width
+.w-svw {
+  width: 100svw;
+}
+
+// Large viewport width
+.w-lvw {
+  width: 100lvw;
+}
+
+// =============================================================================
+// CSS NESTING PREPARATION
+// =============================================================================
+// Helper classes for native CSS nesting
+
+.nesting-context {
+  container-type: inline-size;
+  position: relative;
+}
+
+// =============================================================================
+// COLOR MIX UTILITIES
+// =============================================================================
+// Using CSS color-mix() function
+
+.mix-white-10 {
+  background-color: color-mix(in srgb, currentColor, white 10%);
+}
+.mix-white-20 {
+  background-color: color-mix(in srgb, currentColor, white 20%);
+}
+.mix-white-30 {
+  background-color: color-mix(in srgb, currentColor, white 30%);
+}
+.mix-black-10 {
+  background-color: color-mix(in srgb, currentColor, black 10%);
+}
+.mix-black-20 {
+  background-color: color-mix(in srgb, currentColor, black 20%);
+}
+.mix-black-30 {
+  background-color: color-mix(in srgb, currentColor, black 30%);
+}
+
+// Lighten/darken with color-mix
+@each $palette-name, $palette in $color-palettes {
+  .bg-#{$palette-name}-500-light {
+    background-color: color-mix(
+      in srgb,
+      var(--color-#{$palette-name}-500),
+      white 20%
+    );
+  }
+  .bg-#{$palette-name}-500-dark {
+    background-color: color-mix(
+      in srgb,
+      var(--color-#{$palette-name}-500),
+      black 20%
+    );
+  }
+}
+
+// =============================================================================
+// RELATIVE COLOR SYNTAX
+// =============================================================================
+// Using CSS relative color syntax (Chrome 119+)
+
+@supports (color: rgb(from white r g b)) {
+  .text-relative-darker {
+    color: rgb(from currentColor calc(r * 0.8) calc(g * 0.8) calc(b * 0.8));
+  }
+
+  .text-relative-lighter {
+    color: rgb(from currentColor calc(r + 50) calc(g + 50) calc(b + 50));
+  }
+
+  .bg-relative-transparent {
+    background-color: rgb(from var(--primary) r g b / 50%);
+  }
+}
+
+// =============================================================================
+// CONTAINER STYLE QUERIES (Experimental)
+// =============================================================================
+// Style-based container queries
+
+@supports (container-type: style) {
+  .style-container {
+    container-type: style;
+  }
+
+  // Example: Change children based on parent's custom property value
+  // @container style(--theme: dark) {
+  //   .adaptive-child {
+  //     background: var(--surface-dark);
+  //   }
+  // }
+}
+
+// =============================================================================
+// INTERPOLATE-SIZE (Experimental)
+// =============================================================================
+// Allow transitioning to/from intrinsic sizes
+
+@supports (interpolate-size: allow-keywords) {
+  .interpolate-size {
+    interpolate-size: allow-keywords;
+  }
+
+  .collapsible {
+    interpolate-size: allow-keywords;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+
+    &.expanded {
+      height: auto;
+    }
+  }
+}
+
+// =============================================================================
+// STARTING-STYLE (Experimental)
+// =============================================================================
+// Define initial styles for entry animations
+
+@supports (selector(&:popover-open)) {
+  .dialog-animated {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.2s, transform 0.2s, display 0.2s allow-discrete;
+
+    @starting-style {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    &:popover-open {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+// =============================================================================
+// TEXT WRAP UTILITIES
+// =============================================================================
+
+.text-wrap-balance {
+  text-wrap: balance;
+}
+
+.text-wrap-pretty {
+  text-wrap: pretty;
+}
+
+.text-wrap-stable {
+  text-wrap: stable;
+}
+
+// =============================================================================
+// CONTENT VISIBILITY
+// =============================================================================
+// Performance optimization for off-screen content
+
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+.content-visibility-hidden {
+  content-visibility: hidden;
+}
+
+.content-visibility-visible {
+  content-visibility: visible;
+}
+
+// =============================================================================
+// CONTAIN UTILITIES
+// =============================================================================
+
+.contain-none {
+  contain: none;
+}
+.contain-strict {
+  contain: strict;
+}
+.contain-content {
+  contain: content;
+}
+.contain-size {
+  contain: size;
+}
+.contain-layout {
+  contain: layout;
+}
+.contain-style {
+  contain: style;
+}
+.contain-paint {
+  contain: paint;
+}
+
+// =============================================================================
+// FIELD-SIZING (Experimental)
+// =============================================================================
+// Auto-sizing form inputs
+
+@supports (field-sizing: content) {
+  .field-sizing-content {
+    field-sizing: content;
+  }
+
+  .field-sizing-fixed {
+    field-sizing: fixed;
+  }
+}

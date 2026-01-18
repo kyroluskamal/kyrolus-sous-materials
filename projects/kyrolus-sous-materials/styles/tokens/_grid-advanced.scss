@@ -1,0 +1,564 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - ADVANCED CSS GRID FEATURES
+// =============================================================================
+// Enhanced grid capabilities beyond basic CSS Grid:
+// - Subgrid improvements and patterns
+// - Masonry grid layouts
+// - Grid template area generators
+// - Dynamic grid sizing
+// - Grid alignment utilities
+// - Responsive grid patterns
+// =============================================================================
+
+@use "sass:map";
+@use "sass:string";
+@use "primitives" as *;
+
+// =============================================================================
+// SUBGRID ENHANCEMENTS
+// =============================================================================
+
+// Advanced subgrid patterns
+.subgrid-advanced {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+
+  // Inherit parent's grid lines
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+}
+
+.subgrid-columns-only {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.subgrid-rows-only {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: subgrid;
+}
+
+// Nested subgrid alignment
+.nested-subgrid {
+  display: grid;
+  grid-template: subgrid / subgrid;
+
+  > * {
+    // Align items to specific grid lines
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+}
+
+// =============================================================================
+// MASONRY GRID LAYOUTS
+// =============================================================================
+
+.masonry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-auto-flow: dense;
+  gap: var(--spacing-4);
+
+  // Masonry-like behavior for supporting browsers
+  @supports (grid-template-rows: masonry) {
+    grid-template-rows: masonry;
+    align-items: start;
+  }
+}
+
+.masonry-columns-2 {
+  grid-template-columns: repeat(2, 1fr);
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.masonry-columns-3 {
+  grid-template-columns: repeat(1, 1fr);
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// Pinterest-style masonry
+.pinterest-grid {
+  column-count: 2;
+  column-gap: var(--spacing-4);
+
+  @media (min-width: 768px) {
+    column-count: 3;
+  }
+  @media (min-width: 1024px) {
+    column-count: 4;
+  }
+  @media (min-width: 1280px) {
+    column-count: 5;
+  }
+
+  > * {
+    break-inside: avoid;
+    margin-bottom: var(--spacing-4);
+  }
+}
+
+// =============================================================================
+// GRID TEMPLATE AREA GENERATORS
+// =============================================================================
+
+// Header, main, sidebar layout
+.layout-three-column {
+  display: grid;
+  grid-template-areas:
+    "header header header"
+    "sidebar main main"
+    "footer footer footer";
+  grid-template-columns: 250px 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+
+  .header {
+    grid-area: header;
+  }
+  .sidebar {
+    grid-area: sidebar;
+  }
+  .main {
+    grid-area: main;
+  }
+  .footer {
+    grid-area: footer;
+  }
+}
+
+// Dashboard layout
+.layout-dashboard {
+  display: grid;
+  grid-template-areas:
+    "nav nav nav"
+    "sidebar main widgets"
+    "sidebar footer footer";
+  grid-template-columns: 80px 1fr 300px;
+  grid-template-rows: 60px 1fr auto;
+  min-height: 100vh;
+
+  .navigation {
+    grid-area: nav;
+  }
+  .sidebar {
+    grid-area: sidebar;
+  }
+  .main-content {
+    grid-area: main;
+  }
+  .widgets {
+    grid-area: widgets;
+  }
+  .footer {
+    grid-area: footer;
+  }
+}
+
+// Responsive grid areas
+.layout-responsive {
+  display: grid;
+  grid-template-areas:
+    "header"
+    "main"
+    "sidebar"
+    "footer";
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto auto;
+
+  @media (min-width: 1024px) {
+    grid-template-areas:
+      "header header header"
+      "sidebar main main"
+      "footer footer footer";
+    grid-template-columns: 250px 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+}
+
+// =============================================================================
+// DYNAMIC GRID SIZING
+// =============================================================================
+
+// Auto-fit grids with min/max constraints
+.grid-auto-fit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.grid-auto-fill {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--spacing-4);
+}
+
+// Responsive grid sizing
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: clamp(1rem, 3vi, 2rem);
+}
+
+// Container query grids
+.grid-container-aware {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2cqi;
+}
+
+// =============================================================================
+// GRID ALIGNMENT UTILITIES
+// =============================================================================
+
+// Item alignment combinations
+.align-grid-start {
+  align-items: start;
+  justify-items: start;
+}
+.align-grid-center {
+  align-items: center;
+  justify-items: center;
+}
+.align-grid-end {
+  align-items: end;
+  justify-items: end;
+}
+.align-grid-stretch {
+  align-items: stretch;
+  justify-items: stretch;
+}
+
+// Content alignment
+.align-content-start {
+  align-content: start;
+  justify-content: start;
+}
+.align-content-center {
+  align-content: center;
+  justify-content: center;
+}
+.align-content-end {
+  align-content: end;
+  justify-content: end;
+}
+.align-content-space-between {
+  align-content: space-between;
+  justify-content: space-between;
+}
+.align-content-space-around {
+  align-content: space-around;
+  justify-content: space-around;
+}
+.align-content-space-evenly {
+  align-content: space-evenly;
+  justify-content: space-evenly;
+}
+
+// Individual item alignment
+.item-self-start {
+  align-self: start;
+  justify-self: start;
+}
+.item-self-center {
+  align-self: center;
+  justify-self: center;
+}
+.item-self-end {
+  align-self: end;
+  justify-self: end;
+}
+.item-self-stretch {
+  align-self: stretch;
+  justify-self: stretch;
+}
+
+// =============================================================================
+// ADVANCED GRID PATTERNS
+// =============================================================================
+
+// Holy grail layout
+.holy-grail {
+  display: grid;
+  grid-template-areas:
+    "header header header"
+    "nav main aside"
+    "footer footer footer";
+  grid-template-columns: 150px 1fr 150px;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+
+  > header {
+    grid-area: header;
+  }
+  > nav {
+    grid-area: nav;
+  }
+  > main {
+    grid-area: main;
+  }
+  > aside {
+    grid-area: aside;
+  }
+  > footer {
+    grid-area: footer;
+  }
+}
+
+// Magazine layout
+.magazine-layout {
+  display: grid;
+  grid-template-areas:
+    "featured featured featured"
+    "article1 article2 article3"
+    "sidebar sidebar sidebar";
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto repeat(2, 1fr);
+  gap: var(--spacing-6);
+
+  .featured-story {
+    grid-area: featured;
+  }
+  .article-1 {
+    grid-area: article1;
+  }
+  .article-2 {
+    grid-area: article2;
+  }
+  .article-3 {
+    grid-area: article3;
+  }
+  .sidebar-content {
+    grid-area: sidebar;
+  }
+}
+
+// E-commerce product grid
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-6);
+
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .product-image {
+      aspect-ratio: 4/3;
+      object-fit: cover;
+    }
+
+    .product-info {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
+}
+
+// =============================================================================
+// GRID DEBUGGING TOOLS
+// =============================================================================
+
+.debug-grid {
+  background-image: linear-gradient(rgba(0, 0, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  position: relative;
+
+  &::before {
+    content: "Grid Debug Overlay";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 255, 0.8);
+    color: white;
+    padding: 4px 8px;
+    font-size: 12px;
+    z-index: 1000;
+  }
+}
+
+.grid-item-numbers {
+  counter-reset: grid-items;
+
+  > * {
+    counter-increment: grid-items;
+
+    &::before {
+      content: counter(grid-items);
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      background: #dc2626; /* red-600 for better contrast */
+      color: #ffffff;
+      padding: 2px 6px;
+      font-size: 12px;
+      border-radius: 3px;
+      z-index: 100;
+    }
+  }
+}
+
+// =============================================================================
+// PERFORMANCE OPTIMIZATIONS
+// =============================================================================
+
+.grid-performance {
+  contain: layout style;
+  will-change: grid-template-columns, grid-template-rows;
+
+  > * {
+    contain: layout style;
+  }
+}
+
+.grid-hardware-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+
+  > * {
+    transform: translateZ(0);
+  }
+}
+
+// =============================================================================
+// ACCESSIBILITY ENHANCEMENTS
+// =============================================================================
+
+.grid-accessible {
+  // Ensure proper focus order
+  grid-auto-flow: row;
+
+  // Maintain readable line lengths
+  @media (prefers-contrast: more) {
+    gap: calc(var(--spacing-4) * 1.5);
+  }
+
+  // Respect reduced motion
+  @media (prefers-reduced-motion: reduce) {
+    > * {
+      transition: none;
+    }
+  }
+
+  // Ensure adequate touch targets
+  > * {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+// =============================================================================
+// RESPONSIVE GRID BREAKPOINTS
+// =============================================================================
+
+.grid-breakpoint-sm {
+  grid-template-columns: 1fr;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.grid-breakpoint-md {
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1280px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.grid-breakpoint-lg {
+  grid-template-columns: 1fr;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: 1280px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+// =============================================================================
+// BROWSER SUPPORT FALLBACKS
+// =============================================================================
+
+@supports not (display: grid) {
+  .fallback-flex {
+    display: flex;
+    flex-wrap: wrap;
+
+    > * {
+      flex: 1 1 300px;
+      margin: var(--spacing-2);
+    }
+  }
+}
+
+@supports not (grid-template-rows: masonry) {
+  .masonry-fallback {
+    column-count: 3;
+    column-gap: var(--spacing-4);
+
+    > * {
+      break-inside: avoid;
+      margin-bottom: var(--spacing-4);
+    }
+  }
+}
+
+@supports not (grid-template-columns: subgrid) {
+  .subgrid-fallback {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--spacing-4);
+
+    > * {
+      // Manually span columns to simulate subgrid
+      &[class*="span-1"] {
+        grid-column: span 1;
+      }
+      &[class*="span-2"] {
+        grid-column: span 2;
+      }
+      &[class*="span-3"] {
+        grid-column: span 3;
+      }
+      &[class*="span-4"] {
+        grid-column: span 4;
+      }
+      &[class*="span-6"] {
+        grid-column: span 6;
+      }
+      &[class*="span-12"] {
+        grid-column: span 12;
+      }
+    }
+  }
+}

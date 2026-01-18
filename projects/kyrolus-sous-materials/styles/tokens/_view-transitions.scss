@@ -1,0 +1,420 @@
+// =============================================================================
+// VIEW TRANSITIONS API UTILITIES
+// =============================================================================
+// Modern page transition effects using the View Transitions API
+// Provides smooth, animated transitions between page states
+// Browser support: Chrome 111+, Edge 111+, Safari 18+
+
+// =============================================================================
+// VIEW TRANSITION NAMES
+// =============================================================================
+// Assign transition names to elements for coordinated animations
+
+/// Generate view-transition-name classes
+@each $name
+  in (
+    header,
+    nav,
+    main,
+    sidebar,
+    footer,
+    hero,
+    card,
+    modal,
+    title,
+    image,
+    content,
+    logo,
+    avatar,
+    button,
+    menu
+  )
+{
+  .vt-#{$name} {
+    view-transition-name: #{$name};
+  }
+}
+
+/// Dynamic view transition name (use with CSS custom property)
+.vt-dynamic {
+  view-transition-name: var(--vt-name);
+}
+
+/// No view transition (opt out)
+.vt-none {
+  view-transition-name: none;
+}
+
+// =============================================================================
+// VIEW TRANSITION CLASSES
+// =============================================================================
+// Classes for elements participating in view transitions
+
+/// Root transition class
+.vt-root {
+  view-transition-name: root;
+}
+
+/// Group elements for shared transition
+.vt-group {
+  view-transition-name: var(--vt-group, group);
+  contain: layout;
+}
+
+// =============================================================================
+// VIEW TRANSITION ANIMATIONS (KEYFRAMES)
+// =============================================================================
+
+/// Fade transition
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes vt-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/// Slide transitions
+@keyframes vt-slide-from-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes vt-slide-to-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes vt-slide-from-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes vt-slide-to-right {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes vt-slide-from-bottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes vt-slide-to-top {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+/// Scale transitions
+@keyframes vt-scale-up {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes vt-scale-down {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+/// Flip transitions
+@keyframes vt-flip-in {
+  from {
+    transform: rotateY(-90deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes vt-flip-out {
+  from {
+    transform: rotateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: rotateY(90deg);
+    opacity: 0;
+  }
+}
+
+// =============================================================================
+// VIEW TRANSITION PSEUDO-ELEMENT STYLES
+// =============================================================================
+// Style the ::view-transition pseudo-elements
+
+/// Default view transition styling
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--vt-duration, 0.3s);
+  animation-timing-function: var(--vt-easing, ease-in-out);
+}
+
+/// Fade transition preset
+.vt-preset-fade {
+  &::view-transition-old(root) {
+    animation: vt-fade-out var(--vt-duration, 0.3s) ease-out;
+  }
+
+  &::view-transition-new(root) {
+    animation: vt-fade-in var(--vt-duration, 0.3s) ease-in;
+  }
+}
+
+/// Slide transition preset
+.vt-preset-slide {
+  &::view-transition-old(root) {
+    animation: vt-slide-to-left var(--vt-duration, 0.3s) ease-in-out;
+  }
+
+  &::view-transition-new(root) {
+    animation: vt-slide-from-right var(--vt-duration, 0.3s) ease-in-out;
+  }
+}
+
+/// Scale transition preset
+.vt-preset-scale {
+  &::view-transition-old(root) {
+    animation: vt-scale-down var(--vt-duration, 0.3s) ease-out;
+  }
+
+  &::view-transition-new(root) {
+    animation: vt-scale-up var(--vt-duration, 0.3s) ease-in;
+  }
+}
+
+// =============================================================================
+// VIEW TRANSITION DURATION UTILITIES
+// =============================================================================
+
+.vt-duration-75 {
+  --vt-duration: 75ms;
+}
+.vt-duration-100 {
+  --vt-duration: 100ms;
+}
+.vt-duration-150 {
+  --vt-duration: 150ms;
+}
+.vt-duration-200 {
+  --vt-duration: 200ms;
+}
+.vt-duration-300 {
+  --vt-duration: 300ms;
+}
+.vt-duration-500 {
+  --vt-duration: 500ms;
+}
+.vt-duration-700 {
+  --vt-duration: 700ms;
+}
+.vt-duration-1000 {
+  --vt-duration: 1000ms;
+}
+
+// =============================================================================
+// VIEW TRANSITION EASING UTILITIES
+// =============================================================================
+
+.vt-ease-linear {
+  --vt-easing: linear;
+}
+.vt-ease-in {
+  --vt-easing: ease-in;
+}
+.vt-ease-out {
+  --vt-easing: ease-out;
+}
+.vt-ease-in-out {
+  --vt-easing: ease-in-out;
+}
+.vt-ease-spring {
+  --vt-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.vt-ease-bounce {
+  --vt-easing: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+// =============================================================================
+// CROSS-DOCUMENT VIEW TRANSITIONS (MPA)
+// =============================================================================
+// For multi-page applications
+
+/// Enable cross-document transitions
+@view-transition {
+  navigation: auto;
+}
+
+/// Opt-in class for cross-document transitions
+.vt-navigate {
+  @supports (view-transition-name: none) {
+    view-transition-name: var(--vt-name, auto);
+  }
+}
+
+// =============================================================================
+// VIEW TRANSITION MIXINS
+// =============================================================================
+
+/// Apply view transition name
+/// @param {String} $name - The transition name
+@mixin view-transition($name) {
+  view-transition-name: $name;
+}
+
+/// Create shared element transition
+/// @param {String} $name - The transition name
+/// @param {Time} $duration - Animation duration
+@mixin shared-element-transition($name, $duration: 0.3s) {
+  view-transition-name: $name;
+
+  &::view-transition-old(#{$name}),
+  &::view-transition-new(#{$name}) {
+    animation-duration: $duration;
+    animation-timing-function: ease-in-out;
+  }
+}
+
+// =============================================================================
+// REDUCED MOTION SUPPORT
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.01ms !important;
+  }
+
+  * {
+    view-transition-name: none !important;
+  }
+}
+
+// =============================================================================
+// VIEW TRANSITION UTILITIES FOR ANGULAR
+// =============================================================================
+
+/// Angular router outlet transition wrapper
+.vt-router-outlet {
+  view-transition-name: router-outlet;
+  contain: layout;
+  position: relative;
+}
+
+/// Page wrapper for route transitions
+.vt-page {
+  view-transition-name: page;
+  min-height: 100dvh;
+}
+
+/// Shared header during navigation
+.vt-sticky-header {
+  view-transition-name: sticky-header;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/// Hero image shared element
+.vt-hero-image {
+  view-transition-name: hero-image;
+  object-fit: cover;
+}
+
+/// Card shared element (for list-to-detail transitions)
+.vt-card-item {
+  view-transition-name: var(--card-id, card);
+}
+
+// =============================================================================
+// DIRECTIONAL TRANSITIONS (RTL AWARE)
+// =============================================================================
+
+/// Start-to-end slide (RTL aware)
+[dir="ltr"] .vt-slide-forward {
+  &::view-transition-old(root) {
+    animation-name: vt-slide-to-left;
+  }
+  &::view-transition-new(root) {
+    animation-name: vt-slide-from-right;
+  }
+}
+
+[dir="rtl"] .vt-slide-forward {
+  &::view-transition-old(root) {
+    animation-name: vt-slide-to-right;
+  }
+  &::view-transition-new(root) {
+    animation-name: vt-slide-from-left;
+  }
+}
+
+/// End-to-start slide (RTL aware - for back navigation)
+[dir="ltr"] .vt-slide-back {
+  &::view-transition-old(root) {
+    animation-name: vt-slide-to-right;
+  }
+  &::view-transition-new(root) {
+    animation-name: vt-slide-from-left;
+  }
+}
+
+[dir="rtl"] .vt-slide-back {
+  &::view-transition-old(root) {
+    animation-name: vt-slide-to-left;
+  }
+  &::view-transition-new(root) {
+    animation-name: vt-slide-from-right;
+  }
+}

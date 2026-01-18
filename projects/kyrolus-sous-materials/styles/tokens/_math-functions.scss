@@ -1,0 +1,449 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - CSS MATH FUNCTIONS & MODULAR SCALES
+// =============================================================================
+// Mathematical functions for precise design systems:
+// - clamp() utilities for fluid typography
+// - Modular scales for harmonious sizing
+// - CSS trigonometry functions
+// - Mathematical ratios and proportions
+// - Calc() power functions
+// =============================================================================
+
+@use "sass:math";
+@use "sass:list";
+@use "primitives" as *;
+
+// =============================================================================
+// FLUID TYPOGRAPHY WITH CLAMP()
+// =============================================================================
+
+// Modular scale ratios
+$modular-scales: (
+  "minor-second": 1.067,
+  "major-second": 1.125,
+  "minor-third": 1.2,
+  "major-third": 1.25,
+  "perfect-fourth": 1.333,
+  "perfect-fifth": 1.5,
+  "golden-ratio": 1.618,
+  "octave": 2,
+);
+
+// Generate fluid typography classes
+@each $name, $ratio in $modular-scales {
+  .fluid-#{$name} {
+    // Base size: 1rem, Max size increases by ratio
+    font-size: clamp(1rem, #{1 * $ratio}vi, #{1.5 * $ratio}rem);
+  }
+}
+
+// Specific fluid sizes
+.fluid-xs {
+  font-size: clamp(0.75rem, 2vi, 1rem);
+}
+.fluid-sm {
+  font-size: clamp(0.875rem, 2.5vi, 1.125rem);
+}
+.fluid-base {
+  font-size: clamp(1rem, 3vi, 1.25rem);
+}
+.fluid-lg {
+  font-size: clamp(1.125rem, 3.5vi, 1.5rem);
+}
+.fluid-xl {
+  font-size: clamp(1.25rem, 4vi, 1.875rem);
+}
+.fluid-2xl {
+  font-size: clamp(1.5rem, 5vi, 2.25rem);
+}
+.fluid-3xl {
+  font-size: clamp(1.875rem, 6vi, 3rem);
+}
+.fluid-4xl {
+  font-size: clamp(2.25rem, 7vi, 3.75rem);
+}
+.fluid-5xl {
+  font-size: clamp(3rem, 8vi, 4.5rem);
+}
+
+// =============================================================================
+// CALC() MATHEMATICAL FUNCTIONS
+// =============================================================================
+
+// Aspect ratio calculations
+.aspect-ratio-16-9 {
+  aspect-ratio: calc(16 / 9);
+}
+.aspect-ratio-4-3 {
+  aspect-ratio: calc(4 / 3);
+}
+.aspect-ratio-3-2 {
+  aspect-ratio: calc(3 / 2);
+}
+.aspect-ratio-21-9 {
+  aspect-ratio: calc(21 / 9);
+}
+.aspect-ratio-golden {
+  aspect-ratio: calc(1.618 / 1);
+}
+
+// Golden ratio utilities
+.golden-width {
+  width: calc(100% * 0.618);
+}
+.golden-height {
+  height: calc(100% * 0.618);
+}
+
+// Mathematical spacing
+.space-golden {
+  --golden-ratio: 1.618;
+  gap: calc(1rem * var(--golden-ratio));
+}
+
+.space-fibonacci {
+  --fib-1: 1;
+  --fib-2: 1;
+  --fib-3: calc(var(--fib-1) + var(--fib-2));
+  --fib-4: calc(var(--fib-2) + var(--fib-3));
+  --fib-5: calc(var(--fib-3) + var(--fib-4));
+  gap: calc(var(--fib-4) * 0.25rem);
+}
+
+// =============================================================================
+// CSS TRIGONOMETRY EXTENDED
+// =============================================================================
+
+// Position calculator classes
+.position-at-angle {
+  --angle: 0deg;
+  --distance: 100px;
+  position: absolute;
+  top: calc(50% + sin(var(--angle)) * var(--distance));
+  left: calc(50% + cos(var(--angle)) * var(--distance));
+  transform: translate(-50%, -50%);
+}
+
+.circle-layout {
+  --items: 8;
+  --radius: 150px;
+
+  > * {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    @for $i from 1 through 8 {
+      &:nth-child(#{$i}) {
+        $angle: calc(360deg / var(--items) * #{$i - 1});
+        transform: translate(-50%, -50%)
+          translate(
+            calc(cos(#{$angle}) * var(--radius)),
+            calc(sin(#{$angle}) * var(--radius))
+          );
+      }
+    }
+  }
+}
+
+// Wave generator
+.wave-motion {
+  --amplitude: 20px;
+  --frequency: 1;
+  --phase: 0deg;
+
+  animation: waveMove 2s infinite linear;
+
+  @keyframes waveMove {
+    0% {
+      transform: translateY(calc(sin(0deg) * var(--amplitude)));
+    }
+    25% {
+      transform: translateY(calc(sin(90deg) * var(--amplitude)));
+    }
+    50% {
+      transform: translateY(calc(sin(180deg) * var(--amplitude)));
+    }
+    75% {
+      transform: translateY(calc(sin(270deg) * var(--amplitude)));
+    }
+    100% {
+      transform: translateY(calc(sin(360deg) * var(--amplitude)));
+    }
+  }
+}
+
+// =============================================================================
+// MODULAR GRID SYSTEM
+// =============================================================================
+
+// 12-column grid with mathematical precision
+.grid-12-col {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--spacing-4);
+}
+
+// Fraction-based column spans
+.col-span-1\/12 {
+  grid-column: span 1;
+}
+.col-span-2\/12 {
+  grid-column: span 2;
+}
+.col-span-3\/12 {
+  grid-column: span 3;
+}
+.col-span-4\/12 {
+  grid-column: span 4;
+}
+.col-span-5\/12 {
+  grid-column: span 5;
+}
+.col-span-6\/12 {
+  grid-column: span 6;
+}
+.col-span-7\/12 {
+  grid-column: span 7;
+}
+.col-span-8\/12 {
+  grid-column: span 8;
+}
+.col-span-9\/12 {
+  grid-column: span 9;
+}
+.col-span-10\/12 {
+  grid-column: span 10;
+}
+.col-span-11\/12 {
+  grid-column: span 11;
+}
+.col-span-12\/12 {
+  grid-column: span 12;
+}
+
+// Mathematical responsive breakpoints
+@media (min-width: calc(48rem - 1px)) {
+  .col-span-md-6\/12 {
+    grid-column: span 6;
+  }
+  .col-span-md-4\/12 {
+    grid-column: span 4;
+  }
+  .col-span-md-3\/12 {
+    grid-column: span 3;
+  }
+}
+
+@media (min-width: calc(64rem - 1px)) {
+  .col-span-lg-3\/12 {
+    grid-column: span 3;
+  }
+  .col-span-lg-2\/12 {
+    grid-column: span 2;
+  }
+  .col-span-lg-1\/12 {
+    grid-column: span 1;
+  }
+}
+
+// =============================================================================
+// PROPORTIONAL SIZING
+// =============================================================================
+
+// Root-based proportional sizing
+.proportional-xs {
+  font-size: calc(1rem * 0.75);
+}
+.proportional-sm {
+  font-size: calc(1rem * 0.875);
+}
+.proportional-base {
+  font-size: 1rem;
+}
+.proportional-lg {
+  font-size: calc(1rem * 1.125);
+}
+.proportional-xl {
+  font-size: calc(1rem * 1.25);
+}
+.proportional-2xl {
+  font-size: calc(1rem * 1.5);
+}
+
+// Viewport-based proportional sizing
+.vw-proportional {
+  width: calc(100vw * 0.8);
+}
+.vh-proportional {
+  height: calc(100vh * 0.6);
+}
+
+// Container-based proportional sizing
+.container-proportional {
+  width: calc(100cqi * 0.9);
+  max-width: calc(1200px * 0.9);
+}
+
+// =============================================================================
+// ADVANCED CALCULATIONS
+// =============================================================================
+
+// Dynamic padding based on content
+.padding-dynamic {
+  padding: calc(var(--base-padding, 1rem) + var(--content-factor, 0) * 0.5rem);
+}
+
+// Aspect-based sizing
+.size-by-aspect {
+  --aspect-ratio: calc(16 / 9);
+  width: 100%;
+  height: calc(100% / var(--aspect-ratio));
+}
+
+// Mathematical transforms
+.transform-rotate-precise {
+  --rotation: 45deg;
+  transform: rotate(calc(var(--rotation) + 0deg));
+}
+
+.transform-scale-math {
+  --scale-factor: 1.5;
+  transform: scale(calc(var(--scale-factor) * 1));
+}
+
+// =============================================================================
+// DEBUGGING UTILITIES
+// =============================================================================
+
+.debug-math {
+  outline: 2px dashed red;
+
+  &::before {
+    content: "Math Debug: " attr(style) " | Computed: " attr(data-computed);
+    position: absolute;
+    background: #dc2626; /* red-600 for better contrast */
+    color: #ffffff;
+    padding: 4px 8px;
+    font-size: 12px;
+    z-index: 1000;
+    transform: translateY(-100%);
+  }
+}
+
+.math-overlay {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(0, 0, 255, 0.1) 10px,
+      rgba(0, 0, 255, 0.1) 20px
+    );
+    pointer-events: none;
+  }
+}
+
+// =============================================================================
+// PERFORMANCE OPTIMIZATION
+// =============================================================================
+
+// Prevent layout thrashing
+.math-stable {
+  contain: layout style;
+  will-change: transform;
+}
+
+// Hardware acceleration for math-heavy elements
+.math-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+// =============================================================================
+// ACCESSIBILITY ENHANCEMENTS
+// =============================================================================
+
+// Ensure mathematical layouts remain accessible
+.math-accessible {
+  // Maintain minimum touch targets
+  min-height: 44px;
+  min-width: 44px;
+
+  // Ensure proper contrast even with mathematical transforms
+  @media (prefers-contrast: more) {
+    border: 2px solid currentColor;
+  }
+
+  // Respect reduced motion
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    animation-duration: 0.01ms;
+  }
+}
+
+// =============================================================================
+// RESPONSIVE MATH PATTERNS
+// =============================================================================
+
+.responsive-math-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(calc(250px - 2rem), 1fr));
+  gap: clamp(1rem, 3vi, 2rem);
+}
+
+.mathematical-card {
+  // Card that maintains perfect proportions
+  aspect-ratio: calc(4 / 3);
+  width: clamp(200px, 30vi, 400px);
+
+  // Padding that scales mathematically
+  padding: calc(clamp(1rem, 2vi, 1.5rem) * 1.5);
+}
+
+// =============================================================================
+// BROWSER SUPPORT
+// =============================================================================
+
+// Feature detection and fallbacks
+@supports not (width: clamp(1rem, 2vi, 1.5rem)) {
+  .fluid-xs {
+    font-size: 1rem;
+  }
+  .fluid-sm {
+    font-size: 1.125rem;
+  }
+  .fluid-base {
+    font-size: 1.25rem;
+  }
+  .fluid-lg {
+    font-size: 1.5rem;
+  }
+  .fluid-xl {
+    font-size: 1.875rem;
+  }
+}
+
+@supports not (aspect-ratio: calc(16 / 9)) {
+  .aspect-ratio-16-9 {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio fallback */
+
+    > * {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

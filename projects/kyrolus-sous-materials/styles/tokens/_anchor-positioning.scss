@@ -1,0 +1,544 @@
+// =============================================================================
+// CSS ANCHOR POSITIONING UTILITIES
+// =============================================================================
+// Position elements relative to any anchor element using CSS Anchor Positioning
+// No JavaScript required for tooltips, popovers, dropdowns
+// Browser support: Chrome 125+, Edge 125+
+
+// =============================================================================
+// ANCHOR DEFINITIONS
+// =============================================================================
+
+/// Define an anchor
+.anchor {
+  anchor-name: --anchor;
+}
+
+/// Named anchor utilities
+@each $name
+  in (
+    trigger,
+    target,
+    menu,
+    tooltip,
+    popover,
+    dropdown,
+    modal,
+    button,
+    link,
+    icon
+  )
+{
+  .anchor-#{$name} {
+    anchor-name: --#{$name};
+  }
+}
+
+/// Dynamic anchor name
+.anchor-dynamic {
+  anchor-name: var(--anchor-name);
+}
+
+// =============================================================================
+// POSITION ANCHOR UTILITIES
+// =============================================================================
+
+/// Position relative to default anchor
+.anchored {
+  position: absolute;
+  position-anchor: --anchor;
+}
+
+/// Position relative to named anchors
+@each $name
+  in (
+    trigger,
+    target,
+    menu,
+    tooltip,
+    popover,
+    dropdown,
+    modal,
+    button,
+    link,
+    icon
+  )
+{
+  .anchored-to-#{$name} {
+    position: absolute;
+    position-anchor: --#{$name};
+  }
+}
+
+/// Dynamic position anchor
+.anchored-dynamic {
+  position: absolute;
+  position-anchor: var(--position-anchor);
+}
+
+// =============================================================================
+// ANCHOR POSITIONING - INSET AREA
+// =============================================================================
+// Quick positioning using logical inset areas
+
+/// Position above anchor
+.anchor-top {
+  inset-area: top;
+}
+
+/// Position below anchor
+.anchor-bottom {
+  inset-area: bottom;
+}
+
+/// Position to start of anchor (LTR: left, RTL: right)
+.anchor-start {
+  inset-area: inline-start;
+}
+
+/// Position to end of anchor (LTR: right, RTL: left)
+.anchor-end {
+  inset-area: inline-end;
+}
+
+/// Position to left of anchor
+.anchor-left {
+  inset-area: left;
+}
+
+/// Position to right of anchor
+.anchor-right {
+  inset-area: right;
+}
+
+// Centered positions
+.anchor-top-center {
+  inset-area: top center;
+}
+
+.anchor-bottom-center {
+  inset-area: bottom center;
+}
+
+.anchor-start-center {
+  inset-area: inline-start center;
+}
+
+.anchor-end-center {
+  inset-area: inline-end center;
+}
+
+// Corner positions
+.anchor-top-start {
+  inset-area: top start;
+}
+
+.anchor-top-end {
+  inset-area: top end;
+}
+
+.anchor-bottom-start {
+  inset-area: bottom start;
+}
+
+.anchor-bottom-end {
+  inset-area: bottom end;
+}
+
+// Full span positions
+.anchor-top-span {
+  inset-area: top span-all;
+}
+
+.anchor-bottom-span {
+  inset-area: bottom span-all;
+}
+
+.anchor-start-span {
+  inset-area: inline-start span-all;
+}
+
+.anchor-end-span {
+  inset-area: inline-end span-all;
+}
+
+// =============================================================================
+// ANCHOR FUNCTION POSITIONING
+// =============================================================================
+// Fine-grained control using anchor() function
+
+/// Align top edge of positioned element with bottom edge of anchor
+.anchor-below {
+  top: anchor(bottom);
+  left: anchor(center);
+  translate: -50% 0;
+}
+
+/// Align bottom edge of positioned element with top edge of anchor
+.anchor-above {
+  bottom: anchor(top);
+  left: anchor(center);
+  translate: -50% 0;
+}
+
+/// Align to start of anchor
+.anchor-before {
+  right: anchor(left);
+  top: anchor(center);
+  translate: 0 -50%;
+}
+
+/// Align to end of anchor
+.anchor-after {
+  left: anchor(right);
+  top: anchor(center);
+  translate: 0 -50%;
+}
+
+// =============================================================================
+// ANCHOR OFFSET UTILITIES
+// =============================================================================
+
+/// Offset from anchor
+.anchor-offset-1 {
+  --anchor-offset: 0.25rem;
+  margin: var(--anchor-offset);
+}
+
+.anchor-offset-2 {
+  --anchor-offset: 0.5rem;
+  margin: var(--anchor-offset);
+}
+
+.anchor-offset-3 {
+  --anchor-offset: 0.75rem;
+  margin: var(--anchor-offset);
+}
+
+.anchor-offset-4 {
+  --anchor-offset: 1rem;
+  margin: var(--anchor-offset);
+}
+
+.anchor-offset-6 {
+  --anchor-offset: 1.5rem;
+  margin: var(--anchor-offset);
+}
+
+.anchor-offset-8 {
+  --anchor-offset: 2rem;
+  margin: var(--anchor-offset);
+}
+
+// =============================================================================
+// ANCHOR SIZE UTILITIES
+// =============================================================================
+// Size elements relative to anchor dimensions
+
+/// Match anchor width
+.anchor-w-full {
+  width: anchor-size(width);
+}
+
+/// Match anchor height
+.anchor-h-full {
+  height: anchor-size(height);
+}
+
+/// Match anchor dimensions
+.anchor-size-full {
+  width: anchor-size(width);
+  height: anchor-size(height);
+}
+
+/// Minimum width of anchor
+.anchor-min-w {
+  min-width: anchor-size(width);
+}
+
+/// Maximum width of anchor
+.anchor-max-w {
+  max-width: anchor-size(width);
+}
+
+// Percentage of anchor size
+.anchor-w-50 {
+  width: calc(anchor-size(width) * 0.5);
+}
+
+.anchor-w-75 {
+  width: calc(anchor-size(width) * 0.75);
+}
+
+.anchor-w-150 {
+  width: calc(anchor-size(width) * 1.5);
+}
+
+.anchor-w-200 {
+  width: calc(anchor-size(width) * 2);
+}
+
+// =============================================================================
+// POSITION FALLBACK UTILITIES
+// =============================================================================
+// Fallback positions when preferred position causes overflow
+
+/// Try bottom first, then top
+@position-try --try-top {
+  inset-area: top center;
+}
+
+@position-try --try-bottom {
+  inset-area: bottom center;
+}
+
+@position-try --try-start {
+  inset-area: inline-start center;
+}
+
+@position-try --try-end {
+  inset-area: inline-end center;
+}
+
+/// Flip to top if bottom overflows
+.anchor-flip-block {
+  position-try-fallbacks: flip-block;
+}
+
+/// Flip to start/end if overflows
+.anchor-flip-inline {
+  position-try-fallbacks: flip-inline;
+}
+
+/// Flip both axes if needed
+.anchor-flip-both {
+  position-try-fallbacks: flip-block, flip-inline;
+}
+
+/// Custom fallback order
+.anchor-fallback-vertical {
+  position-try-fallbacks: --try-bottom, --try-top;
+}
+
+.anchor-fallback-horizontal {
+  position-try-fallbacks: --try-end, --try-start;
+}
+
+.anchor-fallback-all {
+  position-try-fallbacks: --try-bottom, --try-top, --try-end, --try-start;
+}
+
+// =============================================================================
+// TOOLTIP PRESET
+// =============================================================================
+
+/// Tooltip anchor trigger
+.tooltip-trigger {
+  anchor-name: --tooltip;
+  position: relative;
+
+  &:hover + .tooltip,
+  &:focus + .tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/// Tooltip positioned element
+.tooltip {
+  position: absolute;
+  position-anchor: --tooltip;
+  inset-area: top center;
+  margin-bottom: 0.5rem;
+
+  padding: 0.5rem 0.75rem;
+  background: var(--surface-inverse, #1a1a1a);
+  color: var(--text-inverse, #fff);
+  border-radius: var(--radius-md, 0.375rem);
+  font-size: 0.875rem;
+  white-space: nowrap;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+
+  // Flip if overflows
+  position-try-fallbacks: flip-block;
+
+  // Arrow
+  &::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    translate: -50% 0;
+    border: 6px solid transparent;
+    border-top-color: var(--surface-inverse, #1a1a1a);
+  }
+}
+
+// Tooltip position variants
+.tooltip-bottom {
+  inset-area: bottom center;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+
+  &::before {
+    top: auto;
+    bottom: 100%;
+    border-top-color: transparent;
+    border-bottom-color: var(--surface-inverse, #1a1a1a);
+  }
+}
+
+.tooltip-start {
+  inset-area: inline-start center;
+  margin-inline-end: 0.5rem;
+}
+
+.tooltip-end {
+  inset-area: inline-end center;
+  margin-inline-start: 0.5rem;
+}
+
+// =============================================================================
+// DROPDOWN PRESET
+// =============================================================================
+
+/// Dropdown trigger
+.dropdown-trigger {
+  anchor-name: --dropdown;
+}
+
+/// Dropdown menu
+.dropdown-menu {
+  position: absolute;
+  position-anchor: --dropdown;
+  inset-area: bottom span-start;
+  margin-top: 0.25rem;
+
+  min-width: anchor-size(width);
+  background: var(--surface);
+  border-radius: var(--radius-md, 0.375rem);
+  box-shadow: var(--shadow-lg);
+
+  // Flip to top if needed
+  position-try-fallbacks: flip-block;
+}
+
+// =============================================================================
+// POPOVER PRESET
+// =============================================================================
+
+/// Popover anchor
+.popover-anchor {
+  anchor-name: --popover;
+}
+
+/// Popover content
+.popover-content {
+  position: absolute;
+  position-anchor: --popover;
+  inset-area: bottom center;
+  margin-top: 0.5rem;
+
+  padding: 1rem;
+  background: var(--surface);
+  border-radius: var(--radius-lg, 0.5rem);
+  box-shadow: var(--shadow-xl);
+  max-width: 320px;
+
+  position-try-fallbacks: flip-block, flip-inline;
+}
+
+// =============================================================================
+// ANCHOR VISIBILITY
+// =============================================================================
+
+/// Hide when anchor is not visible
+.anchor-visibility-anchors-visible {
+  position-visibility: anchors-visible;
+}
+
+/// Hide when positioned element is not visible
+.anchor-visibility-no-overflow {
+  position-visibility: no-overflow;
+}
+
+/// Always visible (default)
+.anchor-visibility-always {
+  position-visibility: always;
+}
+
+// =============================================================================
+// ANCHOR MIXINS
+// =============================================================================
+
+/// Define an anchor with name
+/// @param {String} $name - Anchor name
+@mixin define-anchor($name) {
+  anchor-name: --#{$name};
+}
+
+/// Position relative to anchor
+/// @param {String} $anchor - Anchor name
+/// @param {String} $position - Position (top, bottom, start, end)
+@mixin anchored-to($anchor, $position: bottom) {
+  position: absolute;
+  position-anchor: --#{$anchor};
+
+  @if $position == top {
+    inset-area: top center;
+  } @else if $position == bottom {
+    inset-area: bottom center;
+  } @else if $position == start {
+    inset-area: inline-start center;
+  } @else if $position == end {
+    inset-area: inline-end center;
+  }
+}
+
+/// Create tooltip component
+/// @param {String} $anchor - Anchor name
+/// @param {String} $position - Position
+@mixin tooltip-component($anchor: tooltip, $position: top) {
+  position: absolute;
+  position-anchor: --#{$anchor};
+  inset-area: #{$position} center;
+  position-try-fallbacks: flip-block;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+// =============================================================================
+// FEATURE DETECTION
+// =============================================================================
+
+/// Feature query for anchor positioning support
+@supports (anchor-name: --test) {
+  .anchor-supported {
+    --anchor-support: true;
+  }
+}
+
+/// Fallback for browsers without anchor positioning
+@supports not (anchor-name: --test) {
+  .anchored,
+  [class*="anchored-to-"] {
+    // Fallback to fixed positioning or hide
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .tooltip {
+    // Fallback tooltip positioning
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

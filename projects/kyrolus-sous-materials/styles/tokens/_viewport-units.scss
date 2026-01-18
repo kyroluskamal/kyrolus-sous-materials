@@ -1,0 +1,509 @@
+// =============================================================================
+// MODERN VIEWPORT UNITS
+// =============================================================================
+// Dynamic viewport units for mobile-safe layouts
+// dvh, svh, lvh - Dynamic, Small, Large viewport heights
+// dvw, svw, lvw - Dynamic, Small, Large viewport widths
+// Browser support: All modern browsers (Chrome 108+, Safari 15.4+, Firefox 101+)
+
+// =============================================================================
+// DYNAMIC VIEWPORT HEIGHT (dvh)
+// =============================================================================
+// Accounts for dynamic browser UI (address bar, toolbars)
+// Recommended for most mobile layouts
+
+/// Height utilities with dvh
+.h-dvh {
+  height: 100dvh;
+}
+
+.h-50dvh {
+  height: 50dvh;
+}
+
+.h-75dvh {
+  height: 75dvh;
+}
+
+.h-screen-dynamic {
+  height: 100dvh;
+}
+
+/// Min/max height with dvh
+.min-h-dvh {
+  min-height: 100dvh;
+}
+
+.min-h-50dvh {
+  min-height: 50dvh;
+}
+
+.max-h-dvh {
+  max-height: 100dvh;
+}
+
+.max-h-50dvh {
+  max-height: 50dvh;
+}
+
+// =============================================================================
+// SMALL VIEWPORT HEIGHT (svh)
+// =============================================================================
+// Smallest possible viewport (browser UI fully visible)
+// Useful for ensuring content never overflows
+
+/// Height utilities with svh
+.h-svh {
+  height: 100svh;
+}
+
+.h-50svh {
+  height: 50svh;
+}
+
+.h-75svh {
+  height: 75svh;
+}
+
+.h-screen-small {
+  height: 100svh;
+}
+
+/// Min/max height with svh
+.min-h-svh {
+  min-height: 100svh;
+}
+
+.min-h-50svh {
+  min-height: 50svh;
+}
+
+.max-h-svh {
+  max-height: 100svh;
+}
+
+// =============================================================================
+// LARGE VIEWPORT HEIGHT (lvh)
+// =============================================================================
+// Largest possible viewport (browser UI hidden)
+// Useful for hero sections, fullscreen backgrounds
+
+/// Height utilities with lvh
+.h-lvh {
+  height: 100lvh;
+}
+
+.h-50lvh {
+  height: 50lvh;
+}
+
+.h-75lvh {
+  height: 75lvh;
+}
+
+.h-screen-large {
+  height: 100lvh;
+}
+
+/// Min/max height with lvh
+.min-h-lvh {
+  min-height: 100lvh;
+}
+
+.min-h-50lvh {
+  min-height: 50lvh;
+}
+
+.max-h-lvh {
+  max-height: 100lvh;
+}
+
+// =============================================================================
+// DYNAMIC VIEWPORT WIDTH (dvw)
+// =============================================================================
+
+/// Width utilities with dvw
+.w-dvw {
+  width: 100dvw;
+}
+
+.w-50dvw {
+  width: 50dvw;
+}
+
+.w-75dvw {
+  width: 75dvw;
+}
+
+.w-screen-dynamic {
+  width: 100dvw;
+}
+
+/// Min/max width with dvw
+.min-w-dvw {
+  min-width: 100dvw;
+}
+
+.max-w-dvw {
+  max-width: 100dvw;
+}
+
+// =============================================================================
+// SMALL VIEWPORT WIDTH (svw)
+// =============================================================================
+
+.w-svw {
+  width: 100svw;
+}
+
+.w-50svw {
+  width: 50svw;
+}
+
+.w-screen-small-w {
+  width: 100svw;
+}
+
+// =============================================================================
+// LARGE VIEWPORT WIDTH (lvw)
+// =============================================================================
+
+.w-lvw {
+  width: 100lvw;
+}
+
+.w-50lvw {
+  width: 50lvw;
+}
+
+.w-screen-large-w {
+  width: 100lvw;
+}
+
+// =============================================================================
+// DYNAMIC VIEWPORT BLOCK/INLINE (dvb, dvi)
+// =============================================================================
+// Logical viewport units (writing-mode aware)
+
+.h-dvb {
+  block-size: 100dvb;
+}
+
+.w-dvi {
+  inline-size: 100dvi;
+}
+
+.min-h-dvb {
+  min-block-size: 100dvb;
+}
+
+.min-w-dvi {
+  min-inline-size: 100dvi;
+}
+
+// =============================================================================
+// VIEWPORT UNIT COMBINATIONS
+// =============================================================================
+
+/// Full dynamic viewport
+.full-dvh {
+  width: 100dvw;
+  height: 100dvh;
+}
+
+/// Full small viewport (safe area)
+.full-svh {
+  width: 100svw;
+  height: 100svh;
+}
+
+/// Full large viewport (immersive)
+.full-lvh {
+  width: 100lvw;
+  height: 100lvh;
+}
+
+// =============================================================================
+// COMMON PATTERNS WITH VIEWPORT UNITS
+// =============================================================================
+
+/// Mobile-safe hero section
+.hero-mobile-safe {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/// Fullscreen section with dynamic height
+.section-fullscreen {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+}
+
+/// Sticky header with viewport calculation
+.header-fixed-safe {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  & + main {
+    padding-top: var(--header-height, 4rem);
+    min-height: calc(100dvh - var(--header-height, 4rem));
+  }
+}
+
+/// Footer that stays at bottom
+.footer-bottom {
+  min-height: calc(100dvh - var(--content-height, auto));
+}
+
+/// Sticky footer layout
+.layout-sticky-footer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+
+  main {
+    flex: 1;
+  }
+}
+
+// =============================================================================
+// SCROLL CONTAINERS WITH VIEWPORT UNITS
+// =============================================================================
+
+/// Scrollable container with dynamic height
+.scroll-container-dvh {
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/// Scrollable container with fixed header offset
+.scroll-container-offset {
+  height: calc(100dvh - var(--header-height, 4rem));
+  overflow-y: auto;
+}
+
+/// Horizontal scroll container
+.scroll-container-horizontal {
+  width: 100dvw;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+// =============================================================================
+// MODAL/DIALOG WITH VIEWPORT UNITS
+// =============================================================================
+
+/// Modal overlay with dynamic viewport
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100dvw;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--overlay);
+}
+
+/// Modal content with max height
+.modal-content {
+  max-height: calc(100dvh - 4rem);
+  max-width: calc(100dvw - 2rem);
+  overflow: auto;
+}
+
+/// Bottom sheet modal
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 90dvh;
+  overflow-y: auto;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  background: var(--surface);
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+
+  &.is-open {
+    transform: translateY(0);
+  }
+}
+
+// =============================================================================
+// SAFE AREA INSETS COMBINED WITH VIEWPORT UNITS
+// =============================================================================
+
+/// Safe area aware fullscreen
+.fullscreen-safe {
+  min-height: 100dvh;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/// Height minus safe area
+.h-safe-dvh {
+  height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+}
+
+/// Width minus safe area
+.w-safe-dvw {
+  width: calc(100dvw - env(safe-area-inset-left) - env(safe-area-inset-right));
+}
+
+// =============================================================================
+// CSS CUSTOM PROPERTIES FOR VIEWPORT
+// =============================================================================
+
+:root {
+  // Store viewport values for calculations
+  --vh: 1dvh;
+  --vw: 1dvw;
+  --vh-small: 1svh;
+  --vh-large: 1lvh;
+
+  // Common viewport-based sizes
+  --full-height: 100dvh;
+  --half-height: 50dvh;
+  --full-width: 100dvw;
+  --half-width: 50dvw;
+}
+
+/// Use custom property for dynamic height
+.h-dynamic {
+  height: calc(var(--vh) * 100);
+}
+
+// =============================================================================
+// RESPONSIVE VIEWPORT UTILITIES
+// =============================================================================
+
+/// Use dvh on mobile, vh on desktop
+.h-screen-responsive {
+  height: 100vh;
+
+  @supports (height: 100dvh) {
+    height: 100dvh;
+  }
+}
+
+/// Fallback for older browsers
+.h-screen-fallback {
+  height: 100vh;
+  height: 100dvh;
+}
+
+// =============================================================================
+// PERCENTAGE VALUES WITH VIEWPORT UNITS
+// =============================================================================
+
+$viewport-percentages: (
+  10,
+  20,
+  25,
+  30,
+  33,
+  40,
+  50,
+  60,
+  66,
+  70,
+  75,
+  80,
+  90,
+  100
+);
+
+@each $percent in $viewport-percentages {
+  .h-#{$percent}dvh {
+    height: #{$percent}dvh;
+  }
+
+  .w-#{$percent}dvw {
+    width: #{$percent}dvw;
+  }
+
+  .min-h-#{$percent}dvh {
+    min-height: #{$percent}dvh;
+  }
+
+  .max-h-#{$percent}dvh {
+    max-height: #{$percent}dvh;
+  }
+}
+
+// =============================================================================
+// VIEWPORT MIXINS
+// =============================================================================
+
+/// Apply dynamic viewport height
+/// @param {Number} $percent - Percentage of viewport (default 100)
+@mixin dynamic-height($percent: 100) {
+  height: #{$percent}dvh;
+}
+
+/// Apply small viewport height (safe)
+/// @param {Number} $percent - Percentage of viewport
+@mixin safe-height($percent: 100) {
+  height: #{$percent}svh;
+}
+
+/// Apply large viewport height (immersive)
+/// @param {Number} $percent - Percentage of viewport
+@mixin immersive-height($percent: 100) {
+  height: #{$percent}lvh;
+}
+
+/// Fullscreen with safe area padding
+@mixin fullscreen-safe-area {
+  min-height: 100dvh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/// Scrollable viewport container
+/// @param {Length} $offset - Offset from top (e.g., header height)
+@mixin scroll-viewport($offset: 0) {
+  height: calc(100dvh - #{$offset});
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+// =============================================================================
+// FEATURE DETECTION
+// =============================================================================
+
+@supports (height: 100dvh) {
+  .viewport-units-supported {
+    --viewport-units-support: true;
+  }
+}
+
+@supports not (height: 100dvh) {
+  // Fallback to vh for older browsers
+  .h-dvh,
+  .h-screen-dynamic {
+    height: 100vh;
+  }
+
+  .min-h-dvh {
+    min-height: 100vh;
+  }
+
+  .w-dvw,
+  .w-screen-dynamic {
+    width: 100vw;
+  }
+}

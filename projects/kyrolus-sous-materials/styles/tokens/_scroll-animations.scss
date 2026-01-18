@@ -1,0 +1,641 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - ADVANCED SCROLL-DRIVEN ANIMATIONS
+// =============================================================================
+// Enhanced scroll-driven animations with custom timelines, view timelines,
+// and advanced animation controls
+//
+// Features:
+// - Custom scroll timelines
+// - View timelines with precise control
+// - Animation range customization
+// - Multiple timeline synchronization
+// - Scroll progress indicators
+// - Intersection-based triggers
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// CUSTOM TIMELINE DEFINITIONS
+// =============================================================================
+
+:root {
+  // Scroll timeline configuration
+  --scroll-timeline-axis: block;
+  --scroll-timeline-name: --main-scroll;
+  --view-timeline-name: --main-view;
+
+  // Animation ranges
+  --animation-start: 0%;
+  --animation-end: 100%;
+  --cover-start: cover 0%;
+  --cover-end: cover 100%;
+  --entry-start: entry 0%;
+  --entry-end: entry 100%;
+  --exit-start: exit 0%;
+  --exit-end: exit 100%;
+}
+
+// Root scroll timeline
+.scroll-container {
+  scroll-timeline-name: --main-scroll;
+  scroll-timeline-axis: block;
+}
+
+.horizontal-scroll {
+  scroll-timeline-name: --horizontal-scroll;
+  scroll-timeline-axis: inline;
+}
+
+// View timeline container
+.view-container {
+  view-timeline-name: --main-view;
+  view-timeline-axis: block;
+}
+
+// =============================================================================
+// ADVANCED VIEW TIMELINE ANIMATIONS
+// =============================================================================
+
+// Entry animations (element enters viewport)
+.slide-in-from-left {
+  animation: slideInLeft linear;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+}
+
+.slide-in-from-right {
+  animation: slideInRight linear;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+}
+
+.fade-in-on-view {
+  animation: fadeIn linear;
+  animation-timeline: view();
+  animation-range: entry 25% entry 100%;
+}
+
+.scale-in-on-view {
+  animation: scaleIn linear;
+  animation-timeline: view();
+  animation-range: entry 50% entry 100%;
+}
+
+// Exit animations (element leaves viewport)
+.slide-out-to-left {
+  animation: slideOutLeft linear;
+  animation-timeline: view();
+  animation-range: exit 0% exit 100%;
+}
+
+.fade-out-on-exit {
+  animation: fadeOut linear;
+  animation-timeline: view();
+  animation-range: exit 0% exit 75%;
+}
+
+// Cover animations (entire element passes through viewport)
+.reveal-text {
+  animation: textReveal linear;
+  animation-timeline: view();
+  animation-range: cover 0% cover 100%;
+}
+
+.progress-bar-animation {
+  animation: fillProgress linear;
+  animation-timeline: view();
+  animation-range: cover 25% cover 75%;
+}
+
+// =============================================================================
+// PRECISE ANIMATION RANGE CONTROL
+// =============================================================================
+
+// Fine-grained entry control
+.enter-early {
+  animation: fadeIn linear;
+  animation-timeline: view();
+  animation-range: entry 0% entry 25%;
+}
+
+.enter-mid {
+  animation: fadeIn linear;
+  animation-timeline: view();
+  animation-range: entry 25% entry 75%;
+}
+
+.enter-late {
+  animation: fadeIn linear;
+  animation-timeline: view();
+  animation-range: entry 75% entry 100%;
+}
+
+// Staggered animations
+.stagger-delay-1 {
+  animation: fadeInUp linear;
+  animation-timeline: view();
+  animation-range: entry 10% entry 40%;
+}
+
+.stagger-delay-2 {
+  animation: fadeInUp linear;
+  animation-timeline: view();
+  animation-range: entry 20% entry 50%;
+}
+
+.stagger-delay-3 {
+  animation: fadeInUp linear;
+  animation-timeline: view();
+  animation-range: entry 30% entry 60%;
+}
+
+// =============================================================================
+// MULTIPLE TIMELINE SYNCHRONIZATION
+// =============================================================================
+
+// Sync with scroll timeline
+.sync-with-scroll {
+  animation: parallax linear;
+  animation-timeline: scroll(root block);
+  animation-range: cover 0% cover 100%;
+}
+
+// Dual timeline animation
+.dual-timeline {
+  animation: slideIn linear, parallax linear;
+  animation-timeline: view(), scroll(root block);
+  animation-range: entry 0% entry 100%, cover 0% cover 100%;
+}
+
+// Chained animations
+.chain-first {
+  animation: fadeIn linear;
+  animation-timeline: view();
+  animation-range: entry 0% entry 50%;
+}
+
+.chain-second {
+  animation: slideUp linear;
+  animation-timeline: view();
+  animation-range: entry 50% entry 100%;
+}
+
+// =============================================================================
+// SCROLL PROGRESS INDICATORS
+// =============================================================================
+
+// Progress bar that fills with scroll
+.scroll-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  &::after {
+    content: "";
+    display: block;
+    height: 100%;
+    background: var(--primary);
+    animation: progressFill linear;
+    animation-timeline: scroll(root block);
+    animation-range: cover 0% cover 100%;
+    transform-origin: left;
+  }
+}
+
+// Scroll percentage indicator
+.scroll-percentage {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+
+  &::after {
+    content: attr(data-progress) "%";
+    display: block;
+    animation: updatePercentage linear;
+    animation-timeline: scroll(root block);
+    animation-range: cover 0% cover 100%;
+  }
+}
+
+// =============================================================================
+// ADVANCED SCROLL EFFECTS
+// =============================================================================
+
+// Parallax scrolling
+.parallax-slow {
+  animation: parallax linear;
+  animation-timeline: scroll(root block);
+  animation-range: cover 0% cover 100%;
+  animation-timing-function: linear;
+}
+
+.parallax-fast {
+  animation: parallaxFast linear;
+  animation-timeline: scroll(root block);
+  animation-range: cover 0% cover 100%;
+}
+
+// Sticky reveal effect
+.sticky-reveal {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+
+  .content {
+    animation: revealContent linear;
+    animation-timeline: scroll(self block);
+    animation-range: cover 25% cover 75%;
+  }
+}
+
+// Scroll-triggered counter
+.counter-animation {
+  animation: countUp linear;
+  animation-timeline: view();
+  animation-range: entry 50% entry 100%;
+}
+
+// =============================================================================
+// INTERSECTION-BASED TRIGGERS
+// =============================================================================
+
+// Animate when element intersects container
+.intersection-trigger {
+  animation: intersectAnimate linear;
+  animation-timeline: view(--intersection-container);
+  animation-range: contain 0% contain 100%;
+}
+
+// Threshold-based triggering
+.threshold-25 {
+  animation: thresholdAnimate linear;
+  animation-timeline: view();
+  animation-range: entry 25% contain 75%;
+}
+
+.threshold-50 {
+  animation: thresholdAnimate linear;
+  animation-timeline: view();
+  animation-range: entry 50% contain 50%;
+}
+
+.threshold-75 {
+  animation: thresholdAnimate linear;
+  animation-timeline: view();
+  animation-range: entry 75% contain 25%;
+}
+
+// =============================================================================
+// CUSTOM ANIMATION KEYFRAMES
+// =============================================================================
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes textReveal {
+  0% {
+    background: linear-gradient(90deg, transparent 0%, transparent 0%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  100% {
+    background: linear-gradient(90deg, currentColor 0%, currentColor 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+}
+
+@keyframes fillProgress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes progressFill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes parallax {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50px);
+  }
+}
+
+@keyframes parallaxFast {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100px);
+  }
+}
+
+@keyframes revealContent {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes countUp {
+  from {
+    --count: 0;
+  }
+  to {
+    --count: var(--target-count);
+  }
+}
+
+@keyframes intersectAnimate {
+  from {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.5;
+  }
+  to {
+    transform: rotate(360deg) scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes thresholdAnimate {
+  0% {
+    filter: blur(5px);
+    opacity: 0.3;
+  }
+  100% {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+// =============================================================================
+// ADVANCED TIMELINE CONTROLS
+// =============================================================================
+
+// Timeline with custom easing
+.timeline-ease-in {
+  animation: fadeIn linear;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+  animation-timing-function: ease-in;
+}
+
+.timeline-ease-out {
+  animation: fadeIn linear;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+  animation-timing-function: ease-out;
+}
+
+.timeline-ease-in-out {
+  animation: fadeIn linear;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+  animation-timing-function: ease-in-out;
+}
+
+// Step-based animations
+.timeline-steps {
+  animation: stepAnimation linear;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+  animation-timing-function: steps(5, jump-end);
+}
+
+// =============================================================================
+// SCROLL DIRECTION DETECTION
+// =============================================================================
+
+// Downward scroll animations
+.scroll-down-only {
+  animation: scrollDownAnim linear;
+  animation-timeline: scroll(root block);
+  animation-range: cover 0% cover 100%;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+// Upward scroll animations
+.scroll-up-only {
+  animation: scrollUpAnim linear;
+  animation-timeline: scroll(root block);
+  animation-range: cover 100% cover 0%; /* Reverse direction */
+}
+
+// =============================================================================
+// PERFORMANCE OPTIMIZATIONS
+// =============================================================================
+
+// Optimized scroll animations
+.scroll-performant {
+  animation: optimizedScroll linear;
+  animation-timeline: scroll(root block);
+  animation-range: cover 0% cover 100%;
+  will-change: transform;
+  contain: layout style;
+}
+
+// Lazy-loaded scroll animations
+.scroll-lazy {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
+
+  &.animate {
+    animation: lazyAnimate linear;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+}
+
+// =============================================================================
+// RESPONSIVE SCROLL ANIMATIONS
+// =============================================================================
+
+// Mobile vs desktop animations
+@media (max-width: 768px) {
+  .responsive-scroll {
+    animation: mobileScroll linear;
+    animation-timeline: view();
+    animation-range: entry 25% entry 100%;
+  }
+}
+
+@media (min-width: 769px) {
+  .responsive-scroll {
+    animation: desktopScroll linear;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+}
+
+// Container query based animations
+@container (min-width: 600px) {
+  .cq-scroll {
+    animation: largeContainerAnim linear;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+}
+
+@container (max-width: 599px) {
+  .cq-scroll {
+    animation: smallContainerAnim linear;
+    animation-timeline: view();
+    animation-range: entry 50% entry 100%;
+  }
+}
+
+// =============================================================================
+// DEBUGGING UTILITIES
+// =============================================================================
+
+// Timeline visualization
+.debug-timeline {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      red 0%,
+      orange 25%,
+      yellow 50%,
+      green 75%,
+      blue 100%
+    );
+    z-index: 1000;
+    animation: debugProgress linear;
+    animation-timeline: scroll(root block);
+    animation-range: cover 0% cover 100%;
+  }
+}
+
+@keyframes debugProgress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+// Animation range indicators
+.range-indicator::after {
+  content: "Entry: " attr(data-entry) "% | Exit: " attr(data-exit) "%";
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  z-index: 1000;
+}
+
+// =============================================================================
+// BROWSER SUPPORT NOTES
+// =============================================================================
+// Scroll-driven animations support:
+// - Chrome 115+
+// - Edge 115+
+// - Firefox 118+
+// - Safari 17.4+
+//
+// For unsupported browsers:
+// 1. Use feature detection with @supports
+// 2. Provide JavaScript fallbacks
+// 3. Graceful degradation to static styles
+//
+// Example:
+// @supports (animation-timeline: scroll()) {
+//   .animated { /* Modern animation */ }
+// } @else {
+//   .animated { /* Fallback styles */ }
+// }

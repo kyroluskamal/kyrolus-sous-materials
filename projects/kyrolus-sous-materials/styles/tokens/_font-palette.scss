@@ -1,0 +1,379 @@
+// =============================================================================
+// FONT PALETTE - COLOR FONTS
+// =============================================================================
+// Control colors in color fonts (COLRv0, COLRv1, SVG fonts)
+// Override palette colors or use predefined palettes
+// Browser support: Chrome 101+, Firefox 107+, Safari 15.4+
+
+// =============================================================================
+// FONT-PALETTE PROPERTY
+// =============================================================================
+
+/// Use normal/default palette
+.palette-normal {
+  font-palette: normal;
+}
+
+/// Use light palette (if font supports it)
+.palette-light {
+  font-palette: light;
+}
+
+/// Use dark palette (if font supports it)
+.palette-dark {
+  font-palette: dark;
+}
+
+// =============================================================================
+// CUSTOM PALETTE DEFINITIONS
+// =============================================================================
+
+/// Primary palette - uses theme primary color
+@font-palette-values --palette-primary {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 var(--primary, #3b82f6), 1 var(--primary-dark, #1d4ed8);
+}
+
+/// Secondary palette
+@font-palette-values --palette-secondary {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 var(--secondary, #6366f1), 1 var(--secondary-dark, #4338ca);
+}
+
+/// Success palette (green tones)
+@font-palette-values --palette-success {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #22c55e, 1 #16a34a;
+}
+
+/// Warning palette (amber tones)
+@font-palette-values --palette-warning {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #f59e0b, 1 #d97706;
+}
+
+/// Danger palette (red tones)
+@font-palette-values --palette-danger {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #ef4444, 1 #dc2626;
+}
+
+/// Info palette (cyan tones)
+@font-palette-values --palette-info {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #06b6d4, 1 #0891b2;
+}
+
+/// Grayscale palette
+@font-palette-values --palette-grayscale {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #6b7280, 1 #4b5563, 2 #374151;
+}
+
+/// Rainbow palette
+@font-palette-values --palette-rainbow {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #ef4444, 1 #f97316, 2 #eab308, 3 #22c55e, 4 #3b82f6,
+    5 #8b5cf6;
+}
+
+/// Sunset palette
+@font-palette-values --palette-sunset {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #f43f5e, 1 #fb7185, 2 #fda4af, 3 #fecdd3;
+}
+
+/// Ocean palette
+@font-palette-values --palette-ocean {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #0ea5e9, 1 #38bdf8, 2 #7dd3fc, 3 #bae6fd;
+}
+
+/// Forest palette
+@font-palette-values --palette-forest {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #15803d, 1 #22c55e, 2 #4ade80, 3 #86efac;
+}
+
+// =============================================================================
+// PALETTE UTILITY CLASSES
+// =============================================================================
+
+.palette-primary {
+  font-palette: --palette-primary;
+}
+
+.palette-secondary {
+  font-palette: --palette-secondary;
+}
+
+.palette-success {
+  font-palette: --palette-success;
+}
+
+.palette-warning {
+  font-palette: --palette-warning;
+}
+
+.palette-danger {
+  font-palette: --palette-danger;
+}
+
+.palette-info {
+  font-palette: --palette-info;
+}
+
+.palette-grayscale {
+  font-palette: --palette-grayscale;
+}
+
+.palette-rainbow {
+  font-palette: --palette-rainbow;
+}
+
+.palette-sunset {
+  font-palette: --palette-sunset;
+}
+
+.palette-ocean {
+  font-palette: --palette-ocean;
+}
+
+.palette-forest {
+  font-palette: --palette-forest;
+}
+
+// =============================================================================
+// EMOJI-SPECIFIC PALETTES
+// =============================================================================
+
+/// Define palettes for common color emoji fonts
+@font-palette-values --emoji-warm {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
+  base-palette: 0;
+  override-colors: 0 #fbbf24, 1 #f59e0b;
+}
+
+@font-palette-values --emoji-cool {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
+  base-palette: 0;
+  override-colors: 0 #60a5fa, 1 #3b82f6;
+}
+
+// =============================================================================
+// DARK MODE PALETTES
+// =============================================================================
+
+/// Dark mode adjusted palettes
+@font-palette-values --palette-dark-primary {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #60a5fa, 1 #93c5fd;
+}
+
+@font-palette-values --palette-dark-success {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #4ade80, 1 #86efac;
+}
+
+@font-palette-values --palette-dark-warning {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #fbbf24, 1 #fcd34d;
+}
+
+@font-palette-values --palette-dark-danger {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #f87171, 1 #fca5a5;
+}
+
+[data-theme="dark"],
+.dark {
+  .palette-primary {
+    font-palette: --palette-dark-primary;
+  }
+
+  .palette-success {
+    font-palette: --palette-dark-success;
+  }
+
+  .palette-warning {
+    font-palette: --palette-dark-warning;
+  }
+
+  .palette-danger {
+    font-palette: --palette-dark-danger;
+  }
+}
+
+// =============================================================================
+// ANIMATED PALETTE SWITCHING
+// =============================================================================
+
+/// Smooth palette transition
+.palette-transition {
+  transition: font-palette 0.3s ease;
+}
+
+/// Hover palette change
+.palette-hover-primary {
+  &:hover {
+    font-palette: --palette-primary;
+  }
+}
+
+.palette-hover-rainbow {
+  &:hover {
+    font-palette: --palette-rainbow;
+  }
+}
+
+// =============================================================================
+// COLOR FONT UTILITIES
+// =============================================================================
+
+/// Indicate color font is in use
+.color-font {
+  --is-color-font: 1;
+}
+
+/// Force grayscale on color fonts
+.color-font-grayscale {
+  filter: grayscale(1);
+}
+
+/// Desaturate color fonts
+.color-font-desaturate {
+  filter: saturate(0.5);
+}
+
+/// Invert color font colors
+.color-font-invert {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+// =============================================================================
+// POPULAR COLOR FONT FAMILIES
+// =============================================================================
+
+/// Noto Color Emoji support
+.font-noto-emoji {
+  font-family: "Noto Color Emoji", sans-serif;
+}
+
+/// Twemoji support
+.font-twemoji {
+  font-family: "Twemoji Mozilla", "Apple Color Emoji", sans-serif;
+}
+
+/// Bungee color font
+.font-bungee-color {
+  font-family: "Bungee Shade", "Bungee", sans-serif;
+}
+
+// =============================================================================
+// ICON FONT PALETTES
+// =============================================================================
+
+/// Material Icons palette
+@font-palette-values --icons-primary {
+  font-family: "Material Icons", "Material Symbols Outlined";
+  base-palette: 0;
+  override-colors: 0 var(--primary);
+}
+
+/// Colored icon class
+.icon-colored {
+  font-palette: --icons-primary;
+}
+
+// =============================================================================
+// BRAND PALETTES
+// =============================================================================
+
+/// Social media brand colors
+@font-palette-values --palette-twitter {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #1da1f2;
+}
+
+@font-palette-values --palette-facebook {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #1877f2;
+}
+
+@font-palette-values --palette-instagram {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #e4405f, 1 #833ab4, 2 #fd1d1d;
+}
+
+@font-palette-values --palette-youtube {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #ff0000;
+}
+
+@font-palette-values --palette-linkedin {
+  font-family: inherit;
+  base-palette: 0;
+  override-colors: 0 #0a66c2;
+}
+
+// =============================================================================
+// BROWSER SUPPORT
+// =============================================================================
+
+@supports (font-palette: normal) {
+  .palette-supported {
+    --palette-support: 1;
+  }
+}
+
+@supports not (font-palette: normal) {
+  // Fallback: Use color property instead
+  .palette-fallback {
+    .palette-primary {
+      color: var(--primary);
+    }
+
+    .palette-success {
+      color: var(--success);
+    }
+
+    .palette-warning {
+      color: var(--warning);
+    }
+
+    .palette-danger {
+      color: var(--danger);
+    }
+  }
+}
+
+// =============================================================================
+// PRINT STYLES
+// =============================================================================
+
+@media print {
+  [class*="palette-"] {
+    font-palette: normal;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

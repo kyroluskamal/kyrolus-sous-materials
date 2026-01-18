@@ -1,0 +1,704 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - SVG UTILITIES
+// =============================================================================
+// Comprehensive SVG styling utilities:
+// - Fill colors
+// - Stroke colors and widths
+// - Stroke properties (dasharray, linecap, linejoin)
+// - SVG-specific transforms
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// FILL UTILITIES
+// =============================================================================
+
+.fill-none {
+  fill: none;
+}
+
+.fill-transparent {
+  fill: transparent;
+}
+
+.fill-current {
+  fill: currentColor;
+}
+
+.fill-inherit {
+  fill: inherit;
+}
+
+// Theme colors
+.fill-primary {
+  fill: var(--primary);
+}
+
+.fill-primary-hover {
+  fill: var(--primary-hover);
+}
+
+.fill-secondary {
+  fill: var(--secondary);
+}
+
+.fill-accent {
+  fill: var(--accent);
+}
+
+.fill-success {
+  fill: var(--success);
+}
+
+.fill-warning {
+  fill: var(--warning);
+}
+
+.fill-danger {
+  fill: var(--danger);
+}
+
+.fill-info {
+  fill: var(--info);
+}
+
+// Neutral colors
+.fill-white {
+  fill: white;
+}
+
+.fill-black {
+  fill: black;
+}
+
+.fill-text {
+  fill: var(--text);
+}
+
+.fill-text-secondary {
+  fill: var(--text-secondary);
+}
+
+.fill-text-muted {
+  fill: var(--text-muted);
+}
+
+.fill-surface {
+  fill: var(--surface);
+}
+
+.fill-bg {
+  fill: var(--bg);
+}
+
+.fill-border {
+  fill: var(--border);
+}
+
+// Fill from palette colors
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in $palette-shades {
+    .fill-#{$palette-name}-#{$shade} {
+      fill: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+// Fill opacity
+.fill-opacity-0 {
+  fill-opacity: 0;
+}
+
+.fill-opacity-5 {
+  fill-opacity: 0.05;
+}
+
+.fill-opacity-10 {
+  fill-opacity: 0.1;
+}
+
+.fill-opacity-20 {
+  fill-opacity: 0.2;
+}
+
+.fill-opacity-25 {
+  fill-opacity: 0.25;
+}
+
+.fill-opacity-30 {
+  fill-opacity: 0.3;
+}
+
+.fill-opacity-40 {
+  fill-opacity: 0.4;
+}
+
+.fill-opacity-50 {
+  fill-opacity: 0.5;
+}
+
+.fill-opacity-60 {
+  fill-opacity: 0.6;
+}
+
+.fill-opacity-70 {
+  fill-opacity: 0.7;
+}
+
+.fill-opacity-75 {
+  fill-opacity: 0.75;
+}
+
+.fill-opacity-80 {
+  fill-opacity: 0.8;
+}
+
+.fill-opacity-90 {
+  fill-opacity: 0.9;
+}
+
+.fill-opacity-95 {
+  fill-opacity: 0.95;
+}
+
+.fill-opacity-100 {
+  fill-opacity: 1;
+}
+
+// Fill rule
+.fill-rule-nonzero {
+  fill-rule: nonzero;
+}
+
+.fill-rule-evenodd {
+  fill-rule: evenodd;
+}
+
+// =============================================================================
+// STROKE UTILITIES
+// =============================================================================
+
+.stroke-none {
+  stroke: none;
+}
+
+.stroke-transparent {
+  stroke: transparent;
+}
+
+.stroke-current {
+  stroke: currentColor;
+}
+
+.stroke-inherit {
+  stroke: inherit;
+}
+
+// Theme colors
+.stroke-primary {
+  stroke: var(--primary);
+}
+
+.stroke-primary-hover {
+  stroke: var(--primary-hover);
+}
+
+.stroke-secondary {
+  stroke: var(--secondary);
+}
+
+.stroke-accent {
+  stroke: var(--accent);
+}
+
+.stroke-success {
+  stroke: var(--success);
+}
+
+.stroke-warning {
+  stroke: var(--warning);
+}
+
+.stroke-danger {
+  stroke: var(--danger);
+}
+
+.stroke-info {
+  stroke: var(--info);
+}
+
+// Neutral colors
+.stroke-white {
+  stroke: white;
+}
+
+.stroke-black {
+  stroke: black;
+}
+
+.stroke-text {
+  stroke: var(--text);
+}
+
+.stroke-text-secondary {
+  stroke: var(--text-secondary);
+}
+
+.stroke-text-muted {
+  stroke: var(--text-muted);
+}
+
+.stroke-border {
+  stroke: var(--border);
+}
+
+.stroke-border-strong {
+  stroke: var(--border-strong);
+}
+
+// Stroke from palette colors
+@each $palette-name, $palette in $color-palettes {
+  @each $shade in (100, 300, 500, 700, 900) {
+    .stroke-#{$palette-name}-#{$shade} {
+      stroke: var(--color-#{$palette-name}-#{$shade});
+    }
+  }
+}
+
+// =============================================================================
+// STROKE WIDTH
+// =============================================================================
+
+.stroke-0 {
+  stroke-width: 0;
+}
+
+.stroke-1 {
+  stroke-width: 1;
+}
+
+.stroke-2 {
+  stroke-width: 2;
+}
+
+.stroke-3 {
+  stroke-width: 3;
+}
+
+.stroke-4 {
+  stroke-width: 4;
+}
+
+.stroke-5 {
+  stroke-width: 5;
+}
+
+.stroke-6 {
+  stroke-width: 6;
+}
+
+.stroke-8 {
+  stroke-width: 8;
+}
+
+// Fractional stroke widths
+.stroke-\[0\.5\] {
+  stroke-width: 0.5;
+}
+
+.stroke-\[1\.5\] {
+  stroke-width: 1.5;
+}
+
+.stroke-\[2\.5\] {
+  stroke-width: 2.5;
+}
+
+// =============================================================================
+// STROKE OPACITY
+// =============================================================================
+
+.stroke-opacity-0 {
+  stroke-opacity: 0;
+}
+
+.stroke-opacity-25 {
+  stroke-opacity: 0.25;
+}
+
+.stroke-opacity-50 {
+  stroke-opacity: 0.5;
+}
+
+.stroke-opacity-75 {
+  stroke-opacity: 0.75;
+}
+
+.stroke-opacity-100 {
+  stroke-opacity: 1;
+}
+
+// =============================================================================
+// STROKE LINECAP
+// =============================================================================
+
+.stroke-cap-butt {
+  stroke-linecap: butt;
+}
+
+.stroke-cap-round {
+  stroke-linecap: round;
+}
+
+.stroke-cap-square {
+  stroke-linecap: square;
+}
+
+// =============================================================================
+// STROKE LINEJOIN
+// =============================================================================
+
+.stroke-join-miter {
+  stroke-linejoin: miter;
+}
+
+.stroke-join-round {
+  stroke-linejoin: round;
+}
+
+.stroke-join-bevel {
+  stroke-linejoin: bevel;
+}
+
+// Miter limit
+.stroke-miter-1 {
+  stroke-miterlimit: 1;
+}
+
+.stroke-miter-4 {
+  stroke-miterlimit: 4;
+}
+
+.stroke-miter-8 {
+  stroke-miterlimit: 8;
+}
+
+// =============================================================================
+// STROKE DASHARRAY
+// =============================================================================
+
+.stroke-dash-none {
+  stroke-dasharray: none;
+}
+
+.stroke-dash-1 {
+  stroke-dasharray: 1;
+}
+
+.stroke-dash-2 {
+  stroke-dasharray: 2;
+}
+
+.stroke-dash-4 {
+  stroke-dasharray: 4;
+}
+
+.stroke-dash-6 {
+  stroke-dasharray: 6;
+}
+
+// Common dash patterns
+.stroke-dashed {
+  stroke-dasharray: 4 4;
+}
+
+.stroke-dotted {
+  stroke-dasharray: 1 3;
+}
+
+.stroke-dash-dot {
+  stroke-dasharray: 8 4 2 4;
+}
+
+.stroke-dash-long {
+  stroke-dasharray: 12 6;
+}
+
+// Animated dash (for drawing effects)
+.stroke-dash-animated {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: dash-draw 2s ease forwards;
+}
+
+@keyframes dash-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+// =============================================================================
+// STROKE DASHOFFSET
+// =============================================================================
+
+.stroke-offset-0 {
+  stroke-dashoffset: 0;
+}
+
+.stroke-offset-1 {
+  stroke-dashoffset: 1;
+}
+
+.stroke-offset-2 {
+  stroke-dashoffset: 2;
+}
+
+.stroke-offset-4 {
+  stroke-dashoffset: 4;
+}
+
+// =============================================================================
+// VECTOR EFFECT
+// =============================================================================
+
+.vector-none {
+  vector-effect: none;
+}
+
+.vector-non-scaling {
+  vector-effect: non-scaling-stroke;
+}
+
+// =============================================================================
+// SVG TEXT UTILITIES
+// =============================================================================
+
+.text-anchor-start {
+  text-anchor: start;
+}
+
+.text-anchor-middle {
+  text-anchor: middle;
+}
+
+.text-anchor-end {
+  text-anchor: end;
+}
+
+.dominant-baseline-auto {
+  dominant-baseline: auto;
+}
+
+.dominant-baseline-middle {
+  dominant-baseline: middle;
+}
+
+.dominant-baseline-hanging {
+  dominant-baseline: hanging;
+}
+
+.dominant-baseline-central {
+  dominant-baseline: central;
+}
+
+// =============================================================================
+// PAINT ORDER
+// =============================================================================
+
+.paint-normal {
+  paint-order: normal;
+}
+
+.paint-stroke {
+  paint-order: stroke fill markers;
+}
+
+.paint-fill {
+  paint-order: fill stroke markers;
+}
+
+.paint-markers {
+  paint-order: markers fill stroke;
+}
+
+// =============================================================================
+// SVG ICON SIZING
+// =============================================================================
+
+.icon-xs {
+  width: 12px;
+  height: 12px;
+}
+
+.icon-sm {
+  width: 16px;
+  height: 16px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-md {
+  width: 24px;
+  height: 24px;
+}
+
+.icon-lg {
+  width: 32px;
+  height: 32px;
+}
+
+.icon-xl {
+  width: 40px;
+  height: 40px;
+}
+
+.icon-2xl {
+  width: 48px;
+  height: 48px;
+}
+
+.icon-3xl {
+  width: 64px;
+  height: 64px;
+}
+
+// Icon that inherits text size
+.icon-em {
+  width: 1em;
+  height: 1em;
+}
+
+// =============================================================================
+// SVG COMMON PATTERNS
+// =============================================================================
+
+// Icon button (clickable icon)
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--surface-hover);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+  }
+}
+
+// Icon with text
+.icon-text {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+
+  svg {
+    flex-shrink: 0;
+    width: 1.25em;
+    height: 1.25em;
+    fill: currentColor;
+  }
+}
+
+// Spinning icon (for loading)
+.icon-spin {
+  animation: spin 1s linear infinite;
+}
+
+// Pulsing icon (for notifications)
+.icon-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+// Icon that changes on hover
+.icon-hover-swap {
+  .icon-default {
+    display: block;
+  }
+
+  .icon-hover {
+    display: none;
+  }
+
+  &:hover {
+    .icon-default {
+      display: none;
+    }
+
+    .icon-hover {
+      display: block;
+    }
+  }
+}
+
+// =============================================================================
+// SVG MARKER UTILITIES
+// =============================================================================
+
+.marker-start-none {
+  marker-start: none;
+}
+
+.marker-mid-none {
+  marker-mid: none;
+}
+
+.marker-end-none {
+  marker-end: none;
+}
+
+// =============================================================================
+// COLOR INTERPOLATION (SVG Property)
+// =============================================================================
+// NOTE: color-interpolation is a valid SVG property for controlling color blending
+// See: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/color-interpolation
+
+.color-interpolation-auto {
+  // stylelint-disable-next-line property-no-unknown
+  color-interpolation: auto;
+}
+
+.color-interpolation-srgb {
+  // stylelint-disable-next-line property-no-unknown
+  color-interpolation: sRGB;
+}
+
+.color-interpolation-linear {
+  // stylelint-disable-next-line property-no-unknown
+  color-interpolation: linearRGB;
+}
+
+// =============================================================================
+// SVG ACCESSIBILITY
+// =============================================================================
+
+// Hide decorative SVGs from screen readers
+svg[aria-hidden="true"],
+svg.decorative {
+  pointer-events: none;
+}
+
+// Ensure SVGs with meaning have proper accessible name
+svg[role="img"] {
+  // Requires title or aria-label for accessibility
+  // Add a default display to ensure visibility
+  display: inline-block;
+}
+
+// Focus visible for interactive SVGs
+svg:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

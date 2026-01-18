@@ -1,0 +1,586 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - UNIFIED THEMING SYSTEM
+// =============================================================================
+// Simple, straightforward theming with dark mode, RTL/LTR, and high contrast.
+// No complexity, no separate files - just CSS custom properties.
+// =============================================================================
+//
+// THEME SWITCHING (use either method):
+// ------------------------------------
+// Method 1 - Data Attribute (recommended):
+//   <html data-theme="dark">            Dark mode
+//   <html data-theme="light">           Light mode
+//   <html data-theme="auto">            Follow system preference
+//   <html data-theme="high-contrast">   High contrast mode
+//
+// Method 2 - CSS Class:
+//   <html class="dark">          Dark mode
+//   <html class="light">         Light mode (optional, it's default)
+//
+// RTL/LTR LAYOUT:
+// ---------------
+// Use the standard HTML dir attribute (this is the correct semantic approach):
+//   <html dir="rtl">             Right-to-left
+//   <html dir="ltr">             Left-to-right (default)
+//
+// COMBINED EXAMPLES:
+// ------------------
+//   <html data-theme="dark" dir="rtl">             Dark + RTL
+//   <html class="dark" dir="rtl">                  Dark + RTL (class method)
+//   <html data-theme="auto">                       Auto theme, LTR
+//   <html data-theme="high-contrast" dir="rtl">    High contrast + RTL
+//
+// =============================================================================
+
+@use "sass:map";
+@use "sass:color";
+
+// =============================================================================
+// COLOR PALETTE CONFIGURATION
+// =============================================================================
+// Define your brand colors here - everything else is auto-generated
+
+$theme-primary: #2563eb; // Primary brand color
+$theme-secondary: #9db44f; // Secondary brand color
+$theme-accent: #7c3aed; // Accent/Tertiary color
+
+// Semantic colors (adjust to your preference)
+$theme-success: #10b981;
+$theme-warning: #f59e0b;
+$theme-danger: #dc2626;
+$theme-info: #3b82f6;
+
+// =============================================================================
+// LIGHT THEME TOKENS
+// =============================================================================
+$light-theme: (
+  // Backgrounds
+  --bg: #ffffff,
+  --bg-secondary: #f8fafc,
+  --bg-tertiary: #f1f5f9,
+  --bg-elevated: #ffffff,
+
+  // Text
+  --text: #1e293b,
+  --text-secondary: #64748b,
+  --text-muted: #94a3b8,
+  --text-inverted: #ffffff,
+
+  // Borders
+  --border: #e2e8f0,
+  --border-strong: #cbd5e1,
+  --border-focus: $theme-primary,
+
+  // Brand colors
+  --primary: $theme-primary,
+  --primary-hover: color.scale($theme-primary, $lightness: -10%),
+  --primary-active: color.scale($theme-primary, $lightness: -20%),
+  --primary-light: color.scale($theme-primary, $lightness: 40%),
+  --on-primary: #ffffff,
+
+  --secondary: $theme-secondary,
+  --secondary-hover: color.scale($theme-secondary, $lightness: -10%),
+  --secondary-active: color.scale($theme-secondary, $lightness: -20%),
+  --on-secondary: #ffffff,
+
+  --accent: $theme-accent,
+  --accent-hover: color.scale($theme-accent, $lightness: -10%),
+  --on-accent: #ffffff,
+
+  // Status colors
+  --success: $theme-success,
+  --success-light: color.scale($theme-success, $lightness: 40%),
+  --on-success: #ffffff,
+
+  --warning: $theme-warning,
+  --warning-light: color.scale($theme-warning, $lightness: 40%),
+  --on-warning: #1e293b,
+
+  --danger: $theme-danger,
+  --danger-light: color.scale($theme-danger, $lightness: 40%),
+  --on-danger: #ffffff,
+
+  --info: $theme-info,
+  --info-light: color.scale($theme-info, $lightness: 40%),
+  --on-info: #ffffff,
+
+  // Surfaces & overlays
+  --surface: #ffffff,
+  --surface-hover: #f8fafc,
+  --overlay: rgba(0, 0, 0, 0.5),
+  --backdrop: rgba(0, 0, 0, 0.3),
+  // Shadows
+  --shadow-color: rgba(0, 0, 0, 0.1),
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05),
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1),
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1),
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1),
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1),
+  // Interactive states
+  --hover-opacity: 0.04,
+  --active-opacity: 0.08,
+  --disabled-opacity: 0.5,
+
+  // Input specific
+  --input-bg: #ffffff,
+  --input-border: #e2e8f0,
+  --input-focus: $theme-primary,
+  --input-placeholder: #94a3b8
+);
+
+// =============================================================================
+// DARK THEME TOKENS
+// =============================================================================
+$dark-theme: (
+  // Backgrounds
+  --bg: #0f172a,
+  --bg-secondary: #1e293b,
+  --bg-tertiary: #334155,
+  --bg-elevated: #1e293b,
+
+  // Text
+  --text: #f1f5f9,
+  --text-secondary: #94a3b8,
+  --text-muted: #64748b,
+  --text-inverted: #1e293b,
+
+  // Borders
+  --border: #334155,
+  --border-strong: #475569,
+  --border-focus: color.scale($theme-primary, $lightness: 10%),
+  // Brand colors (slightly brighter for dark mode)
+  --primary: color.scale($theme-primary, $lightness: 10%),
+  --primary-hover: color.scale($theme-primary, $lightness: 20%),
+  --primary-active: $theme-primary,
+  --primary-light:
+    color.scale($theme-primary, $lightness: -30%, $saturation: -20%),
+  --on-primary: #ffffff,
+
+  --secondary: color.scale($theme-secondary, $lightness: 10%),
+  --secondary-hover: color.scale($theme-secondary, $lightness: 20%),
+  --secondary-active: $theme-secondary,
+  --on-secondary: #1e293b,
+
+  --accent: color.scale($theme-accent, $lightness: 15%),
+  --accent-hover: color.scale($theme-accent, $lightness: 25%),
+  --on-accent: #ffffff,
+
+  // Status colors (adjusted for dark backgrounds)
+  --success: color.scale($theme-success, $lightness: 10%),
+  --success-light:
+    color.scale($theme-success, $lightness: -30%, $saturation: -20%),
+  --on-success: #ffffff,
+
+  --warning: color.scale($theme-warning, $lightness: 5%),
+  --warning-light:
+    color.scale($theme-warning, $lightness: -30%, $saturation: -20%),
+  --on-warning: #1e293b,
+
+  --danger: color.scale($theme-danger, $lightness: 10%),
+  --danger-light:
+    color.scale($theme-danger, $lightness: -30%, $saturation: -20%),
+  --on-danger: #ffffff,
+
+  --info: color.scale($theme-info, $lightness: 10%),
+  --info-light: color.scale($theme-info, $lightness: -30%, $saturation: -20%),
+  --on-info: #ffffff,
+
+  // Surfaces & overlays
+  --surface: #1e293b,
+  --surface-hover: #334155,
+  --overlay: rgba(0, 0, 0, 0.7),
+  --backdrop: rgba(0, 0, 0, 0.5),
+  // Shadows (more subtle in dark mode)
+  --shadow-color: rgba(0, 0, 0, 0.3),
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2),
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3),
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3),
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3),
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.4),
+  // Interactive states
+  --hover-opacity: 0.08,
+  --active-opacity: 0.12,
+  --disabled-opacity: 0.4,
+
+  // Input specific
+  --input-bg: #1e293b,
+  --input-border: #475569,
+  --input-focus: color.scale($theme-primary, $lightness: 10%),
+  --input-placeholder: #64748b
+);
+
+// =============================================================================
+// HIGH CONTRAST THEME TOKENS (WCAG AAA compliant)
+// =============================================================================
+$high-contrast-theme: (
+  // Backgrounds - Maximum contrast
+  --bg: #000000,
+  --bg-secondary: #0a0a0a,
+  --bg-tertiary: #1a1a1a,
+  --bg-elevated: #0a0a0a,
+
+  // Text - Pure white for maximum contrast
+  --text: #ffffff,
+  --text-secondary: #e0e0e0,
+  --text-muted: #b0b0b0,
+  --text-inverted: #000000,
+
+  // Borders - Visible and distinct
+  --border: #ffffff,
+  --border-strong: #ffffff,
+  --border-focus: #ffff00,
+
+  // Yellow for focus (high visibility)
+  // Brand colors - High contrast variants
+  --primary: #4da6ff,
+  // Brighter blue for dark bg
+  --primary-hover: #80c4ff,
+  --primary-active: #2894ff,
+  --primary-light: #1a3a5c,
+  --on-primary: #000000,
+
+  --secondary: #c8e644,
+  // Brighter yellow-green
+  --secondary-hover: #daf066,
+  --secondary-active: #b6d422,
+  --on-secondary: #000000,
+
+  --accent: #b380ff,
+  // Brighter purple
+  --accent-hover: #cc99ff,
+  --on-accent: #000000,
+
+  // Status colors - Extra bright for visibility
+  --success: #00ff7f,
+  // Bright green
+  --success-light: #0a3d1f,
+  --on-success: #000000,
+
+  --warning: #ffd700,
+  // Gold/yellow
+  --warning-light: #3d3100,
+  --on-warning: #000000,
+
+  --danger: #ff4d4d,
+  // Bright red
+  --danger-light: #4d0a0a,
+  --on-danger: #000000,
+
+  --info: #4dd2ff,
+  // Bright cyan
+  --info-light: #0a3d4d,
+  --on-info: #000000,
+
+  // Surfaces
+  --surface: #0a0a0a,
+  --surface-hover: #1a1a1a,
+  --overlay: rgba(0, 0, 0, 0.95),
+  --backdrop: rgba(0, 0, 0, 0.9),
+  // Shadows - Stronger for visibility
+  --shadow-color: rgba(255, 255, 255, 0.1),
+  --shadow-sm: 0 1px 2px rgba(255, 255, 255, 0.1),
+  --shadow: 0 1px 3px rgba(255, 255, 255, 0.15),
+  --shadow-md: 0 4px 6px rgba(255, 255, 255, 0.15),
+  --shadow-lg: 0 10px 15px rgba(255, 255, 255, 0.15),
+  --shadow-xl: 0 20px 25px rgba(255, 255, 255, 0.2),
+  // Interactive states - More pronounced
+  --hover-opacity: 0.15,
+  --active-opacity: 0.25,
+  --disabled-opacity: 0.3,
+
+  // Input specific
+  --input-bg: #0a0a0a,
+  --input-border: #ffffff,
+  --input-focus: #ffff00,
+  --input-placeholder: #808080
+);
+
+// =============================================================================
+// APPLY THEME TOKENS
+// =============================================================================
+
+// Light theme (default)
+:root,
+[data-theme="light"],
+.light {
+  @each $token, $value in $light-theme {
+    #{$token}: #{$value};
+  }
+  color-scheme: light;
+}
+
+// Dark theme - supports both data attribute AND class
+[data-theme="dark"],
+.dark {
+  @each $token, $value in $dark-theme {
+    #{$token}: #{$value};
+  }
+  color-scheme: dark;
+}
+
+// Auto theme (follows system preference)
+[data-theme="auto"] {
+  @each $token, $value in $light-theme {
+    #{$token}: #{$value};
+  }
+  color-scheme: light dark;
+
+  @media (prefers-color-scheme: dark) {
+    @each $token, $value in $dark-theme {
+      #{$token}: #{$value};
+    }
+  }
+}
+
+// High contrast theme
+[data-theme="high-contrast"],
+.high-contrast {
+  @each $token, $value in $high-contrast-theme {
+    #{$token}: #{$value};
+  }
+  color-scheme: dark;
+  forced-color-adjust: none; // Prevent Windows high contrast from overriding
+
+  // Enhanced focus indicators for high contrast
+  *:focus-visible {
+    outline: 3px solid var(--border-focus) !important;
+    outline-offset: 3px !important;
+  }
+
+  // Increased border widths for visibility
+  [class*="border"] {
+    border-width: 2px;
+  }
+
+  // Enhanced link visibility
+  a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+// High contrast theme that follows prefers-contrast media query
+@media (prefers-contrast: more) {
+  :root:not([data-theme]),
+  [data-theme="auto"] {
+    @each $token, $value in $high-contrast-theme {
+      #{$token}: #{$value};
+    }
+    color-scheme: dark;
+
+    *:focus-visible {
+      outline: 3px solid var(--border-focus) !important;
+      outline-offset: 3px !important;
+    }
+  }
+}
+
+// =============================================================================
+// RTL/LTR SUPPORT
+// =============================================================================
+// The dir attribute is THE correct semantic approach for text direction.
+// It's the HTML standard and provides:
+// - Native browser RTL handling (text alignment, flexbox, etc.)
+// - CSS logical properties work automatically
+// - Accessibility - screen readers understand it
+// - SEO-friendly
+//
+// Usage: <html dir="rtl"> or <html dir="ltr">
+
+:root {
+  // Direction-aware spacing (use these in components)
+  --space-start: var(--space-inline-start, 0);
+  --space-end: var(--space-inline-end, 0);
+}
+
+// =============================================================================
+// RTL HELPER CLASSES
+// =============================================================================
+// The dir="rtl" attribute handles MOST flipping automatically.
+// These classes are only for SPECIAL CASES that need manual control.
+
+// Flip visual elements (icons, arrows, images) that should mirror in RTL
+// Use for: arrows, chevrons, directional icons, decorative images
+[dir="rtl"] {
+  .flip-rtl {
+    transform: scaleX(-1);
+  }
+}
+
+// Alternative: Always flip (regardless of dir attribute)
+.mirror {
+  transform: scaleX(-1);
+}
+
+// Force LTR for specific content (phone numbers, code, URLs)
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+// Force RTL for specific content
+.rtl {
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+
+// =============================================================================
+// IMPORTANT: Use CSS Logical Properties!
+// =============================================================================
+// Instead of:              Use:
+// margin-left              margin-inline-start
+// margin-right             margin-inline-end
+// padding-left             padding-inline-start
+// padding-right            padding-inline-end
+// left                     inset-inline-start
+// right                    inset-inline-end
+// text-align: left         text-align: start
+// text-align: right        text-align: end
+// border-left              border-inline-start
+// border-right             border-inline-end
+// float: left              float: inline-start
+// float: right             float: inline-end
+//
+// These logical properties automatically flip with dir="rtl"!
+// =============================================================================
+
+// =============================================================================
+// THEME UTILITY CLASSES
+// =============================================================================
+
+// Background utilities
+.bg-primary {
+  background-color: var(--primary);
+  color: var(--on-primary);
+}
+.bg-secondary {
+  background-color: var(--secondary);
+  color: var(--on-secondary);
+}
+.bg-accent {
+  background-color: var(--accent);
+  color: var(--on-accent);
+}
+.bg-success {
+  background-color: var(--success);
+  color: var(--on-success);
+}
+.bg-warning {
+  background-color: var(--warning);
+  color: var(--on-warning);
+}
+.bg-danger {
+  background-color: var(--danger);
+  color: var(--on-danger);
+}
+.bg-info {
+  background-color: var(--info);
+  color: var(--on-info);
+}
+.bg-surface {
+  background-color: var(--surface);
+}
+.bg-elevated {
+  background-color: var(--bg-elevated);
+}
+
+// Text utilities
+.text-primary {
+  color: var(--primary);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+.text-muted {
+  color: var(--text-muted);
+}
+.text-success {
+  color: var(--success);
+}
+.text-warning {
+  color: var(--warning);
+}
+.text-danger {
+  color: var(--danger);
+}
+.text-info {
+  color: var(--info);
+}
+
+// Border utilities
+.border-primary {
+  border-color: var(--primary);
+}
+.border-secondary {
+  border-color: var(--border);
+}
+.border-strong {
+  border-color: var(--border-strong);
+}
+
+// Shadow utilities
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+.shadow {
+  box-shadow: var(--shadow);
+}
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+.shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
+.shadow-none {
+  box-shadow: none;
+}
+
+// =============================================================================
+// THEME TOGGLE HELPER (JavaScript)
+// =============================================================================
+//
+// METHOD 1: Using data-theme attribute (recommended)
+// ---------------------------------------------------
+// function setTheme(theme) {
+//   document.documentElement.setAttribute('data-theme', theme);
+//   localStorage.setItem('theme', theme);
+// }
+//
+// function toggleTheme() {
+//   const current = document.documentElement.getAttribute('data-theme');
+//   setTheme(current === 'dark' ? 'light' : 'dark');
+// }
+//
+// // On page load
+// const savedTheme = localStorage.getItem('theme') || 'auto';
+// setTheme(savedTheme);
+//
+// METHOD 2: Using CSS class
+// -------------------------
+// function setTheme(theme) {
+//   document.documentElement.classList.remove('light', 'dark');
+//   document.documentElement.classList.add(theme);
+//   localStorage.setItem('theme', theme);
+// }
+//
+// function toggleTheme() {
+//   const isDark = document.documentElement.classList.contains('dark');
+//   setTheme(isDark ? 'light' : 'dark');
+// }
+//
+// RTL TOGGLE:
+// -----------
+// function setDirection(dir) {
+//   document.documentElement.setAttribute('dir', dir);
+//   localStorage.setItem('dir', dir);
+// }
+//
+// function toggleDirection() {
+//   const isRTL = document.documentElement.getAttribute('dir') === 'rtl';
+//   setDirection(isRTL ? 'ltr' : 'rtl');
+// }
+//
+// =============================================================================

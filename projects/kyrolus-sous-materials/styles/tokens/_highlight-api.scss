@@ -1,0 +1,524 @@
+// =============================================================================
+// CSS HIGHLIGHT API
+// =============================================================================
+// Custom text highlighting using the CSS Custom Highlight API
+// Create custom highlights for search results, code syntax, annotations
+// Browser support: Chrome 105+, Edge 105+, Safari 17.2+
+
+// =============================================================================
+// HOW CSS HIGHLIGHT API WORKS
+// =============================================================================
+// 1. JavaScript creates Range objects for text to highlight
+// 2. Ranges are added to a Highlight object
+// 3. Highlight is registered with CSS.highlights.set('name', highlight)
+// 4. CSS targets it with ::highlight(name)
+
+// =============================================================================
+// SEARCH HIGHLIGHT
+// =============================================================================
+
+/// Search result highlight
+::highlight(search-result) {
+  background-color: var(--highlight-search-bg, #fef08a);
+  color: var(--highlight-search-text, inherit);
+}
+
+/// Current/active search result
+::highlight(search-current) {
+  background-color: var(--highlight-search-active-bg, #fb923c);
+  color: var(--highlight-search-active-text, #000);
+}
+
+/// Search match count indicator
+::highlight(search-match) {
+  background-color: color-mix(in srgb, var(--primary) 30%, transparent);
+  color: inherit;
+}
+
+// =============================================================================
+// CODE SYNTAX HIGHLIGHTING
+// =============================================================================
+
+/// Keywords (if, else, for, while, etc.)
+::highlight(syntax-keyword) {
+  color: var(--syntax-keyword, #c678dd);
+  font-weight: 500;
+}
+
+/// Strings
+::highlight(syntax-string) {
+  color: var(--syntax-string, #98c379);
+}
+
+/// Numbers
+::highlight(syntax-number) {
+  color: var(--syntax-number, #d19a66);
+}
+
+/// Comments
+::highlight(syntax-comment) {
+  color: var(--syntax-comment, #5c6370);
+  font-style: italic;
+}
+
+/// Functions
+::highlight(syntax-function) {
+  color: var(--syntax-function, #61afef);
+}
+
+/// Variables
+::highlight(syntax-variable) {
+  color: var(--syntax-variable, #e06c75);
+}
+
+/// Types/classes
+::highlight(syntax-type) {
+  color: var(--syntax-type, #e5c07b);
+}
+
+/// Operators
+::highlight(syntax-operator) {
+  color: var(--syntax-operator, #56b6c2);
+}
+
+/// Punctuation
+::highlight(syntax-punctuation) {
+  color: var(--syntax-punctuation, #abb2bf);
+}
+
+/// Regex
+::highlight(syntax-regex) {
+  color: var(--syntax-regex, #56b6c2);
+}
+
+/// Constants
+::highlight(syntax-constant) {
+  color: var(--syntax-constant, #d19a66);
+}
+
+/// Decorators/annotations
+::highlight(syntax-decorator) {
+  color: var(--syntax-decorator, #c678dd);
+}
+
+/// HTML tags
+::highlight(syntax-tag) {
+  color: var(--syntax-tag, #e06c75);
+}
+
+/// HTML attributes
+::highlight(syntax-attribute) {
+  color: var(--syntax-attribute, #d19a66);
+}
+
+// =============================================================================
+// TEXT ANNOTATIONS
+// =============================================================================
+
+/// Error/invalid text
+::highlight(error) {
+  background-color: var(--highlight-error-bg, #fecaca);
+  text-decoration: wavy underline var(--danger, #ef4444);
+  text-decoration-skip-ink: none;
+}
+
+/// Warning text
+::highlight(warning) {
+  background-color: var(--highlight-warning-bg, #fef3c7);
+  text-decoration: wavy underline var(--warning, #f59e0b);
+  text-decoration-skip-ink: none;
+}
+
+/// Success/valid text
+::highlight(success) {
+  background-color: var(--highlight-success-bg, #dcfce7);
+  color: var(--highlight-success-text, inherit);
+}
+
+/// Info annotation
+::highlight(info) {
+  background-color: var(--highlight-info-bg, #dbeafe);
+  color: var(--highlight-info-text, inherit);
+}
+
+/// Added text (diff)
+::highlight(diff-added) {
+  background-color: var(--highlight-added-bg, #bbf7d0);
+  color: var(--highlight-added-text, #166534);
+}
+
+/// Removed text (diff)
+::highlight(diff-removed) {
+  background-color: var(--highlight-removed-bg, #fecaca);
+  color: var(--highlight-removed-text, #991b1b);
+  text-decoration: line-through;
+}
+
+/// Changed text (diff)
+::highlight(diff-changed) {
+  background-color: var(--highlight-changed-bg, #fef08a);
+  color: var(--highlight-changed-text, #854d0e);
+}
+
+// =============================================================================
+// SELECTION VARIANTS
+// =============================================================================
+
+/// Custom selection (primary)
+::highlight(selection-primary) {
+  background-color: var(--primary-light, #dbeafe);
+  color: var(--primary-dark, #1e40af);
+}
+
+/// Custom selection (secondary)
+::highlight(selection-secondary) {
+  background-color: var(--secondary-light, #e0e7ff);
+  color: var(--secondary-dark, #3730a3);
+}
+
+/// Custom selection (accent)
+::highlight(selection-accent) {
+  background-color: var(--accent-light, #fce7f3);
+  color: var(--accent-dark, #9d174d);
+}
+
+// =============================================================================
+// READING/FOCUS HIGHLIGHTS
+// =============================================================================
+
+/// Current reading position
+::highlight(reading-position) {
+  background-color: var(--highlight-reading-bg, #fef9c3);
+  color: var(--highlight-reading-text, inherit);
+}
+
+/// Focus highlight (bionic reading style)
+::highlight(focus-text) {
+  font-weight: 700;
+}
+
+/// Important/key text
+::highlight(important) {
+  background: linear-gradient(
+    to bottom,
+    transparent 60%,
+    var(--highlight-important-bg, #fef08a) 60%
+  );
+}
+
+/// Quoted text
+::highlight(quote) {
+  background-color: var(--highlight-quote-bg, #f3f4f6);
+  border-left: 3px solid var(--primary);
+  padding-left: 0.5em;
+}
+
+// =============================================================================
+// COLLABORATION HIGHLIGHTS
+// =============================================================================
+
+/// User 1 cursor/selection
+::highlight(user-1) {
+  background-color: rgba(59, 130, 246, 0.3);
+  border-bottom: 2px solid #3b82f6;
+}
+
+/// User 2 cursor/selection
+::highlight(user-2) {
+  background-color: rgba(236, 72, 153, 0.3);
+  border-bottom: 2px solid #ec4899;
+}
+
+/// User 3 cursor/selection
+::highlight(user-3) {
+  background-color: rgba(34, 197, 94, 0.3);
+  border-bottom: 2px solid #22c55e;
+}
+
+/// User 4 cursor/selection
+::highlight(user-4) {
+  background-color: rgba(168, 85, 247, 0.3);
+  border-bottom: 2px solid #a855f7;
+}
+
+/// User 5 cursor/selection
+::highlight(user-5) {
+  background-color: rgba(249, 115, 22, 0.3);
+  border-bottom: 2px solid #f97316;
+}
+
+// =============================================================================
+// EDUCATIONAL HIGHLIGHTS
+// =============================================================================
+
+/// Definition highlight
+::highlight(definition) {
+  border-bottom: 2px dotted var(--primary);
+  cursor: help;
+}
+
+/// Term highlight
+::highlight(term) {
+  font-weight: 600;
+  color: var(--highlight-term-color, var(--primary));
+}
+
+/// Example highlight
+::highlight(example) {
+  background-color: var(--highlight-example-bg, #f0fdf4);
+  font-family: monospace;
+}
+
+/// Note highlight
+::highlight(note) {
+  background-color: var(--highlight-note-bg, #eff6ff);
+  padding: 0 0.25em;
+  border-radius: 2px;
+}
+
+// =============================================================================
+// ACCESSIBILITY HIGHLIGHTS
+// =============================================================================
+
+/// Skip link target
+::highlight(skip-target) {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/// Current focus in list
+::highlight(focus-current) {
+  background-color: var(--highlight-focus-bg, #dbeafe);
+  outline: 2px solid var(--primary);
+}
+
+// =============================================================================
+// MARKDOWN/RICH TEXT
+// =============================================================================
+
+/// Bold text
+::highlight(md-bold) {
+  font-weight: 700;
+}
+
+/// Italic text
+::highlight(md-italic) {
+  font-style: italic;
+}
+
+/// Code inline
+::highlight(md-code) {
+  font-family: ui-monospace, monospace;
+  background-color: var(--highlight-code-bg, #f3f4f6);
+  padding: 0.125em 0.25em;
+  border-radius: 3px;
+}
+
+/// Link text
+::highlight(md-link) {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/// Strikethrough
+::highlight(md-strikethrough) {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+// =============================================================================
+// SPELLING/GRAMMAR
+// =============================================================================
+
+/// Spelling error
+::highlight(spelling-error) {
+  text-decoration: wavy underline #ef4444;
+  text-decoration-skip-ink: none;
+}
+
+/// Grammar error
+::highlight(grammar-error) {
+  text-decoration: wavy underline #3b82f6;
+  text-decoration-skip-ink: none;
+}
+
+/// Style suggestion
+::highlight(style-suggestion) {
+  text-decoration: wavy underline #8b5cf6;
+  text-decoration-skip-ink: none;
+}
+
+// =============================================================================
+// THEME VARIABLES
+// =============================================================================
+
+:root {
+  // Search
+  --highlight-search-bg: #fef08a;
+  --highlight-search-active-bg: #fb923c;
+
+  // Annotations
+  --highlight-error-bg: #fecaca;
+  --highlight-warning-bg: #fef3c7;
+  --highlight-success-bg: #dcfce7;
+  --highlight-info-bg: #dbeafe;
+
+  // Diff
+  --highlight-added-bg: #bbf7d0;
+  --highlight-removed-bg: #fecaca;
+  --highlight-changed-bg: #fef08a;
+
+  // Reading
+  --highlight-reading-bg: #fef9c3;
+  --highlight-important-bg: #fef08a;
+  --highlight-quote-bg: #f3f4f6;
+
+  // Code
+  --highlight-code-bg: #f3f4f6;
+
+  // Syntax (One Dark inspired)
+  --syntax-keyword: #c678dd;
+  --syntax-string: #98c379;
+  --syntax-number: #d19a66;
+  --syntax-comment: #5c6370;
+  --syntax-function: #61afef;
+  --syntax-variable: #e06c75;
+  --syntax-type: #e5c07b;
+  --syntax-operator: #56b6c2;
+  --syntax-punctuation: #abb2bf;
+}
+
+// =============================================================================
+// DARK MODE
+// =============================================================================
+
+[data-theme="dark"],
+.dark {
+  // Search
+  --highlight-search-bg: #854d0e;
+  --highlight-search-active-bg: #c2410c;
+
+  // Annotations
+  --highlight-error-bg: #7f1d1d;
+  --highlight-warning-bg: #78350f;
+  --highlight-success-bg: #14532d;
+  --highlight-info-bg: #1e3a8a;
+
+  // Diff
+  --highlight-added-bg: #14532d;
+  --highlight-removed-bg: #7f1d1d;
+  --highlight-changed-bg: #713f12;
+
+  // Reading
+  --highlight-reading-bg: #422006;
+  --highlight-important-bg: #713f12;
+  --highlight-quote-bg: #374151;
+
+  // Code
+  --highlight-code-bg: #374151;
+}
+
+// =============================================================================
+// HIGH CONTRAST MODE
+// =============================================================================
+
+@media (prefers-contrast: more) {
+  ::highlight(search-result) {
+    background-color: yellow;
+    color: black;
+  }
+
+  ::highlight(search-current) {
+    background-color: orange;
+    color: black;
+    outline: 2px solid black;
+  }
+
+  ::highlight(error) {
+    background-color: #7f1d1d;
+    color: white;
+    text-decoration: underline;
+  }
+
+  ::highlight(warning) {
+    background-color: #854d0e;
+    color: white;
+    text-decoration: underline;
+  }
+}
+
+// =============================================================================
+// HELPER CLASSES FOR HIGHLIGHT CONTAINERS
+// =============================================================================
+
+/// Container for highlighted content
+.highlight-container {
+  position: relative;
+
+  // Ensure highlights are visible
+  &::selection {
+    background: transparent;
+  }
+}
+
+/// Disable native selection when using custom highlights
+.highlight-no-select {
+  user-select: none;
+
+  &::selection {
+    background: transparent;
+  }
+}
+
+// =============================================================================
+// PRINT STYLES
+// =============================================================================
+
+@media print {
+  ::highlight(search-result),
+  ::highlight(search-current) {
+    background-color: #fef08a !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  ::highlight(error) {
+    text-decoration: underline !important;
+  }
+
+  ::highlight(diff-removed) {
+    text-decoration: line-through !important;
+  }
+}
+
+// =============================================================================
+// BROWSER SUPPORT CHECK
+// =============================================================================
+
+/// Feature detection class
+.highlight-supported {
+  // This class is added via JS when Highlight API is supported
+  --highlight-api-supported: 1;
+}
+
+/// Fallback for unsupported browsers
+.highlight-fallback {
+  // Use mark element as fallback
+  mark {
+    background-color: var(--highlight-search-bg, #fef08a);
+    color: inherit;
+  }
+
+  mark.current {
+    background-color: var(--highlight-search-active-bg, #fb923c);
+  }
+
+  .error {
+    text-decoration: wavy underline #ef4444;
+  }
+
+  .warning {
+    text-decoration: wavy underline #f59e0b;
+  }
+}

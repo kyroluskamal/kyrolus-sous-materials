@@ -1,0 +1,523 @@
+// =============================================================================
+// INTERPOLATE SIZE
+// =============================================================================
+// Animate to intrinsic sizes like height: auto
+// Finally solve the "animate to auto height" problem!
+// Browser support: Chrome 129+, Safari 17.4+
+
+// =============================================================================
+// ENABLE INTERPOLATE-SIZE
+// =============================================================================
+
+/// Enable interpolate-size globally
+:root {
+  interpolate-size: allow-keywords;
+}
+
+/// Enable on specific containers
+.interpolate-size {
+  interpolate-size: allow-keywords;
+}
+
+/// Disable interpolate-size (for specific elements)
+.interpolate-size-none {
+  interpolate-size: numeric-only;
+}
+
+// =============================================================================
+// HEIGHT AUTO TRANSITIONS
+// =============================================================================
+
+/// Collapsible panel (height: 0 to height: auto)
+.collapse {
+  overflow: hidden;
+  height: 0;
+  transition: height var(--collapse-duration, 0.3s) var(--collapse-easing, ease);
+
+  &.is-open,
+  &[open],
+  &.expanded {
+    height: auto;
+  }
+}
+
+/// Collapse with opacity
+.collapse-fade {
+  overflow: hidden;
+  height: 0;
+  opacity: 0;
+  transition: height var(--collapse-duration, 0.3s) var(--collapse-easing, ease),
+    opacity var(--collapse-duration, 0.3s) var(--collapse-easing, ease);
+
+  &.is-open,
+  &[open],
+  &.expanded {
+    height: auto;
+    opacity: 1;
+  }
+}
+
+/// Smooth accordion content
+.accordion-content {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.3s ease;
+
+  [open] > & {
+    height: auto;
+  }
+}
+
+// =============================================================================
+// WIDTH AUTO TRANSITIONS
+// =============================================================================
+
+/// Expandable width
+.expand-width {
+  overflow: hidden;
+  width: 0;
+  transition: width var(--expand-duration, 0.3s) ease;
+
+  &.is-open,
+  &.expanded {
+    width: auto;
+  }
+}
+
+/// Expand from icon to full button
+.expand-button {
+  overflow: hidden;
+  width: 3rem;
+  white-space: nowrap;
+  transition: width 0.3s ease;
+
+  &:hover,
+  &:focus {
+    width: auto;
+  }
+
+  .button-text {
+    opacity: 0;
+    transition: opacity 0.2s ease 0.1s;
+  }
+
+  &:hover .button-text,
+  &:focus .button-text {
+    opacity: 1;
+  }
+}
+
+/// Expandable search input
+.search-expand {
+  width: 2.5rem;
+  transition: width 0.3s ease;
+
+  &:focus,
+  &:focus-within,
+  &.is-expanded {
+    width: auto;
+    min-width: 200px;
+  }
+}
+
+// =============================================================================
+// BOTH DIMENSIONS
+// =============================================================================
+
+/// Expand both dimensions
+.expand-both {
+  overflow: hidden;
+  width: 0;
+  height: 0;
+  transition: width var(--expand-duration, 0.3s) ease,
+    height var(--expand-duration, 0.3s) ease;
+
+  &.is-open,
+  &.expanded {
+    width: auto;
+    height: auto;
+  }
+}
+
+/// Card reveal
+.card-reveal {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s ease;
+
+  &.is-revealed {
+    max-height: none;
+  }
+}
+
+// =============================================================================
+// DURATION VARIANTS
+// =============================================================================
+
+.collapse-fast {
+  --collapse-duration: 0.15s;
+}
+
+.collapse-normal {
+  --collapse-duration: 0.3s;
+}
+
+.collapse-slow {
+  --collapse-duration: 0.5s;
+}
+
+.collapse-slower {
+  --collapse-duration: 0.75s;
+}
+
+// =============================================================================
+// EASING VARIANTS
+// =============================================================================
+
+.collapse-ease {
+  --collapse-easing: ease;
+}
+
+.collapse-ease-in {
+  --collapse-easing: ease-in;
+}
+
+.collapse-ease-out {
+  --collapse-easing: ease-out;
+}
+
+.collapse-ease-in-out {
+  --collapse-easing: ease-in-out;
+}
+
+.collapse-spring {
+  --collapse-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+// =============================================================================
+// MENU/DROPDOWN PATTERNS
+// =============================================================================
+
+/// Dropdown menu with height animation
+.dropdown-animated {
+  position: absolute;
+  overflow: hidden;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: height 0.25s ease, opacity 0.25s ease, visibility 0.25s;
+
+  &.is-open,
+  .is-open > &,
+  [open] > & {
+    height: auto;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/// Submenu animation
+.submenu-animated {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.2s ease;
+
+  .menu-item:hover > &,
+  .menu-item:focus-within > &,
+  .menu-item.is-open > & {
+    height: auto;
+  }
+}
+
+// =============================================================================
+// SIDEBAR PATTERNS
+// =============================================================================
+
+/// Collapsible sidebar
+.sidebar-collapse {
+  overflow: hidden;
+  width: var(--sidebar-width, 250px);
+  transition: width 0.3s ease;
+
+  &.is-collapsed {
+    width: var(--sidebar-collapsed-width, 60px);
+  }
+}
+
+/// Mobile bottom sheet
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  height: 0;
+  background: var(--surface);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  box-shadow: var(--shadow-2xl);
+  transition: height 0.3s ease;
+
+  &.is-open {
+    height: auto;
+    max-height: 90vh;
+  }
+}
+
+// =============================================================================
+// TOOLTIP/POPOVER PATTERNS
+// =============================================================================
+
+/// Tooltip with auto height
+.tooltip-animated {
+  overflow: hidden;
+  height: 0;
+  opacity: 0;
+  transition: height 0.2s ease, opacity 0.2s ease;
+
+  &.is-visible,
+  [data-tooltip]:hover &,
+  [data-tooltip]:focus & {
+    height: auto;
+    opacity: 1;
+  }
+}
+
+/// Info box that expands
+.info-expandable {
+  overflow: hidden;
+  height: 1.5em;
+  transition: height 0.3s ease;
+
+  &:hover,
+  &:focus-within,
+  &.is-expanded {
+    height: auto;
+  }
+}
+
+// =============================================================================
+// NOTIFICATION/ALERT PATTERNS
+// =============================================================================
+
+/// Toast notification enter/exit
+.toast-animated {
+  overflow: hidden;
+  height: 0;
+  opacity: 0;
+  transition: height 0.3s ease, opacity 0.3s ease;
+
+  &.is-visible {
+    height: auto;
+    opacity: 1;
+  }
+}
+
+/// Alert with expand/collapse
+.alert-collapsible {
+  overflow: hidden;
+
+  .alert-details {
+    height: 0;
+    transition: height 0.3s ease;
+  }
+
+  &.is-expanded .alert-details {
+    height: auto;
+  }
+}
+
+// =============================================================================
+// TEXT EXPANSION PATTERNS
+// =============================================================================
+
+/// Read more / Show less
+.text-expandable {
+  overflow: hidden;
+  height: calc(var(--collapsed-lines, 3) * 1.5em);
+  transition: height 0.3s ease;
+
+  &.is-expanded {
+    height: auto;
+  }
+}
+
+/// FAQ answer expansion
+.faq-answer {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.3s ease;
+
+  details[open] > & {
+    height: auto;
+  }
+}
+
+// =============================================================================
+// FORM PATTERNS
+// =============================================================================
+
+/// Expandable form section
+.form-section-collapse {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.3s ease;
+
+  &.is-visible {
+    height: auto;
+  }
+}
+
+/// Conditional form fields
+.form-conditional {
+  overflow: hidden;
+  height: 0;
+  opacity: 0;
+  transition: height 0.3s ease, opacity 0.3s ease;
+
+  &.is-shown {
+    height: auto;
+    opacity: 1;
+  }
+}
+
+/// Error message animation
+.form-error-animated {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.2s ease;
+
+  &.has-error,
+  .is-invalid ~ & {
+    height: auto;
+  }
+}
+
+// =============================================================================
+// IMAGE/MEDIA PATTERNS
+// =============================================================================
+
+/// Image caption reveal
+.caption-reveal {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.3s ease;
+
+  .media-container:hover &,
+  .media-container:focus-within & {
+    height: auto;
+  }
+}
+
+/// Gallery description
+.gallery-description {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.3s ease;
+
+  &.is-visible {
+    height: auto;
+  }
+}
+
+// =============================================================================
+// FALLBACK FOR UNSUPPORTED BROWSERS
+// =============================================================================
+
+@supports not (interpolate-size: allow-keywords) {
+  // Fallback using max-height
+  .collapse {
+    max-height: 0;
+    transition: max-height var(--collapse-duration, 0.3s)
+      var(--collapse-easing, ease);
+
+    &.is-open,
+    &[open],
+    &.expanded {
+      max-height: var(--collapse-max-height, 1000px);
+    }
+  }
+
+  .collapse-fade {
+    max-height: 0;
+    opacity: 0;
+    transition: max-height var(--collapse-duration, 0.3s)
+        var(--collapse-easing, ease),
+      opacity var(--collapse-duration, 0.3s) var(--collapse-easing, ease);
+
+    &.is-open,
+    &[open],
+    &.expanded {
+      max-height: var(--collapse-max-height, 1000px);
+      opacity: 1;
+    }
+  }
+
+  .accordion-content {
+    max-height: 0;
+    transition: max-height 0.3s ease;
+
+    [open] > & {
+      max-height: var(--collapse-max-height, 1000px);
+    }
+  }
+}
+
+// =============================================================================
+// UTILITY CLASSES
+// =============================================================================
+
+/// Force overflow hidden during animation
+.overflow-clip-during-animation {
+  overflow: clip;
+}
+
+/// Smooth content wrapper
+.smooth-content {
+  transition: height 0.3s ease;
+}
+
+// =============================================================================
+// REDUCED MOTION
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .collapse,
+  .collapse-fade,
+  .accordion-content,
+  .expand-width,
+  .expand-button,
+  .search-expand,
+  .expand-both,
+  .card-reveal,
+  .dropdown-animated,
+  .submenu-animated,
+  .sidebar-collapse,
+  .bottom-sheet,
+  .tooltip-animated,
+  .info-expandable,
+  .toast-animated,
+  .text-expandable,
+  .faq-answer,
+  .form-section-collapse,
+  .form-conditional,
+  .form-error-animated,
+  .caption-reveal,
+  .gallery-description {
+    transition: none !important;
+  }
+}
+
+// =============================================================================
+// PRINT STYLES
+// =============================================================================
+
+@media print {
+  .collapse,
+  .accordion-content,
+  .text-expandable,
+  .faq-answer {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}

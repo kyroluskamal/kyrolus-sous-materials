@@ -1,0 +1,410 @@
+// ============================================================================
+// OBJECT-VIEW-BOX UTILITIES
+// Crop and zoom images without layout shift
+// Browser Support: Chrome 104+, Safari 16+
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// BASIC OBJECT-VIEW-BOX
+// Defines a crop region within the image
+// ----------------------------------------------------------------------------
+
+// Crop from edges (inset values: top right bottom left)
+.view-box-inset-5 {
+  object-view-box: inset(5% 5% 5% 5%);
+}
+
+.view-box-inset-10 {
+  object-view-box: inset(10% 10% 10% 10%);
+}
+
+.view-box-inset-15 {
+  object-view-box: inset(15% 15% 15% 15%);
+}
+
+.view-box-inset-20 {
+  object-view-box: inset(20% 20% 20% 20%);
+}
+
+.view-box-inset-25 {
+  object-view-box: inset(25% 25% 25% 25%);
+}
+
+// ----------------------------------------------------------------------------
+// DIRECTIONAL CROPS
+// ----------------------------------------------------------------------------
+
+// Crop from top
+.view-box-crop-top-10 {
+  object-view-box: inset(10% 0 0 0);
+}
+
+.view-box-crop-top-20 {
+  object-view-box: inset(20% 0 0 0);
+}
+
+.view-box-crop-top-30 {
+  object-view-box: inset(30% 0 0 0);
+}
+
+// Crop from bottom
+.view-box-crop-bottom-10 {
+  object-view-box: inset(0 0 10% 0);
+}
+
+.view-box-crop-bottom-20 {
+  object-view-box: inset(0 0 20% 0);
+}
+
+.view-box-crop-bottom-30 {
+  object-view-box: inset(0 0 30% 0);
+}
+
+// Crop from left
+.view-box-crop-left-10 {
+  object-view-box: inset(0 0 0 10%);
+}
+
+.view-box-crop-left-20 {
+  object-view-box: inset(0 0 0 20%);
+}
+
+.view-box-crop-left-30 {
+  object-view-box: inset(0 0 0 30%);
+}
+
+// Crop from right
+.view-box-crop-right-10 {
+  object-view-box: inset(0 10% 0 0);
+}
+
+.view-box-crop-right-20 {
+  object-view-box: inset(0 20% 0 0);
+}
+
+.view-box-crop-right-30 {
+  object-view-box: inset(0 30% 0 0);
+}
+
+// ----------------------------------------------------------------------------
+// HORIZONTAL CROPS
+// ----------------------------------------------------------------------------
+
+// Crop left and right equally
+.view-box-crop-x-10 {
+  object-view-box: inset(0 10% 0 10%);
+}
+
+.view-box-crop-x-20 {
+  object-view-box: inset(0 20% 0 20%);
+}
+
+.view-box-crop-x-30 {
+  object-view-box: inset(0 30% 0 30%);
+}
+
+// ----------------------------------------------------------------------------
+// VERTICAL CROPS
+// ----------------------------------------------------------------------------
+
+// Crop top and bottom equally
+.view-box-crop-y-10 {
+  object-view-box: inset(10% 0 10% 0);
+}
+
+.view-box-crop-y-20 {
+  object-view-box: inset(20% 0 20% 0);
+}
+
+.view-box-crop-y-30 {
+  object-view-box: inset(30% 0 30% 0);
+}
+
+// ----------------------------------------------------------------------------
+// ZOOM EFFECTS
+// Crop all sides to create zoom effect
+// ----------------------------------------------------------------------------
+
+.view-box-zoom-110 {
+  object-view-box: inset(5%);
+}
+
+.view-box-zoom-120 {
+  object-view-box: inset(10%);
+}
+
+.view-box-zoom-130 {
+  object-view-box: inset(15%);
+}
+
+.view-box-zoom-140 {
+  object-view-box: inset(20%);
+}
+
+.view-box-zoom-150 {
+  object-view-box: inset(25%);
+}
+
+.view-box-zoom-200 {
+  object-view-box: inset(35%);
+}
+
+// ----------------------------------------------------------------------------
+// FOCUS POINTS (Asymmetric crops)
+// ----------------------------------------------------------------------------
+
+// Focus on top-left
+.view-box-focus-top-left {
+  object-view-box: inset(0 30% 30% 0);
+}
+
+// Focus on top-right
+.view-box-focus-top-right {
+  object-view-box: inset(0 0 30% 30%);
+}
+
+// Focus on bottom-left
+.view-box-focus-bottom-left {
+  object-view-box: inset(30% 30% 0 0);
+}
+
+// Focus on bottom-right
+.view-box-focus-bottom-right {
+  object-view-box: inset(30% 0 0 30%);
+}
+
+// Focus on center (equal all sides)
+.view-box-focus-center {
+  object-view-box: inset(20%);
+}
+
+// Focus on top
+.view-box-focus-top {
+  object-view-box: inset(0 10% 40% 10%);
+}
+
+// Focus on bottom
+.view-box-focus-bottom {
+  object-view-box: inset(40% 10% 0 10%);
+}
+
+// Focus on left
+.view-box-focus-left {
+  object-view-box: inset(10% 40% 10% 0);
+}
+
+// Focus on right
+.view-box-focus-right {
+  object-view-box: inset(10% 0 10% 40%);
+}
+
+// ----------------------------------------------------------------------------
+// CUSTOM VIEW BOX WITH CSS VARIABLES
+// ----------------------------------------------------------------------------
+
+.view-box-custom {
+  object-view-box: inset(
+    var(--view-box-top, 0) var(--view-box-right, 0) var(--view-box-bottom, 0)
+      var(--view-box-left, 0)
+  );
+}
+
+// ----------------------------------------------------------------------------
+// HOVER ZOOM EFFECTS
+// ----------------------------------------------------------------------------
+
+.view-box-hover-zoom {
+  object-view-box: inset(0);
+  transition: object-view-box 0.3s ease;
+
+  &:hover {
+    object-view-box: inset(10%);
+  }
+}
+
+.view-box-hover-zoom-smooth {
+  object-view-box: inset(0);
+  transition: object-view-box 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    object-view-box: inset(15%);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// COMBINED WITH OBJECT-FIT
+// ----------------------------------------------------------------------------
+
+.view-box-cover {
+  object-fit: cover;
+}
+
+.view-box-contain {
+  object-fit: contain;
+}
+
+.view-box-fill {
+  object-fit: fill;
+}
+
+// ----------------------------------------------------------------------------
+// COMBINED WITH OBJECT-POSITION
+// ----------------------------------------------------------------------------
+
+.view-box-pos-center {
+  object-position: center;
+}
+
+.view-box-pos-top {
+  object-position: top;
+}
+
+.view-box-pos-bottom {
+  object-position: bottom;
+}
+
+.view-box-pos-left {
+  object-position: left;
+}
+
+.view-box-pos-right {
+  object-position: right;
+}
+
+// ----------------------------------------------------------------------------
+// IMAGE GALLERY PATTERNS
+// ----------------------------------------------------------------------------
+
+// Thumbnail with zoom
+.thumbnail-zoom {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-view-box: inset(0);
+  transition: object-view-box 0.3s ease;
+
+  &:hover {
+    object-view-box: inset(10%);
+  }
+}
+
+// Portrait from landscape
+.portrait-from-landscape {
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  object-view-box: inset(0 20% 0 20%);
+}
+
+// Landscape from portrait
+.landscape-from-portrait {
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  object-view-box: inset(20% 0 20% 0);
+}
+
+// Square from rectangle
+.square-crop {
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
+// ----------------------------------------------------------------------------
+// AVATAR CROPS
+// ----------------------------------------------------------------------------
+
+// Avatar focus on face (top portion)
+.avatar-face-focus {
+  object-fit: cover;
+  object-view-box: inset(0 10% 30% 10%);
+}
+
+// Avatar with zoom
+.avatar-zoom {
+  object-fit: cover;
+  object-view-box: inset(15%);
+}
+
+// ----------------------------------------------------------------------------
+// PRODUCT IMAGE PATTERNS
+// ----------------------------------------------------------------------------
+
+// Product detail zoom
+.product-zoom {
+  object-view-box: inset(20%);
+}
+
+// Product focus center
+.product-focus {
+  object-fit: contain;
+  object-view-box: inset(10%);
+}
+
+// ----------------------------------------------------------------------------
+// HERO IMAGE PATTERNS
+// ----------------------------------------------------------------------------
+
+// Hero with top focus
+.hero-focus-top {
+  object-fit: cover;
+  object-position: top;
+  object-view-box: inset(0 0 20% 0);
+}
+
+// Hero with bottom focus
+.hero-focus-bottom {
+  object-fit: cover;
+  object-position: bottom;
+  object-view-box: inset(20% 0 0 0);
+}
+
+// ----------------------------------------------------------------------------
+// RESPONSIVE VIEW BOX
+// ----------------------------------------------------------------------------
+
+@media (min-width: 640px) {
+  .sm\:view-box-zoom-120 {
+    object-view-box: inset(10%);
+  }
+
+  .sm\:view-box-none {
+    object-view-box: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:view-box-zoom-120 {
+    object-view-box: inset(10%);
+  }
+
+  .md\:view-box-none {
+    object-view-box: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:view-box-zoom-120 {
+    object-view-box: inset(10%);
+  }
+
+  .lg\:view-box-none {
+    object-view-box: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// NO VIEW BOX (Reset)
+// ----------------------------------------------------------------------------
+
+.view-box-none {
+  object-view-box: none;
+}
+
+// ----------------------------------------------------------------------------
+// FEATURE DETECTION
+// ----------------------------------------------------------------------------
+
+@supports (object-view-box: inset(0)) {
+  .object-view-box-supported {
+    --object-view-box-supported: 1;
+  }
+}

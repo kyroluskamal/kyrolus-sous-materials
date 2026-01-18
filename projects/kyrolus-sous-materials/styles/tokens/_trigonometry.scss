@@ -1,0 +1,655 @@
+// =============================================================================
+// CSS TRIGONOMETRY
+// =============================================================================
+// Advanced animations using CSS math functions: sin(), cos(), tan()
+// Enables circular motion, waves, orbits, and oscillating effects
+// Browser support: All modern browsers (Chrome 111+, Firefox 108+, Safari 15.4+)
+
+// =============================================================================
+// CSS MATH FUNCTIONS
+// =============================================================================
+// round(), mod(), rem(), sin(), cos(), tan(), asin(), acos(), atan(), atan2()
+// pow(), sqrt(), hypot(), log(), exp(), abs(), sign()
+
+// =============================================================================
+// TRIGONOMETRY CUSTOM PROPERTIES
+// =============================================================================
+
+:root {
+  // Common angles
+  --angle-0: 0deg;
+  --angle-30: 30deg;
+  --angle-45: 45deg;
+  --angle-60: 60deg;
+  --angle-90: 90deg;
+  --angle-120: 120deg;
+  --angle-180: 180deg;
+  --angle-270: 270deg;
+  --angle-360: 360deg;
+
+  // Common radii
+  --orbit-xs: 25px;
+  --orbit-sm: 50px;
+  --orbit-md: 100px;
+  --orbit-lg: 150px;
+  --orbit-xl: 200px;
+}
+
+// =============================================================================
+// CIRCULAR MOTION
+// =============================================================================
+
+/// Circular orbit animation
+@property --orbit-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes orbit {
+  to {
+    --orbit-angle: 360deg;
+  }
+}
+
+/// Orbit utilities
+.orbit {
+  --orbit-radius: var(--orbit-md);
+  --orbit-duration: 4s;
+
+  animation: orbit var(--orbit-duration) linear infinite;
+  transform: translateX(calc(cos(var(--orbit-angle)) * var(--orbit-radius)))
+    translateY(calc(sin(var(--orbit-angle)) * var(--orbit-radius)));
+}
+
+.orbit-xs {
+  --orbit-radius: var(--orbit-xs);
+}
+
+.orbit-sm {
+  --orbit-radius: var(--orbit-sm);
+}
+
+.orbit-md {
+  --orbit-radius: var(--orbit-md);
+}
+
+.orbit-lg {
+  --orbit-radius: var(--orbit-lg);
+}
+
+.orbit-xl {
+  --orbit-radius: var(--orbit-xl);
+}
+
+/// Orbit speed variants
+.orbit-slow {
+  --orbit-duration: 8s;
+}
+
+.orbit-fast {
+  --orbit-duration: 2s;
+}
+
+/// Reverse orbit direction
+.orbit-reverse {
+  animation-direction: reverse;
+}
+
+/// Elliptical orbit
+.orbit-ellipse {
+  --orbit-radius-x: calc(var(--orbit-radius) * 1.5);
+  --orbit-radius-y: var(--orbit-radius);
+
+  transform: translateX(calc(cos(var(--orbit-angle)) * var(--orbit-radius-x)))
+    translateY(calc(sin(var(--orbit-angle)) * var(--orbit-radius-y)));
+}
+
+// =============================================================================
+// WAVE ANIMATIONS
+// =============================================================================
+
+@property --wave-phase {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes wave-cycle {
+  to {
+    --wave-phase: 360deg;
+  }
+}
+
+/// Sine wave vertical motion
+.wave-y {
+  --wave-amplitude: 20px;
+  --wave-duration: 2s;
+
+  animation: wave-cycle var(--wave-duration) linear infinite;
+  transform: translateY(calc(sin(var(--wave-phase)) * var(--wave-amplitude)));
+}
+
+/// Sine wave horizontal motion
+.wave-x {
+  --wave-amplitude: 20px;
+  --wave-duration: 2s;
+
+  animation: wave-cycle var(--wave-duration) linear infinite;
+  transform: translateX(calc(sin(var(--wave-phase)) * var(--wave-amplitude)));
+}
+
+/// Wave amplitude variants
+.wave-sm {
+  --wave-amplitude: 10px;
+}
+
+.wave-md {
+  --wave-amplitude: 20px;
+}
+
+.wave-lg {
+  --wave-amplitude: 40px;
+}
+
+.wave-xl {
+  --wave-amplitude: 60px;
+}
+
+/// Combined wave (figure-8 motion)
+.wave-figure-8 {
+  --wave-amplitude-x: 30px;
+  --wave-amplitude-y: 20px;
+  --wave-duration: 3s;
+
+  animation: wave-cycle var(--wave-duration) linear infinite;
+  transform: translateX(
+      calc(sin(var(--wave-phase) * 2) * var(--wave-amplitude-x))
+    )
+    translateY(calc(sin(var(--wave-phase)) * var(--wave-amplitude-y)));
+}
+
+// =============================================================================
+// OSCILLATING EFFECTS
+// =============================================================================
+
+/// Pendulum swing
+@property --pendulum-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes pendulum {
+  0%,
+  100% {
+    --pendulum-angle: -30deg;
+  }
+  50% {
+    --pendulum-angle: 30deg;
+  }
+}
+
+.pendulum {
+  --pendulum-duration: 2s;
+  transform-origin: top center;
+  animation: pendulum var(--pendulum-duration) ease-in-out infinite;
+  transform: rotate(var(--pendulum-angle));
+}
+
+/// Breathing/pulse effect using sin
+.breathe {
+  --breathe-min: 0.95;
+  --breathe-max: 1.05;
+  --breathe-duration: 3s;
+
+  animation: wave-cycle var(--breathe-duration) linear infinite;
+
+  // Scale oscillates between min and max using sin
+  transform: scale(
+    calc(
+      var(--breathe-min) + (var(--breathe-max) - var(--breathe-min)) *
+        (sin(var(--wave-phase)) * 0.5 + 0.5)
+    )
+  );
+}
+
+/// Floating effect
+.float {
+  --float-amplitude: 10px;
+  --float-duration: 3s;
+
+  animation: wave-cycle var(--float-duration) ease-in-out infinite;
+  transform: translateY(calc(sin(var(--wave-phase)) * var(--float-amplitude)));
+}
+
+// =============================================================================
+// RADIAL POSITIONING
+// =============================================================================
+
+/// Position elements in a circle
+/// Use on parent, children will be positioned radially
+
+// Generate radial positions for n items
+@for $i from 2 through 12 {
+  .radial-#{$i} {
+    --item-count: #{$i};
+    --radial-radius: var(--orbit-md);
+
+    position: relative;
+
+    // Position each child
+    @for $j from 1 through $i {
+      $angle: calc(360deg / #{$i} * #{$j - 1});
+
+      > :nth-child(#{$j}) {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%)
+          translateY(-50%)
+          rotate($angle)
+          translateY(calc(var(--radial-radius) * -1))
+          rotate(calc($angle * -1));
+      }
+    }
+  }
+}
+
+// =============================================================================
+// SPIRAL ANIMATIONS
+// =============================================================================
+
+@property --spiral-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --spiral-radius {
+  syntax: "<length>";
+  initial-value: 0px;
+  inherits: false;
+}
+
+@keyframes spiral-in {
+  from {
+    --spiral-angle: 0deg;
+    --spiral-radius: 100px;
+  }
+  to {
+    --spiral-angle: 720deg;
+    --spiral-radius: 0px;
+  }
+}
+
+@keyframes spiral-out {
+  from {
+    --spiral-angle: 0deg;
+    --spiral-radius: 0px;
+  }
+  to {
+    --spiral-angle: 720deg;
+    --spiral-radius: 100px;
+  }
+}
+
+.spiral-in {
+  animation: spiral-in 2s ease-out forwards;
+  transform: translateX(calc(cos(var(--spiral-angle)) * var(--spiral-radius)))
+    translateY(calc(sin(var(--spiral-angle)) * var(--spiral-radius)));
+}
+
+.spiral-out {
+  animation: spiral-out 2s ease-in forwards;
+  transform: translateX(calc(cos(var(--spiral-angle)) * var(--spiral-radius)))
+    translateY(calc(sin(var(--spiral-angle)) * var(--spiral-radius)));
+}
+
+// =============================================================================
+// ROTATION WITH TRIG
+// =============================================================================
+
+/// 3D rotation using cos/sin for perspective
+.rotate-3d {
+  --rotate-angle: 0deg;
+
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/// Rotating card flip with trig-based easing
+@property --flip-progress {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: false;
+}
+
+@keyframes flip-card {
+  to {
+    --flip-progress: 1;
+  }
+}
+
+.flip-card {
+  --flip-duration: 0.6s;
+
+  transform-style: preserve-3d;
+  animation: flip-card var(--flip-duration) ease-in-out forwards;
+  transform: rotateY(calc(var(--flip-progress) * 180deg));
+}
+
+// =============================================================================
+// WOBBLE EFFECTS
+// =============================================================================
+
+/// Wobble using combined trig functions
+@property --wobble-phase {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes wobble-cycle {
+  to {
+    --wobble-phase: 360deg;
+  }
+}
+
+.wobble {
+  --wobble-rotation: 5deg;
+  --wobble-duration: 0.5s;
+
+  animation: wobble-cycle var(--wobble-duration) linear infinite;
+  transform: rotate(
+    calc(sin(var(--wobble-phase) * 3) * var(--wobble-rotation))
+  );
+}
+
+.wobble-intense {
+  --wobble-rotation: 15deg;
+  --wobble-duration: 0.3s;
+}
+
+.wobble-gentle {
+  --wobble-rotation: 2deg;
+  --wobble-duration: 1s;
+}
+
+// =============================================================================
+// ELASTIC EFFECTS
+// =============================================================================
+
+/// Elastic bounce using combined trig
+@property --elastic-t {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: false;
+}
+
+@keyframes elastic-in {
+  to {
+    --elastic-t: 1;
+  }
+}
+
+.elastic-scale {
+  --elastic-duration: 0.8s;
+
+  animation: elastic-in var(--elastic-duration) ease-out forwards;
+
+  // Damped oscillation formula
+  transform: scale(
+    calc(1 + (1 - var(--elastic-t)) * sin(var(--elastic-t) * 1080deg) * 0.3)
+  );
+}
+
+// =============================================================================
+// CLOCK/GAUGE UTILITIES
+// =============================================================================
+
+/// Clock hand rotation
+.clock-second {
+  transform-origin: bottom center;
+  animation: orbit 60s linear infinite;
+  transform: rotate(var(--orbit-angle));
+}
+
+.clock-minute {
+  transform-origin: bottom center;
+  animation: orbit 3600s linear infinite;
+  transform: rotate(var(--orbit-angle));
+}
+
+.clock-hour {
+  transform-origin: bottom center;
+  animation: orbit 43200s linear infinite;
+  transform: rotate(var(--orbit-angle));
+}
+
+/// Gauge/meter
+.gauge {
+  --gauge-value: 0;
+  --gauge-min: 0;
+  --gauge-max: 100;
+  --gauge-start-angle: -135deg;
+  --gauge-end-angle: 135deg;
+
+  transform-origin: bottom center;
+  transform: rotate(
+    calc(
+      var(--gauge-start-angle) +
+        (var(--gauge-end-angle) - var(--gauge-start-angle)) *
+        (
+          (var(--gauge-value) - var(--gauge-min)) /
+            (var(--gauge-max) - var(--gauge-min))
+        )
+    )
+  );
+  transition: transform 0.5s ease-out;
+}
+
+// =============================================================================
+// MATH FUNCTION UTILITIES
+// =============================================================================
+
+/// Round utilities
+.round-nearest {
+  --rounded: round(nearest, var(--value), 1);
+}
+
+.round-up {
+  --rounded: round(up, var(--value), 1);
+}
+
+.round-down {
+  --rounded: round(down, var(--value), 1);
+}
+
+/// Absolute value
+.abs {
+  --absolute: abs(var(--value));
+}
+
+/// Sign function
+.sign {
+  --sign: sign(var(--value));
+}
+
+/// Square root
+.sqrt {
+  --sqrt: sqrt(var(--value));
+}
+
+/// Power functions
+.pow-2 {
+  --result: pow(var(--base), 2);
+}
+
+.pow-3 {
+  --result: pow(var(--base), 3);
+}
+
+/// Clamp with calculation
+.clamp-responsive {
+  --size: clamp(
+    var(--min, 1rem),
+    var(--preferred, calc(1rem + 2vw)),
+    var(--max, 3rem)
+  );
+}
+
+// =============================================================================
+// LISSAJOUS CURVES
+// =============================================================================
+
+/// Lissajous curve animation (complex oscillation)
+@property --lissajous-t {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes lissajous-cycle {
+  to {
+    --lissajous-t: 360deg;
+  }
+}
+
+.lissajous {
+  --a: 3;
+  --b: 2;
+  --delta: 90deg;
+  --amplitude: 50px;
+  --duration: 4s;
+
+  animation: lissajous-cycle var(--duration) linear infinite;
+  transform: translateX(
+      calc(sin(var(--a) * var(--lissajous-t) + var(--delta)) * var(--amplitude))
+    )
+    translateY(calc(sin(var(--b) * var(--lissajous-t)) * var(--amplitude)));
+}
+
+.lissajous-1-2 {
+  --a: 1;
+  --b: 2;
+}
+
+.lissajous-2-3 {
+  --a: 2;
+  --b: 3;
+}
+
+.lissajous-3-4 {
+  --a: 3;
+  --b: 4;
+}
+
+// =============================================================================
+// STAGGERED TRIG ANIMATIONS
+// =============================================================================
+
+/// Staggered wave for child elements
+@for $i from 1 through 20 {
+  .wave-stagger > :nth-child(#{$i}) {
+    $delay: $i * 0.1;
+    animation-delay: #{$delay}s;
+  }
+}
+
+/// Staggered orbit
+@for $i from 1 through 12 {
+  .orbit-stagger > :nth-child(#{$i}) {
+    $angle: calc(360deg / 12 * #{$i});
+    --orbit-offset: #{$angle};
+
+    animation: orbit var(--orbit-duration, 4s) linear infinite;
+    transform: rotate(var(--orbit-offset))
+      translateX(var(--orbit-radius))
+      rotate(calc(var(--orbit-offset) * -1));
+  }
+}
+
+// =============================================================================
+// RESPONSIVE CALCULATIONS
+// =============================================================================
+
+/// Fluid typography using math
+.text-fluid {
+  font-size: clamp(
+    1rem,
+    calc(1rem + (1.5 - 1) * ((100vw - 20rem) / (80 - 20))),
+    1.5rem
+  );
+}
+
+/// Fluid spacing
+.space-fluid {
+  --space: clamp(
+    var(--space-min, 1rem),
+    calc(
+      var(--space-min, 1rem) + (var(--space-max, 3rem) - var(--space-min, 1rem)) *
+        ((100vw - 20rem) / 60)
+    ),
+    var(--space-max, 3rem)
+  );
+}
+
+// =============================================================================
+// REDUCED MOTION
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit,
+  .wave-x,
+  .wave-y,
+  .wave-figure-8,
+  .pendulum,
+  .breathe,
+  .float,
+  .spiral-in,
+  .spiral-out,
+  .flip-card,
+  .wobble,
+  .elastic-scale,
+  .clock-second,
+  .clock-minute,
+  .clock-hour,
+  .lissajous {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+// =============================================================================
+// BROWSER SUPPORT
+// =============================================================================
+
+/// Feature detection for trig functions
+@supports (transform: translateX(calc(sin(0deg) * 1px))) {
+  .trig-supported {
+    // Trig functions are supported
+    --trig-support: 1;
+  }
+}
+
+@supports not (transform: translateX(calc(sin(0deg) * 1px))) {
+  .trig-fallback {
+    // Fallback for older browsers
+    .orbit,
+    .wave-x,
+    .wave-y {
+      animation-name: simple-bounce;
+    }
+  }
+
+  @keyframes simple-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+}

@@ -5,13 +5,18 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
+    "build:prod:purge": "npm run build:prod & npm run purge:css",
     "watch": "ng build --watch --configuration development",
     "test:watch": "ng test --watch --code-coverage",
     "test": "ng test ",
     "serve:ssr:DemoApp": "node dist/DemoApp/server/server.mjs",
     "cypress:open": "cypress open",
     "ks": "ng build kyrolus-sous-materials --watch ",
-    "demo": "ng serve DemoApp --port 4200 -o"
+    "demo": "ng serve DemoApp --port 4200 -o",
+    "purge:css": "node projects/kyrolus-sous-materials/postbuild.js",
+    "purge:css:safe": "node projects/kyrolus-sous-materials/postbuild-safe.js",
+    "purge:css:custom": "node projects/kyrolus-sous-materials/postbuild.js"
   },
   "prettier": {
     "overrides": [
@@ -45,11 +50,13 @@
     "@angular/build": "^20.3.4",
     "@angular/cli": "^20.3.4",
     "@angular/compiler-cli": "^20.3.3",
+    "@fullhuman/postcss-purgecss": "^7.0.2",
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",
     "@vitest/coverage-v8": "^3.2.4",
     "autoprefixer": "^10.4.16",
+    "cssnano": "^7.1.2",
     "cypress": "^14.5.4",
     "jasmine-core": "~5.8.0",
     "jsdom": "^26.1.0",
@@ -60,6 +67,7 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "ng-packagr": "^20.1.0",
     "postcss": "^8.5.6",
+    "purgecss": "^7.0.2",
     "typescript": "~5.8.2",
     "user-agent-data-types": "^0.4.2",
     "vitest": "^3.2.4"

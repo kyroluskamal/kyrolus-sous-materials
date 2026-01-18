@@ -1,0 +1,833 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - FLUID TYPOGRAPHY SYSTEM
+// =============================================================================
+// Modern typography system with fluid scaling using clamp().
+// Automatically adjusts between mobile and desktop without media queries.
+// =============================================================================
+
+@use "sass:map";
+@use "sass:math";
+@use "primitives" as *;
+
+// =============================================================================
+// FLUID TYPOGRAPHY CONFIGURATION
+// =============================================================================
+
+$viewport-min: 320; // Mobile viewport (px)
+$viewport-max: 1440; // Desktop viewport (px)
+
+// Fluid type scale with min/max values
+$fluid-type-scale: (
+  "xs": (
+    min: 0.75,
+    max: 0.75,
+    leading: 1.5,
+  ),
+  // 12px fixed
+  "sm":
+    (
+      min: 0.8125,
+      max: 0.875,
+      leading: 1.5,
+    ),
+  // 13px → 14px
+  "base":
+    (
+      min: 0.875,
+      max: 1,
+      leading: 1.6,
+    ),
+  // 14px → 16px
+  "lg":
+    (
+      min: 1,
+      max: 1.125,
+      leading: 1.6,
+    ),
+  // 16px → 18px
+  "xl":
+    (
+      min: 1.125,
+      max: 1.25,
+      leading: 1.5,
+    ),
+  // 18px → 20px
+  "2xl":
+    (
+      min: 1.25,
+      max: 1.5,
+      leading: 1.4,
+    ),
+  // 20px → 24px
+  "3xl":
+    (
+      min: 1.5,
+      max: 1.875,
+      leading: 1.3,
+    ),
+  // 24px → 30px
+  "4xl":
+    (
+      min: 1.875,
+      max: 2.25,
+      leading: 1.2,
+    ),
+  // 30px → 36px
+  "5xl":
+    (
+      min: 2.25,
+      max: 3,
+      leading: 1.1,
+    ),
+  // 36px → 48px
+  "6xl":
+    (
+      min: 2.75,
+      max: 3.75,
+      leading: 1.1,
+    ),
+  // 44px → 60px
+  "7xl":
+    (
+      min: 3.25,
+      max: 4.5,
+      leading: 1,
+    ),
+  // 52px → 72px
+  "8xl":
+    (
+      min: 4,
+      max: 6,
+      leading: 1,
+    ),
+  // 64px → 96px
+  "9xl":
+    (
+      min: 5,
+      max: 8,
+      leading: 1,
+    ),
+  // 80px → 128px
+);
+
+// Display type scale (for hero sections)
+$fluid-display-scale: (
+  "display-sm": (
+    min: 2.25,
+    max: 3,
+    leading: 1.1,
+  ),
+  // 36px → 48px
+  "display":
+    (
+      min: 2.75,
+      max: 4,
+      leading: 1.05,
+    ),
+  // 44px → 64px
+  "display-lg":
+    (
+      min: 3.5,
+      max: 5,
+      leading: 1,
+    ),
+  // 56px → 80px
+  "display-xl":
+    (
+      min: 4.5,
+      max: 6,
+      leading: 0.95,
+    ),
+  // 72px → 96px
+  "display-2xl":
+    (
+      min: 5.5,
+      max: 8,
+      leading: 0.9,
+    ),
+  // 88px → 128px
+);
+
+// =============================================================================
+// FLUID SIZE FUNCTION
+// =============================================================================
+/// Generates a fluid clamp() value for typography
+/// @param {Number} $min-size - Minimum size in rem
+/// @param {Number} $max-size - Maximum size in rem
+/// @return {String} - clamp() CSS function
+@function fluid($min-size, $max-size) {
+  // Convert rem to px for calculation (assuming 16px base)
+  $min-px: $min-size * 16;
+  $max-px: $max-size * 16;
+
+  // Calculate the slope
+  $slope: math.div($max-px - $min-px, $viewport-max - $viewport-min);
+
+  // Calculate the y-intercept
+  $y-intercept: $min-px - ($slope * $viewport-min);
+
+  // Convert back to rem
+  $y-intercept-rem: math.div($y-intercept, 16);
+
+  // Calculate vw coefficient
+  $slope-vw: $slope * 100;
+
+  @return clamp(
+    #{$min-size}rem,
+    #{$y-intercept-rem}rem + #{$slope-vw}vw,
+    #{$max-size}rem
+  );
+}
+
+// =============================================================================
+// CSS CUSTOM PROPERTIES FOR FLUID TYPOGRAPHY
+// =============================================================================
+:root {
+  // Base fluid type scale
+  @each $name, $config in $fluid-type-scale {
+    --text-fluid-#{$name}: #{fluid(
+        map.get($config, min),
+        map.get($config, max)
+      )};
+    --leading-fluid-#{$name}: #{map.get($config, leading)};
+  }
+
+  // Display type scale
+  @each $name, $config in $fluid-display-scale {
+    --text-fluid-#{$name}: #{fluid(
+        map.get($config, min),
+        map.get($config, max)
+      )};
+    --leading-fluid-#{$name}: #{map.get($config, leading)};
+  }
+}
+
+// =============================================================================
+// FLUID TYPOGRAPHY UTILITY CLASSES
+// =============================================================================
+@each $name, $config in $fluid-type-scale {
+  .text-fluid-#{$name} {
+    font-size: var(--text-fluid-#{$name});
+    line-height: var(--leading-fluid-#{$name});
+  }
+}
+
+@each $name, $config in $fluid-display-scale {
+  .text-fluid-#{$name} {
+    font-size: var(--text-fluid-#{$name});
+    line-height: var(--leading-fluid-#{$name});
+  }
+}
+
+// =============================================================================
+// STATIC TYPOGRAPHY UTILITY CLASSES
+// =============================================================================
+@each $name, $config in $font-sizes {
+  .text-#{$name} {
+    font-size: var(--text-#{$name});
+    line-height: var(--leading-#{$name});
+  }
+}
+
+// =============================================================================
+// FONT FAMILY UTILITIES
+// =============================================================================
+.font-sans {
+  font-family: var(--font-sans);
+}
+.font-serif {
+  font-family: var(--font-serif);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+// =============================================================================
+// FONT WEIGHT UTILITIES
+// =============================================================================
+@each $name, $value in $font-weights {
+  .font-#{$name} {
+    font-weight: var(--font-#{$name});
+  }
+}
+
+// =============================================================================
+// LINE HEIGHT UTILITIES
+// =============================================================================
+@each $name, $value in $line-heights {
+  .leading-#{$name} {
+    line-height: $value;
+  }
+}
+
+// =============================================================================
+// LETTER SPACING UTILITIES
+// =============================================================================
+@each $name, $value in $letter-spacings {
+  .tracking-#{$name} {
+    letter-spacing: var(--tracking-#{$name});
+  }
+}
+
+// =============================================================================
+// TEXT ALIGNMENT UTILITIES
+// =============================================================================
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.text-justify {
+  text-align: justify;
+}
+.text-start {
+  text-align: start;
+}
+.text-end {
+  text-align: end;
+}
+
+// =============================================================================
+// TEXT DECORATION UTILITIES
+// =============================================================================
+.underline {
+  text-decoration-line: underline;
+}
+.overline {
+  text-decoration-line: overline;
+}
+.line-through {
+  text-decoration-line: line-through;
+}
+.no-underline {
+  text-decoration-line: none;
+}
+
+.decoration-solid {
+  text-decoration-style: solid;
+}
+.decoration-double {
+  text-decoration-style: double;
+}
+.decoration-dotted {
+  text-decoration-style: dotted;
+}
+.decoration-dashed {
+  text-decoration-style: dashed;
+}
+.decoration-wavy {
+  text-decoration-style: wavy;
+}
+
+.decoration-0 {
+  text-decoration-thickness: 0px;
+}
+.decoration-1 {
+  text-decoration-thickness: 1px;
+}
+.decoration-2 {
+  text-decoration-thickness: 2px;
+}
+.decoration-4 {
+  text-decoration-thickness: 4px;
+}
+.decoration-8 {
+  text-decoration-thickness: 8px;
+}
+.decoration-auto {
+  text-decoration-thickness: auto;
+}
+.decoration-from-font {
+  text-decoration-thickness: from-font;
+}
+
+.underline-offset-0 {
+  text-underline-offset: 0px;
+}
+.underline-offset-1 {
+  text-underline-offset: 1px;
+}
+.underline-offset-2 {
+  text-underline-offset: 2px;
+}
+.underline-offset-4 {
+  text-underline-offset: 4px;
+}
+.underline-offset-8 {
+  text-underline-offset: 8px;
+}
+.underline-offset-auto {
+  text-underline-offset: auto;
+}
+
+// =============================================================================
+// TEXT TRANSFORM UTILITIES
+// =============================================================================
+.uppercase {
+  text-transform: uppercase;
+}
+.lowercase {
+  text-transform: lowercase;
+}
+.capitalize {
+  text-transform: capitalize;
+}
+.normal-case {
+  text-transform: none;
+}
+
+// =============================================================================
+// TEXT OVERFLOW UTILITIES
+// =============================================================================
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-ellipsis {
+  text-overflow: ellipsis;
+}
+.text-clip {
+  text-overflow: clip;
+}
+
+// =============================================================================
+// TEXT WRAP UTILITIES
+// =============================================================================
+.text-wrap {
+  text-wrap: wrap;
+}
+.text-nowrap {
+  text-wrap: nowrap;
+}
+.text-balance {
+  text-wrap: balance;
+}
+.text-pretty {
+  text-wrap: pretty;
+}
+
+// =============================================================================
+// WHITESPACE UTILITIES
+// =============================================================================
+.whitespace-normal {
+  white-space: normal;
+}
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+.whitespace-pre {
+  white-space: pre;
+}
+.whitespace-pre-line {
+  white-space: pre-line;
+}
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+.whitespace-break-spaces {
+  white-space: break-spaces;
+}
+
+// =============================================================================
+// WORD BREAK UTILITIES
+// =============================================================================
+.break-normal {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.break-words {
+  overflow-wrap: break-word;
+}
+
+.break-all {
+  word-break: break-all;
+}
+
+.break-keep {
+  word-break: keep-all;
+}
+
+// =============================================================================
+// HYPHENS UTILITIES
+// =============================================================================
+.hyphens-none {
+  hyphens: none;
+}
+.hyphens-manual {
+  hyphens: manual;
+}
+.hyphens-auto {
+  hyphens: auto;
+}
+
+// =============================================================================
+// LINE CLAMP UTILITIES
+// =============================================================================
+@for $i from 1 through 6 {
+  .line-clamp-#{$i} {
+    display: -webkit-box;
+    -webkit-line-clamp: $i;
+    line-clamp: $i;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.line-clamp-none {
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  -webkit-box-orient: unset;
+  display: block;
+  overflow: visible;
+}
+
+// =============================================================================
+// FONT STYLE UTILITIES
+// =============================================================================
+.italic {
+  font-style: italic;
+}
+.not-italic {
+  font-style: normal;
+}
+
+// =============================================================================
+// FONT VARIANT UTILITIES
+// =============================================================================
+.normal-nums {
+  font-variant-numeric: normal;
+}
+.ordinal {
+  font-variant-numeric: ordinal;
+}
+.slashed-zero {
+  font-variant-numeric: slashed-zero;
+}
+.lining-nums {
+  font-variant-numeric: lining-nums;
+}
+.oldstyle-nums {
+  font-variant-numeric: oldstyle-nums;
+}
+.proportional-nums {
+  font-variant-numeric: proportional-nums;
+}
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+.diagonal-fractions {
+  font-variant-numeric: diagonal-fractions;
+}
+.stacked-fractions {
+  font-variant-numeric: stacked-fractions;
+}
+
+// =============================================================================
+// LIST STYLE UTILITIES
+// =============================================================================
+.list-inside {
+  list-style-position: inside;
+}
+.list-outside {
+  list-style-position: outside;
+}
+
+.list-none {
+  list-style-type: none;
+}
+.list-disc {
+  list-style-type: disc;
+}
+.list-decimal {
+  list-style-type: decimal;
+}
+.list-circle {
+  list-style-type: circle;
+}
+.list-square {
+  list-style-type: square;
+}
+.list-roman {
+  list-style-type: upper-roman;
+}
+.list-alpha {
+  list-style-type: lower-alpha;
+}
+
+// =============================================================================
+// VERTICAL ALIGN UTILITIES
+// =============================================================================
+.align-baseline {
+  vertical-align: baseline;
+}
+.align-top {
+  vertical-align: top;
+}
+.align-middle {
+  vertical-align: middle;
+}
+.align-bottom {
+  vertical-align: bottom;
+}
+.align-text-top {
+  vertical-align: text-top;
+}
+.align-text-bottom {
+  vertical-align: text-bottom;
+}
+.align-sub {
+  vertical-align: sub;
+}
+.align-super {
+  vertical-align: super;
+}
+
+// =============================================================================
+// TEXT INDENT UTILITIES
+// =============================================================================
+$text-indents: (
+  0: 0,
+  1: 0.25rem,
+  2: 0.5rem,
+  4: 1rem,
+  6: 1.5rem,
+  8: 2rem,
+  10: 2.5rem,
+  12: 3rem,
+);
+
+@each $name, $value in $text-indents {
+  .indent-#{$name} {
+    text-indent: $value;
+  }
+}
+
+// =============================================================================
+// CONTENT UTILITIES
+// =============================================================================
+.content-empty {
+  content: "";
+}
+
+.content-none {
+  content: none;
+}
+
+// =============================================================================
+// PROSE / READABLE CONTENT STYLES
+// =============================================================================
+.prose {
+  color: var(--text);
+  max-width: 65ch;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--text);
+    font-weight: var(--font-bold);
+    line-height: 1.2;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  h1 {
+    font-size: var(--text-fluid-4xl);
+  }
+  h2 {
+    font-size: var(--text-fluid-3xl);
+  }
+  h3 {
+    font-size: var(--text-fluid-2xl);
+  }
+  h4 {
+    font-size: var(--text-fluid-xl);
+  }
+  h5 {
+    font-size: var(--text-fluid-lg);
+  }
+  h6 {
+    font-size: var(--text-fluid-base);
+  }
+
+  p {
+    margin-bottom: 1.25em;
+    line-height: 1.75;
+  }
+
+  a {
+    color: var(--text-link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover {
+      color: var(--text-link-hover);
+    }
+  }
+
+  strong,
+  b {
+    font-weight: var(--font-semibold);
+    color: var(--text);
+  }
+
+  em,
+  i {
+    font-style: italic;
+  }
+
+  ul,
+  ol {
+    padding-left: 1.5em;
+    margin-bottom: 1.25em;
+
+    li {
+      margin-bottom: 0.5em;
+    }
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+  ol {
+    list-style-type: decimal;
+  }
+
+  blockquote {
+    border-left: 4px solid var(--border-strong);
+    padding-left: 1em;
+    margin: 1.5em 0;
+    font-style: italic;
+    color: var(--text-secondary);
+  }
+
+  pre,
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background-color: var(--surface-sunken);
+    border-radius: var(--radius-md);
+  }
+
+  code {
+    padding: 0.2em 0.4em;
+  }
+
+  pre {
+    padding: 1em;
+    overflow-x: auto;
+    margin: 1.5em 0;
+
+    code {
+      padding: 0;
+      background: transparent;
+    }
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--divider);
+    margin: 2em 0;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    margin: 1.5em 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+
+    th,
+    td {
+      padding: 0.75em;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--surface-sunken);
+      font-weight: var(--font-semibold);
+    }
+
+    tr:nth-child(even) {
+      background-color: var(--background-subtle);
+    }
+  }
+}
+
+// Prose size variants
+.prose-sm {
+  font-size: var(--text-sm);
+}
+
+.prose-lg {
+  font-size: var(--text-lg);
+}
+
+.prose-xl {
+  font-size: var(--text-xl);
+}
+
+// =============================================================================
+// RESPONSIVE TYPOGRAPHY UTILITIES
+// =============================================================================
+@each $bp-name, $bp-value in $breakpoints {
+  @if $bp-value > 0 {
+    @media (min-width: $bp-value) {
+      // Font sizes
+      @each $name, $config in $font-sizes {
+        .#{$bp-name}\:text-#{$name} {
+          font-size: var(--text-#{$name});
+          line-height: var(--leading-#{$name});
+        }
+      }
+
+      // Fluid font sizes
+      @each $name, $config in $fluid-type-scale {
+        .#{$bp-name}\:text-fluid-#{$name} {
+          font-size: var(--text-fluid-#{$name});
+          line-height: var(--leading-fluid-#{$name});
+        }
+      }
+
+      // Font weights
+      @each $name, $value in $font-weights {
+        .#{$bp-name}\:font-#{$name} {
+          font-weight: var(--font-#{$name});
+        }
+      }
+
+      // Text alignment
+      .#{$bp-name}\:text-left {
+        text-align: left;
+      }
+      .#{$bp-name}\:text-center {
+        text-align: center;
+      }
+      .#{$bp-name}\:text-right {
+        text-align: right;
+      }
+      .#{$bp-name}\:text-justify {
+        text-align: justify;
+      }
+    }
+  }
+}

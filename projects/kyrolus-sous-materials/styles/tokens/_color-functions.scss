@@ -1,0 +1,405 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - ADVANCED COLOR FUNCTIONS
+// =============================================================================
+// Enhanced OKLCH color manipulations, gradients, and color systems
+//
+// Features:
+// - Advanced OKLCH color operations
+// - Color interpolation with steps
+// - Harmonious color palettes
+// - Dynamic color themes
+// - Color contrast calculations
+// - Gradient generators
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// ADVANCED OKLCH MANIPULATIONS
+// =============================================================================
+
+:root {
+  // Base OKLCH colors
+  --oklch-primary: oklch(60% 0.2 240);
+  --oklch-secondary: oklch(70% 0.15 120);
+  --oklch-success: oklch(65% 0.18 150);
+  --oklch-warning: oklch(80% 0.15 80);
+  --oklch-danger: oklch(55% 0.22 30);
+  --oklch-info: oklch(75% 0.12 280);
+
+  // Color manipulation parameters
+  --lightness-step: 0.1;
+  --chroma-step: 0.05;
+  --hue-shift: 30;
+}
+
+// Lightness variations
+.bg-primary-lighter-1 {
+  background-color: oklch(from var(--oklch-primary) calc(l + 0.1) c h);
+}
+
+.bg-primary-lighter-2 {
+  background-color: oklch(from var(--oklch-primary) calc(l + 0.2) c h);
+}
+
+.bg-primary-darker-1 {
+  background-color: oklch(from var(--oklch-primary) calc(l - 0.1) c h);
+}
+
+.bg-primary-darker-2 {
+  background-color: oklch(from var(--oklch-primary) calc(l - 0.2) c h);
+}
+
+// Chroma/saturation variations
+.bg-primary-saturated {
+  background-color: oklch(from var(--oklch-primary) l calc(c * 1.3) h);
+}
+
+.bg-primary-desaturated {
+  background-color: oklch(from var(--oklch-primary) l calc(c * 0.7) h);
+}
+
+// Hue rotations
+.bg-primary-warmer {
+  background-color: oklch(from var(--oklch-primary) l c calc(h - 30));
+}
+
+.bg-primary-cooler {
+  background-color: oklch(from var(--oklch-primary) l c calc(h + 30));
+}
+
+.bg-primary-complementary {
+  background-color: oklch(from var(--oklch-primary) l c calc(h + 180));
+}
+
+// =============================================================================
+// COLOR HARMONY SYSTEMS
+// =============================================================================
+
+// Triadic colors
+.bg-primary-triadic-1 {
+  background-color: oklch(from var(--oklch-primary) l c calc(h + 120));
+}
+
+.bg-primary-triadic-2 {
+  background-color: oklch(from var(--oklch-primary) l c calc(h + 240));
+}
+
+// Analogous colors
+.bg-primary-analogous-1 {
+  background-color: oklch(from var(--oklch-primary) l c calc(h - 15));
+}
+
+.bg-primary-analogous-2 {
+  background-color: oklch(from var(--oklch-primary) l c calc(h + 15));
+}
+
+// Split complementary
+.bg-primary-split-1 {
+  background-color: oklch(from var(--oklch-primary) l c calc(h + 150));
+}
+
+.bg-primary-split-2 {
+  background-color: oklch(from var(--oklch-primary) l c calc(h + 210));
+}
+
+// Tetradic/rectangle
+.bg-primary-tetradic-1 {
+  background-color: oklch(from var(--oklch-primary) l c calc(h + 90));
+}
+
+.bg-primary-tetradic-2 {
+  background-color: oklch(from var(--oklch-primary) l c calc(h + 180));
+}
+
+.bg-primary-tetradic-3 {
+  background-color: oklch(from var(--oklch-primary) l c calc(h + 270));
+}
+
+// =============================================================================
+// ADVANCED GRADIENTS
+// =============================================================================
+
+// Smooth color interpolation
+.gradient-smooth-primary {
+  background: linear-gradient(
+    to right,
+    oklch(from var(--oklch-primary) l c h),
+    oklch(from var(--oklch-primary) l calc(c * 0.8) calc(h + 20)),
+    oklch(from var(--oklch-primary) l calc(c * 0.6) calc(h + 40))
+  );
+}
+
+// Multi-stop gradients with OKLCH
+.gradient-multi-stop {
+  background: linear-gradient(
+    45deg,
+    oklch(70% 0.1 240),
+    oklch(65% 0.15 270),
+    oklch(60% 0.2 300),
+    oklch(55% 0.18 330)
+  );
+}
+
+// Radial gradients with color interpolation
+.gradient-radial-smooth {
+  background: radial-gradient(
+    circle at center,
+    oklch(from var(--oklch-primary) calc(l + 0.2) c h) 0%,
+    oklch(from var(--oklch-primary) l c h) 50%,
+    oklch(from var(--oklch-primary) calc(l - 0.1) c h) 100%
+  );
+}
+
+// Conic gradients for color wheels
+.gradient-conic-hue {
+  background: conic-gradient(
+    from 0deg,
+    oklch(60% 0.2 0),
+    oklch(60% 0.2 60),
+    oklch(60% 0.2 120),
+    oklch(60% 0.2 180),
+    oklch(60% 0.2 240),
+    oklch(60% 0.2 300),
+    oklch(60% 0.2 360)
+  );
+}
+
+// =============================================================================
+// COLOR MIXING ADVANCED
+// =============================================================================
+
+// Tints and shades
+.bg-primary-tint-10 {
+  background-color: color-mix(in oklch, var(--oklch-primary), white 10%);
+}
+
+.bg-primary-tint-25 {
+  background-color: color-mix(in oklch, var(--oklch-primary), white 25%);
+}
+
+.bg-primary-tint-50 {
+  background-color: color-mix(in oklch, var(--oklch-primary), white 50%);
+}
+
+.bg-primary-shade-10 {
+  background-color: color-mix(in oklch, var(--oklch-primary), black 10%);
+}
+
+.bg-primary-shade-25 {
+  background-color: color-mix(in oklch, var(--oklch-primary), black 25%);
+}
+
+.bg-primary-shade-50 {
+  background-color: color-mix(in oklch, var(--oklch-primary), black 50%);
+}
+
+// Alpha blending
+.bg-primary-alpha-10 {
+  background-color: oklch(from var(--oklch-primary) l c h / 10%);
+}
+
+.bg-primary-alpha-25 {
+  background-color: oklch(from var(--oklch-primary) l c h / 25%);
+}
+
+.bg-primary-alpha-50 {
+  background-color: oklch(from var(--oklch-primary) l c h / 50%);
+}
+
+.bg-primary-alpha-75 {
+  background-color: oklch(from var(--oklch-primary) l c h / 75%);
+}
+
+// Cross-color mixing
+.bg-primary-secondary-mix {
+  background-color: color-mix(
+    in oklch,
+    var(--oklch-primary),
+    var(--oklch-secondary) 50%
+  );
+}
+
+.bg-primary-success-mix {
+  background-color: color-mix(
+    in oklch,
+    var(--oklch-primary),
+    var(--oklch-success) 30%
+  );
+}
+
+.bg-primary-warning-mix {
+  background-color: color-mix(
+    in oklch,
+    var(--oklch-primary),
+    var(--oklch-warning) 20%
+  );
+}
+
+// =============================================================================
+// DYNAMIC COLOR THEMES
+// =============================================================================
+
+// Theme generator classes
+.theme-generator {
+  --theme-hue: 240;
+  --theme-lightness: 60%;
+  --theme-chroma: 0.2;
+
+  --theme-primary: oklch(
+    var(--theme-lightness) var(--theme-chroma) var(--theme-hue)
+  );
+  --theme-secondary: oklch(
+    calc(var(--theme-lightness) + 10%) calc(var(--theme-chroma) * 0.8)
+      var(--theme-hue)
+  );
+  --theme-accent: oklch(
+    calc(var(--theme-lightness) - 10%) calc(var(--theme-chroma) * 1.2)
+      calc(var(--theme-hue) + 60)
+  );
+}
+
+// Theme variants
+.theme-blue {
+  --theme-hue: 240;
+}
+
+.theme-green {
+  --theme-hue: 140;
+}
+
+.theme-purple {
+  --theme-hue: 300;
+}
+
+.theme-orange {
+  --theme-hue: 40;
+}
+
+// =============================================================================
+// CONTRAST CALCULATIONS
+// =============================================================================
+
+// Automatic contrast adjustment
+.text-auto-contrast {
+  color: white;
+  background-color: var(--oklch-primary);
+
+  /* Auto-adjust text color based on background contrast */
+  @supports (color: color-contrast()) {
+    color: color-contrast(var(--oklch-primary) vs black, white);
+  }
+}
+
+// Contrast ratio utilities
+.contrast-high {
+  --min-contrast: 7;
+}
+
+.contrast-medium {
+  --min-contrast: 4.5;
+}
+
+.contrast-low {
+  --min-contrast: 3;
+}
+
+// =============================================================================
+// COLOR UTILITY FUNCTIONS
+// =============================================================================
+
+// Color inversion
+.invert-colors {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+// Color temperature adjustment
+.warmer-colors {
+  filter: sepia(0.3) saturate(1.5) hue-rotate(-10deg);
+}
+
+.cooler-colors {
+  filter: sepia(0.2) saturate(1.2) hue-rotate(10deg);
+}
+
+// =============================================================================
+// ACCESSIBLE COLOR COMBINATIONS
+// =============================================================================
+
+// WCAG compliant combinations
+.accessible-combo-1 {
+  background-color: oklch(95% 0.05 240); /* Light blue background */
+  color: oklch(20% 0.05 240); /* Dark blue text */
+}
+
+.accessible-combo-2 {
+  background-color: oklch(15% 0.05 60); /* Dark green background */
+  color: oklch(90% 0.05 60); /* Light green text */
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .auto-contrast {
+    border: 2px solid currentColor;
+    outline: 2px solid;
+  }
+}
+
+// =============================================================================
+// DEBUGGING & VISUALIZATION
+// =============================================================================
+
+// Color picker visualization
+.color-picker-preview {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #ccc;
+  position: relative;
+
+  &::after {
+    content: "L: " attr(data-lightness) " C: " attr(data-chroma) " H: "
+      attr(data-hue);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px;
+    font-size: 12px;
+  }
+}
+
+// Color harmony visualization
+.color-harmony-wheel {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  position: relative;
+  background: conic-gradient(
+    oklch(60% 0.2 0),
+    oklch(60% 0.2 60),
+    oklch(60% 0.2 120),
+    oklch(60% 0.2 180),
+    oklch(60% 0.2 240),
+    oklch(60% 0.2 300),
+    oklch(60% 0.2 360)
+  );
+}
+
+// =============================================================================
+// BROWSER SUPPORT NOTES
+// =============================================================================
+// OKLCH and color-mix() support:
+// - Chrome 111+
+// - Firefox 113+
+// - Safari 16.4+
+// - Edge 111+
+//
+// For older browsers, provide fallbacks:
+//
+// .element {
+//   background-color: #3b82f6; /* Fallback */
+//   background-color: oklch(60% 0.2 240); /* Modern */
+// }

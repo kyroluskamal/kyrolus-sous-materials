@@ -1,0 +1,624 @@
+// =============================================================================
+// LOGICAL PROPERTIES UTILITIES
+// =============================================================================
+// Full RTL/LTR support using CSS logical properties
+// Automatically adapts to text direction without separate stylesheets
+// Works with dir="ltr" and dir="rtl" seamlessly
+
+// =============================================================================
+// MARGIN - BLOCK (TOP/BOTTOM)
+// =============================================================================
+
+$spacing-values: (
+  0: 0,
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 0.75rem,
+  4: 1rem,
+  5: 1.25rem,
+  6: 1.5rem,
+  8: 2rem,
+  10: 2.5rem,
+  12: 3rem,
+  16: 4rem,
+  20: 5rem,
+  24: 6rem,
+  auto: auto,
+  px: 1px,
+);
+
+/// Margin block (top and bottom)
+@each $key, $value in $spacing-values {
+  .mbs-#{$key} {
+    margin-block-start: $value;
+  }
+  .mbe-#{$key} {
+    margin-block-end: $value;
+  }
+  .mb-#{$key} {
+    margin-block: $value;
+  }
+}
+
+// =============================================================================
+// MARGIN - INLINE (START/END - DIRECTION AWARE)
+// =============================================================================
+
+/// Margin inline (left/right in LTR, right/left in RTL)
+@each $key, $value in $spacing-values {
+  .mis-#{$key} {
+    margin-inline-start: $value;
+  }
+  .mie-#{$key} {
+    margin-inline-end: $value;
+  }
+  .mi-#{$key} {
+    margin-inline: $value;
+  }
+}
+
+// =============================================================================
+// PADDING - BLOCK (TOP/BOTTOM)
+// =============================================================================
+
+/// Padding block (top and bottom)
+@each $key, $value in $spacing-values {
+  @if $key != auto {
+    .pbs-#{$key} {
+      padding-block-start: $value;
+    }
+    .pbe-#{$key} {
+      padding-block-end: $value;
+    }
+    .pb-#{$key} {
+      padding-block: $value;
+    }
+  }
+}
+
+// =============================================================================
+// PADDING - INLINE (START/END - DIRECTION AWARE)
+// =============================================================================
+
+/// Padding inline (left/right in LTR, right/left in RTL)
+@each $key, $value in $spacing-values {
+  @if $key != auto {
+    .pis-#{$key} {
+      padding-inline-start: $value;
+    }
+    .pie-#{$key} {
+      padding-inline-end: $value;
+    }
+    .pi-#{$key} {
+      padding-inline: $value;
+    }
+  }
+}
+
+// =============================================================================
+// INSET (POSITIONING)
+// =============================================================================
+
+$inset-values: (
+  0: 0,
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 0.75rem,
+  4: 1rem,
+  6: 1.5rem,
+  8: 2rem,
+  auto: auto,
+  full: 100%,
+);
+
+/// Inset block (top/bottom)
+@each $key, $value in $inset-values {
+  .inset-bs-#{$key} {
+    inset-block-start: $value;
+  }
+  .inset-be-#{$key} {
+    inset-block-end: $value;
+  }
+  .inset-b-#{$key} {
+    inset-block: $value;
+  }
+}
+
+/// Inset inline (start/end - direction aware)
+@each $key, $value in $inset-values {
+  .inset-is-#{$key} {
+    inset-inline-start: $value;
+  }
+  .inset-ie-#{$key} {
+    inset-inline-end: $value;
+  }
+  .inset-i-#{$key} {
+    inset-inline: $value;
+  }
+}
+
+// =============================================================================
+// SIZING - BLOCK/INLINE DIMENSIONS
+// =============================================================================
+
+$size-values: (
+  0: 0,
+  px: 1px,
+  1: 0.25rem,
+  2: 0.5rem,
+  4: 1rem,
+  8: 2rem,
+  16: 4rem,
+  24: 6rem,
+  32: 8rem,
+  48: 12rem,
+  64: 16rem,
+  auto: auto,
+  full: 100%,
+  screen: 100vw,
+  min: min-content,
+  max: max-content,
+  fit: fit-content,
+);
+
+/// Block size (height in horizontal writing mode)
+@each $key, $value in $size-values {
+  .bs-#{$key} {
+    block-size: $value;
+  }
+  .min-bs-#{$key} {
+    min-block-size: $value;
+  }
+  .max-bs-#{$key} {
+    max-block-size: $value;
+  }
+}
+
+/// Inline size (width in horizontal writing mode)
+@each $key, $value in $size-values {
+  .is-#{$key} {
+    inline-size: $value;
+  }
+  .min-is-#{$key} {
+    min-inline-size: $value;
+  }
+  .max-is-#{$key} {
+    max-inline-size: $value;
+  }
+}
+
+// =============================================================================
+// BORDER - LOGICAL PROPERTIES
+// =============================================================================
+
+/// Border block
+.border-bs {
+  border-block-start: 1px solid var(--border);
+}
+.border-be {
+  border-block-end: 1px solid var(--border);
+}
+.border-b {
+  border-block: 1px solid var(--border);
+}
+
+/// Border inline (direction aware)
+.border-is {
+  border-inline-start: 1px solid var(--border);
+}
+.border-ie {
+  border-inline-end: 1px solid var(--border);
+}
+.border-i {
+  border-inline: 1px solid var(--border);
+}
+
+/// Border width variants
+@each $width in (0, 2, 4, 8) {
+  .border-bs-#{$width} {
+    border-block-start-width: #{$width}px;
+  }
+  .border-be-#{$width} {
+    border-block-end-width: #{$width}px;
+  }
+  .border-is-#{$width} {
+    border-inline-start-width: #{$width}px;
+  }
+  .border-ie-#{$width} {
+    border-inline-end-width: #{$width}px;
+  }
+}
+
+// =============================================================================
+// BORDER RADIUS - LOGICAL PROPERTIES
+// =============================================================================
+
+$radius-values: (
+  none: 0,
+  sm: 0.125rem,
+  md: 0.375rem,
+  lg: 0.5rem,
+  xl: 0.75rem,
+  2xl: 1rem,
+  3xl: 1.5rem,
+  full: 9999px,
+);
+
+/// Border radius - start-start (top-left in LTR, top-right in RTL)
+@each $key, $value in $radius-values {
+  .rounded-ss-#{$key} {
+    border-start-start-radius: $value;
+  }
+  .rounded-se-#{$key} {
+    border-start-end-radius: $value;
+  }
+  .rounded-es-#{$key} {
+    border-end-start-radius: $value;
+  }
+  .rounded-ee-#{$key} {
+    border-end-end-radius: $value;
+  }
+}
+
+/// Border radius - start side (top corners in horizontal mode)
+@each $key, $value in $radius-values {
+  .rounded-s-#{$key} {
+    border-start-start-radius: $value;
+    border-start-end-radius: $value;
+  }
+  .rounded-e-#{$key} {
+    border-end-start-radius: $value;
+    border-end-end-radius: $value;
+  }
+}
+
+// =============================================================================
+// TEXT ALIGNMENT - LOGICAL
+// =============================================================================
+
+/// Text align start (left in LTR, right in RTL)
+.text-start {
+  text-align: start;
+}
+
+/// Text align end (right in LTR, left in RTL)
+.text-end {
+  text-align: end;
+}
+
+// =============================================================================
+// FLOAT - LOGICAL PROPERTIES
+// =============================================================================
+
+/// Float inline-start (left in LTR, right in RTL)
+.float-start {
+  float: inline-start;
+}
+
+/// Float inline-end (right in LTR, left in RTL)
+.float-end {
+  float: inline-end;
+}
+
+// =============================================================================
+// CLEAR - LOGICAL PROPERTIES
+// =============================================================================
+
+.clear-start {
+  clear: inline-start;
+}
+
+.clear-end {
+  clear: inline-end;
+}
+
+// =============================================================================
+// RESIZE - LOGICAL PROPERTIES
+// =============================================================================
+
+.resize-block {
+  resize: block;
+}
+
+.resize-inline {
+  resize: inline;
+}
+
+// =============================================================================
+// OVERFLOW - LOGICAL PROPERTIES
+// =============================================================================
+
+.overflow-block-auto {
+  overflow-block: auto;
+}
+.overflow-block-hidden {
+  overflow-block: hidden;
+}
+.overflow-block-scroll {
+  overflow-block: scroll;
+}
+.overflow-block-visible {
+  overflow-block: visible;
+}
+
+.overflow-inline-auto {
+  overflow-inline: auto;
+}
+.overflow-inline-hidden {
+  overflow-inline: hidden;
+}
+.overflow-inline-scroll {
+  overflow-inline: scroll;
+}
+.overflow-inline-visible {
+  overflow-inline: visible;
+}
+
+// =============================================================================
+// SCROLL MARGIN/PADDING - LOGICAL
+// =============================================================================
+
+@each $key, $value in $spacing-values {
+  @if $key != auto {
+    .scroll-mbs-#{$key} {
+      scroll-margin-block-start: $value;
+    }
+    .scroll-mbe-#{$key} {
+      scroll-margin-block-end: $value;
+    }
+    .scroll-mis-#{$key} {
+      scroll-margin-inline-start: $value;
+    }
+    .scroll-mie-#{$key} {
+      scroll-margin-inline-end: $value;
+    }
+
+    .scroll-pbs-#{$key} {
+      scroll-padding-block-start: $value;
+    }
+    .scroll-pbe-#{$key} {
+      scroll-padding-block-end: $value;
+    }
+    .scroll-pis-#{$key} {
+      scroll-padding-inline-start: $value;
+    }
+    .scroll-pie-#{$key} {
+      scroll-padding-inline-end: $value;
+    }
+  }
+}
+
+// =============================================================================
+// FLEXBOX LOGICAL UTILITIES
+// =============================================================================
+
+/// Justify content with logical values
+.justify-start-logical {
+  justify-content: flex-start;
+}
+.justify-end-logical {
+  justify-content: flex-end;
+}
+
+/// Align items with logical values
+.items-start-logical {
+  align-items: flex-start;
+}
+.items-end-logical {
+  align-items: flex-end;
+}
+
+/// Self alignment
+.self-start-logical {
+  align-self: flex-start;
+  justify-self: start;
+}
+.self-end-logical {
+  align-self: flex-end;
+  justify-self: end;
+}
+
+// =============================================================================
+// DIRECTION UTILITIES
+// =============================================================================
+
+/// Force LTR direction
+.dir-ltr {
+  direction: ltr;
+}
+
+/// Force RTL direction
+.dir-rtl {
+  direction: rtl;
+}
+
+/// Inherit direction from parent
+.dir-inherit {
+  direction: inherit;
+}
+
+/// Unicode bidi utilities
+.bidi-normal {
+  unicode-bidi: normal;
+}
+.bidi-embed {
+  unicode-bidi: embed;
+}
+.bidi-isolate {
+  unicode-bidi: isolate;
+}
+.bidi-override {
+  unicode-bidi: bidi-override;
+}
+.bidi-isolate-override {
+  unicode-bidi: isolate-override;
+}
+.bidi-plaintext {
+  unicode-bidi: plaintext;
+}
+
+// =============================================================================
+// WRITING MODE UTILITIES
+// =============================================================================
+
+/// Horizontal top-to-bottom (default)
+.writing-horizontal {
+  writing-mode: horizontal-tb;
+}
+
+/// Vertical right-to-left
+.writing-vertical-rl {
+  writing-mode: vertical-rl;
+}
+
+/// Vertical left-to-right
+.writing-vertical-lr {
+  writing-mode: vertical-lr;
+}
+
+/// Sideways right-to-left
+.writing-sideways-rl {
+  writing-mode: sideways-rl;
+}
+
+/// Sideways left-to-right
+.writing-sideways-lr {
+  writing-mode: sideways-lr;
+}
+
+// =============================================================================
+// TRANSFORM ORIGIN - LOGICAL
+// =============================================================================
+
+.origin-block-start {
+  transform-origin: center top;
+}
+.origin-block-end {
+  transform-origin: center bottom;
+}
+.origin-inline-start {
+  transform-origin: left center;
+
+  [dir="rtl"] & {
+    transform-origin: right center;
+  }
+}
+.origin-inline-end {
+  transform-origin: right center;
+
+  [dir="rtl"] & {
+    transform-origin: left center;
+  }
+}
+
+// =============================================================================
+// FLIP/MIRROR FOR RTL
+// =============================================================================
+
+/// Mirror element in RTL (for icons, arrows, etc.)
+.rtl-flip {
+  [dir="rtl"] & {
+    transform: scaleX(-1);
+  }
+}
+
+/// Don't flip in RTL (for logos, images, etc.)
+.rtl-no-flip {
+  [dir="rtl"] & {
+    transform: none;
+  }
+}
+
+/// Flip rotation in RTL
+.rtl-rotate-flip {
+  [dir="rtl"] & {
+    --tw-rotate: calc(var(--tw-rotate, 0deg) * -1);
+  }
+}
+
+// =============================================================================
+// LOGICAL PROPERTY MIXINS
+// =============================================================================
+
+/// Apply margin inline
+/// @param {Length} $start - Margin inline start
+/// @param {Length} $end - Margin inline end (defaults to $start)
+@mixin margin-inline($start, $end: $start) {
+  margin-inline-start: $start;
+  margin-inline-end: $end;
+}
+
+/// Apply margin block
+/// @param {Length} $start - Margin block start
+/// @param {Length} $end - Margin block end (defaults to $start)
+@mixin margin-block($start, $end: $start) {
+  margin-block-start: $start;
+  margin-block-end: $end;
+}
+
+/// Apply padding inline
+/// @param {Length} $start - Padding inline start
+/// @param {Length} $end - Padding inline end (defaults to $start)
+@mixin padding-inline($start, $end: $start) {
+  padding-inline-start: $start;
+  padding-inline-end: $end;
+}
+
+/// Apply padding block
+/// @param {Length} $start - Padding block start
+/// @param {Length} $end - Padding block end (defaults to $start)
+@mixin padding-block($start, $end: $start) {
+  padding-block-start: $start;
+  padding-block-end: $end;
+}
+
+/// Apply logical border radius
+/// @param {Length} $ss - Start-start corner
+/// @param {Length} $se - Start-end corner
+/// @param {Length} $ee - End-end corner
+/// @param {Length} $es - End-start corner
+@mixin border-radius-logical($ss, $se: $ss, $ee: $ss, $es: $se) {
+  border-start-start-radius: $ss;
+  border-start-end-radius: $se;
+  border-end-end-radius: $ee;
+  border-end-start-radius: $es;
+}
+
+/// Apply logical inset
+/// @param {Length} $block-start - Inset block start
+/// @param {Length} $inline-end - Inset inline end
+/// @param {Length} $block-end - Inset block end
+/// @param {Length} $inline-start - Inset inline start
+@mixin inset-logical(
+  $block-start,
+  $inline-end: $block-start,
+  $block-end: $block-start,
+  $inline-start: $inline-end
+) {
+  inset-block-start: $block-start;
+  inset-inline-end: $inline-end;
+  inset-block-end: $block-end;
+  inset-inline-start: $inline-start;
+}
+
+// =============================================================================
+// SHORTHAND UTILITIES
+// =============================================================================
+
+/// Common logical spacing patterns
+.space-x-reverse > :not(:first-child) {
+  margin-inline-start: var(--space-x, 0.5rem);
+}
+
+.space-x > :not(:last-child) {
+  margin-inline-end: var(--space-x, 0.5rem);
+}
+
+/// Divide utilities with logical properties
+.divide-x > :not(:first-child) {
+  border-inline-start: 1px solid var(--border);
+}
+
+.divide-x-reverse > :not(:last-child) {
+  border-inline-end: 1px solid var(--border);
+}

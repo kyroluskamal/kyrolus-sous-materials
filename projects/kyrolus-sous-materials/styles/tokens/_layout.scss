@@ -1,0 +1,1299 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - LAYOUT UTILITIES
+// =============================================================================
+// Comprehensive layout utilities including flexbox, grid, display,
+// positioning, and responsive layout patterns.
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// DISPLAY UTILITIES
+// =============================================================================
+.hidden {
+  display: none;
+}
+.block {
+  display: block;
+}
+.inline-block {
+  display: inline-block;
+}
+.inline {
+  display: inline;
+}
+.flex {
+  display: flex;
+}
+.inline-flex {
+  display: inline-flex;
+}
+.grid {
+  display: grid;
+}
+.inline-grid {
+  display: inline-grid;
+}
+.table {
+  display: table;
+}
+.inline-table {
+  display: inline-table;
+}
+.table-caption {
+  display: table-caption;
+}
+.table-cell {
+  display: table-cell;
+}
+.table-column {
+  display: table-column;
+}
+.table-column-group {
+  display: table-column-group;
+}
+.table-footer-group {
+  display: table-footer-group;
+}
+.table-header-group {
+  display: table-header-group;
+}
+.table-row-group {
+  display: table-row-group;
+}
+.table-row {
+  display: table-row;
+}
+.flow-root {
+  display: flow-root;
+}
+.contents {
+  display: contents;
+}
+.list-item {
+  display: list-item;
+}
+
+// =============================================================================
+// FLEXBOX UTILITIES
+// =============================================================================
+
+// Flex direction
+.flex-row {
+  flex-direction: row;
+}
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+.flex-col {
+  flex-direction: column;
+}
+.flex-col-reverse {
+  flex-direction: column-reverse;
+}
+
+// Flex wrap
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.flex-wrap-reverse {
+  flex-wrap: wrap-reverse;
+}
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+// Flex (shorthand)
+.flex-1 {
+  flex: 1 1 0%;
+}
+.flex-auto {
+  flex: 1 1 auto;
+}
+.flex-initial {
+  flex: 0 1 auto;
+}
+.flex-none {
+  flex: none;
+}
+
+// Flex grow
+.grow {
+  flex-grow: 1;
+}
+.grow-0 {
+  flex-grow: 0;
+}
+
+// Flex shrink
+.shrink {
+  flex-shrink: 1;
+}
+.shrink-0 {
+  flex-shrink: 0;
+}
+
+// Flex basis
+$flex-basis-values: (
+  "0": 0%,
+  "1": 8.333333%,
+  "2": 16.666667%,
+  "3": 25%,
+  "4": 33.333333%,
+  "5": 41.666667%,
+  "6": 50%,
+  "7": 58.333333%,
+  "8": 66.666667%,
+  "9": 75%,
+  "10": 83.333333%,
+  "11": 91.666667%,
+  "12": 100%,
+  "auto": auto,
+  "full": 100%,
+);
+
+@each $name, $value in $flex-basis-values {
+  .basis-#{$name} {
+    flex-basis: $value;
+  }
+}
+
+// =============================================================================
+// GRID UTILITIES
+// =============================================================================
+
+// Grid template columns
+@for $i from 1 through 12 {
+  .grid-cols-#{$i} {
+    grid-template-columns: repeat($i, minmax(0, 1fr));
+  }
+}
+.grid-cols-none {
+  grid-template-columns: none;
+}
+.grid-cols-subgrid {
+  grid-template-columns: subgrid;
+}
+
+// Grid template rows
+@for $i from 1 through 6 {
+  .grid-rows-#{$i} {
+    grid-template-rows: repeat($i, minmax(0, 1fr));
+  }
+}
+.grid-rows-none {
+  grid-template-rows: none;
+}
+.grid-rows-subgrid {
+  grid-template-rows: subgrid;
+}
+
+// Grid column span
+@for $i from 1 through 12 {
+  .col-span-#{$i} {
+    grid-column: span $i / span $i;
+  }
+}
+.col-span-full {
+  grid-column: 1 / -1;
+}
+.col-auto {
+  grid-column: auto;
+}
+
+// Grid column start/end
+@for $i from 1 through 13 {
+  .col-start-#{$i} {
+    grid-column-start: $i;
+  }
+  .col-end-#{$i} {
+    grid-column-end: $i;
+  }
+}
+.col-start-auto {
+  grid-column-start: auto;
+}
+.col-end-auto {
+  grid-column-end: auto;
+}
+
+// Grid row span
+@for $i from 1 through 6 {
+  .row-span-#{$i} {
+    grid-row: span $i / span $i;
+  }
+}
+.row-span-full {
+  grid-row: 1 / -1;
+}
+.row-auto {
+  grid-row: auto;
+}
+
+// Grid row start/end
+@for $i from 1 through 7 {
+  .row-start-#{$i} {
+    grid-row-start: $i;
+  }
+  .row-end-#{$i} {
+    grid-row-end: $i;
+  }
+}
+.row-start-auto {
+  grid-row-start: auto;
+}
+.row-end-auto {
+  grid-row-end: auto;
+}
+
+// Grid auto flow
+.grid-flow-row {
+  grid-auto-flow: row;
+}
+.grid-flow-col {
+  grid-auto-flow: column;
+}
+.grid-flow-dense {
+  grid-auto-flow: dense;
+}
+.grid-flow-row-dense {
+  grid-auto-flow: row dense;
+}
+.grid-flow-col-dense {
+  grid-auto-flow: column dense;
+}
+
+// Grid auto columns
+.auto-cols-auto {
+  grid-auto-columns: auto;
+}
+.auto-cols-min {
+  grid-auto-columns: min-content;
+}
+.auto-cols-max {
+  grid-auto-columns: max-content;
+}
+.auto-cols-fr {
+  grid-auto-columns: minmax(0, 1fr);
+}
+
+// Grid auto rows
+.auto-rows-auto {
+  grid-auto-rows: auto;
+}
+.auto-rows-min {
+  grid-auto-rows: min-content;
+}
+.auto-rows-max {
+  grid-auto-rows: max-content;
+}
+.auto-rows-fr {
+  grid-auto-rows: minmax(0, 1fr);
+}
+
+// =============================================================================
+// ALIGNMENT UTILITIES
+// =============================================================================
+
+// Justify content
+.justify-normal {
+  justify-content: normal;
+}
+.justify-start {
+  justify-content: flex-start;
+}
+.justify-end {
+  justify-content: flex-end;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-around {
+  justify-content: space-around;
+}
+.justify-evenly {
+  justify-content: space-evenly;
+}
+.justify-stretch {
+  justify-content: stretch;
+}
+
+// Justify items
+.justify-items-start {
+  justify-items: start;
+}
+.justify-items-end {
+  justify-items: end;
+}
+.justify-items-center {
+  justify-items: center;
+}
+.justify-items-stretch {
+  justify-items: stretch;
+}
+
+// Justify self
+.justify-self-auto {
+  justify-self: auto;
+}
+.justify-self-start {
+  justify-self: start;
+}
+.justify-self-end {
+  justify-self: end;
+}
+.justify-self-center {
+  justify-self: center;
+}
+.justify-self-stretch {
+  justify-self: stretch;
+}
+
+// Align content
+.content-normal {
+  align-content: normal;
+}
+.content-center {
+  align-content: center;
+}
+.content-start {
+  align-content: flex-start;
+}
+.content-end {
+  align-content: flex-end;
+}
+.content-between {
+  align-content: space-between;
+}
+.content-around {
+  align-content: space-around;
+}
+.content-evenly {
+  align-content: space-evenly;
+}
+.content-baseline {
+  align-content: baseline;
+}
+.content-stretch {
+  align-content: stretch;
+}
+
+// Align items
+.items-start {
+  align-items: flex-start;
+}
+.items-end {
+  align-items: flex-end;
+}
+.items-center {
+  align-items: center;
+}
+.items-baseline {
+  align-items: baseline;
+}
+.items-stretch {
+  align-items: stretch;
+}
+
+// Align self
+.self-auto {
+  align-self: auto;
+}
+.self-start {
+  align-self: flex-start;
+}
+.self-end {
+  align-self: flex-end;
+}
+.self-center {
+  align-self: center;
+}
+.self-stretch {
+  align-self: stretch;
+}
+.self-baseline {
+  align-self: baseline;
+}
+
+// Place content
+.place-content-center {
+  place-content: center;
+}
+.place-content-start {
+  place-content: start;
+}
+.place-content-end {
+  place-content: end;
+}
+.place-content-between {
+  place-content: space-between;
+}
+.place-content-around {
+  place-content: space-around;
+}
+.place-content-evenly {
+  place-content: space-evenly;
+}
+.place-content-baseline {
+  place-content: baseline;
+}
+.place-content-stretch {
+  place-content: stretch;
+}
+
+// Place items
+.place-items-start {
+  place-items: start;
+}
+.place-items-end {
+  place-items: end;
+}
+.place-items-center {
+  place-items: center;
+}
+.place-items-baseline {
+  place-items: baseline;
+}
+.place-items-stretch {
+  place-items: stretch;
+}
+
+// Place self
+.place-self-auto {
+  place-self: auto;
+}
+.place-self-start {
+  place-self: start;
+}
+.place-self-end {
+  place-self: end;
+}
+.place-self-center {
+  place-self: center;
+}
+.place-self-stretch {
+  place-self: stretch;
+}
+
+// =============================================================================
+// ORDER UTILITIES
+// =============================================================================
+.order-first {
+  order: -9999;
+}
+.order-last {
+  order: 9999;
+}
+.order-none {
+  order: 0;
+}
+
+@for $i from 1 through 12 {
+  .order-#{$i} {
+    order: $i;
+  }
+}
+
+// =============================================================================
+// POSITION UTILITIES
+// =============================================================================
+.static {
+  position: static;
+}
+.fixed {
+  position: fixed;
+}
+.absolute {
+  position: absolute;
+}
+.relative {
+  position: relative;
+}
+.sticky {
+  position: sticky;
+}
+
+// =============================================================================
+// VISIBILITY UTILITIES
+// =============================================================================
+.visible {
+  visibility: visible;
+}
+.invisible {
+  visibility: hidden;
+}
+.collapse {
+  visibility: collapse;
+}
+
+// =============================================================================
+// Z-INDEX UTILITIES
+// =============================================================================
+@each $name, $value in $z-indices {
+  .z-#{$name} {
+    z-index: $value;
+  }
+}
+
+// Negative z-index
+.-z-10 {
+  z-index: -10;
+}
+.-z-20 {
+  z-index: -20;
+}
+.-z-30 {
+  z-index: -30;
+}
+.-z-40 {
+  z-index: -40;
+}
+.-z-50 {
+  z-index: -50;
+}
+
+// =============================================================================
+// OVERFLOW UTILITIES
+// =============================================================================
+.overflow-auto {
+  overflow: auto;
+}
+.overflow-hidden {
+  overflow: hidden;
+}
+.overflow-clip {
+  overflow: clip;
+}
+.overflow-visible {
+  overflow: visible;
+}
+.overflow-scroll {
+  overflow: scroll;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+.overflow-x-clip {
+  overflow-x: clip;
+}
+.overflow-x-visible {
+  overflow-x: visible;
+}
+.overflow-x-scroll {
+  overflow-x: scroll;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+.overflow-y-hidden {
+  overflow-y: hidden;
+}
+.overflow-y-clip {
+  overflow-y: clip;
+}
+.overflow-y-visible {
+  overflow-y: visible;
+}
+.overflow-y-scroll {
+  overflow-y: scroll;
+}
+
+// =============================================================================
+// FLOAT UTILITIES
+// =============================================================================
+.float-start {
+  float: inline-start;
+}
+.float-end {
+  float: inline-end;
+}
+.float-right {
+  float: right;
+}
+.float-left {
+  float: left;
+}
+.float-none {
+  float: none;
+}
+
+// =============================================================================
+// CLEAR UTILITIES
+// =============================================================================
+.clear-start {
+  clear: inline-start;
+}
+.clear-end {
+  clear: inline-end;
+}
+.clear-left {
+  clear: left;
+}
+.clear-right {
+  clear: right;
+}
+.clear-both {
+  clear: both;
+}
+.clear-none {
+  clear: none;
+}
+
+// =============================================================================
+// BOX SIZING UTILITIES
+// =============================================================================
+.box-border {
+  box-sizing: border-box;
+}
+.box-content {
+  box-sizing: content-box;
+}
+
+// =============================================================================
+// CONTAINER UTILITIES
+// =============================================================================
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-4);
+  padding-right: var(--spacing-4);
+
+  @each $name, $size in $containers {
+    @media (min-width: map.get($breakpoints, $name)) {
+      max-width: $size;
+    }
+  }
+}
+
+// Fixed containers
+@each $name, $size in $containers {
+  .container-#{$name} {
+    width: 100%;
+    max-width: $size;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--spacing-4);
+    padding-right: var(--spacing-4);
+  }
+}
+
+// =============================================================================
+// COLUMNS UTILITIES
+// =============================================================================
+$column-counts: (
+  "1": 1,
+  "2": 2,
+  "3": 3,
+  "4": 4,
+  "5": 5,
+  "6": 6,
+  "7": 7,
+  "8": 8,
+  "9": 9,
+  "10": 10,
+  "11": 11,
+  "12": 12,
+  "auto": auto,
+);
+
+@each $name, $value in $column-counts {
+  .columns-#{$name} {
+    columns: $value;
+  }
+}
+
+// Column widths
+$column-widths: (
+  "3xs": 16rem,
+  "2xs": 18rem,
+  "xs": 20rem,
+  "sm": 24rem,
+  "md": 28rem,
+  "lg": 32rem,
+  "xl": 36rem,
+  "2xl": 42rem,
+  "3xl": 48rem,
+  "4xl": 56rem,
+  "5xl": 64rem,
+  "6xl": 72rem,
+  "7xl": 80rem,
+);
+
+@each $name, $value in $column-widths {
+  .columns-#{$name} {
+    columns: $value;
+  }
+}
+
+// =============================================================================
+// BREAK UTILITIES
+// =============================================================================
+
+// Break after
+.break-after-auto {
+  break-after: auto;
+}
+.break-after-avoid {
+  break-after: avoid;
+}
+.break-after-all {
+  break-after: all;
+}
+.break-after-avoid-page {
+  break-after: avoid-page;
+}
+.break-after-page {
+  break-after: page;
+}
+.break-after-left {
+  break-after: left;
+}
+.break-after-right {
+  break-after: right;
+}
+.break-after-column {
+  break-after: column;
+}
+
+// Break before
+.break-before-auto {
+  break-before: auto;
+}
+.break-before-avoid {
+  break-before: avoid;
+}
+.break-before-all {
+  break-before: all;
+}
+.break-before-avoid-page {
+  break-before: avoid-page;
+}
+.break-before-page {
+  break-before: page;
+}
+.break-before-left {
+  break-before: left;
+}
+.break-before-right {
+  break-before: right;
+}
+.break-before-column {
+  break-before: column;
+}
+
+// Break inside
+.break-inside-auto {
+  break-inside: auto;
+}
+.break-inside-avoid {
+  break-inside: avoid;
+}
+.break-inside-avoid-page {
+  break-inside: avoid-page;
+}
+.break-inside-avoid-column {
+  break-inside: avoid-column;
+}
+
+// =============================================================================
+// BOX DECORATION UTILITIES
+// =============================================================================
+.box-decoration-clone {
+  box-decoration-break: clone;
+}
+.box-decoration-slice {
+  box-decoration-break: slice;
+}
+
+// =============================================================================
+// RESPONSIVE LAYOUT UTILITIES
+// =============================================================================
+@each $bp-name, $bp-value in $breakpoints {
+  @if $bp-value > 0 {
+    @media (min-width: $bp-value) {
+      // Display
+      .#{$bp-name}\:hidden {
+        display: none;
+      }
+      .#{$bp-name}\:block {
+        display: block;
+      }
+      .#{$bp-name}\:inline-block {
+        display: inline-block;
+      }
+      .#{$bp-name}\:inline {
+        display: inline;
+      }
+      .#{$bp-name}\:flex {
+        display: flex;
+      }
+      .#{$bp-name}\:inline-flex {
+        display: inline-flex;
+      }
+      .#{$bp-name}\:grid {
+        display: grid;
+      }
+      .#{$bp-name}\:inline-grid {
+        display: inline-grid;
+      }
+
+      // Flex direction
+      .#{$bp-name}\:flex-row {
+        flex-direction: row;
+      }
+      .#{$bp-name}\:flex-row-reverse {
+        flex-direction: row-reverse;
+      }
+      .#{$bp-name}\:flex-col {
+        flex-direction: column;
+      }
+      .#{$bp-name}\:flex-col-reverse {
+        flex-direction: column-reverse;
+      }
+
+      // Flex wrap
+      .#{$bp-name}\:flex-wrap {
+        flex-wrap: wrap;
+      }
+      .#{$bp-name}\:flex-nowrap {
+        flex-wrap: nowrap;
+      }
+
+      // Grid columns
+      @for $i from 1 through 12 {
+        .#{$bp-name}\:grid-cols-#{$i} {
+          grid-template-columns: repeat($i, minmax(0, 1fr));
+        }
+      }
+
+      // Grid rows
+      @for $i from 1 through 6 {
+        .#{$bp-name}\:grid-rows-#{$i} {
+          grid-template-rows: repeat($i, minmax(0, 1fr));
+        }
+      }
+
+      // Column span
+      @for $i from 1 through 12 {
+        .#{$bp-name}\:col-span-#{$i} {
+          grid-column: span $i / span $i;
+        }
+      }
+      .#{$bp-name}\:col-span-full {
+        grid-column: 1 / -1;
+      }
+
+      // Row span
+      @for $i from 1 through 6 {
+        .#{$bp-name}\:row-span-#{$i} {
+          grid-row: span $i / span $i;
+        }
+      }
+
+      // Justify content
+      .#{$bp-name}\:justify-start {
+        justify-content: flex-start;
+      }
+      .#{$bp-name}\:justify-end {
+        justify-content: flex-end;
+      }
+      .#{$bp-name}\:justify-center {
+        justify-content: center;
+      }
+      .#{$bp-name}\:justify-between {
+        justify-content: space-between;
+      }
+      .#{$bp-name}\:justify-around {
+        justify-content: space-around;
+      }
+      .#{$bp-name}\:justify-evenly {
+        justify-content: space-evenly;
+      }
+
+      // Align items
+      .#{$bp-name}\:items-start {
+        align-items: flex-start;
+      }
+      .#{$bp-name}\:items-end {
+        align-items: flex-end;
+      }
+      .#{$bp-name}\:items-center {
+        align-items: center;
+      }
+      .#{$bp-name}\:items-baseline {
+        align-items: baseline;
+      }
+      .#{$bp-name}\:items-stretch {
+        align-items: stretch;
+      }
+
+      // Order
+      .#{$bp-name}\:order-first {
+        order: -9999;
+      }
+      .#{$bp-name}\:order-last {
+        order: 9999;
+      }
+      .#{$bp-name}\:order-none {
+        order: 0;
+      }
+      @for $i from 1 through 12 {
+        .#{$bp-name}\:order-#{$i} {
+          order: $i;
+        }
+      }
+
+      // Position
+      .#{$bp-name}\:static {
+        position: static;
+      }
+      .#{$bp-name}\:fixed {
+        position: fixed;
+      }
+      .#{$bp-name}\:absolute {
+        position: absolute;
+      }
+      .#{$bp-name}\:relative {
+        position: relative;
+      }
+      .#{$bp-name}\:sticky {
+        position: sticky;
+      }
+
+      // Visibility
+      .#{$bp-name}\:visible {
+        visibility: visible;
+      }
+      .#{$bp-name}\:invisible {
+        visibility: hidden;
+      }
+
+      // Overflow
+      .#{$bp-name}\:overflow-auto {
+        overflow: auto;
+      }
+      .#{$bp-name}\:overflow-hidden {
+        overflow: hidden;
+      }
+      .#{$bp-name}\:overflow-visible {
+        overflow: visible;
+      }
+      .#{$bp-name}\:overflow-scroll {
+        overflow: scroll;
+      }
+    }
+  }
+}
+
+// =============================================================================
+// CONTAINER QUERY RESPONSIVE UTILITIES
+// =============================================================================
+// Use containers for component-level responsive design
+// These utilities respond to the container size, not viewport
+
+// Container types
+.container-inline {
+  container-type: inline-size;
+}
+.container-size {
+  container-type: size;
+}
+.container-normal {
+  container-type: normal;
+}
+
+// Named containers
+.container-card {
+  container-type: inline-size;
+  container-name: card;
+}
+.container-sidebar {
+  container-type: inline-size;
+  container-name: sidebar;
+}
+.container-content {
+  container-type: inline-size;
+  container-name: content;
+}
+.container-modal {
+  container-type: inline-size;
+  container-name: modal;
+}
+.container-section {
+  container-type: inline-size;
+  container-name: section;
+}
+
+// Container query breakpoints
+$container-breakpoints: (
+  "cq-xs": 20rem,
+  // 320px
+  "cq-sm": 24rem,
+  // 384px
+  "cq-md": 28rem,
+  // 448px
+  "cq-lg": 32rem,
+  // 512px
+  "cq-xl": 36rem,
+  // 576px
+  "cq-2xl": 42rem,
+  // 672px
+  "cq-3xl": 48rem,
+  // 768px
+);
+
+// Generate container query responsive utilities
+@each $bp-name, $bp-value in $container-breakpoints {
+  @container (min-width: #{$bp-value}) {
+    // Display
+    .#{$bp-name}\:hidden {
+      display: none;
+    }
+    .#{$bp-name}\:block {
+      display: block;
+    }
+    .#{$bp-name}\:flex {
+      display: flex;
+    }
+    .#{$bp-name}\:grid {
+      display: grid;
+    }
+    .#{$bp-name}\:inline {
+      display: inline;
+    }
+    .#{$bp-name}\:inline-flex {
+      display: inline-flex;
+    }
+    .#{$bp-name}\:inline-block {
+      display: inline-block;
+    }
+
+    // Flex direction
+    .#{$bp-name}\:flex-row {
+      flex-direction: row;
+    }
+    .#{$bp-name}\:flex-col {
+      flex-direction: column;
+    }
+    .#{$bp-name}\:flex-row-reverse {
+      flex-direction: row-reverse;
+    }
+    .#{$bp-name}\:flex-col-reverse {
+      flex-direction: column-reverse;
+    }
+
+    // Flex wrap
+    .#{$bp-name}\:flex-wrap {
+      flex-wrap: wrap;
+    }
+    .#{$bp-name}\:flex-nowrap {
+      flex-wrap: nowrap;
+    }
+
+    // Grid columns
+    @for $i from 1 through 12 {
+      .#{$bp-name}\:grid-cols-#{$i} {
+        grid-template-columns: repeat($i, minmax(0, 1fr));
+      }
+    }
+    .#{$bp-name}\:grid-cols-none {
+      grid-template-columns: none;
+    }
+
+    // Grid rows
+    @for $i from 1 through 6 {
+      .#{$bp-name}\:grid-rows-#{$i} {
+        grid-template-rows: repeat($i, minmax(0, 1fr));
+      }
+    }
+
+    // Column span
+    @for $i from 1 through 12 {
+      .#{$bp-name}\:col-span-#{$i} {
+        grid-column: span $i / span $i;
+      }
+    }
+    .#{$bp-name}\:col-span-full {
+      grid-column: 1 / -1;
+    }
+
+    // Gap
+    @each $name, $value in $spacing {
+      .#{$bp-name}\:gap-#{$name} {
+        gap: $value;
+      }
+    }
+
+    // Width
+    .#{$bp-name}\:w-auto {
+      width: auto;
+    }
+    .#{$bp-name}\:w-full {
+      width: 100%;
+    }
+    .#{$bp-name}\:w-1\/2 {
+      width: 50%;
+    }
+    .#{$bp-name}\:w-1\/3 {
+      width: 33.333333%;
+    }
+    .#{$bp-name}\:w-2\/3 {
+      width: 66.666667%;
+    }
+    .#{$bp-name}\:w-1\/4 {
+      width: 25%;
+    }
+    .#{$bp-name}\:w-3\/4 {
+      width: 75%;
+    }
+
+    // Justify
+    .#{$bp-name}\:justify-start {
+      justify-content: flex-start;
+    }
+    .#{$bp-name}\:justify-center {
+      justify-content: center;
+    }
+    .#{$bp-name}\:justify-end {
+      justify-content: flex-end;
+    }
+    .#{$bp-name}\:justify-between {
+      justify-content: space-between;
+    }
+    .#{$bp-name}\:justify-around {
+      justify-content: space-around;
+    }
+    .#{$bp-name}\:justify-evenly {
+      justify-content: space-evenly;
+    }
+
+    // Align items
+    .#{$bp-name}\:items-start {
+      align-items: flex-start;
+    }
+    .#{$bp-name}\:items-center {
+      align-items: center;
+    }
+    .#{$bp-name}\:items-end {
+      align-items: flex-end;
+    }
+    .#{$bp-name}\:items-stretch {
+      align-items: stretch;
+    }
+    .#{$bp-name}\:items-baseline {
+      align-items: baseline;
+    }
+
+    // Text alignment
+    .#{$bp-name}\:text-left {
+      text-align: left;
+    }
+    .#{$bp-name}\:text-center {
+      text-align: center;
+    }
+    .#{$bp-name}\:text-right {
+      text-align: right;
+    }
+    .#{$bp-name}\:text-start {
+      text-align: start;
+    }
+    .#{$bp-name}\:text-end {
+      text-align: end;
+    }
+
+    // Padding
+    @each $name, $value in $spacing {
+      .#{$bp-name}\:p-#{$name} {
+        padding: $value;
+      }
+      .#{$bp-name}\:px-#{$name} {
+        padding-inline: $value;
+      }
+      .#{$bp-name}\:py-#{$name} {
+        padding-block: $value;
+      }
+    }
+
+    // Margin
+    @each $name, $value in $spacing {
+      .#{$bp-name}\:m-#{$name} {
+        margin: $value;
+      }
+      .#{$bp-name}\:mx-#{$name} {
+        margin-inline: $value;
+      }
+      .#{$bp-name}\:my-#{$name} {
+        margin-block: $value;
+      }
+      .#{$bp-name}\:mx-auto {
+        margin-inline: auto;
+      }
+    }
+
+    // Order
+    .#{$bp-name}\:order-first {
+      order: -9999;
+    }
+    .#{$bp-name}\:order-last {
+      order: 9999;
+    }
+    .#{$bp-name}\:order-none {
+      order: 0;
+    }
+    @for $i from 1 through 6 {
+      .#{$bp-name}\:order-#{$i} {
+        order: $i;
+      }
+    }
+  }
+}
+
+// Named container queries (for specific containers)
+@container card (min-width: 20rem) {
+  .card\:flex {
+    display: flex;
+  }
+  .card\:flex-row {
+    flex-direction: row;
+  }
+  .card\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container sidebar (min-width: 16rem) {
+  .sidebar\:block {
+    display: block;
+  }
+  .sidebar\:hidden {
+    display: none;
+  }
+}
+
+@container content (min-width: 32rem) {
+  .content\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .content\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@container modal (min-width: 28rem) {
+  .modal\:flex-row {
+    flex-direction: row;
+  }
+  .modal\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

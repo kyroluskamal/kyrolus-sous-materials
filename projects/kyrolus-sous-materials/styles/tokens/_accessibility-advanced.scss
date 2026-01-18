@@ -1,0 +1,590 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - ADVANCED ACCESSIBILITY FEATURES
+// =============================================================================
+// Comprehensive accessibility utilities and patterns:
+// - Prefers-* media queries
+// - Focus management
+// - Screen reader optimizations
+// - Keyboard navigation enhancements
+// - Cognitive accessibility features
+// - Motion sensitivity controls
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// PREFERENCES MEDIA QUERIES
+// =============================================================================
+
+// Reduced motion preference
+@media (prefers-reduced-motion: reduce) {
+  // Disable all animations and transitions
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  // Preserve essential animations
+  .essential-animation {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: more) {
+  // Enhance borders and outlines
+  * {
+    border-width: 2px !important;
+  }
+
+  // Increase text contrast
+  .high-contrast-text {
+    color: black !important;
+    background-color: white !important;
+  }
+
+  // Enhanced focus indicators
+  :focus {
+    outline: 3px solid yellow !important;
+    outline-offset: 2px !important;
+  }
+}
+
+@media (prefers-contrast: less) {
+  // Reduce harsh contrasts
+  .soft-contrast {
+    border-color: var(
+      --border-color-light,
+      #{map.get($colors, "gray", "300")}
+    ) !important;
+  }
+}
+
+// Color preference (light/dark themes handled elsewhere)
+
+// Reduced transparency preference
+@media (prefers-reduced-transparency: reduce) {
+  // Remove semi-transparent backgrounds
+  .semi-transparent {
+    background-color: var(--surface-solid, white) !important;
+    opacity: 1 !important;
+  }
+
+  // Solid backgrounds instead of glass effects
+  .glass-effect {
+    background-color: var(--surface-1) !important;
+    backdrop-filter: none !important;
+  }
+}
+
+// Reduced data preference (for users who want to save bandwidth)
+@media (prefers-reduced-data: reduce) {
+  // Simplify complex graphics
+  .complex-graphic {
+    display: none !important;
+  }
+
+  // Use simpler alternatives
+  .simple-alternative {
+    display: block !important;
+  }
+}
+
+// =============================================================================
+// FOCUS MANAGEMENT
+// =============================================================================
+
+// Enhanced focus indicators
+.focus-enhanced {
+  &:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+// Focus visible only when keyboard navigating
+.focus-keyboard-only {
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+// Skip to content link
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--color-primary);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  z-index: 1000;
+
+  &:focus {
+    top: 6px;
+  }
+}
+
+// Focus trapping utilities
+.focus-trap {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+  }
+}
+
+// =============================================================================
+// SCREEN READER OPTIMIZATIONS
+// =============================================================================
+
+// Screen reader only content
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Visible to screen readers but not visually
+.sr-only-focusable {
+  &:active,
+  &:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+}
+
+// ARIA landmark roles
+[role="banner"] {
+  // Header/banner region
+  padding: var(--spacing-4);
+  border-bottom: 1px solid var(--border-color);
+}
+
+[role="navigation"] {
+  // Navigation region
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      margin-bottom: var(--spacing-2);
+    }
+  }
+}
+
+[role="main"] {
+  // Main content region
+  min-height: calc(100vh - 200px);
+  padding: var(--spacing-6);
+}
+
+[role="complementary"] {
+  // Sidebar/complementary content
+  padding: var(--spacing-4);
+  background-color: var(--surface-2);
+}
+
+[role="contentinfo"] {
+  // Footer region
+  padding: var(--spacing-4);
+  border-top: 1px solid var(--border-color);
+  margin-top: var(--spacing-8);
+}
+
+// =============================================================================
+// KEYBOARD NAVIGATION ENHANCEMENTS
+// =============================================================================
+
+// Keyboard accessible dropdowns
+.keyboard-dropdown {
+  position: relative;
+
+  .dropdown-toggle {
+    background: none;
+    border: 1px solid var(--border-color);
+    padding: var(--spacing-2) var(--spacing-4);
+    cursor: pointer;
+
+    &:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--surface-1);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    min-width: 200px;
+    z-index: 100;
+    display: none;
+
+    &[aria-expanded="true"] {
+      display: block;
+    }
+
+    .dropdown-item {
+      display: block;
+      padding: var(--spacing-2) var(--spacing-4);
+      text-decoration: none;
+      color: var(--color-text);
+
+      &:hover,
+      &:focus {
+        background-color: var(--surface-2);
+        outline: none;
+      }
+    }
+  }
+}
+
+// Tab navigation patterns
+.tab-list {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+
+  .tab {
+    padding: var(--spacing-3) var(--spacing-4);
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-weight: map.get($font-weights, "medium");
+
+    &:hover {
+      background-color: var(--surface-2);
+    }
+
+    &[aria-selected="true"] {
+      border-bottom-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    &:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: -2px;
+    }
+  }
+}
+
+.tab-panel {
+  display: none;
+  padding: var(--spacing-4);
+
+  &[aria-hidden="false"] {
+    display: block;
+  }
+}
+
+// =============================================================================
+// COGNITIVE ACCESSIBILITY
+// =============================================================================
+
+// Reading mode
+.reading-mode {
+  @media (prefers-contrast: more) {
+    max-width: 65ch;
+    line-height: 1.6;
+    font-size: 1.125rem;
+
+    p {
+      margin-bottom: 1.5em;
+    }
+  }
+}
+
+// Text spacing adjustments
+@media (prefers-reduced-motion: no-preference) {
+  .enhanced-spacing {
+    line-height: 1.5 !important;
+    letter-spacing: 0.12px !important;
+    word-spacing: 0.16px !important;
+  }
+}
+
+// Simplified interface mode
+.simplified-interface {
+  // Note: prefers-reduced-complexity is not yet standardized
+  // This serves as a placeholder for future implementation
+  .complex-animation {
+    // Will be hidden when complexity reduction is supported
+    // display: none !important;
+    opacity: 1; /* Placeholder */
+  }
+
+  .simple-content {
+    // Will be shown when complexity reduction is supported
+    // display: block !important;
+    display: block; /* Placeholder */
+  }
+
+  .minimal-controls {
+    .advanced-options {
+      // Will be hidden in simplified mode
+      // display: none;
+      visibility: visible; /* Placeholder */
+    }
+  }
+}
+
+// =============================================================================
+// MOTION SENSITIVITY CONTROLS
+// =============================================================================
+
+// Parallax reduction
+.parallax-sensitive {
+  @media (prefers-reduced-motion: reduce) {
+    transform: none !important;
+    will-change: auto !important;
+  }
+}
+
+// Auto-play media controls
+.auto-play-control {
+  // Note: CSS cannot control autoplay attribute directly
+  // This is a placeholder for JavaScript integration
+  video,
+  audio {
+    // JavaScript should handle autoplay control based on user preferences
+    // &[autoplay] {
+    //   /* JS will manage autoplay behavior */
+    // }
+    /* Placeholder styles */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+// Scroll behavior adjustments
+.scroll-smooth {
+  scroll-behavior: smooth;
+
+  @media (prefers-reduced-motion: reduce) {
+    scroll-behavior: auto;
+  }
+}
+
+// =============================================================================
+// FORM ACCESSIBILITY
+// =============================================================================
+
+// Enhanced form controls
+.accessible-form {
+  .form-field {
+    margin-bottom: var(--spacing-4);
+
+    label {
+      display: block;
+      margin-bottom: var(--spacing-2);
+      font-weight: map.get($font-weights, "medium");
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: var(--spacing-2) var(--spacing-3);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-base);
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 59, 130, 246), 0.2);
+      }
+
+      &:invalid {
+        border-color: #{map.get($colors, "red", "500")};
+
+        &:focus {
+          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+      }
+    }
+  }
+
+  // Required field indicators
+  .required {
+    label::after {
+      content: " *";
+      color: #{map.get($colors, "red", "500")};
+    }
+  }
+
+  // Help text
+  .help-text {
+    display: block;
+    margin-top: var(--spacing-1);
+    font-size: var(--font-size-sm);
+    color: var(--color-secondary);
+  }
+
+  // Error messages
+  .error-message {
+    display: block;
+    margin-top: var(--spacing-1);
+    font-size: var(--font-size-sm);
+    color: #{map.get($colors, "red", "600")};
+  }
+}
+
+// =============================================================================
+// ACCESSIBILITY DEBUGGING
+// =============================================================================
+
+@if $debug-mode {
+  .a11y-debug {
+    // Outline focusable elements
+    a[href],
+    area[href],
+    input:not([disabled]),
+    select:not([disabled]),
+    textarea:not([disabled]),
+    button:not([disabled]),
+    iframe,
+    [tabindex],
+    [contentEditable="true"] {
+      outline: 1px dotted red;
+    }
+
+    // Show ARIA attributes
+    [aria-label]::after {
+      content: " [aria-label: " attr(aria-label) "]";
+      position: absolute;
+      background: yellow;
+      color: black;
+      font-size: 10px;
+      padding: 2px;
+      z-index: 1000;
+    }
+  }
+}
+
+// =============================================================================
+// INTERNATIONALIZATION ACCESSIBILITY
+// =============================================================================
+
+// RTL support enhancements
+[dir="rtl"] {
+  .rtl-mirror {
+    transform: scaleX(-1);
+  }
+
+  .text-right {
+    text-align: left;
+  }
+
+  .text-left {
+    text-align: right;
+  }
+}
+
+// Language-specific adaptations
+:lang(ar),
+:lang(fa),
+:lang(ur) {
+  // Arabic/Farsi/Urdu adaptations
+  font-family: "Arial", sans-serif;
+  line-height: 1.7;
+}
+
+:lang(ja),
+:lang(ko),
+:lang(zh) {
+  // East Asian adaptations
+  line-height: 1.8;
+  letter-spacing: 0.05em;
+}
+
+// =============================================================================
+// PERFORMANCE ACCESSIBILITY
+// =============================================================================
+
+// Loading states with accessibility
+.loading-content {
+  position: relative;
+
+  &::before {
+    content: "Loading...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--radius-md);
+    z-index: 1000;
+  }
+
+  // Screen reader announcement
+  .sr-loading {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+// =============================================================================
+// BROWSER SUPPORT FALLBACKS
+// =============================================================================
+
+// Fallback for browsers that don't support prefers-* media queries
+.no-prefers-support {
+  // Default enhanced accessibility settings
+  * {
+    transition: none;
+  }
+
+  .focus-enhanced {
+    &:focus {
+      outline: 2px solid var(--color-primary) !important;
+    }
+  }
+}

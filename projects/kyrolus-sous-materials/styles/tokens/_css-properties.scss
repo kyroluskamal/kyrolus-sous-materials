@@ -1,0 +1,509 @@
+// =============================================================================
+// CSS @PROPERTY TYPED CUSTOM PROPERTIES
+// =============================================================================
+// Register custom properties with types for animatable CSS variables
+// Enables smooth transitions on custom properties
+// Browser support: Chrome 85+, Edge 85+, Safari 16.4+
+
+// =============================================================================
+// REGISTERED COLOR PROPERTIES
+// =============================================================================
+
+/// Primary color - animatable
+@property --color-primary {
+  syntax: "<color>";
+  initial-value: #3b82f6;
+  inherits: true;
+}
+
+/// Secondary color - animatable
+@property --color-secondary {
+  syntax: "<color>";
+  initial-value: #8b5cf6;
+  inherits: true;
+}
+
+/// Accent color - animatable
+@property --color-accent {
+  syntax: "<color>";
+  initial-value: #f59e0b;
+  inherits: true;
+}
+
+/// Background color - animatable
+@property --bg-color {
+  syntax: "<color>";
+  initial-value: #ffffff;
+  inherits: true;
+}
+
+/// Text color - animatable
+@property --text-color {
+  syntax: "<color>";
+  initial-value: #1a1a1a;
+  inherits: true;
+}
+
+/// Border color - animatable
+@property --border-color {
+  syntax: "<color>";
+  initial-value: #e5e5e5;
+  inherits: true;
+}
+
+/// Shadow color - animatable
+@property --shadow-color {
+  syntax: "<color>";
+  initial-value: rgba(0, 0, 0, 0.1);
+  inherits: true;
+}
+
+// =============================================================================
+// REGISTERED LENGTH PROPERTIES
+// =============================================================================
+
+/// Spacing value - animatable
+@property --spacing {
+  syntax: "<length>";
+  initial-value: 1rem;
+  inherits: false;
+}
+
+/// Border radius - animatable
+@property --radius {
+  syntax: "<length>";
+  initial-value: 0.5rem;
+  inherits: false;
+}
+
+/// Border width - animatable
+@property --border-width {
+  syntax: "<length>";
+  initial-value: 1px;
+  inherits: false;
+}
+
+/// Gap value - animatable
+@property --gap {
+  syntax: "<length>";
+  initial-value: 1rem;
+  inherits: false;
+}
+
+/// Shadow blur - animatable
+@property --shadow-blur {
+  syntax: "<length>";
+  initial-value: 10px;
+  inherits: false;
+}
+
+/// Shadow offset - animatable
+@property --shadow-offset {
+  syntax: "<length>";
+  initial-value: 4px;
+  inherits: false;
+}
+
+// =============================================================================
+// REGISTERED PERCENTAGE PROPERTIES
+// =============================================================================
+
+/// Opacity - animatable
+@property --opacity {
+  syntax: "<number>";
+  initial-value: 1;
+  inherits: false;
+}
+
+/// Scale factor - animatable
+@property --scale {
+  syntax: "<number>";
+  initial-value: 1;
+  inherits: false;
+}
+
+/// Rotation - animatable
+@property --rotate {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/// Progress value - animatable
+@property --progress {
+  syntax: "<percentage>";
+  initial-value: 0%;
+  inherits: false;
+}
+
+/// Gradient position - animatable
+@property --gradient-position {
+  syntax: "<percentage>";
+  initial-value: 0%;
+  inherits: false;
+}
+
+// =============================================================================
+// ANIMATED GRADIENT UTILITIES
+// =============================================================================
+
+/// Animatable gradient angle
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/// Rotating gradient background
+.gradient-rotate {
+  --gradient-angle: 0deg;
+  background: linear-gradient(
+    var(--gradient-angle),
+    var(--color-primary),
+    var(--color-secondary)
+  );
+  transition: --gradient-angle 0.5s ease;
+
+  &:hover {
+    --gradient-angle: 180deg;
+  }
+}
+
+/// Animated gradient rotation
+@keyframes gradient-spin {
+  to {
+    --gradient-angle: 360deg;
+  }
+}
+
+.gradient-spin {
+  --gradient-angle: 0deg;
+  background: linear-gradient(
+    var(--gradient-angle),
+    var(--color-primary),
+    var(--color-secondary)
+  );
+  animation: gradient-spin 3s linear infinite;
+}
+
+/// Gradient position animation
+.gradient-shift {
+  --gradient-position: 0%;
+  background: linear-gradient(
+    90deg,
+    var(--color-primary) var(--gradient-position),
+    var(--color-secondary) calc(var(--gradient-position) + 50%)
+  );
+  background-size: 200% 100%;
+  transition: --gradient-position 0.5s ease;
+
+  &:hover {
+    --gradient-position: 50%;
+  }
+}
+
+// =============================================================================
+// ANIMATABLE COLOR TRANSITIONS
+// =============================================================================
+
+/// Smooth color transition on hover
+.color-transition {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border-color: var(--border-color);
+  transition: --bg-color 0.3s, --text-color 0.3s, --border-color 0.3s;
+
+  &:hover {
+    --bg-color: var(--color-primary);
+    --text-color: #ffffff;
+    --border-color: var(--color-primary);
+  }
+}
+
+/// Theme color animation
+.theme-transition {
+  --bg-color: var(--surface);
+  --text-color: var(--text);
+
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: --bg-color 0.5s ease, --text-color 0.5s ease;
+}
+
+// =============================================================================
+// ANIMATED SHADOWS
+// =============================================================================
+
+/// Animatable shadow
+.shadow-animated {
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow-blur: 10px;
+  --shadow-offset: 4px;
+
+  box-shadow: 0 var(--shadow-offset) var(--shadow-blur) var(--shadow-color);
+  transition: --shadow-blur 0.3s, --shadow-offset 0.3s, --shadow-color 0.3s;
+
+  &:hover {
+    --shadow-blur: 20px;
+    --shadow-offset: 8px;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+/// Glow effect with animated color
+.glow-animated {
+  --shadow-color: var(--color-primary);
+  --shadow-blur: 0px;
+
+  box-shadow: 0 0 var(--shadow-blur) var(--shadow-color);
+  transition: --shadow-blur 0.3s ease;
+
+  &:hover {
+    --shadow-blur: 20px;
+  }
+}
+
+// =============================================================================
+// PROGRESS INDICATORS
+// =============================================================================
+
+/// Animated progress bar
+.progress-animated {
+  --progress: 0%;
+
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-alt);
+  border-radius: var(--radius);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--progress);
+    background: var(--color-primary);
+    transition: --progress 0.5s ease-out;
+  }
+}
+
+/// Circular progress with animatable property
+.progress-circle {
+  --progress: 0%;
+  --circle-size: 100px;
+  --stroke-width: 8px;
+
+  width: var(--circle-size);
+  height: var(--circle-size);
+
+  svg circle {
+    stroke-dasharray: 283; // 2 * PI * 45
+    stroke-dashoffset: calc(283 * (1 - var(--progress) / 100%));
+    transition: stroke-dashoffset 0.5s ease, --progress 0.5s ease;
+  }
+}
+
+// =============================================================================
+// TRANSFORM PROPERTIES
+// =============================================================================
+
+/// Animatable scale
+.scale-animated {
+  --scale: 1;
+  transform: scale(var(--scale));
+  transition: --scale 0.3s ease;
+
+  &:hover {
+    --scale: 1.1;
+  }
+}
+
+/// Animatable rotation
+.rotate-animated {
+  --rotate: 0deg;
+  transform: rotate(var(--rotate));
+  transition: --rotate 0.3s ease;
+
+  &:hover {
+    --rotate: 180deg;
+  }
+}
+
+/// Combined transform animation
+.transform-animated {
+  --scale: 1;
+  --rotate: 0deg;
+  --translate-x: 0px;
+  --translate-y: 0px;
+
+  transform: translateX(var(--translate-x)) translateY(var(--translate-y))
+    scale(var(--scale)) rotate(var(--rotate));
+
+  transition: --scale 0.3s ease, --rotate 0.3s ease, --translate-x 0.3s ease,
+    --translate-y 0.3s ease;
+}
+
+// =============================================================================
+// REGISTERED PROPERTIES FOR LAYOUTS
+// =============================================================================
+
+@property --column-count {
+  syntax: "<integer>";
+  initial-value: 1;
+  inherits: false;
+}
+
+@property --row-count {
+  syntax: "<integer>";
+  initial-value: 1;
+  inherits: false;
+}
+
+/// Animated grid columns
+.grid-columns-animated {
+  display: grid;
+  grid-template-columns: repeat(var(--column-count), 1fr);
+  transition: --column-count 0.5s ease;
+}
+
+// =============================================================================
+// UTILITY CLASSES FOR REGISTERED PROPERTIES
+// =============================================================================
+
+/// Set primary color
+@each $color in (blue, red, green, purple, orange) {
+  .prop-primary-#{$color} {
+    @if $color == blue {
+      --color-primary: #3b82f6;
+    } @else if $color == red {
+      --color-primary: #ef4444;
+    } @else if $color == green {
+      --color-primary: #22c55e;
+    } @else if $color == purple {
+      --color-primary: #8b5cf6;
+    } @else if $color == orange {
+      --color-primary: #f59e0b;
+    }
+  }
+}
+
+/// Set spacing values
+.prop-spacing-sm {
+  --spacing: 0.5rem;
+}
+.prop-spacing-md {
+  --spacing: 1rem;
+}
+.prop-spacing-lg {
+  --spacing: 1.5rem;
+}
+.prop-spacing-xl {
+  --spacing: 2rem;
+}
+
+/// Set radius values
+.prop-radius-none {
+  --radius: 0;
+}
+.prop-radius-sm {
+  --radius: 0.25rem;
+}
+.prop-radius-md {
+  --radius: 0.5rem;
+}
+.prop-radius-lg {
+  --radius: 1rem;
+}
+.prop-radius-full {
+  --radius: 9999px;
+}
+
+// =============================================================================
+// DARK MODE WITH REGISTERED PROPERTIES
+// =============================================================================
+
+:root {
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
+  --border-color: #e5e5e5;
+}
+
+[data-theme="dark"] {
+  --bg-color: #1a1a1a;
+  --text-color: #f5f5f5;
+  --border-color: #333333;
+}
+
+/// Smooth theme transition
+.theme-aware {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border-color: var(--border-color);
+  transition: --bg-color 0.5s ease, --text-color 0.5s ease,
+    --border-color 0.5s ease;
+}
+
+// =============================================================================
+// MIXINS FOR REGISTERED PROPERTIES
+// =============================================================================
+
+/// Register a custom property
+/// Note: This is a placeholder - @property rules must be at root level
+/// Use this for documentation/reference
+/// @param {String} $name - Property name
+/// @param {String} $syntax - Property syntax
+/// @param {*} $initial - Initial value
+/// @param {Bool} $inherits - Whether property inherits
+@mixin document-property($name, $syntax, $initial, $inherits: false) {
+  // @property #{$name} {
+  //   syntax: "#{$syntax}";
+  //   initial-value: #{$initial};
+  //   inherits: #{$inherits};
+  // }
+}
+
+// =============================================================================
+// FEATURE DETECTION
+// =============================================================================
+
+@supports (background: paint(something)) {
+  .houdini-supported {
+    --houdini-support: true;
+  }
+}
+
+/// Fallback for browsers without @property support
+@supports not (syntax: "<color>") {
+  .color-transition,
+  .gradient-rotate,
+  .gradient-spin {
+    // Fall back to regular transitions
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+
+  .shadow-animated {
+    transition: box-shadow 0.3s;
+
+    &:hover {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+// =============================================================================
+// REDUCED MOTION
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-spin,
+  .color-transition,
+  .shadow-animated,
+  .glow-animated,
+  .scale-animated,
+  .rotate-animated,
+  .transform-animated {
+    transition: none !important;
+    animation: none !important;
+  }
+}

@@ -1,0 +1,492 @@
+// ============================================================================
+// WIDE GAMUT COLORS (Display-P3)
+// Brighter, more vivid colors using the display-p3 color space
+// Browser Support: Chrome 111+, Firefox 113+, Safari 15.4+
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// CSS VARIABLES - WIDE GAMUT COLORS
+// ----------------------------------------------------------------------------
+
+:root {
+  // Wide gamut primary colors
+  --p3-red: color(display-p3 1 0.2 0.2);
+  --p3-orange: color(display-p3 1 0.5 0);
+  --p3-yellow: color(display-p3 1 0.95 0);
+  --p3-lime: color(display-p3 0.5 1 0);
+  --p3-green: color(display-p3 0 0.9 0.4);
+  --p3-teal: color(display-p3 0 0.85 0.7);
+  --p3-cyan: color(display-p3 0 0.9 1);
+  --p3-blue: color(display-p3 0.2 0.5 1);
+  --p3-indigo: color(display-p3 0.4 0.3 1);
+  --p3-purple: color(display-p3 0.7 0.2 1);
+  --p3-pink: color(display-p3 1 0.3 0.6);
+  --p3-magenta: color(display-p3 1 0 0.8);
+
+  // Semantic wide gamut colors
+  --p3-primary: color(display-p3 0.3 0.55 1);
+  --p3-secondary: color(display-p3 0.6 0.35 1);
+  --p3-success: color(display-p3 0.15 0.85 0.45);
+  --p3-warning: color(display-p3 1 0.65 0);
+  --p3-error: color(display-p3 1 0.25 0.25);
+  --p3-info: color(display-p3 0 0.7 1);
+}
+
+// ----------------------------------------------------------------------------
+// BACKGROUND COLORS - WIDE GAMUT
+// ----------------------------------------------------------------------------
+
+// Primary colors
+.bg-p3-red {
+  background-color: color(display-p3 1 0.2 0.2);
+}
+
+.bg-p3-orange {
+  background-color: color(display-p3 1 0.5 0);
+}
+
+.bg-p3-yellow {
+  background-color: color(display-p3 1 0.95 0);
+}
+
+.bg-p3-lime {
+  background-color: color(display-p3 0.5 1 0);
+}
+
+.bg-p3-green {
+  background-color: color(display-p3 0 0.9 0.4);
+}
+
+.bg-p3-teal {
+  background-color: color(display-p3 0 0.85 0.7);
+}
+
+.bg-p3-cyan {
+  background-color: color(display-p3 0 0.9 1);
+}
+
+.bg-p3-blue {
+  background-color: color(display-p3 0.2 0.5 1);
+}
+
+.bg-p3-indigo {
+  background-color: color(display-p3 0.4 0.3 1);
+}
+
+.bg-p3-purple {
+  background-color: color(display-p3 0.7 0.2 1);
+}
+
+.bg-p3-pink {
+  background-color: color(display-p3 1 0.3 0.6);
+}
+
+.bg-p3-magenta {
+  background-color: color(display-p3 1 0 0.8);
+}
+
+// Semantic backgrounds
+.bg-p3-primary {
+  background-color: var(--p3-primary);
+}
+
+.bg-p3-secondary {
+  background-color: var(--p3-secondary);
+}
+
+.bg-p3-success {
+  background-color: var(--p3-success);
+}
+
+.bg-p3-warning {
+  background-color: var(--p3-warning);
+}
+
+.bg-p3-error {
+  background-color: var(--p3-error);
+}
+
+.bg-p3-info {
+  background-color: var(--p3-info);
+}
+
+// ----------------------------------------------------------------------------
+// TEXT COLORS - WIDE GAMUT
+// ----------------------------------------------------------------------------
+
+.text-p3-red {
+  color: color(display-p3 1 0.2 0.2);
+}
+
+.text-p3-orange {
+  color: color(display-p3 1 0.5 0);
+}
+
+.text-p3-yellow {
+  color: color(display-p3 1 0.95 0);
+}
+
+.text-p3-lime {
+  color: color(display-p3 0.5 1 0);
+}
+
+.text-p3-green {
+  color: color(display-p3 0 0.9 0.4);
+}
+
+.text-p3-teal {
+  color: color(display-p3 0 0.85 0.7);
+}
+
+.text-p3-cyan {
+  color: color(display-p3 0 0.9 1);
+}
+
+.text-p3-blue {
+  color: color(display-p3 0.2 0.5 1);
+}
+
+.text-p3-indigo {
+  color: color(display-p3 0.4 0.3 1);
+}
+
+.text-p3-purple {
+  color: color(display-p3 0.7 0.2 1);
+}
+
+.text-p3-pink {
+  color: color(display-p3 1 0.3 0.6);
+}
+
+.text-p3-magenta {
+  color: color(display-p3 1 0 0.8);
+}
+
+// Semantic text
+.text-p3-primary {
+  color: var(--p3-primary);
+}
+
+.text-p3-secondary {
+  color: var(--p3-secondary);
+}
+
+.text-p3-success {
+  color: var(--p3-success);
+}
+
+.text-p3-warning {
+  color: var(--p3-warning);
+}
+
+.text-p3-error {
+  color: var(--p3-error);
+}
+
+// ----------------------------------------------------------------------------
+// BORDER COLORS - WIDE GAMUT
+// ----------------------------------------------------------------------------
+
+.border-p3-red {
+  border-color: color(display-p3 1 0.2 0.2);
+}
+
+.border-p3-orange {
+  border-color: color(display-p3 1 0.5 0);
+}
+
+.border-p3-yellow {
+  border-color: color(display-p3 1 0.95 0);
+}
+
+.border-p3-green {
+  border-color: color(display-p3 0 0.9 0.4);
+}
+
+.border-p3-blue {
+  border-color: color(display-p3 0.2 0.5 1);
+}
+
+.border-p3-purple {
+  border-color: color(display-p3 0.7 0.2 1);
+}
+
+.border-p3-pink {
+  border-color: color(display-p3 1 0.3 0.6);
+}
+
+.border-p3-primary {
+  border-color: var(--p3-primary);
+}
+
+// ----------------------------------------------------------------------------
+// GRADIENTS - WIDE GAMUT
+// ----------------------------------------------------------------------------
+
+.gradient-p3-sunset {
+  background: linear-gradient(
+    to right,
+    color(display-p3 1 0.2 0.4),
+    color(display-p3 1 0.5 0),
+    color(display-p3 1 0.95 0)
+  );
+}
+
+.gradient-p3-ocean {
+  background: linear-gradient(
+    to right,
+    color(display-p3 0 0.85 0.7),
+    color(display-p3 0.2 0.5 1),
+    color(display-p3 0.4 0.3 1)
+  );
+}
+
+.gradient-p3-aurora {
+  background: linear-gradient(
+    to right,
+    color(display-p3 0 0.9 0.4),
+    color(display-p3 0 0.9 1),
+    color(display-p3 0.7 0.2 1)
+  );
+}
+
+.gradient-p3-neon {
+  background: linear-gradient(
+    to right,
+    color(display-p3 1 0 0.8),
+    color(display-p3 0 0.9 1)
+  );
+}
+
+.gradient-p3-fire {
+  background: linear-gradient(
+    to bottom,
+    color(display-p3 1 0.95 0),
+    color(display-p3 1 0.5 0),
+    color(display-p3 1 0.2 0.2)
+  );
+}
+
+.gradient-p3-forest {
+  background: linear-gradient(
+    to bottom,
+    color(display-p3 0.5 1 0),
+    color(display-p3 0 0.9 0.4),
+    color(display-p3 0 0.85 0.7)
+  );
+}
+
+.gradient-p3-candy {
+  background: linear-gradient(
+    to right,
+    color(display-p3 1 0.3 0.6),
+    color(display-p3 0.7 0.2 1),
+    color(display-p3 0.4 0.3 1)
+  );
+}
+
+// Radial gradients
+.gradient-p3-radial-glow {
+  background: radial-gradient(
+    circle at center,
+    color(display-p3 0 0.9 1),
+    color(display-p3 0.2 0.5 1 / 0.5),
+    transparent
+  );
+}
+
+// ----------------------------------------------------------------------------
+// SHADOW COLORS - WIDE GAMUT
+// ----------------------------------------------------------------------------
+
+.shadow-p3-primary {
+  box-shadow: 0 4px 14px color(display-p3 0.3 0.55 1 / 0.4);
+}
+
+.shadow-p3-success {
+  box-shadow: 0 4px 14px color(display-p3 0.15 0.85 0.45 / 0.4);
+}
+
+.shadow-p3-error {
+  box-shadow: 0 4px 14px color(display-p3 1 0.25 0.25 / 0.4);
+}
+
+.shadow-p3-glow {
+  box-shadow: 0 0 20px color(display-p3 0 0.9 1 / 0.5),
+    0 0 40px color(display-p3 0 0.9 1 / 0.3);
+}
+
+// ----------------------------------------------------------------------------
+// NEON EFFECTS
+// ----------------------------------------------------------------------------
+
+.neon-p3-cyan {
+  color: color(display-p3 0 1 1);
+  text-shadow: 0 0 5px color(display-p3 0 1 1 / 0.8),
+    0 0 10px color(display-p3 0 1 1 / 0.6),
+    0 0 20px color(display-p3 0 1 1 / 0.4);
+}
+
+.neon-p3-magenta {
+  color: color(display-p3 1 0 0.8);
+  text-shadow: 0 0 5px color(display-p3 1 0 0.8 / 0.8),
+    0 0 10px color(display-p3 1 0 0.8 / 0.6),
+    0 0 20px color(display-p3 1 0 0.8 / 0.4);
+}
+
+.neon-p3-green {
+  color: color(display-p3 0 1 0.4);
+  text-shadow: 0 0 5px color(display-p3 0 1 0.4 / 0.8),
+    0 0 10px color(display-p3 0 1 0.4 / 0.6),
+    0 0 20px color(display-p3 0 1 0.4 / 0.4);
+}
+
+// Box neon glow
+.box-neon-p3-cyan {
+  box-shadow: 0 0 10px color(display-p3 0 1 1 / 0.5),
+    0 0 20px color(display-p3 0 1 1 / 0.3),
+    inset 0 0 10px color(display-p3 0 1 1 / 0.2);
+}
+
+// ----------------------------------------------------------------------------
+// FALLBACK PATTERN (sRGB fallback)
+// ----------------------------------------------------------------------------
+
+// Use @supports for graceful degradation
+@supports (color: color(display-p3 1 0 0)) {
+  .p3-supported {
+    --p3-color-supported: 1;
+  }
+}
+
+// With sRGB fallback
+.bg-p3-vivid-blue {
+  // sRGB fallback
+  background-color: #0066ff;
+
+  // Wide gamut override
+  @supports (color: color(display-p3 1 0 0)) {
+    background-color: color(display-p3 0 0.45 1);
+  }
+}
+
+.bg-p3-vivid-green {
+  background-color: #00ff66;
+
+  @supports (color: color(display-p3 1 0 0)) {
+    background-color: color(display-p3 0 1 0.45);
+  }
+}
+
+.bg-p3-vivid-red {
+  background-color: #ff0033;
+
+  @supports (color: color(display-p3 1 0 0)) {
+    background-color: color(display-p3 1 0 0.25);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// BUTTON VARIANTS
+// ----------------------------------------------------------------------------
+
+.btn-p3-primary {
+  background-color: color(display-p3 0.3 0.55 1);
+  color: white;
+
+  &:hover {
+    background-color: color(display-p3 0.2 0.45 0.9);
+  }
+}
+
+.btn-p3-success {
+  background-color: color(display-p3 0.15 0.85 0.45);
+  color: white;
+
+  &:hover {
+    background-color: color(display-p3 0.1 0.75 0.4);
+  }
+}
+
+.btn-p3-gradient {
+  background: linear-gradient(
+    135deg,
+    color(display-p3 0.7 0.2 1),
+    color(display-p3 0.3 0.55 1)
+  );
+  color: white;
+}
+
+// ----------------------------------------------------------------------------
+// BADGE VARIANTS
+// ----------------------------------------------------------------------------
+
+.badge-p3-vivid {
+  background-color: color(display-p3 0.3 0.55 1);
+  color: white;
+}
+
+.badge-p3-success {
+  background-color: color(display-p3 0.15 0.85 0.45);
+  color: white;
+}
+
+.badge-p3-warning {
+  background-color: color(display-p3 1 0.65 0);
+  color: black;
+}
+
+.badge-p3-error {
+  background-color: color(display-p3 1 0.25 0.25);
+  color: white;
+}
+
+// ----------------------------------------------------------------------------
+// ALERT VARIANTS
+// ----------------------------------------------------------------------------
+
+.alert-p3-info {
+  background-color: color(display-p3 0.2 0.5 1 / 0.15);
+  border-left: 4px solid color(display-p3 0 0.7 1);
+}
+
+.alert-p3-success {
+  background-color: color(display-p3 0.15 0.85 0.45 / 0.15);
+  border-left: 4px solid color(display-p3 0.15 0.85 0.45);
+}
+
+.alert-p3-warning {
+  background-color: color(display-p3 1 0.65 0 / 0.15);
+  border-left: 4px solid color(display-p3 1 0.65 0);
+}
+
+.alert-p3-error {
+  background-color: color(display-p3 1 0.25 0.25 / 0.15);
+  border-left: 4px solid color(display-p3 1 0.25 0.25);
+}
+
+// ----------------------------------------------------------------------------
+// COLOR SPACE CONVERSION
+// ----------------------------------------------------------------------------
+
+// Use for mixing P3 colors
+.p3-color-space {
+  color-interpolation: display-p3;
+}
+
+// ----------------------------------------------------------------------------
+// FEATURE DETECTION
+// ----------------------------------------------------------------------------
+
+@supports (color: color(display-p3 1 0 0)) {
+  .wide-gamut-supported {
+    --wide-gamut-supported: 1;
+  }
+}
+
+// Media query for wide gamut displays
+@media (color-gamut: p3) {
+  .p3-display-detected {
+    --p3-display: 1;
+  }
+}

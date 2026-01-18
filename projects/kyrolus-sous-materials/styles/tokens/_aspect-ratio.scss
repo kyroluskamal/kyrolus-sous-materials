@@ -1,0 +1,443 @@
+// ============================================================================
+// ASPECT-RATIO UTILITIES
+// Native CSS aspect ratio without padding hacks
+// Browser Support: Chrome 88+, Firefox 89+, Safari 15+
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// COMMON ASPECT RATIOS
+// ----------------------------------------------------------------------------
+
+// Square
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-1 {
+  aspect-ratio: 1;
+}
+
+// Video ratios
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-16-9 {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-4-3 {
+  aspect-ratio: 4 / 3;
+}
+
+.aspect-21-9 {
+  aspect-ratio: 21 / 9;
+}
+
+// Widescreen cinema
+.aspect-2-1 {
+  aspect-ratio: 2 / 1;
+}
+
+.aspect-cinema {
+  aspect-ratio: 2.35 / 1;
+}
+
+// Photo ratios
+.aspect-3-2 {
+  aspect-ratio: 3 / 2;
+}
+
+.aspect-5-4 {
+  aspect-ratio: 5 / 4;
+}
+
+// Portrait ratios
+.aspect-9-16 {
+  aspect-ratio: 9 / 16;
+}
+
+.aspect-3-4 {
+  aspect-ratio: 3 / 4;
+}
+
+.aspect-2-3 {
+  aspect-ratio: 2 / 3;
+}
+
+.aspect-4-5 {
+  aspect-ratio: 4 / 5;
+}
+
+// Social media ratios
+.aspect-instagram {
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-instagram-portrait {
+  aspect-ratio: 4 / 5;
+}
+
+.aspect-instagram-landscape {
+  aspect-ratio: 1.91 / 1;
+}
+
+.aspect-twitter {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-facebook {
+  aspect-ratio: 1.91 / 1;
+}
+
+.aspect-linkedin {
+  aspect-ratio: 1.91 / 1;
+}
+
+.aspect-pinterest {
+  aspect-ratio: 2 / 3;
+}
+
+// Golden ratio
+.aspect-golden {
+  aspect-ratio: 1.618 / 1;
+}
+
+.aspect-golden-portrait {
+  aspect-ratio: 1 / 1.618;
+}
+
+// None - remove aspect ratio
+.aspect-auto {
+  aspect-ratio: auto;
+}
+
+// ----------------------------------------------------------------------------
+// RESPONSIVE ASPECT RATIOS
+// ----------------------------------------------------------------------------
+
+@media (min-width: 640px) {
+  .sm\:aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+
+  .sm\:aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+
+  .sm\:aspect-4-3 {
+    aspect-ratio: 4 / 3;
+  }
+
+  .sm\:aspect-auto {
+    aspect-ratio: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+
+  .md\:aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+
+  .md\:aspect-4-3 {
+    aspect-ratio: 4 / 3;
+  }
+
+  .md\:aspect-auto {
+    aspect-ratio: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+
+  .lg\:aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+
+  .lg\:aspect-21-9 {
+    aspect-ratio: 21 / 9;
+  }
+
+  .lg\:aspect-auto {
+    aspect-ratio: auto;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// IMAGE CONTAINERS
+// ----------------------------------------------------------------------------
+
+.image-aspect-video {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.image-aspect-square {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.image-aspect-portrait {
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// VIDEO CONTAINERS
+// ----------------------------------------------------------------------------
+
+.video-container {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+
+  > video,
+  > iframe {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.video-container-4-3 {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+
+  > video,
+  > iframe {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// YouTube/Vimeo embed
+.embed-video {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+
+  > iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// CARD THUMBNAILS
+// ----------------------------------------------------------------------------
+
+.card-thumbnail {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+
+  &:hover > img {
+    transform: scale(1.05);
+  }
+}
+
+.card-thumbnail-square {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// AVATAR SIZES WITH ASPECT RATIO
+// ----------------------------------------------------------------------------
+
+.avatar {
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.avatar-sm {
+  width: 32px;
+  aspect-ratio: 1 / 1;
+}
+
+.avatar-md {
+  width: 48px;
+  aspect-ratio: 1 / 1;
+}
+
+.avatar-lg {
+  width: 64px;
+  aspect-ratio: 1 / 1;
+}
+
+.avatar-xl {
+  width: 96px;
+  aspect-ratio: 1 / 1;
+}
+
+// ----------------------------------------------------------------------------
+// PLACEHOLDER/SKELETON
+// ----------------------------------------------------------------------------
+
+.skeleton-video {
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-square {
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-portrait {
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// GRID WITH ASPECT RATIO
+// ----------------------------------------------------------------------------
+
+.grid-square-items {
+  display: grid;
+
+  > * {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+.grid-video-items {
+  display: grid;
+
+  > * {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// RESPONSIVE IMAGE
+// ----------------------------------------------------------------------------
+
+.responsive-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: attr(width) / attr(height);
+}
+
+// ----------------------------------------------------------------------------
+// OBJECT FIT COMBINATIONS
+// ----------------------------------------------------------------------------
+
+.aspect-cover {
+  object-fit: cover;
+}
+
+.aspect-contain {
+  object-fit: contain;
+}
+
+.aspect-fill {
+  object-fit: fill;
+}
+
+.aspect-none {
+  object-fit: none;
+}
+
+.aspect-scale-down {
+  object-fit: scale-down;
+}
+
+// ----------------------------------------------------------------------------
+// FEATURE DETECTION
+// ----------------------------------------------------------------------------
+
+@supports (aspect-ratio: 1) {
+  .aspect-ratio-supported {
+    --aspect-ratio-supported: 1;
+  }
+}
+
+// Fallback for older browsers (padding hack)
+@supports not (aspect-ratio: 1) {
+  .aspect-video {
+    position: relative;
+    padding-bottom: 56.25%; // 16:9
+    height: 0;
+
+    > * {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .aspect-square {
+    position: relative;
+    padding-bottom: 100%;
+    height: 0;
+
+    > * {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

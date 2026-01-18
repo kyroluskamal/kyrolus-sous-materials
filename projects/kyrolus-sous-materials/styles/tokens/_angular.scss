@@ -1,0 +1,681 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - ANGULAR INTEGRATION PATTERNS
+// =============================================================================
+// Angular-specific styles and patterns for seamless integration with
+// Angular components, CDK, and common Angular UI patterns.
+// =============================================================================
+
+@use "sass:map";
+@use "primitives" as *;
+
+// =============================================================================
+// ANGULAR COMPONENT HOST STYLING
+// =============================================================================
+// Default styles for Angular component hosts
+
+// Block-level component host
+:host {
+  display: block;
+}
+
+// Inline component host
+:host(.inline) {
+  display: inline;
+}
+
+// Flex component host
+:host(.flex) {
+  display: flex;
+}
+
+// Grid component host
+:host(.grid) {
+  display: grid;
+}
+
+// Hidden component host
+:host(.hidden),
+:host([hidden]) {
+  display: none !important;
+}
+
+// Full-width host
+:host(.full-width) {
+  width: 100%;
+}
+
+// Full-height host
+:host(.full-height) {
+  height: 100%;
+}
+
+// =============================================================================
+// HOST CONTEXT MIXINS (Use in components)
+// =============================================================================
+// These work with ViewEncapsulation.Emulated
+
+// Dark mode host context
+// Usage: @include host-context-dark { ... }
+@mixin host-context-dark {
+  :host-context([data-theme="dark"]) &,
+  :host-context(.dark) & {
+    @content;
+  }
+}
+
+// RTL host context
+@mixin host-context-rtl {
+  :host-context([dir="rtl"]) & {
+    @content;
+  }
+}
+
+// High contrast host context
+@mixin host-context-high-contrast {
+  :host-context([data-contrast="high"]) & {
+    @content;
+  }
+  @media (prefers-contrast: high) {
+    & {
+      @content;
+    }
+  }
+}
+
+// Reduced motion host context
+@mixin host-context-reduced-motion {
+  :host-context([data-motion="reduced"]) & {
+    @content;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    & {
+      @content;
+    }
+  }
+}
+
+// =============================================================================
+// ANGULAR CDK OVERLAY STYLES
+// =============================================================================
+
+.cdk-overlay-container {
+  position: fixed;
+  z-index: var(--z-modal);
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.cdk-overlay-backdrop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-backdrop);
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  opacity: 0;
+
+  &.cdk-overlay-backdrop-showing {
+    opacity: 1;
+  }
+}
+
+.cdk-overlay-dark-backdrop {
+  background: var(--overlay);
+}
+
+.cdk-overlay-transparent-backdrop {
+  background: transparent;
+}
+
+.cdk-overlay-pane {
+  position: absolute;
+  pointer-events: auto;
+  box-sizing: border-box;
+  z-index: var(--z-modal);
+  display: flex;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.cdk-overlay-connected-position-bounding-box {
+  position: absolute;
+  z-index: var(--z-modal);
+  display: flex;
+  flex-direction: column;
+  min-width: 1px;
+  min-height: 1px;
+}
+
+// =============================================================================
+// ANGULAR CDK DIALOG STYLES
+// =============================================================================
+
+.cdk-dialog-container {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  max-height: inherit;
+}
+
+// =============================================================================
+// ANGULAR CDK A11Y STYLES
+// =============================================================================
+
+// Visually hidden but accessible
+.cdk-visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  white-space: nowrap;
+  outline: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  left: 0;
+
+  [dir="rtl"] & {
+    left: auto;
+    right: 0;
+  }
+}
+
+// High contrast mode outlines
+.cdk-high-contrast-active {
+  .cdk-program-focused,
+  .cdk-keyboard-focused {
+    outline: solid 1px;
+  }
+}
+
+// Focus trap
+.cdk-focus-trap-anchor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// =============================================================================
+// ANGULAR CDK DRAG & DROP
+// =============================================================================
+
+.cdk-drag {
+  cursor: grab;
+}
+
+.cdk-drag-dragging {
+  cursor: grabbing;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  opacity: 0.9;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.3;
+  background: var(--surface-sunken);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-md);
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-receiving {
+  background: var(--primary-subtle);
+  border: 2px dashed var(--primary);
+}
+
+// =============================================================================
+// ANGULAR CDK VIRTUAL SCROLL
+// =============================================================================
+
+.cdk-virtual-scroll-viewport {
+  display: block;
+  position: relative;
+  overflow: auto;
+  contain: strict;
+  transform: translateZ(0);
+}
+
+.cdk-virtual-scroll-content-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  contain: content;
+
+  [dir="rtl"] & {
+    right: 0;
+    left: auto;
+  }
+}
+
+.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper {
+  min-height: 100%;
+}
+
+.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper {
+  min-width: 100%;
+}
+
+.cdk-virtual-scroll-spacer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 1px;
+  transform-origin: 0 0;
+}
+
+// =============================================================================
+// ANGULAR CDK TEXT FIELD
+// =============================================================================
+
+.cdk-text-field-autofill-monitored:-webkit-autofill {
+  animation: cdk-text-field-autofill-start 0s 1ms;
+}
+
+.cdk-text-field-autofill-monitored:not(:-webkit-autofill) {
+  animation: cdk-text-field-autofill-end 0s 1ms;
+}
+
+@keyframes cdk-text-field-autofill-start {
+  // Empty to trigger animation
+}
+
+@keyframes cdk-text-field-autofill-end {
+  // Empty to trigger animation
+}
+
+// Autofill styling
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text);
+  -webkit-box-shadow: 0 0 0px 1000px var(--surface) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+// =============================================================================
+// ANGULAR CDK STEPPER
+// =============================================================================
+
+.cdk-step-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  cursor: pointer;
+  user-select: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+.cdk-step-label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.cdk-step-optional {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+// =============================================================================
+// ANGULAR CDK TABLE
+// =============================================================================
+
+.cdk-table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cdk-header-row {
+  display: table-row;
+}
+
+.cdk-row {
+  display: table-row;
+}
+
+.cdk-cell,
+.cdk-header-cell {
+  display: table-cell;
+  padding: var(--spacing-3) var(--spacing-4);
+  text-align: left;
+  vertical-align: middle;
+
+  [dir="rtl"] & {
+    text-align: right;
+  }
+}
+
+.cdk-header-cell {
+  font-weight: var(--font-semibold);
+  background-color: var(--surface-sunken);
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.cdk-cell {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.cdk-footer-row {
+  display: table-row;
+}
+
+.cdk-footer-cell {
+  display: table-cell;
+  padding: var(--spacing-3) var(--spacing-4);
+  font-weight: var(--font-medium);
+  background-color: var(--surface-sunken);
+}
+
+// =============================================================================
+// ANGULAR CDK TREE
+// =============================================================================
+
+.cdk-tree {
+  display: block;
+}
+
+.cdk-nested-tree-node {
+  display: block;
+}
+
+.cdk-tree-node {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  flex: 1;
+  word-wrap: break-word;
+}
+
+.cdk-tree-node-outlet {
+  display: flex;
+  flex-direction: column;
+}
+
+// =============================================================================
+// ANGULAR CDK MENU
+// =============================================================================
+
+.cdk-menu {
+  display: block;
+  outline: none;
+}
+
+.cdk-menu-bar {
+  display: flex;
+}
+
+.cdk-menu-group {
+  display: block;
+}
+
+.cdk-menu-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-4);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  min-height: 40px;
+
+  &:hover,
+  &:focus {
+    background-color: var(--surface-raised);
+  }
+
+  &[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.cdk-menu-item-checkbox,
+.cdk-menu-item-radio {
+  &[aria-checked="true"]::before {
+    content: "✓";
+    margin-right: var(--spacing-2);
+    color: var(--primary);
+  }
+}
+
+// =============================================================================
+// ANGULAR CDK LISTBOX
+// =============================================================================
+
+.cdk-listbox {
+  outline: none;
+}
+
+.cdk-option {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-3);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+
+  &:hover,
+  &.cdk-option-active {
+    background-color: var(--surface-raised);
+  }
+
+  &[aria-selected="true"] {
+    background-color: var(--primary-subtle);
+    color: var(--primary);
+  }
+
+  &[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// =============================================================================
+// ANGULAR FORMS STYLES
+// =============================================================================
+
+// ng-valid / ng-invalid / ng-pending states
+.ng-valid:not(form):not(.ng-untouched) {
+  // Valid styling - no visual change by default
+  border-color: inherit;
+}
+
+.ng-invalid.ng-touched {
+  border-color: var(--error);
+
+  &:focus {
+    outline-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(var(--error), 0.2);
+  }
+}
+
+.ng-pending {
+  // Pending validation - subtle indicator
+  opacity: 0.9;
+}
+
+// =============================================================================
+// ANGULAR ROUTER OUTLET ANIMATIONS
+// =============================================================================
+
+.router-outlet-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+// Route animation wrapper
+.route-animation-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+// =============================================================================
+// ANGULAR COMMON DIRECTIVES
+// =============================================================================
+
+// ngIf/ngFor animation helpers
+[class*="ngIf"],
+[class*="ngFor"] {
+  // Animation-ready elements
+  will-change: opacity, transform;
+}
+
+// Structural directive enter animation
+.ng-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.ng-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+// Structural directive leave animation
+.ng-leave {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ng-leave-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+// =============================================================================
+// ANGULAR VIEW ENCAPSULATION COMPATIBILITY
+// =============================================================================
+// Styles that work with both Emulated and None encapsulation
+
+// Use in global styles for component theming
+[_ngcontent] {
+  // Selector for any Angular component
+  box-sizing: border-box;
+}
+
+// Component attribute selector pattern
+// Usage: Generate component-specific selectors
+@mixin component-host-selector($component-name) {
+  #{$component-name},
+  [#{$component-name}],
+  .#{$component-name} {
+    @content;
+  }
+}
+
+// =============================================================================
+// ANGULAR MATERIAL COMPATIBILITY LAYER
+// =============================================================================
+// Override Angular Material defaults to match our design system
+
+// Material typography override
+.mat-typography {
+  font-family: var(--font-sans);
+}
+
+// Material color override
+.mat-primary {
+  --mat-primary: var(--primary);
+}
+
+.mat-accent {
+  --mat-accent: var(--secondary);
+}
+
+.mat-warn {
+  --mat-warn: var(--error);
+}
+
+// Material elevation override
+.mat-elevation-z0 {
+  box-shadow: none;
+}
+.mat-elevation-z1 {
+  box-shadow: var(--shadow-xs);
+}
+.mat-elevation-z2 {
+  box-shadow: var(--shadow-sm);
+}
+.mat-elevation-z4 {
+  box-shadow: var(--shadow-md);
+}
+.mat-elevation-z6 {
+  box-shadow: var(--shadow-lg);
+}
+.mat-elevation-z8 {
+  box-shadow: var(--shadow-xl);
+}
+
+// =============================================================================
+// NG-DEEP UTILITIES (Use sparingly)
+// =============================================================================
+// Helper classes for when ::ng-deep is needed
+
+.ng-deep-child {
+  // Marker class for elements that need ng-deep styling
+  all: inherit;
+}
+
+// =============================================================================
+// ANGULAR TESTING UTILITIES
+// =============================================================================
+// Classes for testing purposes
+
+[data-testid] {
+  // Test ID marker - ensure no visual impact
+  outline: none;
+}
+
+.test-harness {
+  // Test harness container - minimal styling
+  display: contents;
+}

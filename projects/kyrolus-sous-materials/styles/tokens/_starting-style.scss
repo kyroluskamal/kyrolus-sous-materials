@@ -1,0 +1,639 @@
+// =============================================================================
+// STARTING STYLE - CSS-ONLY ENTRY ANIMATIONS
+// =============================================================================
+// Use @starting-style for pure CSS appear animations
+// No JavaScript needed for enter/exit transitions
+// Browser support: Chrome 117+, Safari 17.4+, Firefox 129+
+
+// =============================================================================
+// HOW @starting-style WORKS
+// =============================================================================
+// @starting-style defines the initial state before an element appears
+// The element transitions from @starting-style values to its normal state
+// Works with display: none transitions via allow-discrete
+
+// =============================================================================
+// FADE IN ANIMATIONS
+// =============================================================================
+
+/// Simple fade in
+.enter-fade {
+  opacity: 1;
+  transition: opacity 0.3s ease, display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+/// Fade in slow
+.enter-fade-slow {
+  opacity: 1;
+  transition: opacity 0.5s ease, display 0.5s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+/// Fade in fast
+.enter-fade-fast {
+  opacity: 1;
+  transition: opacity 0.15s ease, display 0.15s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+// =============================================================================
+// SCALE ANIMATIONS
+// =============================================================================
+
+/// Scale up from center
+.enter-scale {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease,
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/// Scale up with bounce
+.enter-scale-bounce {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s ease,
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    display 0.4s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+/// Scale from zero (zoom in)
+.enter-zoom {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease,
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+/// Scale down (for dropdowns appearing above)
+.enter-scale-down {
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: top center;
+  transition: opacity 0.2s ease, transform 0.2s ease,
+    display 0.2s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/// Scale up (for dropdowns appearing below)
+.enter-scale-up {
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: bottom center;
+  transition: opacity 0.2s ease, transform 0.2s ease,
+    display 0.2s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+// =============================================================================
+// SLIDE ANIMATIONS
+// =============================================================================
+
+/// Slide up
+.enter-slide-up {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease,
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/// Slide down
+.enter-slide-down {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease,
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+/// Slide left
+.enter-slide-left {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s ease, transform 0.3s ease,
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+
+/// Slide right
+.enter-slide-right {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s ease, transform 0.3s ease,
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+
+/// Slide up more (for modals)
+.enter-slide-up-lg {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+}
+
+// =============================================================================
+// COMBINED ANIMATIONS
+// =============================================================================
+
+/// Fade and scale
+.enter-fade-scale {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.25s ease, transform 0.25s ease,
+    display 0.25s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+/// Fade and slide up
+.enter-fade-up {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease,
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/// Fade and slide down
+.enter-fade-down {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease,
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+// =============================================================================
+// BLUR ANIMATIONS
+// =============================================================================
+
+/// Fade in with blur
+.enter-blur {
+  opacity: 1;
+  filter: blur(0);
+  transition: opacity 0.3s ease, filter 0.3s ease,
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    filter: blur(4px);
+  }
+}
+
+/// Scale and blur
+.enter-scale-blur {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+  transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease,
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.95);
+    filter: blur(4px);
+  }
+}
+
+// =============================================================================
+// ROTATION ANIMATIONS
+// =============================================================================
+
+/// Rotate in
+.enter-rotate {
+  opacity: 1;
+  transform: rotate(0deg);
+  transition: opacity 0.3s ease, transform 0.4s ease,
+    display 0.4s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: rotate(-10deg);
+  }
+}
+
+/// Flip in (horizontal)
+.enter-flip-x {
+  opacity: 1;
+  transform: perspective(400px) rotateX(0deg);
+  transition: opacity 0.4s ease, transform 0.4s ease,
+    display 0.4s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: perspective(400px) rotateX(90deg);
+  }
+}
+
+/// Flip in (vertical)
+.enter-flip-y {
+  opacity: 1;
+  transform: perspective(400px) rotateY(0deg);
+  transition: opacity 0.4s ease, transform 0.4s ease,
+    display 0.4s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: perspective(400px) rotateY(90deg);
+  }
+}
+
+// =============================================================================
+// SPECIAL EFFECTS
+// =============================================================================
+
+/// Bounce in
+.enter-bounce {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s ease,
+    transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+    display 0.5s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+/// Elastic in
+.enter-elastic {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s ease,
+    transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+    display 0.8s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+/// Swing in
+.enter-swing {
+  opacity: 1;
+  transform: rotate(0deg);
+  transform-origin: top center;
+  transition: opacity 0.3s ease,
+    transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    display 0.6s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: rotate(-15deg);
+  }
+}
+
+// =============================================================================
+// COMPONENT PATTERNS
+// =============================================================================
+
+/// Modal enter animation
+.modal-enter {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    display 0.3s ease allow-discrete, overlay 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+}
+
+/// Toast notification enter
+.toast-enter {
+  opacity: 1;
+  transform: translateY(0) translateX(0);
+  transition: opacity 0.3s ease, transform 0.3s ease,
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+/// Tooltip enter
+.tooltip-enter {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 0.15s ease, transform 0.15s ease,
+    display 0.15s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(5px) scale(0.95);
+  }
+}
+
+/// Dropdown menu enter
+.dropdown-enter {
+  opacity: 1;
+  transform: translateY(0) scaleY(1);
+  transform-origin: top center;
+  transition: opacity 0.2s ease, transform 0.2s ease,
+    display 0.2s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(-10px) scaleY(0.95);
+  }
+}
+
+/// Sidebar enter
+.sidebar-enter {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s ease, transform 0.3s ease,
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+/// Bottom sheet enter
+.bottom-sheet-enter {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    display 0.3s ease allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+// =============================================================================
+// LIST ITEM STAGGER
+// =============================================================================
+
+/// Staggered list items
+.enter-stagger {
+  > * {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease,
+      display 0.3s ease allow-discrete;
+
+    @starting-style {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+
+  @for $i from 1 through 20 {
+    > :nth-child(#{$i}) {
+      transition-delay: #{$i * 0.05}s;
+    }
+  }
+}
+
+/// Stagger from left
+.enter-stagger-left {
+  > * {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+
+    @starting-style {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+  }
+
+  @for $i from 1 through 20 {
+    > :nth-child(#{$i}) {
+      transition-delay: #{$i * 0.05}s;
+    }
+  }
+}
+
+// =============================================================================
+// EXIT ANIMATIONS (for hidden state)
+// =============================================================================
+
+/// Exit with fade
+.exit-fade {
+  &:not(.is-visible),
+  &[hidden],
+  &.is-hidden {
+    opacity: 0;
+    transition: opacity 0.2s ease, display 0.2s ease allow-discrete;
+  }
+}
+
+/// Exit with scale
+.exit-scale {
+  &:not(.is-visible),
+  &[hidden],
+  &.is-hidden {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.2s ease, transform 0.2s ease,
+      display 0.2s ease allow-discrete;
+  }
+}
+
+/// Exit slide down
+.exit-slide-down {
+  &:not(.is-visible),
+  &[hidden],
+  &.is-hidden {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease,
+      display 0.2s ease allow-discrete;
+  }
+}
+
+// =============================================================================
+// DURATION MODIFIERS
+// =============================================================================
+
+.enter-duration-75 {
+  transition-duration: 75ms !important;
+}
+
+.enter-duration-100 {
+  transition-duration: 100ms !important;
+}
+
+.enter-duration-150 {
+  transition-duration: 150ms !important;
+}
+
+.enter-duration-200 {
+  transition-duration: 200ms !important;
+}
+
+.enter-duration-300 {
+  transition-duration: 300ms !important;
+}
+
+.enter-duration-500 {
+  transition-duration: 500ms !important;
+}
+
+.enter-duration-700 {
+  transition-duration: 700ms !important;
+}
+
+.enter-duration-1000 {
+  transition-duration: 1000ms !important;
+}
+
+// =============================================================================
+// DELAY MODIFIERS
+// =============================================================================
+
+.enter-delay-75 {
+  transition-delay: 75ms;
+}
+
+.enter-delay-100 {
+  transition-delay: 100ms;
+}
+
+.enter-delay-150 {
+  transition-delay: 150ms;
+}
+
+.enter-delay-200 {
+  transition-delay: 200ms;
+}
+
+.enter-delay-300 {
+  transition-delay: 300ms;
+}
+
+.enter-delay-500 {
+  transition-delay: 500ms;
+}
+
+// =============================================================================
+// EASING MODIFIERS
+// =============================================================================
+
+.enter-ease-linear {
+  transition-timing-function: linear !important;
+}
+
+.enter-ease-in {
+  transition-timing-function: ease-in !important;
+}
+
+.enter-ease-out {
+  transition-timing-function: ease-out !important;
+}
+
+.enter-ease-in-out {
+  transition-timing-function: ease-in-out !important;
+}
+
+.enter-ease-spring {
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.enter-ease-bounce {
+  transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+}
+
+// =============================================================================
+// REDUCED MOTION
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="enter-"],
+  [class*="exit-"] {
+    transition: none !important;
+
+    @starting-style {
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+    }
+  }
+}
+
+// =============================================================================
+// BROWSER SUPPORT CHECK
+// =============================================================================
+
+@supports not (transition-behavior: allow-discrete) {
+  // Fallback: Just use opacity transitions
+  [class*="enter-"] {
+    transition: opacity 0.3s ease !important;
+  }
+}
