@@ -1,0 +1,6 @@
+@use "../abstracts/mixins" as mixins;
+
+@include mixins.generate-display-classes;
+@include mixins.generate-responsive-display-classes;
+@include mixins.generate-width-classes;
+@include mixins.generate-height-classes;

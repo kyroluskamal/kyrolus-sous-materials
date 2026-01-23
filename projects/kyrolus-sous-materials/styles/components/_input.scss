@@ -3,7 +3,7 @@ ks-input {
   height: auto !important;
   .form-control-error {
     font-size: 0.7rem; /* تصغير حجم النص */
-    color: #dc3545; /* اللون الأحمر */
+    color: var(--ks-input-error-color, #dc3545); /* اللون الأحمر */
     margin-top: 0.25rem; /* إضافة مسافة صغيرة */
     line-height: 1;
   }
@@ -21,6 +21,7 @@ ks-input {
         transform: translateY(-100%);
         transition: 0.2s ease all;
         font-size: 16px;
+        color: var(--ks-input-label-color, currentColor);
         pointer-events: none;
 
         + div div.input-wrapper {
@@ -28,7 +29,7 @@ ks-input {
             color: transparent;
           }
           input:focus::placeholder {
-            color: #7d7d7d;
+            color: var(--ks-input-placeholder, #7d7d7d);
           }
         }
       }
@@ -41,9 +42,10 @@ ks-input {
         font-size: 12px;
         left: 4px !important;
         font-weight: 500;
+        color: var(--ks-input-label-color, currentColor);
 
         + div.input-wrapper input::placeholder {
-          color: #7d7d7d;
+          color: var(--ks-input-placeholder, #7d7d7d);
         }
       }
     }
@@ -58,6 +60,7 @@ ks-input {
         transform: translateY(-100%);
         transition: 0.2s ease all;
         font-size: 16px;
+        color: var(--ks-input-label-color, currentColor);
         pointer-events: none;
 
         + div div.input-wrapper {
@@ -66,7 +69,7 @@ ks-input {
           }
 
           input:focus::placeholder {
-            color: #7d7d7d;
+            color: var(--ks-input-placeholder, #7d7d7d);
           }
         }
         &:has(+ div div.input-wrapper div.left-icon) {
@@ -75,23 +78,24 @@ ks-input {
       }
 
       &._float {
-        background-color: white;
+        background-color: var(--ks-input-label-bg, white);
         padding: 0 4px;
         top: 15%;
         left: 4px !important;
         transform: translateY(-100%);
         font-size: 12px;
         font-weight: 500;
+        color: var(--ks-input-label-color, currentColor);
 
         + div.input-wrapper input::placeholder {
-          color: #7d7d7d;
+          color: var(--ks-input-placeholder, #7d7d7d);
         }
       }
     }
 
     div {
       &.input-wrapper:hover:not(:focus-within) {
-        box-shadow: 0 0 0 0.05rem black;
+        box-shadow: var(--ks-input-hover-shadow, 0 0 0 0.05rem black);
       }
     }
   }
@@ -110,38 +114,38 @@ ks-input {
     height: 44px;
   }
   input {
-    background-color: inherit;
+    background-color: var(--ks-input-bg, inherit);
 
     &:is(:focus, :focus-visible) {
       outline: none;
     }
     &::placeholder {
-      color: #7d7d7d;
+      color: var(--ks-input-placeholder, #7d7d7d);
     }
     &:is(:disabled, :read-only) {
-      background-color: #f5f5f5;
+      background-color: var(--ks-input-disabled-bg, #f5f5f5);
     }
   }
 
   div.input-wrapper {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     &:hover:not(:focus-within, :has(input:disabled)) {
-      box-shadow: 0 0 0 0.05rem currentColor;
+      box-shadow: var(--ks-input-hover-shadow, 0 0 0 0.05rem currentColor);
     }
     &[appearance^="ghost"] {
       font-size: 14px;
 
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--ks-input-ghost-shadow, inset 0 1px 2px rgba(0, 0, 0, 0.1));
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
 
       &:not(:focus-within) {
-        border: 1px solid #ddd;
+        border: 1px solid var(--ks-input-ghost-border, #ddd);
       }
     }
 
     &:has(input:disabled) {
-      background-color: #f5f5f5;
-      opacity: 0.5;
+      background-color: var(--ks-input-disabled-bg, #f5f5f5);
+      opacity: var(--ks-input-disabled-opacity, 0.5);
     }
   }
 }

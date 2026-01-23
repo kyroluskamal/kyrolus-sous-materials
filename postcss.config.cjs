@@ -16,7 +16,28 @@
  * - And all other cutting-edge features
  */
 
+const selectorParser = require('postcss-selector-parser');
+
 const isProd = process.env.NODE_ENV === 'production';
+const classPrefix = process.env.KS_CLASS_PREFIX;
+const namespaceSelector = process.env.KS_NAMESPACE_SELECTOR || process.env.KS_PREFIX_SELECTOR;
+
+const classPrefixer = classPrefix && {
+  postcssPlugin: 'ks-class-prefix',
+  Rule(rule) {
+    if (!rule.selector) return;
+    const processor = selectorParser((selectors) => {
+      selectors.walkClasses((classNode) => {
+        if (classNode.value.startsWith(classPrefix)) return;
+        classNode.value = `${classPrefix}${classNode.value}`;
+      });
+    });
+    rule.selector = processor.processSync(rule.selector);
+  },
+};
+if (classPrefixer) {
+  classPrefixer.postcss = true;
+}
 
 module.exports = {
   plugins: [
@@ -31,6 +52,22 @@ module.exports = {
       ],
       // Preserve modern syntax
       grid: 'autoplace'
+    }),
+
+    // Optional class prefix to avoid selector collisions
+    classPrefixer,
+
+    // Optional namespace scope to avoid selector collisions
+    namespaceSelector && require('postcss-prefix-selector')({
+      prefix: namespaceSelector,
+      transform: (prefix, selector, prefixedSelector) => {
+        // Keep root-level and element-only selectors global
+        if (!/[.#]/.test(selector)) return selector;
+        if (selector.startsWith(':root')) return selector;
+        if (selector.startsWith('html')) return selector;
+        if (selector.startsWith('body')) return selector;
+        return prefixedSelector;
+      },
     }),
 
     // Minification in production with SAFE settings for modern CSS

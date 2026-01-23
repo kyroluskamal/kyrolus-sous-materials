@@ -4,6 +4,7 @@
 // Browser Support: Chrome 123+, Firefox 120+, Safari 17.5+
 // ============================================================================
 
+@supports (color: light-dark(red, blue)) {
 // ----------------------------------------------------------------------------
 // ENABLE COLOR-SCHEME
 // Required for light-dark() to work
@@ -498,4 +499,5 @@
   .light-dark-supported {
     --light-dark-supported: 1;
   }
+}
 }

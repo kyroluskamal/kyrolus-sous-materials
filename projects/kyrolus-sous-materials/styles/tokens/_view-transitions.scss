@@ -5,6 +5,7 @@
 // Provides smooth, animated transitions between page states
 // Browser support: Chrome 111+, Edge 111+, Safari 18+
 
+@supports (view-transition-name: none) {
 // =============================================================================
 // VIEW TRANSITION NAMES
 // =============================================================================
@@ -417,4 +418,5 @@
   &::view-transition-new(root) {
     animation-name: vt-slide-from-right;
   }
+}
 }

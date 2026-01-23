@@ -34,21 +34,22 @@
 
 @use "sass:map";
 @use "sass:color";
+@use "./config" as config;
 
 // =============================================================================
 // COLOR PALETTE CONFIGURATION
 // =============================================================================
 // Define your brand colors here - everything else is auto-generated
 
-$theme-primary: #2563eb; // Primary brand color
-$theme-secondary: #9db44f; // Secondary brand color
-$theme-accent: #7c3aed; // Accent/Tertiary color
+$theme-primary: config.$ks-primary-color; // Primary brand color
+$theme-secondary: config.$ks-secondary-color; // Secondary brand color
+$theme-accent: config.$ks-accent-color; // Accent/Tertiary color
 
 // Semantic colors (adjust to your preference)
-$theme-success: #10b981;
-$theme-warning: #f59e0b;
-$theme-danger: #dc2626;
-$theme-info: #3b82f6;
+$theme-success: config.$ks-success-color;
+$theme-warning: config.$ks-warning-color;
+$theme-danger: config.$ks-error-color;
+$theme-info: config.$ks-info-color;
 
 // =============================================================================
 // LIGHT THEME TOKENS
@@ -76,7 +77,9 @@ $light-theme: (
   --primary-hover: color.scale($theme-primary, $lightness: -10%),
   --primary-active: color.scale($theme-primary, $lightness: -20%),
   --primary-light: color.scale($theme-primary, $lightness: 40%),
+  --primary-subtle: color.scale($theme-primary, $lightness: 60%),
   --on-primary: #ffffff,
+  --on-primary-subtle: color.scale($theme-primary, $lightness: -45%),
 
   --secondary: $theme-secondary,
   --secondary-hover: color.scale($theme-secondary, $lightness: -10%),
@@ -99,6 +102,10 @@ $light-theme: (
   --danger: $theme-danger,
   --danger-light: color.scale($theme-danger, $lightness: 40%),
   --on-danger: #ffffff,
+  --error: $theme-danger,
+  --error-hover: color.scale($theme-danger, $lightness: -10%),
+  --error-subtle: color.scale($theme-danger, $lightness: 60%),
+  --on-error: #ffffff,
 
   --info: $theme-info,
   --info-light: color.scale($theme-info, $lightness: 40%),
@@ -125,7 +132,10 @@ $light-theme: (
   --input-bg: #ffffff,
   --input-border: #e2e8f0,
   --input-focus: $theme-primary,
-  --input-placeholder: #94a3b8
+  --input-placeholder: #94a3b8,
+
+  // Accessibility
+  --focus-ring: $theme-primary
 );
 
 // =============================================================================
@@ -154,7 +164,10 @@ $dark-theme: (
   --primary-active: $theme-primary,
   --primary-light:
     color.scale($theme-primary, $lightness: -30%, $saturation: -20%),
+  --primary-subtle:
+    color.scale($theme-primary, $lightness: -35%, $saturation: -20%),
   --on-primary: #ffffff,
+  --on-primary-subtle: #f1f5f9,
 
   --secondary: color.scale($theme-secondary, $lightness: 10%),
   --secondary-hover: color.scale($theme-secondary, $lightness: 20%),
@@ -180,6 +193,11 @@ $dark-theme: (
   --danger-light:
     color.scale($theme-danger, $lightness: -30%, $saturation: -20%),
   --on-danger: #ffffff,
+  --error: color.scale($theme-danger, $lightness: 10%),
+  --error-hover: $theme-danger,
+  --error-subtle:
+    color.scale($theme-danger, $lightness: -35%, $saturation: -20%),
+  --on-error: #ffffff,
 
   --info: color.scale($theme-info, $lightness: 10%),
   --info-light: color.scale($theme-info, $lightness: -30%, $saturation: -20%),
@@ -206,7 +224,10 @@ $dark-theme: (
   --input-bg: #1e293b,
   --input-border: #475569,
   --input-focus: color.scale($theme-primary, $lightness: 10%),
-  --input-placeholder: #64748b
+  --input-placeholder: #64748b,
+
+  // Accessibility
+  --focus-ring: color.scale($theme-primary, $lightness: 15%)
 );
 
 // =============================================================================
@@ -237,7 +258,9 @@ $high-contrast-theme: (
   --primary-hover: #80c4ff,
   --primary-active: #2894ff,
   --primary-light: #1a3a5c,
+  --primary-subtle: #10253a,
   --on-primary: #000000,
+  --on-primary-subtle: #ffffff,
 
   --secondary: #c8e644,
   // Brighter yellow-green
@@ -265,6 +288,10 @@ $high-contrast-theme: (
   // Bright red
   --danger-light: #4d0a0a,
   --on-danger: #000000,
+  --error: #ff4d4d,
+  --error-hover: #ff8080,
+  --error-subtle: #4d0a0a,
+  --on-error: #000000,
 
   --info: #4dd2ff,
   // Bright cyan
@@ -292,7 +319,10 @@ $high-contrast-theme: (
   --input-bg: #0a0a0a,
   --input-border: #ffffff,
   --input-focus: #ffff00,
-  --input-placeholder: #808080
+  --input-placeholder: #808080,
+
+  // Accessibility
+  --focus-ring: #ffff00
 );
 
 // =============================================================================
@@ -310,8 +340,8 @@ $high-contrast-theme: (
 }
 
 // Dark theme - supports both data attribute AND class
-[data-theme="dark"],
-.dark {
+#{config.$ks-dark-mode-selector},
+#{config.$ks-dark-mode-class} {
   @each $token, $value in $dark-theme {
     #{$token}: #{$value};
   }
@@ -330,6 +360,12 @@ $high-contrast-theme: (
       #{$token}: #{$value};
     }
   }
+}
+
+// Custom theme (runtime-defined)
+[data-theme="custom"],
+.theme-custom {
+  color-scheme: light dark;
 }
 
 // High contrast theme

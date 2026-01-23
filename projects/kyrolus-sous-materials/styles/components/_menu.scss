@@ -40,22 +40,22 @@ ks-menu {
   &.left,
   &.left-start,
   &.left-end {
-    right: calc(100% + 5px);
+    right: calc(100% + var(--ks-menu-offset, 5px));
   }
   &.right,
   &.right-start,
   &.right-end {
-    left: calc(100% + 5px);
+    left: calc(100% + var(--ks-menu-offset, 5px));
   }
   &.top,
   &.top-start,
   &.top-end {
-    bottom: calc(100% + 5px);
+    bottom: calc(100% + var(--ks-menu-offset, 5px));
   }
   &.bottom,
   &.bottom-start,
   &.bottom-end {
-    top: calc(100% + 5px);
+    top: calc(100% + var(--ks-menu-offset, 5px));
   }
 
   /* محاذاة المحور العرضي */
@@ -131,10 +131,10 @@ ks-menu {
     translate: 0 -50%;
   }
   &.enter {
-    animation: ks-menu-enter 0.2s ease-in-out;
+    animation: ks-menu-enter var(--ks-menu-enter-duration, 0.2s) var(--ks-menu-ease, ease-in-out);
   }
   &.leave {
-    animation: ks-menu-leave 0.2s ease-in-out;
+    animation: ks-menu-leave var(--ks-menu-leave-duration, 0.2s) var(--ks-menu-ease, ease-in-out);
   }
   button [ksIcon],
   button [class*="material-icons"] {
@@ -164,15 +164,15 @@ ks-menu {
   }
 }
 .menu-enter {
-  animation: ks-menu-enter 0.2s ease-in-out;
+  animation: ks-menu-enter var(--ks-menu-enter-duration, 0.2s) var(--ks-menu-ease, ease-in-out);
 }
 .menu-leave {
-  animation: ks-menu-leave 0.2s ease-in-out;
+  animation: ks-menu-leave var(--ks-menu-leave-duration, 0.2s) var(--ks-menu-ease, ease-in-out);
 }
 .arrow {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: var(--ks-menu-arrow-size, 10px);
+  height: var(--ks-menu-arrow-size, 10px);
   background: inherit; /* يرث لون الخلفية من الـ popover */
   transform: rotate(45deg);
 }

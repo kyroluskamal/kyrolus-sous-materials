@@ -112,7 +112,11 @@
             "w-#{$prefix}-#{$size-name}#{$unit-suffix}"
           );
 
-          $value: if($size-value == "auto", auto, #{$size-value}#{$unit});
+          $value: if(
+            $size-value == auto,
+            auto,
+            string.unquote("#{$size-value}#{$unit}")
+          );
 
           .#{$class-name} {
             width: $value;
@@ -151,10 +155,14 @@
             "h-#{$prefix}-#{$size-name}#{$unit-suffix}"
           );
 
-          $value: if($size-value == "auto", auto, #{$size-value}#{$unit});
+          $value: if(
+            $size-value == auto,
+            auto,
+            string.unquote("#{$size-value}#{$unit}")
+          );
 
           .#{$class-name} {
-            width: $value;
+            height: $value;
           }
         }
       }

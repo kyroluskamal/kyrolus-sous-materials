@@ -7,13 +7,11 @@
 // ------
 // In your app's styles.scss:
 //
-// // Override defaults
-// $ks-enable-dark-mode: true;
-// $ks-enable-rtl: true;
-// $ks-primary-color: #your-brand-color;
-//
-// // Then import the framework
-// @use "kyrolus-sous-materials/styles/styles";
+// @use "kyrolus-sous-materials/styles/styles" with (
+//   $ks-enable-dark-mode: true,
+//   $ks-enable-rtl: true,
+//   $ks-primary-color: #your-brand-color
+// );
 // =============================================================================
 
 @use "sass:map";

@@ -9,6 +9,7 @@
 // ENABLE INTERPOLATE-SIZE
 // =============================================================================
 
+@supports (interpolate-size: allow-keywords) {
 /// Enable interpolate-size globally
 :root {
   interpolate-size: allow-keywords;
@@ -417,6 +418,7 @@
   &.is-visible {
     height: auto;
   }
+}
 }
 
 // =============================================================================

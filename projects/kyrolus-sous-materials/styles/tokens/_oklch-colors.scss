@@ -9,6 +9,7 @@
 // OKLCH COLOR DEFINITIONS
 // =============================================================================
 
+@supports (color: oklch(50% 0.2 250)) {
 :root {
   // Primary palette in OKLCH
   --primary-oklch: oklch(55% 0.25 250);
@@ -491,10 +492,9 @@ $oklch-hues: (
 // FEATURE DETECTION
 // =============================================================================
 
-@supports (color: oklch(50% 0.2 250)) {
-  .oklch-supported {
-    --oklch-support: true;
-  }
+.oklch-supported {
+  --oklch-support: true;
+}
 }
 
 @supports not (color: oklch(50% 0.2 250)) {

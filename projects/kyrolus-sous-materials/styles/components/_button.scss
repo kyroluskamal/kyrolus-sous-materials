@@ -127,14 +127,14 @@ $btn-colors: (
 
 // Base Button Styles
 .btn {
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
+  font-weight: var(--ks-btn-font-weight, 500);
+  transition: var(--ks-btn-transition, all 0.2s ease-in-out);
   width: fit-content;
   &:disabled,
   &[disabled] {
-    opacity: 0.6;
-    background-color: #b6b6b6;
-    color: #1b1919;
+    opacity: var(--ks-btn-disabled-opacity, 0.6);
+    background-color: var(--ks-btn-disabled-bg, #b6b6b6);
+    color: var(--ks-btn-disabled-color, #1b1919);
     cursor: not-allowed;
   }
 
@@ -145,12 +145,19 @@ $btn-colors: (
 
 // Size Variants
 @each $size, $values in $btn-sizes {
-  .btn-#{$size} {
-    padding: map.get($values, padding-y) map.get($values, padding-x);
-    font-size: map.get($values, font-size) !important;
+.btn-#{$size} {
+    padding: var(
+        --ks-btn-#{$size}-padding-y,
+        map.get($values, padding-y)
+      )
+      var(--ks-btn-#{$size}-padding-x, map.get($values, padding-x));
+    font-size: var(
+        --ks-btn-#{$size}-font-size,
+        map.get($values, font-size)
+      ) !important;
     &.btn-rounded {
       padding: map.get($values, padding-y) map.get($values, padding-x);
-      border-radius: 0.5rem !important;
+      border-radius: var(--ks-btn-rounded-radius, 0.5rem) !important;
     }
 
     &.btn-circle {
@@ -166,24 +173,33 @@ $btn-colors: (
     &.btn-pill {
       padding: calc(map.get($values, padding-y) * 0.8)
         map.get($values, padding-x);
-      border-radius: 9999px !important;
+      border-radius: var(--ks-btn-pill-radius, 9999px) !important;
     }
   }
 }
 // Appearance Variants
 @each $appearance, $colors in $btn-colors {
   .btn-#{$appearance} {
-    background-color: map.get($colors, bg);
-    color: map.get($colors, color);
+    background-color: var(
+      --ks-btn-#{$appearance}-bg,
+      map.get($colors, bg)
+    );
+    color: var(--ks-btn-#{$appearance}-color, map.get($colors, color));
 
     &:hover:not(:disabled):not([disabled]),
     &:focus:not(:disabled):not([disabled]) {
-      background-color: map.get($colors, hover);
+      background-color: var(
+        --ks-btn-#{$appearance}-hover,
+        map.get($colors, hover)
+      );
     }
 
     &:active:not(:disabled):not([disabled]),
     &.active:not(:disabled):not([disabled]) {
-      background-color: map.get($colors, active);
+      background-color: var(
+        --ks-btn-#{$appearance}-active,
+        map.get($colors, active)
+      );
     }
   }
 }
@@ -203,28 +219,38 @@ $outline-buttons: (
 @each $outline, $color in $outline-buttons {
   .btn-outline-#{$outline} {
     background-color: transparent;
-    border: 2px solid $color !important;
-    color: $color;
+    border: var(--ks-btn-outline-width, 2px) solid
+      var(--ks-btn-outline-#{$outline}-border, $color) !important;
+    color: var(--ks-btn-outline-#{$outline}-color, $color);
 
     &:hover:not(:disabled):not([disabled]),
     &:focus:not(:disabled):not([disabled]) {
-      background-color: rgba($color, 0.1);
+      background-color: var(
+        --ks-btn-outline-#{$outline}-hover-bg,
+        rgba($color, 0.1)
+      );
     }
 
     &:active:not(:disabled):not([disabled]),
     &.active:not(:disabled):not([disabled]) {
-      background-color: rgba($color, 0.2);
+      background-color: var(
+        --ks-btn-outline-#{$outline}-active-bg,
+        rgba($color, 0.2)
+      );
     }
   }
 }
 // Variant Styles
 .btn-outline {
   background-color: transparent;
-  border: 2px solid currentColor;
+  border: var(--ks-btn-outline-width, 2px) solid currentColor;
 
   &:hover:not(:disabled):not([disabled]),
   &:focus:not(:disabled):not([disabled]) {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: var(
+      --ks-btn-outline-hover-bg,
+      rgba(0, 0, 0, 0.05)
+    );
   }
 }
 $ghost-buttons: (
@@ -243,17 +269,20 @@ $ghost-buttons: (
 @each $ghost, $color in $ghost-buttons {
   .btn-ghost-#{$ghost} {
     background-color: transparent;
-    color: $color;
+    color: var(--ks-btn-ghost-#{$ghost}-color, $color);
 
     &:hover:not(:disabled):not([disabled]) {
-      background-color: $color;
-      color: white;
+      background-color: var(--ks-btn-ghost-#{$ghost}-hover-bg, $color);
+      color: var(--ks-btn-ghost-#{$ghost}-hover-color, white);
     }
 
     &:active:not(:disabled):not([disabled]),
     &.active:not(:disabled):not([disabled]) {
-      background-color: color.scale($color, $lightness: $active-darken);
-      color: white;
+      background-color: var(
+        --ks-btn-ghost-#{$ghost}-active-bg,
+        color.scale($color, $lightness: $active-darken)
+      );
+      color: var(--ks-btn-ghost-#{$ghost}-active-color, white);
     }
   }
 }
@@ -274,16 +303,22 @@ $text-buttons: (
 @each $text, $color in $text-buttons {
   .btn-text-#{$text} {
     background-color: transparent;
-    color: $color;
+    color: var(--ks-btn-text-#{$text}-color, $color);
 
     &:hover:not(:disabled):not([disabled]),
     &:focus:not(:disabled):not([disabled]) {
-      background-color: rgba($color, 0.1);
+      background-color: var(
+        --ks-btn-text-#{$text}-hover-bg,
+        rgba($color, 0.1)
+      );
     }
 
     &:active:not(:disabled):not([disabled]),
     &.active:not(:disabled):not([disabled]) {
-      background-color: rgba($color, 0.2);
+      background-color: var(
+        --ks-btn-text-#{$text}-active-bg,
+        rgba($color, 0.2)
+      );
     }
   }
 }
@@ -291,11 +326,11 @@ $text-buttons: (
 .btn-link {
   background-color: transparent;
   padding: 0;
-  text-decoration: underline;
+  text-decoration: var(--ks-btn-link-decoration, underline);
 
   &:hover:not(:disabled):not([disabled]),
   &:focus:not(:disabled):not([disabled]) {
-    text-decoration: none;
+    text-decoration: var(--ks-btn-link-hover-decoration, none);
   }
 }
 a[ksButton]:not([class*="Link"]) {

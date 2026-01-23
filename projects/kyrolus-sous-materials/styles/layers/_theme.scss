@@ -1,0 +1,4 @@
+@layer theme {
+  @use "../abstracts/theme" as *;
+  @use "../tokens/dark-mode" as *;
+}

@@ -1,0 +1,7 @@
+// =============================================================================
+// KYROLUS SOUS MATERIALS - CSS LAYER ORDER
+// =============================================================================
+// Centralized layer order so all entrypoints stay consistent.
+// =============================================================================
+
+@layer reset, tokens, theme, base, components, utilities, states, overrides;

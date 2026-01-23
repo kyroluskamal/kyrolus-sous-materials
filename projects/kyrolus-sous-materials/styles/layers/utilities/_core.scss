@@ -1,0 +1,13 @@
+@layer utilities {
+  // Core utilities (everyday usage)
+  @use "../../tokens/color-utilities" as *;
+  @use "../../tokens/typography" as *;
+  @use "../../tokens/spacing" as *;
+  @use "../../tokens/layout" as *;
+  @use "../../tokens/effects" as *;
+  @use "../../tokens/accessibility" as *;
+  @use "../../tokens/states" as *;
+  @use "../../tokens/group-peer" as *;
+  @use "../../tokens/angular" as *;
+  @use "../../tokens/focus-visible" as *;
+}

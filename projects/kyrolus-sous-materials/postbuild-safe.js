@@ -33,6 +33,7 @@ const path = require('node:path');
 // Configuration
 const DEFAULT_DIST_PATH = './dist/DemoApp/browser';
 const distPath = process.argv[2] || DEFAULT_DIST_PATH;
+const CLASS_PREFIX = process.env.KS_CLASS_PREFIX || '';
 
 // =============================================================================
 // MODERN CSS FEATURE DETECTION
@@ -195,6 +196,26 @@ const SAFELIST_EXACT = [
   'balance',
   'pretty',
 ];
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+const PREFIX_RE = CLASS_PREFIX ? escapeRegExp(CLASS_PREFIX) : '';
+const SAFELIST_PATTERNS_EFFECTIVE = CLASS_PREFIX
+  ? SAFELIST_PATTERNS.map((pattern) => {
+      if (!(pattern instanceof RegExp)) return pattern;
+      const source = pattern.source;
+      if (source.startsWith('^')) {
+        return new RegExp(`^(?:${PREFIX_RE})?${source.slice(1)}`);
+      }
+      return pattern;
+    })
+  : SAFELIST_PATTERNS;
+
+const SAFELIST_EXACT_EFFECTIVE = CLASS_PREFIX
+  ? SAFELIST_EXACT.concat(SAFELIST_EXACT.map((c) => `${CLASS_PREFIX}${c}`))
+  : SAFELIST_EXACT;
 
 // =============================================================================
 // CUSTOM EXTRACTOR FOR ANGULAR
@@ -397,28 +418,22 @@ async function runSafePurgeCSS() {
   try {
     // Run PurgeCSS with programmatic API
     const purgeCSSResults = await new PurgeCSS().purge({
-      content: contentFiles.map(pattern => ({
-        raw: '', // Will be populated by glob
-        extension: 'html'
-      })),
-      contentFunction: (sourceFile) => {
-        // Return all content files
-        return contentFiles;
-      },
-      css: cssFiles.map(file => ({ raw: fs.readFileSync(file, 'utf8') })),
+      content: contentFiles,
+      css: cssFiles,
 
       // Safelist configuration
       safelist: {
-        standard: SAFELIST_EXACT,
-        deep: SAFELIST_PATTERNS,
-        greedy: SAFELIST_PATTERNS,
+        standard: SAFELIST_EXACT_EFFECTIVE,
+        deep: SAFELIST_PATTERNS_EFFECTIVE,
+        greedy: SAFELIST_PATTERNS_EFFECTIVE,
       },
 
       // Custom extractor for Angular
+      defaultExtractor: angularExtractor,
       extractors: [
         {
           extractor: angularExtractor,
-          extensions: ['html', 'js', 'mjs', 'ts'],
+          extensions: ['html', 'js', 'mjs'],
         },
       ],
 

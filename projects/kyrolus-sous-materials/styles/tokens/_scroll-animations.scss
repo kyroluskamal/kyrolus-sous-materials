@@ -16,6 +16,8 @@
 @use "sass:map";
 @use "primitives" as *;
 
+@supports (animation-timeline: scroll()) or (view-timeline-name: --test) {
+
 // =============================================================================
 // CUSTOM TIMELINE DEFINITIONS
 // =============================================================================
@@ -639,3 +641,4 @@
 // } @else {
 //   .animated { /* Fallback styles */ }
 // }
+}

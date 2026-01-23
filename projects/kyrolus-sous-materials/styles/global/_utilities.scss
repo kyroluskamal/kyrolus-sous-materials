@@ -1,0 +1,151 @@
+// =============================================================================
+// GLOBAL UTILITIES (Outside layers for maximum specificity)
+// =============================================================================
+
+// Backdrop overlay
+.backdrop {
+  position: fixed;
+  inset: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  z-index: 1040;
+  background-color: transparent;
+
+  &.backdrop-show,
+  &[data-show="true"] {
+    visibility: visible;
+    opacity: 1;
+    background-color: var(--overlay);
+  }
+}
+
+// Fullscreen mode
+.fullscreen {
+  position: fixed !important;
+  inset: 0.5rem !important;
+  width: calc(100dvw - 1rem) !important;
+  height: calc(100dvh - 1rem) !important;
+  overflow: auto !important;
+  z-index: 1050;
+}
+
+*:fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  margin: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  max-height: none !important;
+  transform: none !important;
+  border-radius: 0 !important;
+  overflow: auto !important;
+}
+
+*::backdrop {
+  background: var(--overlay);
+}
+
+// Ripple effect
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &:active::after {
+    animation: ripple-animation 0.6s ease-out;
+  }
+}
+
+// =============================================================================
+// PRINT STYLES
+// =============================================================================
+@media print {
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+// =============================================================================
+// RTL HELPERS
+// =============================================================================
+
+// Flip icons/elements in RTL
+.flip-rtl {
+  [dir="rtl"] & {
+    transform: scaleX(-1);
+  }
+}
+
+// Force LTR for specific content (like phone numbers, code)
+.ltr-only {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+// Force RTL for specific content
+.rtl-only {
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+
+// =============================================================================
+// DARK MODE HELPERS
+// =============================================================================
+
+// Show only in dark mode (works with both data-theme and class)
+.dark-only {
+  display: none !important;
+
+  [data-theme="dark"] &,
+  .dark & {
+    display: initial !important;
+  }
+}
+
+// Show only in light mode (works with both data-theme and class)
+.light-only {
+  [data-theme="dark"] &,
+  .dark & {
+    display: none !important;
+  }
+}
+
+// Invert colors for images in dark mode
+.invert-dark {
+  [data-theme="dark"] &,
+  .dark & {
+    filter: invert(1) hue-rotate(180deg);
+  }
+}

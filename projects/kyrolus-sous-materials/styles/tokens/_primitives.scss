@@ -9,6 +9,7 @@
 @use "sass:map";
 @use "sass:color";
 @use "sass:math";
+@use "../abstracts/config" as config;
 
 // =============================================================================
 // COLOR PRIMITIVES
@@ -424,9 +425,9 @@ $palette-shades: (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950);
 // =============================================================================
 // SPACING PRIMITIVES
 // =============================================================================
-// Based on a 4px base unit (0.25rem) for consistent spacing
+// Based on a configurable base unit for consistent spacing
 
-$spacing-base: 0.25rem; // 4px
+$spacing-base: config.$ks-spacing-base;
 
 $spacing: (
   0: 0,
@@ -498,6 +499,9 @@ $spacing: (
   96: $spacing-base * 96,
   // 384px
 );
+
+// Allow project-specific overrides or extensions
+$spacing: map.merge($spacing, config.$ks-custom-spacing);
 
 // =============================================================================
 // TYPOGRAPHY PRIMITIVES
@@ -715,24 +719,10 @@ $easings: (
 // =============================================================================
 // BREAKPOINT PRIMITIVES
 // =============================================================================
-$breakpoints: (
-  xs: 0,
-  sm: 640px,
-  md: 768px,
-  lg: 1024px,
-  xl: 1280px,
-  2xl: 1536px,
-  3xl: 1920px,
-);
+$breakpoints: config.$ks-breakpoints;
 
 // Container sizes
-$containers: (
-  sm: 640px,
-  md: 768px,
-  lg: 1024px,
-  xl: 1280px,
-  2xl: 1536px,
-);
+$containers: config.$ks-container-breakpoints;
 
 // =============================================================================
 // Z-INDEX PRIMITIVES

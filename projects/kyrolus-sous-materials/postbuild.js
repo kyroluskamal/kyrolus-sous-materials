@@ -10,13 +10,14 @@
  * Example: node postbuild.js dist/my-app/browser
  */
 
-import { exec } from 'node:child_process';
-import { existsSync, readdirSync, statSync, readFileSync } from 'node:fs';
-import { extname, join, relative } from 'node:path';
+const { exec } = require('node:child_process');
+const { existsSync, readdirSync, statSync, readFileSync } = require('node:fs');
+const { extname, join, relative } = require('node:path');
 
 // Configuration
 const DEFAULT_DIST_PATH = './dist/DemoApp/browser';
 const distPath = process.argv[2] || DEFAULT_DIST_PATH;
+const CLASS_PREFIX = process.env.KS_CLASS_PREFIX || '';
 
 // =============================================================================
 // COMPREHENSIVE SAFELIST FOR MODERN CSS FEATURES
@@ -360,12 +361,13 @@ async function runPurgeCSS() {
   // Note: PurgeCSS CLI has limited safelist support, so we're being extra careful
   const safelistArgs = SAFELIST
     .slice(0, 20) // CLI has limits, so we use the most important patterns
-    .map(pattern => {
-      if (pattern instanceof RegExp) {
-        // Convert regex to string pattern for CLI
-        return pattern.source;
+    .flatMap(pattern => {
+      const baseValue = pattern instanceof RegExp ? pattern.source : pattern;
+      if (!CLASS_PREFIX) return [baseValue];
+      if (baseValue.startsWith('^')) {
+        return [baseValue, `^${CLASS_PREFIX}${baseValue.slice(1)}`];
       }
-      return pattern;
+      return [baseValue, `${CLASS_PREFIX}${baseValue}`];
     });
 
   const cssFilesArg = cssFiles.map(f => `"${f}"`).join(' ');
@@ -419,4 +421,7 @@ async function runPurgeCSS() {
   });
 }
 
-await runPurgeCSS();
+runPurgeCSS().catch((error) => {
+  console.error('âŒ PurgeCSS Error:', error.message);
+  console.error(error.stack);
+});
