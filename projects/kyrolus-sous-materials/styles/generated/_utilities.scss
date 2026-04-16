@@ -4,3 +4,7 @@
 @include mixins.generate-responsive-display-classes;
 @include mixins.generate-width-classes;
 @include mixins.generate-height-classes;
+
+// JIT-generated utility classes (produced by `npm run ks` or `npm run ks:watch`).
+// The file is committed empty and rewritten on each build. Safe to diff.
+@import "jit";

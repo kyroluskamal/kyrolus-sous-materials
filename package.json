@@ -16,11 +16,15 @@
     "test:visual": "cypress run --spec cypress/e2e/visual-baseline.cy.ts",
     "serve:ssr:DemoApp": "node dist/DemoApp/server/server.mjs",
     "cypress:open": "cypress open",
-    "ks": "ng build kyrolus-sous-materials --watch ",
+    "build:lib": "ng build kyrolus-sous-materials --watch ",
     "demo": "ng serve DemoApp --port 4200 -o",
     "purge:css": "node projects/kyrolus-sous-materials/postbuild.js",
     "purge:css:safe": "node projects/kyrolus-sous-materials/postbuild-safe.js",
-    "purge:css:custom": "node projects/kyrolus-sous-materials/postbuild.js"
+    "purge:css:custom": "node projects/kyrolus-sous-materials/postbuild.js",
+    "ks:build-engine": "tsc -p projects/kyrolus-sous-materials/jit/tsconfig.json",
+    "ks": "npm run ks:build-engine --silent && node projects/kyrolus-sous-materials/jit/dist/cli.js build",
+    "ks:watch": "npm run ks:build-engine --silent && node projects/kyrolus-sous-materials/jit/dist/cli.js watch",
+    "ks:init": "npm run ks:build-engine --silent && node projects/kyrolus-sous-materials/jit/dist/cli.js init"
   },
   "prettier": {
     "overrides": [

@@ -1,0 +1,17 @@
+{
+  "name": "@kyrolus-sous-materials/jit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "JIT utility CSS generator for Kyrolus Sous Materials.",
+  "bin": {
+    "ks": "./bin/ks.cjs"
+  },
+  "main": "./src/index.ts",
+  "type": "commonjs",
+  "scripts": {
+    "build:tsc": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0"
+  }
+}
