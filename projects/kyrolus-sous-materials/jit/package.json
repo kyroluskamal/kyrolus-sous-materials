@@ -8,8 +8,13 @@
   },
   "main": "./src/index.ts",
   "type": "commonjs",
+  "builders": "./builders.json",
   "scripts": {
     "build:tsc": "tsc -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "@angular-devkit/architect": ">=0.2000.0",
+    "@angular/build": ">=20.0.0"
   },
   "devDependencies": {
     "@types/node": "^25.6.0"

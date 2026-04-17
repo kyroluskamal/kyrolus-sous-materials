@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/@angular-devkit/architect/src/builders-schema.json",
+  "builders": {
+    "application": {
+      "implementation": "./dist/builders/application",
+      "schema": "./src/builders/application.schema.json",
+      "description": "Runs the ks JIT once, then delegates to @angular/build:application."
+    },
+    "dev-server": {
+      "implementation": "./dist/builders/dev-server",
+      "schema": "./src/builders/dev-server.schema.json",
+      "description": "Starts the ks JIT watcher, then delegates to @angular/build:dev-server."
+    }
+  }
+}

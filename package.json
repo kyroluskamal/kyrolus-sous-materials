@@ -58,6 +58,7 @@
     "@angular/build": "^20.3.4",
     "@angular/cli": "^20.3.4",
     "@angular/compiler-cli": "^20.3.3",
+    "@kyrolus-sous-materials/jit": "file:./projects/kyrolus-sous-materials/jit",
     "@fullhuman/postcss-purgecss": "^7.0.2",
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",

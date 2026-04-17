@@ -66,7 +66,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@kyrolus-sous-materials/jit:application",
           "options": {
             "browser": "projects/demo-app/src/main.ts",
             "tsConfig": "projects/demo-app/tsconfig.app.json",
@@ -114,7 +114,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@kyrolus-sous-materials/jit:dev-server",
           "options": {
             "prebundle": {
               "exclude": ["kyrolus-sous-materials"]
