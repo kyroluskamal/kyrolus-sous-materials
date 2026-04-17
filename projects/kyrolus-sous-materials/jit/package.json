@@ -13,7 +13,7 @@
     "build:tsc": "tsc -p tsconfig.json"
   },
   "peerDependencies": {
-    "@angular/build": ">=20.0.0"
+    "@angular/build": ">=21.0.0"
   },
   "devDependencies": {
     "@types/node": "^25.6.0"
