@@ -18,6 +18,45 @@
 @use "sass:color";
 @use "sass:math";
 @use "sass:list";
+@use "sass:string";
+
+// =============================================================================
+// ESCAPE SELECTOR FUNCTION
+// =============================================================================
+@function escape-selector($name) {
+  $str: "#{$name}";
+  $result: "";
+  $first-char: string.slice($str, 1, 1);
+  @if $first-char ==
+    "0" or
+    $first-char ==
+    "1" or
+    $first-char ==
+    "2" or
+    $first-char ==
+    "3" or
+    $first-char ==
+    "4" or
+    $first-char ==
+    "5" or
+    $first-char ==
+    "6" or
+    $first-char ==
+    "7" or
+    $first-char ==
+    "8" or
+    $first-char ==
+    "9"
+  {
+    $result: "\\3" + $first-char + " ";
+    $str: string.slice($str, 2);
+  }
+  @for $i from 1 through string.length($str) {
+    $char: string.slice($str, $i, $i);
+    $result: $result + $char;
+  }
+  @return $result;
+}
 
 // =============================================================================
 // FEATURE FLAGS
@@ -58,11 +97,21 @@ $ks-info-color: #3b82f6 !default; // Blue-500
 // TYPOGRAPHY CONFIGURATION
 // =============================================================================
 
-$ks-font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-  "Helvetica Neue", Arial, "Noto Sans", sans-serif !default;
-$ks-font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif !default;
-$ks-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-  "Liberation Mono", "Courier New", monospace !default;
+$ks-font-sans:
+  system-ui,
+  -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  Roboto,
+  "Helvetica Neue",
+  Arial,
+  "Noto Sans",
+  sans-serif !default;
+$ks-font-serif:
+  ui-serif, Georgia, Cambria, "Times New Roman", Times, serif !default;
+$ks-font-mono:
+  ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+  "Courier New", monospace !default;
 
 $ks-base-font-size: 16px !default;
 $ks-base-line-height: 1.5 !default;
@@ -317,7 +366,7 @@ $ks-dark-mode-class: ".dark" !default;
     @each $bp-name, $bp-value in $ks-breakpoints {
       @if $bp-value > 0 {
         @media (min-width: $bp-value) {
-          .#{$bp-name}\:#{$class} {
+          .#{escape-selector($bp-name)}\:#{$class} {
             @content;
           }
         }

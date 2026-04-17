@@ -2,9 +2,12 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "KyrolusSousMaterials": [
+   "paths": {
+      "kyrolus-sous-materials": [
         "./dist/kyrolus-sous-materials"
+      ],
+      "kyrolus-sous-materials/*": [
+        "./dist/kyrolus-sous-materials/*"
       ]
     },
     "strict": true,
@@ -18,7 +21,6 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
-    "lib": ["ES2022", "DOM"],
     "types": [
       "./node_modules/user-agent-data-types"
      ]

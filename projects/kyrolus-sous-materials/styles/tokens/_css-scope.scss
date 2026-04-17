@@ -138,8 +138,8 @@
     transition: all 0.2s ease;
   }
 
-  &[open] .menu,
-  &:focus-within .menu {
+  :scope[open] .menu,
+  :scope:focus-within .menu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);

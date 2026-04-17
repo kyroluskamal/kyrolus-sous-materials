@@ -1,3 +1,2 @@
-@layer reset {
-  @use "../base/modern-reset" as *;
-}
+// Reset layer - wraps modern reset styles
+@use "../base/modern-reset";

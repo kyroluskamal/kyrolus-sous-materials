@@ -1,10 +1,9 @@
-@layer components {
-  @use "../components/button" as *;
-  @use "../components/input" as *;
-  @use "../components/card" as *;
-  @use "../components/loaders" as *;
-  @use "../components/accordion" as *;
-  @use "../components/table" as *;
-  @use "../components/paginator" as *;
-  @use "../components/menu" as *;
-}
+// Components layer - UI components
+@use "../components/button";
+@use "../components/input";
+@use "../components/card";
+@use "../components/loaders";
+@use "../components/accordion";
+@use "../components/table";
+@use "../components/paginator";
+@use "../components/menu";

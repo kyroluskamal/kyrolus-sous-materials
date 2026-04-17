@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ButtonDirective } from 'KyrolusSousMaterials';
+import { ButtonDirective } from 'kyrolus-sous-materials';
 
 @Component({
   selector: 'app-tests',

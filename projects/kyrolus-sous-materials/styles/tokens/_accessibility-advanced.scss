@@ -13,6 +13,9 @@
 @use "sass:map";
 @use "primitives" as *;
 
+// Debug mode flag (disable by default)
+$debug-mode: false !default;
+
 // =============================================================================
 // PREFERENCES MEDIA QUERIES
 // =============================================================================

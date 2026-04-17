@@ -5,7 +5,7 @@ import {
   MenuModule,
   PopoverMenuBlock,
   PopoverPlacement,
-} from 'KyrolusSousMaterials';
+} from 'Kyrolus-Sous-Materials';
 
 @Component({
   selector: 'app-popover-menu-tests',
@@ -139,7 +139,7 @@ export class PopoverMenuTests {
       iconName: 'menu',
       RaisedClass: 'raised',
       id: `menu-button-${Math.random().toString(36).substring(2, 15)}`,
-    }
+    },
   );
   placement = signal<PopoverPlacement>('top');
 }

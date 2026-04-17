@@ -1,7 +1,6 @@
-@layer tokens {
-  @use "../tokens/primitives" as *;
-  @use "../tokens/semantic" as *;
-  @use "../tokens/component-vars" as *;
-  @use "../tokens/extended-colors" as *;
-  @use "../tokens/advanced" as *;
-}
+// Tokens layer - CSS custom properties
+@use "../tokens/primitives";
+@use "../tokens/semantic";
+@use "../tokens/component-vars";
+@use "../tokens/extended-colors";
+@use "../tokens/advanced";

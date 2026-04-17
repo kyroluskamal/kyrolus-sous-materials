@@ -6,7 +6,53 @@
 // =============================================================================
 
 @use "sass:map";
+@use "sass:string";
 @use "primitives" as *;
+
+/// Escape special characters in class names for CSS selectors
+/// Handles: slashes, leading digits
+@function escape-selector($name) {
+  $str: "#{$name}";
+  $result: "";
+  $first-char: string.slice($str, 1, 1);
+
+  // Escape leading digit
+  @if $first-char ==
+    "0" or
+    $first-char ==
+    "1" or
+    $first-char ==
+    "2" or
+    $first-char ==
+    "3" or
+    $first-char ==
+    "4" or
+    $first-char ==
+    "5" or
+    $first-char ==
+    "6" or
+    $first-char ==
+    "7" or
+    $first-char ==
+    "8" or
+    $first-char ==
+    "9"
+  {
+    $result: "\\3" + $first-char + " ";
+    $str: string.slice($str, 2);
+  }
+
+  // Process remaining characters
+  @for $i from 1 through string.length($str) {
+    $char: string.slice($str, $i, $i);
+    @if $char == "/" {
+      $result: $result + "\\/";
+    } @else {
+      $result: $result + $char;
+    }
+  }
+  @return $result;
+}
 
 // =============================================================================
 // SPACING UTILITY CLASSES
@@ -259,7 +305,7 @@ $width-percentages: (
 );
 
 @each $name, $value in $width-percentages {
-  .w-#{$name} {
+  .w-#{escape-selector($name)} {
     width: $value;
   }
 }
@@ -381,7 +427,7 @@ $height-percentages: (
 );
 
 @each $name, $value in $height-percentages {
-  .h-#{$name} {
+  .h-#{escape-selector($name)} {
     height: $value;
   }
 }
@@ -549,27 +595,27 @@ $height-percentages: (
 
 // Percentage insets
 @each $name, $value in $width-percentages {
-  .inset-#{$name} {
+  .inset-#{escape-selector($name)} {
     inset: $value;
   }
-  .inset-x-#{$name} {
+  .inset-x-#{escape-selector($name)} {
     left: $value;
     right: $value;
   }
-  .inset-y-#{$name} {
+  .inset-y-#{escape-selector($name)} {
     top: $value;
     bottom: $value;
   }
-  .top-#{$name} {
+  .top-#{escape-selector($name)} {
     top: $value;
   }
-  .right-#{$name} {
+  .right-#{escape-selector($name)} {
     right: $value;
   }
-  .bottom-#{$name} {
+  .bottom-#{escape-selector($name)} {
     bottom: $value;
   }
-  .left-#{$name} {
+  .left-#{escape-selector($name)} {
     left: $value;
   }
 }
@@ -815,8 +861,8 @@ $ring-widths: (
       0
       calc(#{$value} + var(--ring-offset-width, 0px))
       var(--ring-color, var(--primary));
-    box-shadow: var(--ring-offset-shadow), var(--ring-shadow),
-      var(--shadow, 0 0 #0000);
+    box-shadow:
+      var(--ring-offset-shadow), var(--ring-shadow), var(--shadow, 0 0 #0000);
   }
 }
 
@@ -912,122 +958,122 @@ $ring-offsets: (
     @media (min-width: $bp-value) {
       // Padding
       @each $key, $value in $spacing {
-        .#{$bp-name}\:p-#{$key} {
+        .#{escape-selector($bp-name)}\:p-#{$key} {
           padding: $value;
         }
-        .#{$bp-name}\:px-#{$key} {
+        .#{escape-selector($bp-name)}\:px-#{$key} {
           padding-left: $value;
           padding-right: $value;
         }
-        .#{$bp-name}\:py-#{$key} {
+        .#{escape-selector($bp-name)}\:py-#{$key} {
           padding-top: $value;
           padding-bottom: $value;
         }
-        .#{$bp-name}\:pt-#{$key} {
+        .#{escape-selector($bp-name)}\:pt-#{$key} {
           padding-top: $value;
         }
-        .#{$bp-name}\:pr-#{$key} {
+        .#{escape-selector($bp-name)}\:pr-#{$key} {
           padding-right: $value;
         }
-        .#{$bp-name}\:pb-#{$key} {
+        .#{escape-selector($bp-name)}\:pb-#{$key} {
           padding-bottom: $value;
         }
-        .#{$bp-name}\:pl-#{$key} {
+        .#{escape-selector($bp-name)}\:pl-#{$key} {
           padding-left: $value;
         }
       }
 
       // Margin
       @each $key, $value in $spacing {
-        .#{$bp-name}\:m-#{$key} {
+        .#{escape-selector($bp-name)}\:m-#{$key} {
           margin: $value;
         }
-        .#{$bp-name}\:mx-#{$key} {
+        .#{escape-selector($bp-name)}\:mx-#{$key} {
           margin-left: $value;
           margin-right: $value;
         }
-        .#{$bp-name}\:my-#{$key} {
+        .#{escape-selector($bp-name)}\:my-#{$key} {
           margin-top: $value;
           margin-bottom: $value;
         }
-        .#{$bp-name}\:mt-#{$key} {
+        .#{escape-selector($bp-name)}\:mt-#{$key} {
           margin-top: $value;
         }
-        .#{$bp-name}\:mr-#{$key} {
+        .#{escape-selector($bp-name)}\:mr-#{$key} {
           margin-right: $value;
         }
-        .#{$bp-name}\:mb-#{$key} {
+        .#{escape-selector($bp-name)}\:mb-#{$key} {
           margin-bottom: $value;
         }
-        .#{$bp-name}\:ml-#{$key} {
+        .#{escape-selector($bp-name)}\:ml-#{$key} {
           margin-left: $value;
         }
       }
 
       // Auto margins
-      .#{$bp-name}\:mx-auto {
+      .#{escape-selector($bp-name)}\:mx-auto {
         margin-left: auto;
         margin-right: auto;
       }
-      .#{$bp-name}\:my-auto {
+      .#{escape-selector($bp-name)}\:my-auto {
         margin-top: auto;
         margin-bottom: auto;
       }
-      .#{$bp-name}\:ml-auto {
+      .#{escape-selector($bp-name)}\:ml-auto {
         margin-left: auto;
       }
-      .#{$bp-name}\:mr-auto {
+      .#{escape-selector($bp-name)}\:mr-auto {
         margin-right: auto;
       }
 
       // Gap
       @each $key, $value in $spacing {
-        .#{$bp-name}\:gap-#{$key} {
+        .#{escape-selector($bp-name)}\:gap-#{$key} {
           gap: $value;
         }
-        .#{$bp-name}\:gap-x-#{$key} {
+        .#{escape-selector($bp-name)}\:gap-x-#{$key} {
           column-gap: $value;
         }
-        .#{$bp-name}\:gap-y-#{$key} {
+        .#{escape-selector($bp-name)}\:gap-y-#{$key} {
           row-gap: $value;
         }
       }
 
       // Width
       @each $name, $value in $width-percentages {
-        .#{$bp-name}\:w-#{$name} {
+        .#{escape-selector($bp-name)}\:w-#{escape-selector($name)} {
           width: $value;
         }
       }
-      .#{$bp-name}\:w-auto {
+      .#{escape-selector($bp-name)}\:w-auto {
         width: auto;
       }
-      .#{$bp-name}\:w-full {
+      .#{escape-selector($bp-name)}\:w-full {
         width: 100%;
       }
-      .#{$bp-name}\:w-screen {
+      .#{escape-selector($bp-name)}\:w-screen {
         width: 100vw;
       }
 
       // Height
       @each $name, $value in $height-percentages {
-        .#{$bp-name}\:h-#{$name} {
+        .#{escape-selector($bp-name)}\:h-#{escape-selector($name)} {
           height: $value;
         }
       }
-      .#{$bp-name}\:h-auto {
+      .#{escape-selector($bp-name)}\:h-auto {
         height: auto;
       }
-      .#{$bp-name}\:h-full {
+      .#{escape-selector($bp-name)}\:h-full {
         height: 100%;
       }
-      .#{$bp-name}\:h-screen {
+      .#{escape-selector($bp-name)}\:h-screen {
         height: 100vh;
       }
 
       // Max width
       @each $name, $value in $max-widths {
-        .#{$bp-name}\:max-w-#{$name} {
+        .#{escape-selector($bp-name)}\:max-w-#{$name} {
           max-width: $value;
         }
       }

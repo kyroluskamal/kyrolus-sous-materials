@@ -4,7 +4,7 @@ import {
   IconDirective,
   MenuAriaHandlingDirective,
   MenuModule,
-} from 'KyrolusSousMaterials';
+} from 'kyrolus-sous-materials';
 
 @Component({
   selector: 'app-menu-test',

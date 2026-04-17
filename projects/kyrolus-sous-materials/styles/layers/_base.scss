@@ -1,7 +1,7 @@
-@layer base {
-  @use "sass:map";
-  @use "../tokens/primitives" as primitives;
+@use "sass:map";
+@use "../tokens/primitives" as primitives;
 
+@layer base {
   // Core HTML setup
   html {
     font-size: 100%;
@@ -14,13 +14,22 @@
   }
 
   body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-      Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      "Helvetica Neue",
+      Arial,
+      sans-serif;
     font-size: 1rem;
     line-height: 1.5;
     color: var(--text);
     background-color: var(--bg);
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

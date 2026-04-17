@@ -6,7 +6,52 @@
 // =============================================================================
 
 @use "sass:map";
+@use "sass:string";
 @use "primitives" as *;
+
+// =============================================================================
+// ESCAPE SELECTOR FUNCTION
+// =============================================================================
+/// Escape special characters in class names for CSS selectors
+/// Handles: leading digits
+@function escape-selector($name) {
+  $str: "#{$name}";
+  $result: "";
+  $first-char: string.slice($str, 1, 1);
+
+  // Escape leading digit
+  @if $first-char ==
+    "0" or
+    $first-char ==
+    "1" or
+    $first-char ==
+    "2" or
+    $first-char ==
+    "3" or
+    $first-char ==
+    "4" or
+    $first-char ==
+    "5" or
+    $first-char ==
+    "6" or
+    $first-char ==
+    "7" or
+    $first-char ==
+    "8" or
+    $first-char ==
+    "9"
+  {
+    $result: "\\3" + $first-char + " ";
+    $str: string.slice($str, 2);
+  }
+
+  // Process remaining characters
+  @for $i from 1 through string.length($str) {
+    $char: string.slice($str, $i, $i);
+    $result: $result + $char;
+  }
+  @return $result;
+}
 
 // =============================================================================
 // DISPLAY UTILITIES
@@ -822,173 +867,173 @@ $column-widths: (
   @if $bp-value > 0 {
     @media (min-width: $bp-value) {
       // Display
-      .#{$bp-name}\:hidden {
+      .#{escape-selector($bp-name)}\:hidden {
         display: none;
       }
-      .#{$bp-name}\:block {
+      .#{escape-selector($bp-name)}\:block {
         display: block;
       }
-      .#{$bp-name}\:inline-block {
+      .#{escape-selector($bp-name)}\:inline-block {
         display: inline-block;
       }
-      .#{$bp-name}\:inline {
+      .#{escape-selector($bp-name)}\:inline {
         display: inline;
       }
-      .#{$bp-name}\:flex {
+      .#{escape-selector($bp-name)}\:flex {
         display: flex;
       }
-      .#{$bp-name}\:inline-flex {
+      .#{escape-selector($bp-name)}\:inline-flex {
         display: inline-flex;
       }
-      .#{$bp-name}\:grid {
+      .#{escape-selector($bp-name)}\:grid {
         display: grid;
       }
-      .#{$bp-name}\:inline-grid {
+      .#{escape-selector($bp-name)}\:inline-grid {
         display: inline-grid;
       }
 
       // Flex direction
-      .#{$bp-name}\:flex-row {
+      .#{escape-selector($bp-name)}\:flex-row {
         flex-direction: row;
       }
-      .#{$bp-name}\:flex-row-reverse {
+      .#{escape-selector($bp-name)}\:flex-row-reverse {
         flex-direction: row-reverse;
       }
-      .#{$bp-name}\:flex-col {
+      .#{escape-selector($bp-name)}\:flex-col {
         flex-direction: column;
       }
-      .#{$bp-name}\:flex-col-reverse {
+      .#{escape-selector($bp-name)}\:flex-col-reverse {
         flex-direction: column-reverse;
       }
 
       // Flex wrap
-      .#{$bp-name}\:flex-wrap {
+      .#{escape-selector($bp-name)}\:flex-wrap {
         flex-wrap: wrap;
       }
-      .#{$bp-name}\:flex-nowrap {
+      .#{escape-selector($bp-name)}\:flex-nowrap {
         flex-wrap: nowrap;
       }
 
       // Grid columns
       @for $i from 1 through 12 {
-        .#{$bp-name}\:grid-cols-#{$i} {
+        .#{escape-selector($bp-name)}\:grid-cols-#{$i} {
           grid-template-columns: repeat($i, minmax(0, 1fr));
         }
       }
 
       // Grid rows
       @for $i from 1 through 6 {
-        .#{$bp-name}\:grid-rows-#{$i} {
+        .#{escape-selector($bp-name)}\:grid-rows-#{$i} {
           grid-template-rows: repeat($i, minmax(0, 1fr));
         }
       }
 
       // Column span
       @for $i from 1 through 12 {
-        .#{$bp-name}\:col-span-#{$i} {
+        .#{escape-selector($bp-name)}\:col-span-#{$i} {
           grid-column: span $i / span $i;
         }
       }
-      .#{$bp-name}\:col-span-full {
+      .#{escape-selector($bp-name)}\:col-span-full {
         grid-column: 1 / -1;
       }
 
       // Row span
       @for $i from 1 through 6 {
-        .#{$bp-name}\:row-span-#{$i} {
+        .#{escape-selector($bp-name)}\:row-span-#{$i} {
           grid-row: span $i / span $i;
         }
       }
 
       // Justify content
-      .#{$bp-name}\:justify-start {
+      .#{escape-selector($bp-name)}\:justify-start {
         justify-content: flex-start;
       }
-      .#{$bp-name}\:justify-end {
+      .#{escape-selector($bp-name)}\:justify-end {
         justify-content: flex-end;
       }
-      .#{$bp-name}\:justify-center {
+      .#{escape-selector($bp-name)}\:justify-center {
         justify-content: center;
       }
-      .#{$bp-name}\:justify-between {
+      .#{escape-selector($bp-name)}\:justify-between {
         justify-content: space-between;
       }
-      .#{$bp-name}\:justify-around {
+      .#{escape-selector($bp-name)}\:justify-around {
         justify-content: space-around;
       }
-      .#{$bp-name}\:justify-evenly {
+      .#{escape-selector($bp-name)}\:justify-evenly {
         justify-content: space-evenly;
       }
 
       // Align items
-      .#{$bp-name}\:items-start {
+      .#{escape-selector($bp-name)}\:items-start {
         align-items: flex-start;
       }
-      .#{$bp-name}\:items-end {
+      .#{escape-selector($bp-name)}\:items-end {
         align-items: flex-end;
       }
-      .#{$bp-name}\:items-center {
+      .#{escape-selector($bp-name)}\:items-center {
         align-items: center;
       }
-      .#{$bp-name}\:items-baseline {
+      .#{escape-selector($bp-name)}\:items-baseline {
         align-items: baseline;
       }
-      .#{$bp-name}\:items-stretch {
+      .#{escape-selector($bp-name)}\:items-stretch {
         align-items: stretch;
       }
 
       // Order
-      .#{$bp-name}\:order-first {
+      .#{escape-selector($bp-name)}\:order-first {
         order: -9999;
       }
-      .#{$bp-name}\:order-last {
+      .#{escape-selector($bp-name)}\:order-last {
         order: 9999;
       }
-      .#{$bp-name}\:order-none {
+      .#{escape-selector($bp-name)}\:order-none {
         order: 0;
       }
       @for $i from 1 through 12 {
-        .#{$bp-name}\:order-#{$i} {
+        .#{escape-selector($bp-name)}\:order-#{$i} {
           order: $i;
         }
       }
 
       // Position
-      .#{$bp-name}\:static {
+      .#{escape-selector($bp-name)}\:static {
         position: static;
       }
-      .#{$bp-name}\:fixed {
+      .#{escape-selector($bp-name)}\:fixed {
         position: fixed;
       }
-      .#{$bp-name}\:absolute {
+      .#{escape-selector($bp-name)}\:absolute {
         position: absolute;
       }
-      .#{$bp-name}\:relative {
+      .#{escape-selector($bp-name)}\:relative {
         position: relative;
       }
-      .#{$bp-name}\:sticky {
+      .#{escape-selector($bp-name)}\:sticky {
         position: sticky;
       }
 
       // Visibility
-      .#{$bp-name}\:visible {
+      .#{escape-selector($bp-name)}\:visible {
         visibility: visible;
       }
-      .#{$bp-name}\:invisible {
+      .#{escape-selector($bp-name)}\:invisible {
         visibility: hidden;
       }
 
       // Overflow
-      .#{$bp-name}\:overflow-auto {
+      .#{escape-selector($bp-name)}\:overflow-auto {
         overflow: auto;
       }
-      .#{$bp-name}\:overflow-hidden {
+      .#{escape-selector($bp-name)}\:overflow-hidden {
         overflow: hidden;
       }
-      .#{$bp-name}\:overflow-visible {
+      .#{escape-selector($bp-name)}\:overflow-visible {
         overflow: visible;
       }
-      .#{$bp-name}\:overflow-scroll {
+      .#{escape-selector($bp-name)}\:overflow-scroll {
         overflow: scroll;
       }
     }
@@ -1048,8 +1093,7 @@ $container-breakpoints: (
   // 576px
   "cq-2xl": 42rem,
   // 672px
-  "cq-3xl": 48rem,
-  // 768px
+  "cq-3xl": 48rem, // 768px
 );
 
 // Generate container query responsive utilities

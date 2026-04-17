@@ -6,7 +6,7 @@ import {
   MenuModule,
   PopoverMenuBlock,
   PopoverPlacement,
-} from 'KyrolusSousMaterials';
+} from 'kyrolus-sous-materials';
 
 @Component({
   selector: 'app-full-screen-test',
@@ -21,7 +21,7 @@ import {
       fullscreenChildSelector="ks-menu"
       [fullScreenConfig]="{
         mobile: 'native',
-        desktop: 'css'
+        desktop: 'css',
       }"
       [(openFullScreen)]="isOpen"
       [(isOpen)]="isOpen"
@@ -92,7 +92,7 @@ export class FullScreenTest {
       iconName: 'menu',
       RaisedClass: 'raised',
       id: `menu-button-${Math.random().toString(36).substring(2, 15)}`,
-    }
+    },
   );
   placement = signal<PopoverPlacement>('top');
 }

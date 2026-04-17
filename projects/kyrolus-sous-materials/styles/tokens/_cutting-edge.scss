@@ -328,7 +328,9 @@ nav:has(.active) {
 .appear-scale {
   opacity: 1;
   transform: scale(1);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 
   @starting-style {
     opacity: 0;
@@ -340,7 +342,9 @@ nav:has(.active) {
 .appear-slide-down {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 
   @starting-style {
     opacity: 0;
@@ -352,7 +356,9 @@ nav:has(.active) {
 .appear-slide-up {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 
   @starting-style {
     opacity: 0;
@@ -364,7 +370,9 @@ nav:has(.active) {
 .appear-slide-right {
   opacity: 1;
   transform: translateX(0);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 
   @starting-style {
     opacity: 0;
@@ -376,7 +384,9 @@ nav:has(.active) {
 .appear-slide-left {
   opacity: 1;
   transform: translateX(0);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 
   @starting-style {
     opacity: 0;
@@ -388,7 +398,8 @@ nav:has(.active) {
 .appear-zoom {
   opacity: 1;
   transform: scale(1);
-  transition: opacity 0.2s ease,
+  transition:
+    opacity 0.2s ease,
     transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   @starting-style {
@@ -401,7 +412,9 @@ nav:has(.active) {
 .appear-flip {
   opacity: 1;
   transform: perspective(400px) rotateX(0);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
 
   @starting-style {
     opacity: 0;
@@ -413,7 +426,9 @@ nav:has(.active) {
 .appear-blur {
   opacity: 1;
   filter: blur(0);
-  transition: opacity 0.3s ease, filter 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    filter 0.3s ease;
 
   @starting-style {
     opacity: 0;
@@ -427,9 +442,11 @@ dialog,
   &.appear-dialog {
     opacity: 1;
     transform: scale(1) translateY(0);
-    transition: opacity 0.3s ease,
+    transition:
+      opacity 0.3s ease,
       transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-      overlay 0.3s allow-discrete, display 0.3s allow-discrete;
+      overlay 0.3s allow-discrete,
+      display 0.3s allow-discrete;
 
     @starting-style {
       opacity: 0;
@@ -456,7 +473,9 @@ dialog,
   opacity: 1;
   transform: scaleY(1);
   transform-origin: top center;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 
   @starting-style {
     opacity: 0;
@@ -468,7 +487,9 @@ dialog,
 .appear-toast {
   opacity: 1;
   transform: translateX(0);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 
   @starting-style {
     opacity: 0;
@@ -480,7 +501,9 @@ dialog,
 .appear-stagger > * {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 
   @for $i from 1 through 10 {
     &:nth-child(#{$i}) {
@@ -745,19 +768,16 @@ dialog,
   // Exclude aside and .not-prose from styling
   > *:not(aside):not(.not-prose),
   > *:not(aside):not(.not-prose) *:not(aside):not(.not-prose) {
-    &h1,
     h1 {
       font-size: 2.25em;
       margin-top: 0;
       margin-bottom: 0.8em;
     }
-    &h2,
     h2 {
       font-size: 1.5em;
       margin-top: 2em;
       margin-bottom: 1em;
     }
-    &h3,
     h3 {
       font-size: 1.25em;
       margin-top: 1.6em;
@@ -1255,7 +1275,9 @@ details {
     > summary ~ * {
       overflow: hidden;
       height: 0;
-      transition: height 0.3s ease, padding 0.3s ease;
+      transition:
+        height 0.3s ease,
+        padding 0.3s ease;
       padding-block: 0;
     }
 

@@ -2,8 +2,8 @@
   "name": "kyrolus-sous-materials",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^20.1.0",
-    "@angular/core": "^20.1.0"
+    "@angular/common": "^21.2.2",
+    "@angular/core": "^21.2.2"
   },
   "dependencies": {
     "tslib": "^2.3.0"

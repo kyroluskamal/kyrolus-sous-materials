@@ -1,10 +1,8 @@
-@layer utilities {
-  // Legacy utilities (backward compatibility)
-  @use "../../layout/grid" as *;
-  @use "../../layout/flex" as *;
-  @use "../../layout/alignments" as *;
-  @use "../../utilities/elevations" as *;
-  @use "../../utilities/draggable" as *;
-  @use "../../utilities/resizable" as *;
-  @use "../../utilities/googleicons" as *;
-}
+// Legacy utilities (backward compatibility)
+@use "../../layout/grid";
+@use "../../layout/flex";
+@use "../../layout/alignments";
+@use "../../utilities/elevations";
+@use "../../utilities/draggable";
+@use "../../utilities/resizable";
+@use "../../utilities/googleicons";

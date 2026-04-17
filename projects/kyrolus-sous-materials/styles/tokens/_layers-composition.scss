@@ -11,6 +11,9 @@
 @use "sass:map";
 @use "primitives" as *;
 
+// Debug mode flag (disable by default)
+$debug-mode: false !default;
+
 /* =============================================================================
    LAYER ARCHITECTURE DEFINITION
    ============================================================================= */
@@ -74,11 +77,11 @@
 @layer base {
   /* Root variables */
   :root {
-    --font-family-base: #{map.get($font-families, "sans")};
-    --font-size-base: #{map.get($font-sizes, "base")};
-    --line-height-base: #{map.get($line-heights, "normal")};
-    --color-text: #{map.get($colors, "gray", "900")};
-    --color-bg: #{map.get($colors, "white")};
+    --font-family-base: #{$font-sans};
+    --font-size-base: 1rem;
+    --line-height-base: 1.5;
+    --color-text: var(--gray-900);
+    --color-bg: var(--white);
   }
 
   /* Base typography */

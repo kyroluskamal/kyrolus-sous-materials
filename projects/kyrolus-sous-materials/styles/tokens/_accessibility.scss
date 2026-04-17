@@ -7,7 +7,46 @@
 // =============================================================================
 
 @use "sass:map";
+@use "sass:string";
 @use "primitives" as *;
+
+// =============================================================================
+// ESCAPE SELECTOR FUNCTION
+// =============================================================================
+@function escape-selector($name) {
+  $str: "#{$name}";
+  $result: "";
+  $first-char: string.slice($str, 1, 1);
+  @if $first-char ==
+    "0" or
+    $first-char ==
+    "1" or
+    $first-char ==
+    "2" or
+    $first-char ==
+    "3" or
+    $first-char ==
+    "4" or
+    $first-char ==
+    "5" or
+    $first-char ==
+    "6" or
+    $first-char ==
+    "7" or
+    $first-char ==
+    "8" or
+    $first-char ==
+    "9"
+  {
+    $result: "\\3" + $first-char + " ";
+    $str: string.slice($str, 2);
+  }
+  @for $i from 1 through string.length($str) {
+    $char: string.slice($str, $i, $i);
+    $result: $result + $char;
+  }
+  @return $result;
+}
 
 // =============================================================================
 // SCREEN READER UTILITIES
@@ -710,7 +749,7 @@
 @each $bp-name, $bp-value in $breakpoints {
   @if $bp-value > 0 {
     @media (min-width: $bp-value) {
-      .#{$bp-name}\:sr-only {
+      .#{escape-selector($bp-name)}\:sr-only {
         position: absolute;
         width: 1px;
         height: 1px;
@@ -722,7 +761,7 @@
         border-width: 0;
       }
 
-      .#{$bp-name}\:not-sr-only {
+      .#{escape-selector($bp-name)}\:not-sr-only {
         position: static;
         width: auto;
         height: auto;
