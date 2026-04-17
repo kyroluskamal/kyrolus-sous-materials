@@ -24,7 +24,8 @@
     "ks:build-engine": "tsc -p projects/kyrolus-sous-materials/jit/tsconfig.json",
     "ks": "npm run ks:build-engine --silent && node projects/kyrolus-sous-materials/jit/dist/cli.js build",
     "ks:watch": "npm run ks:build-engine --silent && node projects/kyrolus-sous-materials/jit/dist/cli.js watch",
-    "ks:init": "npm run ks:build-engine --silent && node projects/kyrolus-sous-materials/jit/dist/cli.js init"
+    "ks:init": "npm run ks:build-engine --silent && node projects/kyrolus-sous-materials/jit/dist/cli.js init",
+    "ks:intellisense": "npm run ks:build-engine --silent && node projects/kyrolus-sous-materials/jit/dist/cli.js intellisense"
   },
   "prettier": {
     "overrides": [
