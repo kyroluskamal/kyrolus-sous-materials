@@ -51,6 +51,16 @@ function run(cfg: ReturnType<typeof resolveConfig>): void {
   fs.mkdirSync(path.dirname(cfg.output), { recursive: true });
   fs.writeFileSync(cfg.output, result.css, "utf8");
 
+  // Sidecar manifest so downstream tools (e.g. PurgeCSS safelist in
+  // postbuild-safe.js) can trust the JIT's tree-shaking without re-extracting.
+  const manifestPath = path.join(path.dirname(cfg.output), ".jit-classes.json");
+  const manifest = {
+    generatedAt: new Date().toISOString(),
+    count: result.matchedClasses.length,
+    classes: result.matchedClasses,
+  };
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n", "utf8");
+
   const ms = Date.now() - start;
   const sizeKB = (Buffer.byteLength(result.css) / 1024).toFixed(2);
   console.log(

@@ -14,6 +14,7 @@ export interface CompileInput {
 export interface CompileResult {
   css: string;
   matched: number;
+  matchedClasses: string[];
   unmatched: string[];
 }
 
@@ -28,6 +29,7 @@ interface Rule {
 export function compile(input: CompileInput): CompileResult {
   const { candidates, theme, darkMode, layer } = input;
   const rules: Rule[] = [];
+  const matchedClasses: string[] = [];
   const unmatched: string[] = [];
   let sourceIndex = 0;
 
@@ -89,12 +91,18 @@ export function compile(input: CompileInput): CompileResult {
     }
 
     rules.push({ selector, atRules, decls, order, sourceIndex });
+    matchedClasses.push(raw);
   }
 
   rules.sort((a, b) => a.order - b.order || a.sourceIndex - b.sourceIndex);
 
   const css = serialize(rules, layer);
-  return { css, matched: rules.length, unmatched };
+  return {
+    css,
+    matched: rules.length,
+    matchedClasses: Array.from(new Set(matchedClasses)).sort((a, b) => a.localeCompare(b)),
+    unmatched,
+  };
 }
 
 function serialize(rules: Rule[], layer: string): string {

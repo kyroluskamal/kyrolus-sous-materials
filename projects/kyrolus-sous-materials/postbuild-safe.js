@@ -197,6 +197,27 @@ const SAFELIST_EXACT = [
   'pretty',
 ];
 
+// JIT sidecar manifest: every class the JIT engine already tree-shook is
+// guaranteed-used. We add them to the safelist so PurgeCSS never second-guesses
+// the JIT, even for classes with tricky characters (`hover:bg-blue-500`,
+// `w-[320px]`) that the default extractor might miss.
+function loadJitManifest() {
+  const manifestPath = path.resolve(
+    __dirname,
+    'styles/generated/.jit-classes.json'
+  );
+  if (!fs.existsSync(manifestPath)) return [];
+  try {
+    const data = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    return Array.isArray(data.classes) ? data.classes : [];
+  } catch (err) {
+    console.warn(`⚠️  Could not read JIT manifest: ${err.message}`);
+    return [];
+  }
+}
+
+const JIT_CLASSES = loadJitManifest();
+
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -213,9 +234,10 @@ const SAFELIST_PATTERNS_EFFECTIVE = CLASS_PREFIX
     })
   : SAFELIST_PATTERNS;
 
-const SAFELIST_EXACT_EFFECTIVE = CLASS_PREFIX
+const SAFELIST_EXACT_EFFECTIVE = (CLASS_PREFIX
   ? SAFELIST_EXACT.concat(SAFELIST_EXACT.map((c) => `${CLASS_PREFIX}${c}`))
-  : SAFELIST_EXACT;
+  : SAFELIST_EXACT
+).concat(JIT_CLASSES);
 
 // =============================================================================
 // CUSTOM EXTRACTOR FOR ANGULAR
@@ -374,7 +396,11 @@ async function runSafePurgeCSS() {
   console.log('\n✅ This mode uses the PurgeCSS API directly for better');
   console.log('   preservation of modern CSS features.\n');
 
-  console.log(`📂 Scanning: ${distPath}\n`);
+  console.log(`📂 Scanning: ${distPath}`);
+  if (JIT_CLASSES.length > 0) {
+    console.log(`🛡️  JIT manifest: ${JIT_CLASSES.length} classes safelisted (tree-shaken by ks).`);
+  }
+  console.log('');
 
   const cssFiles = getCssFiles(distPath);
 
