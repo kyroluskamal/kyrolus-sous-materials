@@ -1,0 +1,192 @@
+// ============================================================================
+// DIVIDER COMPONENT (Phase 4 P2)
+// ----------------------------------------------------------------------------
+// Visual separator — plain line, labelled line, or vertical rule. Uses
+// `role="separator"` so AT announces it correctly. Vertical variant stretches
+// to parent block size so it can be used inside a flex row.
+//
+// DOM:
+//   <hr class="divider divider-md">
+//
+//   <div class="divider divider-labelled" role="separator"
+//        aria-orientation="horizontal">
+//     <span class="divider-label">Section</span>
+//   </div>
+//
+//   <div class="divider divider-vertical" role="separator"
+//        aria-orientation="vertical"></div>
+//
+// Variants:
+//   .divider-sm / .divider-md / .divider-lg
+//   .divider-{primary|secondary|tertiary|success|warning|danger|info|dark}
+//   .divider-dashed / .divider-dotted / .divider-double
+//   .divider-vertical / .divider-labelled
+//   Label placement: .divider-start / .divider-center (default) / .divider-end
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$divider-sizes: (
+  "sm": 1px,
+  "md": 2px,
+  "lg": 4px,
+);
+
+$divider-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Base — horizontal line using border-block-start so RTL auto-handles.
+// ----------------------------------------------------------------------------
+.divider {
+  --ks-divider-color: #e5e7eb;
+  --ks-divider-size: 1px;
+  --ks-divider-style: solid;
+  --ks-divider-gap: 0.75rem;
+  --ks-divider-label-color: #6b7280;
+  --ks-divider-label-bg: transparent;
+
+  display: block;
+  inline-size: 100%;
+  block-size: 0;
+  margin: 0;
+  border: 0;
+  border-block-start: var(--ks-divider-size) var(--ks-divider-style) var(--ks-divider-color);
+  color: inherit;
+}
+
+// ----------------------------------------------------------------------------
+// Labelled divider — switches to a flex row with a centered label.
+// ----------------------------------------------------------------------------
+.divider-labelled {
+  display: flex;
+  align-items: center;
+  gap: var(--ks-divider-gap);
+  block-size: auto;
+  border: 0;
+  text-align: center;
+  color: var(--ks-divider-label-color);
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1 1 auto;
+    border-block-start: var(--ks-divider-size) var(--ks-divider-style) var(--ks-divider-color);
+  }
+
+  &.divider-start::before  { flex: 0 0 1.5rem; }
+  &.divider-end::after     { flex: 0 0 1.5rem; }
+}
+
+.divider-label {
+  padding-inline: 0.5rem;
+  background: var(--ks-divider-label-bg);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+// ----------------------------------------------------------------------------
+// Vertical divider — fills parent block-size, e.g. inside a flex row toolbar.
+// ----------------------------------------------------------------------------
+.divider-vertical {
+  display: inline-block;
+  inline-size: 0;
+  block-size: auto;
+  align-self: stretch;
+  min-block-size: 1em;
+  margin-inline: var(--ks-divider-gap);
+  border-block-start: 0;
+  border-inline-start: var(--ks-divider-size) var(--ks-divider-style) var(--ks-divider-color);
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $value in $divider-sizes {
+  .divider-#{$size} { --ks-divider-size: #{$value}; }
+}
+
+// ----------------------------------------------------------------------------
+// Line styles
+// ----------------------------------------------------------------------------
+.divider-dashed { --ks-divider-style: dashed; }
+.divider-dotted { --ks-divider-style: dotted; }
+.divider-double {
+  --ks-divider-style: double;
+  --ks-divider-size: 4px;
+}
+
+// ----------------------------------------------------------------------------
+// Color variants
+// ----------------------------------------------------------------------------
+@each $name, $color in $divider-colors {
+  .divider-#{$name} {
+    --ks-divider-color: #{color.scale($color, $lightness: 30%)};
+    --ks-divider-label-color: #{color.scale($color, $lightness: -20%)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .divider {
+  --ks-divider-color: #374151;
+  --ks-divider-label-color: #9ca3af;
+  --ks-divider-label-bg: #1f2937;
+}
+
+@each $name, $color in $divider-colors {
+  [data-theme="dark"] .divider-#{$name} {
+    --ks-divider-color: #{color.scale($color, $lightness: -25%)};
+    --ks-divider-label-color: #{color.scale($color, $lightness: 30%)};
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .divider {
+    --ks-divider-color: #374151;
+    --ks-divider-label-color: #9ca3af;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .divider {
+  --ks-divider-color: #ffffff;
+  --ks-divider-label-color: #ffff00;
+}
+
+@media (forced-colors: active) {
+  .divider,
+  .divider-labelled::before,
+  .divider-labelled::after,
+  .divider-vertical {
+    border-color: CanvasText;
+  }
+  .divider-label { color: CanvasText; }
+}
+
+// ----------------------------------------------------------------------------
+// PRINT
+// ----------------------------------------------------------------------------
+@media print {
+  .divider,
+  .divider-labelled::before,
+  .divider-labelled::after,
+  .divider-vertical {
+    border-color: #000 !important;
+  }
+}

@@ -1,0 +1,339 @@
+// ============================================================================
+// TREE COMPONENT (Phase 4 P2)
+// ----------------------------------------------------------------------------
+// Hierarchical list. Built on `role="tree"` + nested `role="treeitem"` with
+// `aria-expanded` and `aria-selected`. Uses native `<details>`/`<summary>`
+// as the no-JS fallback — rotates the caret via the `[open]` selector.
+//
+// DOM (ARIA tree):
+//   <ul class="tree tree-md" role="tree" aria-label="Files">
+//     <li role="treeitem" aria-expanded="true" class="tree-item">
+//       <div class="tree-row">
+//         <span class="tree-toggle" aria-hidden="true"></span>
+//         <span class="tree-icon" aria-hidden="true">📁</span>
+//         <span class="tree-label">src</span>
+//       </div>
+//       <ul role="group" class="tree-group">
+//         <li role="treeitem" aria-selected="true" class="tree-item">
+//           <div class="tree-row">
+//             <span class="tree-icon" aria-hidden="true">📄</span>
+//             <span class="tree-label">main.ts</span>
+//           </div>
+//         </li>
+//       </ul>
+//     </li>
+//   </ul>
+//
+// DOM (native details fallback):
+//   <ul class="tree">
+//     <li>
+//       <details class="tree-details">
+//         <summary class="tree-row">
+//           <span class="tree-icon">📁</span><span class="tree-label">src</span>
+//         </summary>
+//         <ul class="tree-group">…</ul>
+//       </details>
+//     </li>
+//   </ul>
+//
+// Variants:
+//   .tree-sm / .tree-md / .tree-lg
+//   .tree-{primary|secondary|tertiary|success|warning|danger|info|dark}
+//   .tree-guides (shows vertical guide lines between levels)
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$tree-sizes: (
+  "sm": (row: 1.625rem, font: 0.8125rem, indent: 1rem),
+  "md": (row: 2rem,     font: 0.9375rem, indent: 1.25rem),
+  "lg": (row: 2.375rem, font: 1.0625rem, indent: 1.5rem),
+);
+
+$tree-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Base
+// ----------------------------------------------------------------------------
+.tree {
+  --ks-tree-bg: transparent;
+  --ks-tree-color: #111827;
+  --ks-tree-row-hover: #f3f4f6;
+  --ks-tree-selected-bg: #{rgba($primary-color, 0.12)};
+  --ks-tree-selected-color: #{color.scale($primary-color, $lightness: -15%)};
+  --ks-tree-accent: #{$primary-color};
+  --ks-tree-guide: #e5e7eb;
+  --ks-tree-caret: #6b7280;
+  --ks-tree-row-h: 2rem;
+  --ks-tree-font-size: 0.9375rem;
+  --ks-tree-indent: 1.25rem;
+  --ks-tree-gap: 0.375rem;
+  --ks-tree-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: var(--ks-tree-bg);
+  color: var(--ks-tree-color);
+  font-size: var(--ks-tree-font-size);
+}
+
+// Every nested group indents another level.
+.tree-group,
+.tree ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-inline-start: var(--ks-tree-indent);
+  position: relative;
+}
+
+// Vertical guide line along each group.
+.tree-guides .tree-group,
+.tree-guides ul ul {
+  &::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: calc(var(--ks-tree-indent) / 2);
+    inset-block: 0;
+    inline-size: 1px;
+    background: var(--ks-tree-guide);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Item + row
+// ----------------------------------------------------------------------------
+.tree-item { position: relative; }
+
+.tree-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ks-tree-gap);
+  block-size: var(--ks-tree-row-h);
+  padding-inline: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: inherit;
+  list-style: none;
+  user-select: none;
+
+  &::-webkit-details-marker { display: none; }
+  &::marker                 { display: none; content: ""; }
+
+  &:hover {
+    background: var(--ks-tree-row-hover);
+  }
+
+  &:focus { outline: none; }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--ks-tree-focus-ring);
+  }
+}
+
+.tree-icon {
+  inline-size: 1.125em;
+  block-size: 1.125em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.tree-label {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ----------------------------------------------------------------------------
+// Expand/collapse toggle (caret)
+// ----------------------------------------------------------------------------
+.tree-toggle {
+  inline-size: 1rem;
+  block-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--ks-tree-caret);
+  transition: transform 0.15s ease;
+
+  &::before {
+    content: "";
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-block-start: 2px solid currentColor;
+    border-inline-end: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.15s ease;
+  }
+}
+
+// Expanded (aria-expanded=true OR <details open>).
+.tree-item[aria-expanded="true"] > .tree-row > .tree-toggle::before,
+.tree-details[open] > .tree-row .tree-toggle::before,
+.tree-details[open] > summary .tree-toggle::before {
+  transform: rotate(135deg);
+}
+
+// Leaf items (no children) — swap caret for a subtle dot.
+.tree-item:not([aria-expanded]) > .tree-row > .tree-toggle,
+.tree-item[aria-expanded=""] > .tree-row > .tree-toggle {
+  visibility: hidden;
+}
+
+// RTL — flip rotation direction.
+[dir="rtl"] .tree-toggle::before {
+  transform: rotate(-135deg);
+}
+[dir="rtl"] .tree-item[aria-expanded="true"] > .tree-row > .tree-toggle::before,
+[dir="rtl"] .tree-details[open] > summary .tree-toggle::before {
+  transform: rotate(-45deg);
+}
+
+// ----------------------------------------------------------------------------
+// Native <details> integration
+// ----------------------------------------------------------------------------
+.tree-details {
+  > summary {
+    list-style: none;
+    cursor: pointer;
+
+    &::-webkit-details-marker { display: none; }
+    &::marker { content: ""; }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Selection — aria-selected + .tree-row-selected helper
+// ----------------------------------------------------------------------------
+.tree-item[aria-selected="true"] > .tree-row,
+.tree-row-selected {
+  background: var(--ks-tree-selected-bg);
+  color: var(--ks-tree-selected-color);
+  font-weight: 600;
+
+  &:hover { background: var(--ks-tree-selected-bg); }
+}
+
+// ----------------------------------------------------------------------------
+// Disabled
+// ----------------------------------------------------------------------------
+.tree-item[aria-disabled="true"] > .tree-row,
+.tree-row[aria-disabled="true"] {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $values in $tree-sizes {
+  .tree-#{$size} {
+    --ks-tree-row-h:    #{map.get($values, row)};
+    --ks-tree-font-size:#{map.get($values, font)};
+    --ks-tree-indent:   #{map.get($values, indent)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants — recolor selected row + accent
+// ----------------------------------------------------------------------------
+@each $name, $color in $tree-colors {
+  .tree-#{$name} {
+    --ks-tree-accent: #{$color};
+    --ks-tree-selected-bg: #{rgba($color, 0.12)};
+    --ks-tree-selected-color: #{color.scale($color, $lightness: -15%)};
+    --ks-tree-focus-ring: 0 0 0 3px #{rgba($color, 0.35)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .tree {
+  --ks-tree-color: #e5e7eb;
+  --ks-tree-row-hover: #374151;
+  --ks-tree-selected-bg: #{rgba($primary-color, 0.28)};
+  --ks-tree-selected-color: #{color.scale($primary-color, $lightness: 25%)};
+  --ks-tree-guide: #374151;
+  --ks-tree-caret: #9ca3af;
+}
+
+@each $name, $color in $tree-colors {
+  [data-theme="dark"] .tree-#{$name} {
+    --ks-tree-selected-bg: #{rgba($color, 0.28)};
+    --ks-tree-selected-color: #{color.scale($color, $lightness: 35%)};
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .tree {
+    --ks-tree-color: #e5e7eb;
+    --ks-tree-row-hover: #374151;
+    --ks-tree-guide: #374151;
+    --ks-tree-caret: #9ca3af;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .tree {
+  --ks-tree-bg: #000000;
+  --ks-tree-color: #ffffff;
+  --ks-tree-row-hover: #1a1a1a;
+  --ks-tree-selected-bg: #ffff00;
+  --ks-tree-selected-color: #000000;
+  --ks-tree-guide: #ffffff;
+  --ks-tree-caret: #ffffff;
+  --ks-tree-focus-ring: 0 0 0 3px #ffff00;
+}
+
+@media (forced-colors: active) {
+  .tree-row {
+    forced-color-adjust: none;
+    color: CanvasText;
+
+    &:hover { background: SelectedItem; color: SelectedItemText; }
+  }
+
+  .tree-item[aria-selected="true"] > .tree-row,
+  .tree-row-selected {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .tree-row:focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+
+  .tree-guides .tree-group::before,
+  .tree-guides ul ul::before { background: CanvasText; }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .tree-toggle,
+  .tree-toggle::before { transition: none; }
+}

@@ -1,0 +1,305 @@
+// ============================================================================
+// SLIDER COMPONENT (Phase 4 P2)
+// ----------------------------------------------------------------------------
+// Styles native `<input type="range">` consistently across browsers. Uses
+// `--ks-slider-value` on the wrapper (set by consumer JS or inline style)
+// to paint the filled-portion of the track. Also a non-native
+// `role="slider"` fallback for dual-thumb cases.
+//
+// DOM (single thumb, native):
+//   <label class="slider slider-md slider-primary">
+//     <span class="slider-label">Volume</span>
+//     <input class="slider-input" type="range" min="0" max="100" value="40"
+//            style="--ks-slider-value: 40%">
+//     <span class="slider-value" aria-hidden="true">40</span>
+//   </label>
+//
+// DOM (with ticks):
+//   <div class="slider slider-md">
+//     <datalist id="ticks">
+//       <option value="0"></option><option value="25"></option>
+//       <option value="50"></option><option value="75"></option>
+//       <option value="100"></option>
+//     </datalist>
+//     <input class="slider-input slider-ticks" type="range" list="ticks" …>
+//   </div>
+//
+// Variants:
+//   .slider-sm / .slider-md / .slider-lg
+//   .slider-{primary|secondary|tertiary|success|warning|danger|info|dark}
+//   .slider-vertical
+//   .slider-ticks (shows tick marks alongside <datalist>)
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$slider-sizes: (
+  "sm": (track: 0.25rem,  thumb: 0.875rem, font: 0.75rem),
+  "md": (track: 0.375rem, thumb: 1.125rem, font: 0.875rem),
+  "lg": (track: 0.5rem,   thumb: 1.5rem,   font: 1rem),
+);
+
+$slider-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Base wrapper
+// ----------------------------------------------------------------------------
+.slider {
+  --ks-slider-accent: #{$primary-color};
+  --ks-slider-track: #e5e7eb;
+  --ks-slider-fill: var(--ks-slider-accent);
+  --ks-slider-thumb: var(--ks-slider-accent);
+  --ks-slider-thumb-border: #ffffff;
+  --ks-slider-track-size: 0.375rem;
+  --ks-slider-thumb-size: 1.125rem;
+  --ks-slider-font-size: 0.875rem;
+  --ks-slider-value: 50%;
+  --ks-slider-label-color: #374151;
+  --ks-slider-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  inline-size: 100%;
+  font-size: var(--ks-slider-font-size);
+  color: var(--ks-slider-label-color);
+}
+
+.slider-label {
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.slider-value {
+  align-self: flex-end;
+  font-weight: 600;
+  color: var(--ks-slider-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+// ----------------------------------------------------------------------------
+// Native range input styling — cross-browser with layered pseudo-elements.
+// Filled portion is painted by a linear-gradient whose stop is driven by
+// `--ks-slider-value`.
+// ----------------------------------------------------------------------------
+.slider-input {
+  --ks-slider-gradient: linear-gradient(
+    to right,
+    var(--ks-slider-fill) 0,
+    var(--ks-slider-fill) var(--ks-slider-value),
+    var(--ks-slider-track) var(--ks-slider-value),
+    var(--ks-slider-track) 100%
+  );
+
+  appearance: none;
+  -webkit-appearance: none;
+  inline-size: 100%;
+  block-size: var(--ks-slider-thumb-size);
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+
+  // RTL — reverse the gradient direction.
+  [dir="rtl"] & {
+    --ks-slider-gradient: linear-gradient(
+      to left,
+      var(--ks-slider-fill) 0,
+      var(--ks-slider-fill) var(--ks-slider-value),
+      var(--ks-slider-track) var(--ks-slider-value),
+      var(--ks-slider-track) 100%
+    );
+  }
+
+  // WebKit track + thumb
+  &::-webkit-slider-runnable-track {
+    block-size: var(--ks-slider-track-size);
+    background: var(--ks-slider-gradient);
+    border-radius: 9999px;
+  }
+  &::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    inline-size: var(--ks-slider-thumb-size);
+    block-size: var(--ks-slider-thumb-size);
+    border-radius: 50%;
+    background: var(--ks-slider-thumb);
+    border: 2px solid var(--ks-slider-thumb-border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    margin-block-start: calc((var(--ks-slider-track-size) - var(--ks-slider-thumb-size)) / 2);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    cursor: grab;
+  }
+
+  // Firefox track + thumb
+  &::-moz-range-track {
+    block-size: var(--ks-slider-track-size);
+    background: var(--ks-slider-track);
+    border-radius: 9999px;
+  }
+  &::-moz-range-progress {
+    block-size: var(--ks-slider-track-size);
+    background: var(--ks-slider-fill);
+    border-radius: 9999px;
+  }
+  &::-moz-range-thumb {
+    inline-size: var(--ks-slider-thumb-size);
+    block-size: var(--ks-slider-thumb-size);
+    border-radius: 50%;
+    background: var(--ks-slider-thumb);
+    border: 2px solid var(--ks-slider-thumb-border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    cursor: grab;
+  }
+
+  // Hover / active thumb feedback.
+  &:hover::-webkit-slider-thumb { transform: scale(1.1); }
+  &:hover::-moz-range-thumb     { transform: scale(1.1); }
+  &:active::-webkit-slider-thumb { cursor: grabbing; box-shadow: 0 0 0 6px #{rgba($primary-color, 0.2)}; }
+  &:active::-moz-range-thumb     { cursor: grabbing; box-shadow: 0 0 0 6px #{rgba($primary-color, 0.2)}; }
+
+  &:focus { outline: none; }
+  &:focus-visible::-webkit-slider-thumb { box-shadow: var(--ks-slider-focus-ring); }
+  &:focus-visible::-moz-range-thumb     { box-shadow: var(--ks-slider-focus-ring); }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+
+    &::-webkit-slider-thumb { cursor: not-allowed; }
+    &::-moz-range-thumb     { cursor: not-allowed; }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Ticks — rendered beneath the track as a background-image of radial dots.
+// ----------------------------------------------------------------------------
+.slider-ticks {
+  --ks-slider-tick-count: 10;
+  --ks-slider-tick-color: #9ca3af;
+
+  &::-webkit-slider-runnable-track {
+    background:
+      var(--ks-slider-gradient),
+      repeating-linear-gradient(
+        to right,
+        transparent 0,
+        transparent calc((100% / var(--ks-slider-tick-count)) - 1px),
+        var(--ks-slider-tick-color) calc((100% / var(--ks-slider-tick-count)) - 1px),
+        var(--ks-slider-tick-color) calc(100% / var(--ks-slider-tick-count))
+      );
+    background-blend-mode: multiply;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $values in $slider-sizes {
+  .slider-#{$size} {
+    --ks-slider-track-size: #{map.get($values, track)};
+    --ks-slider-thumb-size: #{map.get($values, thumb)};
+    --ks-slider-font-size:  #{map.get($values, font)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants
+// ----------------------------------------------------------------------------
+@each $name, $color in $slider-colors {
+  .slider-#{$name} {
+    --ks-slider-accent: #{$color};
+    --ks-slider-focus-ring: 0 0 0 3px #{rgba($color, 0.35)};
+
+    .slider-input:active::-webkit-slider-thumb { box-shadow: 0 0 0 6px #{rgba($color, 0.25)}; }
+    .slider-input:active::-moz-range-thumb     { box-shadow: 0 0 0 6px #{rgba($color, 0.25)}; }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Vertical orientation — uses writing-mode trick.
+// ----------------------------------------------------------------------------
+.slider-vertical {
+  flex-direction: row;
+  align-items: center;
+  min-block-size: 8rem;
+  inline-size: auto;
+
+  .slider-input {
+    writing-mode: vertical-lr;
+    direction: rtl;
+    inline-size: var(--ks-slider-thumb-size);
+    block-size: 100%;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .slider {
+  --ks-slider-track: #374151;
+  --ks-slider-thumb-border: #1f2937;
+  --ks-slider-label-color: #e5e7eb;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .slider {
+    --ks-slider-track: #374151;
+    --ks-slider-thumb-border: #1f2937;
+    --ks-slider-label-color: #e5e7eb;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .slider {
+  --ks-slider-accent: #ffff00;
+  --ks-slider-track: #ffffff;
+  --ks-slider-thumb: #ffff00;
+  --ks-slider-thumb-border: #000000;
+  --ks-slider-label-color: #ffffff;
+  --ks-slider-focus-ring: 0 0 0 3px #ffff00;
+}
+
+@media (forced-colors: active) {
+  .slider-input {
+    forced-color-adjust: none;
+
+    &::-webkit-slider-runnable-track { background: ButtonFace; border: 1px solid ButtonText; }
+    &::-webkit-slider-thumb          { background: Highlight; border-color: HighlightText; }
+    &::-moz-range-track              { background: ButtonFace; border: 1px solid ButtonText; }
+    &::-moz-range-progress           { background: Highlight; }
+    &::-moz-range-thumb              { background: Highlight; border-color: HighlightText; }
+
+    &:focus-visible::-webkit-slider-thumb,
+    &:focus-visible::-moz-range-thumb {
+      outline: 3px solid Highlight;
+      outline-offset: 2px;
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .slider-input {
+    &::-webkit-slider-thumb,
+    &::-moz-range-thumb { transition: none; }
+
+    &:hover::-webkit-slider-thumb,
+    &:hover::-moz-range-thumb { transform: none; }
+  }
+}

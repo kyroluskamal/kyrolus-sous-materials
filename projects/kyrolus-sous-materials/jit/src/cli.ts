@@ -67,8 +67,8 @@ function init(cwd: string): void {
     target,
     `module.exports = {
   content: [
-    "projects/demo-app/src/**/*.html",
-    "projects/demo-app/src/**/*.ts",
+    "projects/ks-materials-docs/src/**/*.html",
+    "projects/ks-materials-docs/src/**/*.ts",
     "projects/kyrolus-sous-materials/src/**/*.html",
     "projects/kyrolus-sous-materials/src/**/*.ts",
   ],

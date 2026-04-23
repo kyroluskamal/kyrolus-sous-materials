@@ -1,0 +1,256 @@
+// ============================================================================
+// CHIP COMPONENT (Phase 3 P1)
+// ----------------------------------------------------------------------------
+// Pill-shaped element for tags, filters, selections. Can be interactive
+// (toggleable filter), removable (close button), or static. Heavier than a
+// badge — chips are meant to be read and tapped, not glanced at.
+//
+// DOM:
+//   <span class="chip chip-primary">
+//     <span class="chip-icon" aria-hidden="true">★</span>
+//     <span class="chip-label">Featured</span>
+//     <button class="chip-close" aria-label="Remove">✕</button>
+//   </span>
+//
+//   <button class="chip chip-primary" aria-pressed="true">
+//     <span class="chip-label">Filter A</span>
+//   </button>
+//
+// Variants:
+//   .chip-sm / .chip-md / .chip-lg
+//   .chip-{primary|secondary|tertiary|success|warning|danger|info|dark}
+//   .chip-solid (default) / .chip-subtle / .chip-outline
+//   .chip-square (flat corners) / default (pill)
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$chip-sizes: (
+  "sm": (pad-y: 0.1875rem, pad-x: 0.5rem,   font-size: 0.75rem,   icon: 0.875rem),
+  "md": (pad-y: 0.3125rem, pad-x: 0.75rem,  font-size: 0.875rem,  icon: 1rem),
+  "lg": (pad-y: 0.4375rem, pad-x: 1rem,     font-size: 1rem,      icon: 1.125rem),
+);
+
+$chip-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Base
+// ----------------------------------------------------------------------------
+.chip {
+  --ks-chip-bg: #{color.scale($primary-color, $lightness: 85%)};
+  --ks-chip-color: #{color.scale($primary-color, $lightness: -45%)};
+  --ks-chip-border-color: #{color.scale($primary-color, $lightness: 60%)};
+  --ks-chip-hover-bg: #{color.scale($primary-color, $lightness: 75%)};
+  --ks-chip-pad-y: 0.3125rem;
+  --ks-chip-pad-x: 0.75rem;
+  --ks-chip-radius: 9999px;
+  --ks-chip-font-size: 0.875rem;
+  --ks-chip-icon-size: 1rem;
+  --ks-chip-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+  --ks-chip-transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: var(--ks-chip-pad-y) var(--ks-chip-pad-x);
+  background: var(--ks-chip-bg);
+  color: var(--ks-chip-color);
+  border: 1px solid var(--ks-chip-border-color);
+  border-radius: var(--ks-chip-radius);
+  font-size: var(--ks-chip-font-size);
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  transition: var(--ks-chip-transition);
+
+  // When rendered as <button> or <a>, interactivity kicks in.
+  &:is(button, a) {
+    cursor: pointer;
+    font: inherit;
+    font-size: var(--ks-chip-font-size);
+    font-weight: 500;
+    text-decoration: none;
+
+    &:hover:not([disabled]):not([aria-disabled="true"]) {
+      background: var(--ks-chip-hover-bg);
+    }
+
+    &:focus { outline: none; }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--ks-chip-focus-ring);
+    }
+  }
+
+  // Toggle state — aria-pressed="true" flips to "solid" look.
+  &[aria-pressed="true"],
+  &[aria-selected="true"] {
+    color: #ffffff;
+    background: var(--ks-chip-accent, #{$primary-color});
+    border-color: var(--ks-chip-accent, #{$primary-color});
+  }
+
+  &[aria-disabled="true"],
+  &:disabled {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+}
+
+.chip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ks-chip-icon-size);
+  block-size: var(--ks-chip-icon-size);
+  flex-shrink: 0;
+}
+
+.chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-inline-size: 0;
+}
+
+.chip-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  margin-inline-start: 0.125rem;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  opacity: 0.7;
+  font-size: 0.75rem;
+  line-height: 1;
+
+  &:hover { opacity: 1; background: rgba(0, 0, 0, 0.1); }
+  &:focus { outline: none; }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--ks-chip-focus-ring);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $values in $chip-sizes {
+  .chip-#{$size} {
+    --ks-chip-pad-y: #{map.get($values, pad-y)};
+    --ks-chip-pad-x: #{map.get($values, pad-x)};
+    --ks-chip-font-size: #{map.get($values, font-size)};
+    --ks-chip-icon-size: #{map.get($values, icon)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants — default is "subtle" tinted.
+// ----------------------------------------------------------------------------
+@each $name, $color in $chip-colors {
+  .chip-#{$name} {
+    --ks-chip-bg: #{color.scale($color, $lightness: 85%)};
+    --ks-chip-color: #{color.scale($color, $lightness: -45%)};
+    --ks-chip-border-color: #{color.scale($color, $lightness: 60%)};
+    --ks-chip-hover-bg: #{color.scale($color, $lightness: 75%)};
+    --ks-chip-accent: #{$color};
+    --ks-chip-focus-ring: 0 0 0 3px #{rgba($color, 0.35)};
+  }
+
+  .chip-#{$name}.chip-solid {
+    --ks-chip-bg: #{$color};
+    --ks-chip-color: #ffffff;
+    --ks-chip-border-color: #{color.scale($color, $lightness: -10%)};
+    --ks-chip-hover-bg: #{color.scale($color, $lightness: -10%)};
+  }
+
+  .chip-#{$name}.chip-outline {
+    --ks-chip-bg: transparent;
+    --ks-chip-color: #{color.scale($color, $lightness: -25%)};
+    --ks-chip-border-color: #{$color};
+    --ks-chip-hover-bg: #{rgba($color, 0.1)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Shape variants
+// ----------------------------------------------------------------------------
+.chip-square { --ks-chip-radius: 0.375rem; }
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+@each $name, $color in $chip-colors {
+  [data-theme="dark"] .chip-#{$name} {
+    --ks-chip-bg: #{color.scale($color, $lightness: -55%, $saturation: -15%)};
+    --ks-chip-color: #{color.scale($color, $lightness: 55%)};
+    --ks-chip-border-color: #{color.scale($color, $lightness: -25%)};
+    --ks-chip-hover-bg: #{color.scale($color, $lightness: -45%)};
+  }
+
+  [data-theme="dark"] .chip-#{$name}.chip-outline {
+    --ks-chip-color: #{color.scale($color, $lightness: 30%)};
+    --ks-chip-border-color: #{color.scale($color, $lightness: 20%)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .chip {
+  --ks-chip-bg: #000000;
+  --ks-chip-color: #ffffff;
+  --ks-chip-border-color: #ffffff;
+  --ks-chip-accent: #ffff00;
+  --ks-chip-focus-ring: 0 0 0 3px #ffff00;
+}
+
+@media (forced-colors: active) {
+  .chip {
+    forced-color-adjust: none;
+    background: ButtonFace;
+    color: ButtonText;
+    border: 1px solid ButtonText;
+
+    &[aria-pressed="true"],
+    &[aria-selected="true"] {
+      background: Highlight;
+      color: HighlightText;
+      border-color: Highlight;
+    }
+  }
+
+  .chip:focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .chip { transition: none; }
+}

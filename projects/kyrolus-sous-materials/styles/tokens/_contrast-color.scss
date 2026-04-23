@@ -1,0 +1,71 @@
+// ============================================================================
+// CONTRAST-COLOR UTILITIES
+// CSS `contrast-color()` function + `color-mix` fallbacks
+// Browser Support: experimental (Safari TP 2025); progressive enhancement.
+//
+// Picks an accessible foreground color (black or white) given a background.
+// Replaces the hand-rolled "if bg > 50% luminance then dark text" logic.
+// ============================================================================
+
+// Custom property slot consumers can set: `--ks-surface: <color>`.
+:root {
+  --ks-surface: #ffffff;
+  --ks-on-surface: #111827;
+}
+
+// ----------------------------------------------------------------------------
+// NATIVE PATH — when contrast-color() is supported.
+// ----------------------------------------------------------------------------
+@supports (color: contrast-color(white)) {
+  .contrast-auto {
+    color: contrast-color(var(--ks-surface));
+  }
+
+  .bg-contrast {
+    background-color: var(--ks-surface);
+    color: contrast-color(var(--ks-surface));
+  }
+}
+
+// ----------------------------------------------------------------------------
+// FALLBACK PATH — color-mix approximation.
+// Lightens/darkens the background heavily so it meets ~7:1 contrast on
+// typical surfaces. Not a true WCAG check, but useful for badges and chips.
+// ----------------------------------------------------------------------------
+@supports not (color: contrast-color(white)) {
+  @supports (color: color-mix(in oklch, white, black)) {
+    .contrast-auto {
+      color: color-mix(in oklch, var(--ks-surface) 15%, currentColor);
+    }
+
+    .bg-contrast {
+      background-color: var(--ks-surface);
+      color: color-mix(in oklch, var(--ks-surface), white 90%);
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// SEMANTIC VARIANT CONTRASTS — paint text on top of a semantic surface using
+// whichever mechanism the browser supports.
+// ----------------------------------------------------------------------------
+@each $name, $value in (
+  primary: var(--primary, #2563eb),
+  secondary: var(--secondary, #9db44f),
+  success: var(--success, #10b981),
+  warning: var(--warning, #f59e0b),
+  danger: var(--danger, #dc2626),
+  info: var(--info, #3b82f6)
+) {
+  .bg-#{$name}-contrast {
+    background-color: #{$value};
+
+    @supports (color: contrast-color(white)) {
+      color: contrast-color(#{$value});
+    }
+
+    @supports not (color: contrast-color(white)) {
+      color: #ffffff;
+    }
+  }
+}

@@ -1,6 +1,18 @@
 import type { CssDecl, Matcher } from "./helpers";
 import { colorWithOpacity, resolveColor, tryPrefix } from "./helpers";
 
+function textArbitraryValue(arbValue: string, arbType: string | undefined): CssDecl | null {
+  if (arbType === "color") return { color: arbValue };
+  if (arbType === "length") return { "font-size": arbValue };
+  if (arbType !== undefined) return null;
+  // No explicit hint — fall back to the historical heuristic: looks-like-color
+  // values get `color`, anything else is `font-size`.
+  if (arbValue.startsWith("#") || arbValue.includes("rgb") || arbValue.includes("hsl") || arbValue.includes("oklch")) {
+    return { color: arbValue };
+  }
+  return { "font-size": arbValue };
+}
+
 const TEXT_ALIGN: Record<string, string> = {
   "text-left": "left",
   "text-center": "center",
@@ -98,28 +110,31 @@ export const typographyMatchers: Matcher[] = [
     return null;
   },
   // leading-*
-  ({ name, theme, arbitrary, arbUtility, arbValue }) => {
-    if (arbitrary && arbUtility === "leading") return { "line-height": arbValue! };
+  ({ name, theme, arbitrary, arbUtility, arbValue, arbType }) => {
+    if (arbitrary && arbUtility === "leading") {
+      if (arbType !== undefined && arbType !== "length" && arbType !== "number") return null;
+      return { "line-height": arbValue! };
+    }
     const rest = tryPrefix(name, "leading");
     if (rest === null) return null;
     if (rest in theme.lineHeight) return { "line-height": theme.lineHeight[rest]! };
     return null;
   },
   // tracking-*
-  ({ name, theme, arbitrary, arbUtility, arbValue }) => {
-    if (arbitrary && arbUtility === "tracking") return { "letter-spacing": arbValue! };
+  ({ name, theme, arbitrary, arbUtility, arbValue, arbType }) => {
+    if (arbitrary && arbUtility === "tracking") {
+      if (arbType !== undefined && arbType !== "length") return null;
+      return { "letter-spacing": arbValue! };
+    }
     const rest = tryPrefix(name, "tracking");
     if (rest === null) return null;
     if (rest in theme.letterSpacing) return { "letter-spacing": theme.letterSpacing[rest]! };
     return null;
   },
   // text-size (text-sm, text-lg, etc.) AND text-color (text-blue-500)
-  ({ name, theme, arbitrary, arbUtility, arbValue }) => {
+  ({ name, theme, arbitrary, arbUtility, arbValue, arbType }) => {
     if (arbitrary && arbUtility === "text") {
-      if (arbValue!.startsWith("#") || arbValue!.includes("rgb") || arbValue!.includes("hsl") || arbValue!.includes("oklch")) {
-        return { color: arbValue! };
-      }
-      return { "font-size": arbValue! };
+      return textArbitraryValue(arbValue!, arbType);
     }
     const rest = tryPrefix(name, "text");
     if (rest === null) return null;

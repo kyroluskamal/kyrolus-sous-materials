@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-const CLASS_TOKEN_REGEX = /[@\-\w\/:\[\]#%.,\(\)]+/g;
+const CLASS_TOKEN_REGEX = /[@\-\w/:[\]#%.,()&=+>~*]+/g;
 
 export interface ScanResult {
   files: string[];
@@ -43,11 +43,12 @@ function cleanToken(token: string): string {
 function isPotentialClass(token: string): boolean {
   if (!token) return false;
   if (!/[a-zA-Z]/.test(token[0]!)) {
-    if (token[0] !== "-" && token[0] !== "@") return false;
+    const lead = token[0];
+    if (lead !== "-" && lead !== "@" && lead !== "[" && lead !== "*") return false;
   }
   if (/^(https?:|\/|#[\da-f]+$|\d+px$|\d+rem$|\d+em$|\d+%$)/i.test(token)) return false;
   if (token.length > 128) return false;
-  if (!/^[@\-\w\/:\[\]#%.,\(\)]+$/.test(token)) return false;
+  if (!/^[@\-\w/:[\]#%.,()&=+>~*]+$/.test(token)) return false;
   return true;
 }
 

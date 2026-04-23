@@ -1,0 +1,120 @@
+// ============================================================================
+// MODERN MEDIA QUERIES
+// scripting, update, overflow-block, overflow-inline, hover, pointer
+// Browser Support: all modern browsers (2023+).
+//
+// Enables progressive-enhancement patterns:
+//   - Show different UI when JavaScript is disabled
+//   - Detect e-ink displays (update: slow)
+//   - Detect paged media (overflow-block: paged)
+//   - Distinguish fine vs coarse pointers (touch vs mouse)
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// SCRIPTING — JavaScript availability
+// ----------------------------------------------------------------------------
+@media (scripting: enabled) {
+  .scripting-enabled\:block { display: block; }
+  .scripting-enabled\:hidden { display: none; }
+}
+
+@media (scripting: none) {
+  .scripting-none\:block { display: block; }
+  .scripting-none\:hidden { display: none; }
+  // Standard `no-js` pattern — hide elements that need JS entirely.
+  .js-only { display: none !important; }
+  // Show the no-JS banner only when scripting is disabled.
+  .no-js-only { display: block; }
+}
+
+@media (scripting: initial-only) {
+  .scripting-initial-only\:block { display: block; }
+}
+
+// ----------------------------------------------------------------------------
+// UPDATE — how often the output device can repaint (detects e-ink / print)
+// ----------------------------------------------------------------------------
+@media (update: fast) {
+  .update-fast\:block { display: block; }
+  .update-fast\:transition-all { transition: all 0.2s; }
+}
+
+@media (update: slow) {
+  .update-slow\:block { display: block; }
+  // On slow-refresh displays (e-ink), disable expensive animations entirely.
+  .update-slow\:no-anim,
+  .update-slow * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (update: none) {
+  .update-none\:block { display: block; }
+}
+
+// ----------------------------------------------------------------------------
+// OVERFLOW-BLOCK — paged media (print preview, kindle-style readers)
+// ----------------------------------------------------------------------------
+@media (overflow-block: scroll) {
+  .overflow-block-scroll\:block { display: block; }
+}
+
+@media (overflow-block: paged) {
+  .overflow-block-paged\:block { display: block; }
+  // Common paged-media adjustments: bigger gutters, page breaks.
+  .paged-friendly {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+@media (overflow-block: none) {
+  .overflow-block-none\:block { display: block; }
+}
+
+// ----------------------------------------------------------------------------
+// HOVER + POINTER — precise input capability detection
+// ----------------------------------------------------------------------------
+@media (hover: hover) {
+  .hover-capable\:block { display: block; }
+}
+
+@media (hover: none) {
+  .hover-none\:block { display: block; }
+  // Tap targets should be larger when hover is unavailable (touch devices).
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+@media (any-hover: hover) {
+  .any-hover\:block { display: block; }
+}
+
+@media (pointer: fine) {
+  .pointer-fine\:block { display: block; }
+}
+
+@media (pointer: coarse) {
+  .pointer-coarse\:block { display: block; }
+  // Coarse-pointer devices get bigger interactive hit areas.
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-width: 24px;
+    min-height: 24px;
+  }
+}
+
+@media (pointer: none) {
+  .pointer-none\:block { display: block; }
+}
+
+@media (any-pointer: fine) {
+  .any-pointer-fine\:block { display: block; }
+}
+
+@media (any-pointer: coarse) {
+  .any-pointer-coarse\:block { display: block; }
+}

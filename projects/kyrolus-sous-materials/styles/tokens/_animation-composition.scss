@@ -1,0 +1,21 @@
+// ============================================================================
+// ANIMATION-COMPOSITION UTILITIES
+// Controls how multiple animations on the same property are combined.
+// Browser Support: Chrome 112+, Firefox 115+, Safari 16+.
+//
+// Values:
+//   replace     — later animation replaces earlier (default)
+//   add         — animations stack additively
+//   accumulate  — animations accumulate (e.g. two translateX(5px) → 10px)
+// ============================================================================
+
+@supports (animation-composition: add) {
+  .animation-composition-replace { animation-composition: replace; }
+  .animation-composition-add { animation-composition: add; }
+  .animation-composition-accumulate { animation-composition: accumulate; }
+
+  // Short aliases matching the transition-composition utility families.
+  .anim-compose-replace { animation-composition: replace; }
+  .anim-compose-add { animation-composition: add; }
+  .anim-compose-accumulate { animation-composition: accumulate; }
+}

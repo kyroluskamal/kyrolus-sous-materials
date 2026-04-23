@@ -1,0 +1,127 @@
+// =============================================================================
+// MULTI-BRAND RUNTIME (Phase 5)
+// -----------------------------------------------------------------------------
+// Swap brand palettes at runtime by setting `data-brand="<name>"` on any
+// container (commonly `<html>`). Each brand block overrides the same
+// `--ks-*` custom properties that `ks-define-theme()` emits, so components
+// flow through without rebuilds.
+//
+// USAGE:
+// ------
+//   <html data-brand="default">                    Default
+//   <html data-brand="sunset">                     Sunset palette
+//   <html data-brand="midnight" data-theme="dark"> Brand + dark mode
+//
+// Brands can be scoped to a subtree too — useful for multi-tenant apps:
+//   <section data-brand="acme">… only Acme looks here …</section>
+//   <section data-brand="globex">… only Globex looks here …</section>
+//
+// REGISTER A NEW BRAND:
+// ---------------------
+// Add an entry to `$ks-brands` (or override via @use with):
+//
+//   @use "kyrolus-sous-materials/styles/tokens/brands" with (
+//     $ks-brands: (
+//       "acme":   (primary: #1e40af, accent: #c026d3, density: comfortable),
+//       "globex": (primary: #15803d, accent: #f59e0b, density: compact),
+//     )
+//   );
+//
+// Every entry flows through `ks-define-theme()` so it gets the full color
+// family + density + radius + focus-ring tokens.
+// =============================================================================
+
+@use "sass:map";
+@use "../abstracts/define-theme" as dt;
+
+// -----------------------------------------------------------------------------
+// Built-in brands. Consumers can extend via @use with $ks-brands: (...).
+// Keep this map short — it's demonstrative; production apps override it.
+// -----------------------------------------------------------------------------
+$ks-brands: (
+  "sunset": (
+    primary:   #ea580c,     // Orange
+    secondary: #facc15,     // Amber
+    accent:    #db2777,     // Pink
+    success:   #16a34a,
+    warning:   #d97706,
+    danger:    #b91c1c,
+    info:      #0ea5e9,
+    radius:    0.625rem,
+    density:   comfortable,
+  ),
+  "midnight": (
+    primary:   #6366f1,     // Indigo
+    secondary: #8b5cf6,     // Violet
+    accent:    #22d3ee,     // Cyan
+    success:   #10b981,
+    warning:   #f59e0b,
+    danger:    #ef4444,
+    info:      #3b82f6,
+    radius:    0.375rem,
+    density:   compact,
+    surface:   #0f172a,
+    on-surface:#e5e7eb,
+    text:      #e5e7eb,
+    text-muted:#94a3b8,
+    border:    #1e293b,
+  ),
+  "forest": (
+    primary:   #15803d,     // Emerald
+    secondary: #059669,
+    accent:    #ca8a04,     // Olive
+    success:   #16a34a,
+    warning:   #eab308,
+    danger:    #dc2626,
+    info:      #0891b2,
+    radius:    0.5rem,
+    density:   comfortable,
+  ),
+  "monochrome": (
+    primary:   #111827,
+    secondary: #374151,
+    accent:    #6b7280,
+    success:   #16a34a,
+    warning:   #ca8a04,
+    danger:    #dc2626,
+    info:      #2563eb,
+    radius:    0.25rem,
+    density:   comfortable,
+  ),
+) !default;
+
+// -----------------------------------------------------------------------------
+// Emit every registered brand as an attribute-scoped override.
+// -----------------------------------------------------------------------------
+@each $name, $config in $ks-brands {
+  // Inject the brand name into the config so `ks-define-theme` records it
+  // under `--ks-brand`.
+  $with-name: map.set($config, "brand", $name);
+
+  [data-brand="#{$name}"] {
+    @include dt.ks-define-theme($with-name);
+  }
+
+  // Class fallback for teams that prefer class-based toggling.
+  .brand-#{$name} {
+    @include dt.ks-define-theme($with-name);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Brand + theme combos — each brand gets optional per-theme tweaks.
+// Consumers can override surface/text tokens inside their brand config to
+// recolor dark mode; by default the existing dark theme tokens apply on top.
+// -----------------------------------------------------------------------------
+// NOTE: No extra emission needed — [data-brand="x"][data-theme="dark"] already
+// inherits both rules via cascade order (brand before theme in styles.scss
+// forward chain, theme wins for the surface/text tokens it explicitly sets).
+
+// -----------------------------------------------------------------------------
+// Default brand marker — `:root` reports "default" so scripts can introspect.
+// This does NOT emit any overrides (ks-define-theme is not called here on
+// purpose — the shipped theme already sets the defaults).
+// -----------------------------------------------------------------------------
+:root:not([data-brand]) {
+  --ks-brand: "default";
+}

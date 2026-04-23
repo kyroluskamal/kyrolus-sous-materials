@@ -1,0 +1,321 @@
+// ============================================================================
+// POPOVER COMPONENT (Phase 3 P1)
+// ----------------------------------------------------------------------------
+// Bigger, interactive cousin of tooltip. Supports the native Popover API
+// (`popover` attribute + `:popover-open`) and a non-native fallback driven
+// by `[data-state]`. Enter/exit uses `@starting-style` when supported.
+//
+// DOM (native):
+//   <button popovertarget="menu1">Options</button>
+//   <div id="menu1" popover class="popover popover-md">
+//     <div class="popover-header">Title</div>
+//     <div class="popover-body">…</div>
+//   </div>
+//
+// DOM (fallback):
+//   <div class="popover popover-bottom" role="dialog"
+//        data-state="open">…</div>
+//
+// Variants:
+//   Placements: .popover-{top|right|bottom|left}
+//   .popover-sm / .popover-md / .popover-lg
+//   .popover-{primary|secondary|tertiary|success|warning|danger|info|dark}
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$popover-sizes: (
+  "sm": (width: 14rem,  pad: 0.625rem),
+  "md": (width: 18rem,  pad: 0.875rem),
+  "lg": (width: 24rem,  pad: 1.125rem),
+);
+
+$popover-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Base
+// ----------------------------------------------------------------------------
+.popover {
+  --ks-popover-bg: #ffffff;
+  --ks-popover-color: #111827;
+  --ks-popover-border-color: #e5e7eb;
+  --ks-popover-accent: #{$primary-color};
+  --ks-popover-width: 18rem;
+  --ks-popover-pad: 0.875rem;
+  --ks-popover-radius: 0.5rem;
+  --ks-popover-offset: 0.5rem;
+  --ks-popover-arrow-size: 0.625rem;
+  --ks-popover-font-size: 0.9375rem;
+  --ks-popover-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  --ks-popover-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+  --ks-popover-transition: opacity 0.2s ease, transform 0.2s ease;
+
+  position: absolute;
+  z-index: 1070;
+  inline-size: var(--ks-popover-width);
+  max-inline-size: min(calc(100vw - 2rem), var(--ks-popover-width));
+  padding: 0;
+  margin: 0;
+  background: var(--ks-popover-bg);
+  color: var(--ks-popover-color);
+  border: 1px solid var(--ks-popover-border-color);
+  border-radius: var(--ks-popover-radius);
+  box-shadow: var(--ks-popover-shadow);
+  font-size: var(--ks-popover-font-size);
+  overflow: hidden;
+}
+
+// Native popover element resets.
+[popover].popover {
+  position: fixed;
+  inset: unset;
+}
+
+// ----------------------------------------------------------------------------
+// Sections
+// ----------------------------------------------------------------------------
+.popover-header,
+.popover-body,
+.popover-footer {
+  padding: var(--ks-popover-pad);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.popover-header {
+  font-weight: 600;
+  border-block-end: 1px solid var(--ks-popover-border-color);
+}
+
+.popover-footer {
+  border-block-start: 1px solid var(--ks-popover-border-color);
+  flex-direction: row;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.popover-close {
+  margin-inline-start: auto;
+  background: transparent;
+  border: none;
+  color: inherit;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0.7;
+
+  &:hover { opacity: 1; background: rgba(0, 0, 0, 0.06); }
+  &:focus { outline: none; }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--ks-popover-focus-ring);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Arrow
+// ----------------------------------------------------------------------------
+.popover-arrow {
+  position: absolute;
+  inline-size: var(--ks-popover-arrow-size);
+  block-size: var(--ks-popover-arrow-size);
+  background: var(--ks-popover-bg);
+  border: 1px solid var(--ks-popover-border-color);
+  transform: rotate(45deg);
+  z-index: -1;
+}
+
+// ----------------------------------------------------------------------------
+// Placement modifiers (non-native fallback).
+// ----------------------------------------------------------------------------
+.popover-top {
+  inset-block-end: calc(100% + var(--ks-popover-offset));
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  .popover-arrow {
+    inset-block-end: calc(var(--ks-popover-arrow-size) / -2);
+    inset-inline-start: 50%;
+    translate: -50% 0;
+    border-block-start: 0;
+    border-inline-start: 0;
+  }
+}
+
+.popover-bottom {
+  inset-block-start: calc(100% + var(--ks-popover-offset));
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  .popover-arrow {
+    inset-block-start: calc(var(--ks-popover-arrow-size) / -2);
+    inset-inline-start: 50%;
+    translate: -50% 0;
+    border-block-end: 0;
+    border-inline-end: 0;
+  }
+}
+
+.popover-left {
+  inset-inline-end: calc(100% + var(--ks-popover-offset));
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  .popover-arrow {
+    inset-inline-end: calc(var(--ks-popover-arrow-size) / -2);
+    inset-block-start: 50%;
+    translate: 0 -50%;
+    border-inline-start: 0;
+    border-block-end: 0;
+  }
+}
+
+.popover-right {
+  inset-inline-start: calc(100% + var(--ks-popover-offset));
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  .popover-arrow {
+    inset-inline-start: calc(var(--ks-popover-arrow-size) / -2);
+    inset-block-start: 50%;
+    translate: 0 -50%;
+    border-inline-end: 0;
+    border-block-start: 0;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $values in $popover-sizes {
+  .popover-#{$size} {
+    --ks-popover-width: #{map.get($values, width)};
+    --ks-popover-pad: #{map.get($values, pad)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants — tint the header, keep body neutral.
+// ----------------------------------------------------------------------------
+@each $name, $color in $popover-colors {
+  .popover-#{$name} {
+    --ks-popover-border-color: #{color.scale($color, $lightness: 55%)};
+    --ks-popover-accent: #{$color};
+    --ks-popover-focus-ring: 0 0 0 3px #{rgba($color, 0.35)};
+
+    .popover-header {
+      background: #{color.scale($color, $lightness: 92%)};
+      color: #{color.scale($color, $lightness: -55%)};
+      border-block-end-color: #{color.scale($color, $lightness: 65%)};
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Open/close animation — native :popover-open + non-native [data-state=open].
+// ----------------------------------------------------------------------------
+@supports (transition-behavior: allow-discrete) {
+  .popover {
+    opacity: 0;
+    transform: translateY(-0.25rem) scale(0.98);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      display 0.2s allow-discrete,
+      overlay 0.2s allow-discrete;
+  }
+
+  .popover:popover-open,
+  .popover[data-state="open"] {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+
+  .popover-top:popover-open,
+  .popover-top[data-state="open"],
+  .popover-bottom:popover-open,
+  .popover-bottom[data-state="open"] {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  .popover-left:popover-open,
+  .popover-left[data-state="open"],
+  .popover-right:popover-open,
+  .popover-right[data-state="open"] {
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+
+  @starting-style {
+    .popover:popover-open,
+    .popover[data-state="open"] {
+      opacity: 0;
+      transform: translateY(-0.25rem) scale(0.98);
+    }
+  }
+}
+
+.popover[data-state="closed"] { display: none; }
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .popover {
+  --ks-popover-bg: #1f2937;
+  --ks-popover-color: #e5e7eb;
+  --ks-popover-border-color: #374151;
+  --ks-popover-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .popover {
+    --ks-popover-bg: #1f2937;
+    --ks-popover-color: #e5e7eb;
+    --ks-popover-border-color: #374151;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .popover {
+  --ks-popover-bg: #000000;
+  --ks-popover-color: #ffffff;
+  --ks-popover-border-color: #ffffff;
+  --ks-popover-accent: #ffff00;
+  --ks-popover-focus-ring: 0 0 0 3px #ffff00;
+}
+
+@media (forced-colors: active) {
+  .popover {
+    forced-color-adjust: none;
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+    box-shadow: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .popover {
+    transition: opacity 0.1s ease;
+    transform: none !important;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// PRINT
+// ----------------------------------------------------------------------------
+@media print {
+  .popover { display: none !important; }
+}

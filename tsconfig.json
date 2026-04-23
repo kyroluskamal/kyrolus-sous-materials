@@ -1,13 +1,15 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": ".",
-   "paths": {
+    "paths": {
       "kyrolus-sous-materials": [
         "./dist/kyrolus-sous-materials"
       ],
       "kyrolus-sous-materials/*": [
         "./dist/kyrolus-sous-materials/*"
+      ],
+      "@ks-jit/browser": [
+        "./projects/kyrolus-sous-materials/jit/src/browser"
       ]
     },
     "strict": true,
@@ -41,10 +43,10 @@
       "path": "./projects/kyrolus-sous-materials/tsconfig.spec.json"
     },
     {
-      "path": "./projects/demo-app/tsconfig.app.json"
+      "path": "./projects/ks-materials-docs/tsconfig.app.json"
     },
     {
-      "path": "./projects/demo-app/tsconfig.spec.json"
+      "path": "./projects/ks-materials-docs/tsconfig.spec.json"
     }
   ]
 }

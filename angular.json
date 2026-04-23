@@ -50,7 +50,7 @@
         }
       }
     },
-    "DemoApp": {
+    "ks-materials-docs": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -61,32 +61,37 @@
           "inlineTemplate": true
         }
       },
-      "root": "projects/demo-app",
-      "sourceRoot": "projects/demo-app/src",
+      "root": "projects/ks-materials-docs",
+      "sourceRoot": "projects/ks-materials-docs/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@kyrolus-sous-materials/jit:application",
           "options": {
-            "browser": "projects/demo-app/src/main.ts",
-            "tsConfig": "projects/demo-app/tsconfig.app.json",
+            "browser": "projects/ks-materials-docs/src/main.ts",
+            "tsConfig": "projects/ks-materials-docs/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
-                "input": "projects/demo-app/public"
+                "input": "projects/ks-materials-docs/public"
+              },
+              {
+                "glob": "**/*.md",
+                "input": "docs/migration",
+                "output": "/migration-guides"
               }
             ],
             "styles": [
-              "node_modules/kyrolus-sous-materials/styles/styles.scss",
+              "projects/kyrolus-sous-materials/styles/styles.scss",
               "node_modules/bootstrap-icons/font/bootstrap-icons.scss",
               "node_modules/material-icons/iconfont/material-icons.css",
-              "projects/demo-app/src/styles.scss"
+              "projects/ks-materials-docs/src/styles.scss"
             ],
-            "server": "projects/demo-app/src/main.server.ts",
+            "server": "projects/ks-materials-docs/src/main.server.ts",
             "outputMode": "server",
             "ssr": {
-              "entry": "projects/demo-app/src/server.ts"
+              "entry": "projects/ks-materials-docs/src/server.ts"
             }
           },
           "configurations": {
@@ -94,13 +99,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "3MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumError": "16kB"
                 }
               ],
               "outputHashing": "all"
@@ -122,10 +127,10 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "DemoApp:build:production"
+              "buildTarget": "ks-materials-docs:build:production"
             },
             "development": {
-              "buildTarget": "DemoApp:build:development"
+              "buildTarget": "ks-materials-docs:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -136,15 +141,15 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "tsConfig": "projects/demo-app/tsconfig.spec.json",
+            "tsConfig": "projects/ks-materials-docs/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
-                "input": "projects/demo-app/public"
+                "input": "projects/ks-materials-docs/public"
               }
             ],
-            "styles": ["projects/demo-app/src/styles.scss"]
+            "styles": ["projects/ks-materials-docs/src/styles.scss"]
           }
         }
       }

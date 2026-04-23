@@ -20,7 +20,7 @@ export function parseCandidate(raw: string): Candidate | null {
   let value: string | undefined;
   let arbitrary = false;
 
-  const arbMatch = core.match(/^([a-zA-Z][a-zA-Z0-9-]*)-\[(.+)\]$/);
+  const arbMatch = /^([a-zA-Z][a-zA-Z0-9-]*)-\[(.+)\]$/.exec(core);
   if (arbMatch) {
     arbitrary = true;
     value = arbMatch[2];
@@ -36,7 +36,22 @@ export function parseCandidate(raw: string): Candidate | null {
     };
   }
 
-  const bareArb = core.match(/^\[(.+)\]$/);
+  const parenMatch = /^([a-zA-Z][a-zA-Z0-9-]*)-\((.+)\)$/.exec(core);
+  if (parenMatch) {
+    arbitrary = true;
+    value = `var(${parenMatch[2]})`;
+    return {
+      raw,
+      variants,
+      base,
+      utility: parenMatch[1]!,
+      value,
+      negative,
+      arbitrary,
+    };
+  }
+
+  const bareArb = /^\[(.+)\]$/.exec(core);
   if (bareArb) {
     arbitrary = true;
     return {

@@ -1,0 +1,480 @@
+// ============================================================================
+// AUTOCOMPLETE COMPONENT (Phase 4 P2)
+// ----------------------------------------------------------------------------
+// Combobox — input + listbox of suggestions. Built on the WAI-ARIA 1.2
+// combobox pattern (role="combobox" + aria-controls + role="listbox" +
+// role="option"). Progressive enhancement target: native `<input list>` +
+// `<datalist>` (we restyle where we can; browsers render the list themselves).
+//
+// DOM (ARIA combobox — preferred):
+//   <div class="autocomplete autocomplete-md">
+//     <label class="autocomplete-label" for="ac-1">Country</label>
+//     <div class="autocomplete-control">
+//       <input id="ac-1" class="autocomplete-input" type="text"
+//              role="combobox" aria-autocomplete="list"
+//              aria-expanded="false" aria-controls="ac-1-list">
+//       <span class="autocomplete-caret" aria-hidden="true"></span>
+//     </div>
+//     <ul id="ac-1-list" class="autocomplete-listbox" role="listbox"
+//         data-state="closed">
+//       <li role="option" class="autocomplete-option" aria-selected="true">
+//         <span class="autocomplete-option-label">Egypt</span>
+//         <span class="autocomplete-option-hint">EG</span>
+//       </li>
+//       <li role="option" class="autocomplete-option">Canada</li>
+//       <li class="autocomplete-empty">No matches</li>
+//     </ul>
+//   </div>
+//
+// DOM (native datalist):
+//   <input class="autocomplete-input" list="colors">
+//   <datalist id="colors">…</datalist>
+//
+// Variants:
+//   .autocomplete-sm / .autocomplete-md / .autocomplete-lg
+//   .autocomplete-{primary|secondary|tertiary|success|warning|danger|info|dark}
+//   .autocomplete-chips  (multi-select input with chips)
+//   .autocomplete-ghost  (borderless)
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$autocomplete-sizes: (
+  "sm": (pad-y: 0.3125rem, pad-x: 0.625rem, font: 0.8125rem, option-pad: 0.375rem 0.625rem),
+  "md": (pad-y: 0.5rem,    pad-x: 0.75rem,  font: 0.9375rem, option-pad: 0.5rem 0.75rem),
+  "lg": (pad-y: 0.6875rem, pad-x: 0.875rem, font: 1rem,      option-pad: 0.625rem 0.875rem),
+);
+
+$autocomplete-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Wrapper
+// ----------------------------------------------------------------------------
+.autocomplete {
+  --ks-ac-bg: #ffffff;
+  --ks-ac-color: #111827;
+  --ks-ac-border: #d1d5db;
+  --ks-ac-accent: #{$primary-color};
+  --ks-ac-placeholder: #9ca3af;
+  --ks-ac-list-bg: #ffffff;
+  --ks-ac-list-border: #e5e7eb;
+  --ks-ac-list-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  --ks-ac-option-hover: #f3f4f6;
+  --ks-ac-option-active-bg: #{rgba($primary-color, 0.12)};
+  --ks-ac-option-active-color: #{color.scale($primary-color, $lightness: -20%)};
+  --ks-ac-radius: 0.5rem;
+  --ks-ac-pad-y: 0.5rem;
+  --ks-ac-pad-x: 0.75rem;
+  --ks-ac-font-size: 0.9375rem;
+  --ks-ac-option-pad: 0.5rem 0.75rem;
+  --ks-ac-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+  --ks-ac-transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  position: relative;
+  display: block;
+  font-size: var(--ks-ac-font-size);
+  color: var(--ks-ac-color);
+}
+
+.autocomplete-label {
+  display: inline-block;
+  font-weight: 500;
+  margin-block-end: 0.375rem;
+  font-size: 0.875em;
+}
+
+// ----------------------------------------------------------------------------
+// Control — wraps the input and the caret/clear button.
+// ----------------------------------------------------------------------------
+.autocomplete-control {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: var(--ks-ac-bg);
+  border: 1px solid var(--ks-ac-border);
+  border-radius: var(--ks-ac-radius);
+  padding: var(--ks-ac-pad-y) var(--ks-ac-pad-x);
+  transition: var(--ks-ac-transition);
+
+  &:has(.autocomplete-input:focus-visible),
+  &:has(.autocomplete-input[aria-expanded="true"]) {
+    border-color: var(--ks-ac-accent);
+    box-shadow: var(--ks-ac-focus-ring);
+  }
+
+  &:has(.autocomplete-input[aria-invalid="true"]),
+  &:has(.autocomplete-input:user-invalid) {
+    border-color: $danger-color;
+    box-shadow: 0 0 0 3px #{rgba($danger-color, 0.25)};
+  }
+
+  &:has(.autocomplete-input:disabled),
+  &[aria-disabled="true"] {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+}
+
+.autocomplete-input {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+
+  &:focus { outline: none; }
+
+  &::placeholder { color: var(--ks-ac-placeholder); }
+
+  // When rendered alone (native datalist case), apply the control's styles.
+  &:not(.autocomplete-control > *) {
+    background: var(--ks-ac-bg);
+    border: 1px solid var(--ks-ac-border);
+    border-radius: var(--ks-ac-radius);
+    padding: var(--ks-ac-pad-y) var(--ks-ac-pad-x);
+    transition: var(--ks-ac-transition);
+
+    &:focus-visible {
+      outline: none;
+      border-color: var(--ks-ac-accent);
+      box-shadow: var(--ks-ac-focus-ring);
+    }
+  }
+}
+
+// Caret indicator (flips when expanded).
+.autocomplete-caret {
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  flex-shrink: 0;
+  color: var(--ks-ac-placeholder);
+  transition: transform 0.2s ease, color 0.15s ease;
+
+  &::before {
+    content: "";
+    display: inline-block;
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-block-end: 2px solid currentColor;
+    border-inline-end: 2px solid currentColor;
+    transform: rotate(45deg) translate(-2px, -2px);
+  }
+}
+
+.autocomplete-control:has(.autocomplete-input[aria-expanded="true"]) .autocomplete-caret {
+  transform: rotate(180deg);
+  color: var(--ks-ac-accent);
+}
+
+// Clear button (×).
+.autocomplete-clear {
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: var(--ks-ac-placeholder);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  &:hover { background: rgba(0, 0, 0, 0.06); color: var(--ks-ac-color); }
+  &:focus { outline: none; }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--ks-ac-focus-ring);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Listbox (popup)
+// ----------------------------------------------------------------------------
+.autocomplete-listbox {
+  list-style: none;
+  padding: 0.25rem;
+  margin: 0.25rem 0 0;
+  max-block-size: 16rem;
+  overflow-y: auto;
+  background: var(--ks-ac-list-bg);
+  border: 1px solid var(--ks-ac-list-border);
+  border-radius: var(--ks-ac-radius);
+  box-shadow: var(--ks-ac-list-shadow);
+  z-index: 1080;
+
+  // Position below the control (consumer is responsible for layout container).
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 100%;
+
+  // Hidden until opened.
+  display: none;
+  opacity: 0;
+  transform: translateY(-0.25rem);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.autocomplete-listbox[data-state="open"],
+.autocomplete .autocomplete-input[aria-expanded="true"] ~ .autocomplete-listbox {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+// @starting-style entrance — progressive enhancement.
+@supports (transition-behavior: allow-discrete) {
+  .autocomplete-listbox {
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease,
+      display 0.15s allow-discrete;
+  }
+
+  @starting-style {
+    .autocomplete-listbox[data-state="open"],
+    .autocomplete .autocomplete-input[aria-expanded="true"] ~ .autocomplete-listbox {
+      opacity: 0;
+      transform: translateY(-0.25rem);
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Option
+// ----------------------------------------------------------------------------
+.autocomplete-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: var(--ks-ac-option-pad);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: inherit;
+  min-inline-size: 0;
+
+  &:hover:not([aria-disabled="true"]):not([aria-selected="true"]) {
+    background: var(--ks-ac-option-hover);
+  }
+
+  &[aria-selected="true"],
+  &.active {
+    background: var(--ks-ac-option-active-bg);
+    color: var(--ks-ac-option-active-color);
+    font-weight: 500;
+  }
+
+  &[aria-disabled="true"] {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+}
+
+.autocomplete-option-label {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.autocomplete-option-hint {
+  color: var(--ks-ac-placeholder);
+  font-size: 0.875em;
+  flex-shrink: 0;
+}
+
+// Highlight matching substring (consumer wraps matched text with <mark>).
+.autocomplete-option mark,
+.autocomplete-option .match {
+  background: transparent;
+  color: var(--ks-ac-accent);
+  font-weight: 600;
+  padding: 0;
+}
+
+// Empty state.
+.autocomplete-empty {
+  padding: var(--ks-ac-option-pad);
+  text-align: center;
+  color: var(--ks-ac-placeholder);
+  font-style: italic;
+  pointer-events: none;
+}
+
+// Group header.
+.autocomplete-group-label {
+  padding: 0.375rem var(--ks-ac-pad-x);
+  font-size: 0.75em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ks-ac-placeholder);
+}
+
+// ----------------------------------------------------------------------------
+// Chips (multi-select)
+// ----------------------------------------------------------------------------
+.autocomplete-chips .autocomplete-control {
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.autocomplete-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  background: #{rgba($primary-color, 0.1)};
+  color: #{color.scale($primary-color, $lightness: -25%)};
+  border-radius: 9999px;
+  font-size: 0.8125em;
+
+  > button {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font-size: 0.875em;
+    line-height: 1;
+    padding: 0 0.125rem;
+
+    &:hover { opacity: 0.7; }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Ghost variant — borderless input, underline on focus.
+// ----------------------------------------------------------------------------
+.autocomplete-ghost .autocomplete-control {
+  background: transparent;
+  border-color: transparent;
+  border-block-end: 1px solid var(--ks-ac-border);
+  border-radius: 0;
+  padding-inline: 0;
+
+  &:has(.autocomplete-input:focus-visible),
+  &:has(.autocomplete-input[aria-expanded="true"]) {
+    box-shadow: none;
+    border-block-end-color: var(--ks-ac-accent);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $values in $autocomplete-sizes {
+  .autocomplete-#{$size} {
+    --ks-ac-pad-y:      #{map.get($values, pad-y)};
+    --ks-ac-pad-x:      #{map.get($values, pad-x)};
+    --ks-ac-font-size:  #{map.get($values, font)};
+    --ks-ac-option-pad: #{map.get($values, option-pad)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants — recolor border/focus/accent
+// ----------------------------------------------------------------------------
+@each $name, $color in $autocomplete-colors {
+  .autocomplete-#{$name} {
+    --ks-ac-accent: #{$color};
+    --ks-ac-focus-ring: 0 0 0 3px #{rgba($color, 0.35)};
+    --ks-ac-option-active-bg: #{rgba($color, 0.12)};
+    --ks-ac-option-active-color: #{color.scale($color, $lightness: -20%)};
+  }
+
+  .autocomplete-#{$name} .autocomplete-chip {
+    background: #{rgba($color, 0.1)};
+    color: #{color.scale($color, $lightness: -25%)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .autocomplete {
+  --ks-ac-bg: #1f2937;
+  --ks-ac-color: #e5e7eb;
+  --ks-ac-border: #374151;
+  --ks-ac-placeholder: #6b7280;
+  --ks-ac-list-bg: #1f2937;
+  --ks-ac-list-border: #374151;
+  --ks-ac-list-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  --ks-ac-option-hover: #374151;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .autocomplete {
+    --ks-ac-bg: #1f2937;
+    --ks-ac-color: #e5e7eb;
+    --ks-ac-border: #374151;
+    --ks-ac-placeholder: #6b7280;
+    --ks-ac-list-bg: #1f2937;
+    --ks-ac-list-border: #374151;
+    --ks-ac-option-hover: #374151;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .autocomplete {
+  --ks-ac-bg: #000000;
+  --ks-ac-color: #ffffff;
+  --ks-ac-border: #ffffff;
+  --ks-ac-accent: #ffff00;
+  --ks-ac-placeholder: #ffffff;
+  --ks-ac-list-bg: #000000;
+  --ks-ac-list-border: #ffffff;
+  --ks-ac-option-hover: #1a1a1a;
+  --ks-ac-option-active-bg: #ffff00;
+  --ks-ac-option-active-color: #000000;
+  --ks-ac-focus-ring: 0 0 0 3px #ffff00;
+}
+
+@media (forced-colors: active) {
+  .autocomplete-control,
+  .autocomplete-listbox {
+    forced-color-adjust: none;
+    background: Field;
+    color: FieldText;
+    border: 1px solid FieldText;
+  }
+
+  .autocomplete-option[aria-selected="true"],
+  .autocomplete-option.active {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .autocomplete-control:has(.autocomplete-input:focus-visible) {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .autocomplete-caret,
+  .autocomplete-listbox {
+    transition: opacity 0.1s ease;
+    transform: none !important;
+  }
+}

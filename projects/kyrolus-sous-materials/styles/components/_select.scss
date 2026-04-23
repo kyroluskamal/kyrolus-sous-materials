@@ -1,0 +1,247 @@
+// ============================================================================
+// SELECT COMPONENT (Phase 2 P0)
+// ----------------------------------------------------------------------------
+// Styles the native <select>. Uses appearance: none + an SVG caret painted
+// via background-image, so the control stays a real <select> (keyboard +
+// screen reader support comes free from the browser).
+//
+// DOM:
+//   <div class="select select-md select-primary">
+//     <select class="select-input" aria-label="Country">
+//       <option>Egypt</option><option>USA</option>
+//     </select>
+//   </div>
+//
+// Variants:
+//   .select-sm / .select-md / .select-lg
+//   .select-{primary|secondary|tertiary|success|warning|danger|info|dark}
+//   .select-filled / .select-outline (default) / .select-ghost
+//   .select-multiple wraps a <select multiple> and removes the caret.
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$select-sizes: (
+  "sm": (pad-y: 0.375rem, pad-x: 0.625rem, font-size: 0.875rem, caret-size: 0.75rem),
+  "md": (pad-y: 0.5rem,   pad-x: 0.75rem,  font-size: 1rem,     caret-size: 0.875rem),
+  "lg": (pad-y: 0.75rem,  pad-x: 1rem,     font-size: 1.125rem, caret-size: 1rem),
+);
+
+$select-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Wrapper
+// ----------------------------------------------------------------------------
+.select {
+  --ks-select-bg: #ffffff;
+  --ks-select-color: #111827;
+  --ks-select-border-color: #d1d5db;
+  --ks-select-border-focus: #{$primary-color};
+  --ks-select-pad-y: 0.5rem;
+  --ks-select-pad-x: 0.75rem;
+  --ks-select-radius: 0.375rem;
+  --ks-select-font-size: 1rem;
+  --ks-select-caret-size: 0.875rem;
+  --ks-select-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+  --ks-select-transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  // Inline SVG caret — consumer can override via --ks-select-caret.
+  --ks-select-caret: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b7280'><path d='M5.25 7.5L10 12.25 14.75 7.5' stroke='%236b7280' stroke-width='1.75' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+
+  display: inline-flex;
+  align-items: stretch;
+  position: relative;
+  inline-size: 100%;
+  max-inline-size: 100%;
+}
+
+// ----------------------------------------------------------------------------
+// The <select> itself
+// ----------------------------------------------------------------------------
+.select-input {
+  appearance: none;
+  -webkit-appearance: none;
+  inline-size: 100%;
+  padding: var(--ks-select-pad-y)
+    calc(var(--ks-select-pad-x) * 2 + var(--ks-select-caret-size))
+    var(--ks-select-pad-y) var(--ks-select-pad-x);
+  font: inherit;
+  font-size: var(--ks-select-font-size);
+  background-color: var(--ks-select-bg);
+  background-image: var(--ks-select-caret);
+  background-repeat: no-repeat;
+  background-position: right var(--ks-select-pad-x) center;
+  background-size: var(--ks-select-caret-size);
+  color: var(--ks-select-color);
+  border: 1px solid var(--ks-select-border-color);
+  border-radius: var(--ks-select-radius);
+  cursor: pointer;
+  line-height: 1.3;
+  transition: var(--ks-select-transition);
+
+  &:hover:not(:disabled) {
+    border-color: var(--ks-select-border-focus);
+  }
+
+  &:focus { outline: none; }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--ks-select-border-focus);
+    box-shadow: var(--ks-select-focus-ring);
+  }
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.6;
+    background-color: #f3f4f6;
+  }
+
+  // <option> styling — browsers give very limited control, but modern
+  // ones honor color/background-color.
+  option {
+    background: var(--ks-select-bg);
+    color: var(--ks-select-color);
+  }
+}
+
+// RTL — flip caret to the other side.
+[dir="rtl"] .select-input {
+  padding-inline: calc(var(--ks-select-pad-x) * 2 + var(--ks-select-caret-size))
+    var(--ks-select-pad-x);
+  background-position: left var(--ks-select-pad-x) center;
+}
+
+// Multiple-select: drop the caret and let the browser show its native list.
+.select-multiple .select-input {
+  background-image: none;
+  padding-inline-end: var(--ks-select-pad-x);
+  min-block-size: 6rem;
+  cursor: auto;
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $values in $select-sizes {
+  .select-#{$size} {
+    --ks-select-pad-y: #{map.get($values, pad-y)};
+    --ks-select-pad-x: #{map.get($values, pad-x)};
+    --ks-select-font-size: #{map.get($values, font-size)};
+    --ks-select-caret-size: #{map.get($values, caret-size)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants — recolor focus ring / border.
+// ----------------------------------------------------------------------------
+@each $name, $color in $select-colors {
+  .select-#{$name} {
+    --ks-select-border-focus: #{$color};
+    --ks-select-focus-ring: 0 0 0 3px #{rgba($color, 0.35)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Appearance variants
+// ----------------------------------------------------------------------------
+.select-filled .select-input {
+  background-color: #f3f4f6;
+  border-color: transparent;
+
+  &:hover:not(:disabled) { background-color: #e5e7eb; }
+  &:focus-visible { background-color: #ffffff; }
+}
+
+.select-ghost .select-input {
+  background-color: transparent;
+  border-color: transparent;
+
+  &:hover:not(:disabled) { background-color: rgba(0, 0, 0, 0.04); }
+}
+
+// ----------------------------------------------------------------------------
+// Validation states
+// ----------------------------------------------------------------------------
+@supports selector(:user-invalid) {
+  .select-input:user-invalid {
+    --ks-select-border-color: #{$danger-color};
+    --ks-select-border-focus: #{$danger-color};
+    --ks-select-focus-ring: 0 0 0 3px #{rgba($danger-color, 0.35)};
+  }
+
+  .select-input:user-valid {
+    --ks-select-border-color: #{$success-color};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .select {
+  --ks-select-bg: #1f2937;
+  --ks-select-color: #e5e7eb;
+  --ks-select-border-color: #374151;
+  // Switch caret fill to a light color.
+  --ks-select-caret: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M5.25 7.5L10 12.25 14.75 7.5' stroke='%23d1d5db' stroke-width='1.75' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+}
+
+[data-theme="dark"] .select-filled .select-input {
+  background-color: #111827;
+
+  &:hover:not(:disabled) { background-color: #0b1220; }
+  &:focus-visible { background-color: #1f2937; }
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .select {
+    --ks-select-bg: #1f2937;
+    --ks-select-color: #e5e7eb;
+    --ks-select-border-color: #374151;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .select {
+  --ks-select-bg: #000000;
+  --ks-select-color: #ffffff;
+  --ks-select-border-color: #ffffff;
+  --ks-select-border-focus: #ffff00;
+  --ks-select-focus-ring: 0 0 0 3px #ffff00;
+  --ks-select-caret: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M5.25 7.5L10 12.25 14.75 7.5' stroke='%23ffffff' stroke-width='1.75' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+}
+
+@media (forced-colors: active) {
+  .select-input {
+    forced-color-adjust: none;
+    background-color: Canvas;
+    color: CanvasText;
+    border-color: CanvasText;
+
+    &:focus-visible {
+      outline: 3px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .select-input { transition: none; }
+}

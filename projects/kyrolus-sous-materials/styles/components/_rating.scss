@@ -1,0 +1,249 @@
+// ============================================================================
+// RATING COMPONENT (Phase 4 P2)
+// ----------------------------------------------------------------------------
+// Star rating. Two implementations:
+//   (1) Read-only display — `role="img"` with aria-label describing the score.
+//   (2) Interactive — radio group styled as stars. Uses native radios so
+//       keyboard + screen readers work without JS.
+//
+// DOM (display-only):
+//   <div class="rating rating-md" role="img" aria-label="4 out of 5">
+//     <span class="rating-stars" style="--ks-rating-value: 80%"></span>
+//   </div>
+//
+// DOM (interactive):
+//   <fieldset class="rating rating-md rating-interactive">
+//     <legend class="visually-hidden">Rate this</legend>
+//     <label class="rating-star"><input type="radio" name="r" value="1"><span aria-hidden="true">★</span></label>
+//     <label class="rating-star"><input type="radio" name="r" value="2"><span aria-hidden="true">★</span></label>
+//     <label class="rating-star"><input type="radio" name="r" value="3"><span aria-hidden="true">★</span></label>
+//     <label class="rating-star"><input type="radio" name="r" value="4"><span aria-hidden="true">★</span></label>
+//     <label class="rating-star"><input type="radio" name="r" value="5"><span aria-hidden="true">★</span></label>
+//   </fieldset>
+//
+// Variants:
+//   .rating-sm / .rating-md / .rating-lg
+//   .rating-{primary|secondary|tertiary|success|warning|danger|info|dark}
+//   .rating-interactive (enables hover/check styling for radios)
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$rating-sizes: (
+  "sm": 1rem,
+  "md": 1.5rem,
+  "lg": 2rem,
+);
+
+$rating-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Base
+// ----------------------------------------------------------------------------
+.rating {
+  --ks-rating-size: 1.5rem;
+  --ks-rating-color: #{$warning-color};
+  --ks-rating-empty: #e5e7eb;
+  --ks-rating-value: 0%;
+  --ks-rating-gap: 0.125rem;
+  --ks-rating-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ks-rating-gap);
+  color: var(--ks-rating-color);
+  border: 0;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+
+  // Legend hidden by default (consumers can re-show if needed).
+  > legend {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Display-only mode — single element with a value-driven linear-gradient mask.
+// Uses one row of ★★★★★ whose colour is clipped to --ks-rating-value.
+// ----------------------------------------------------------------------------
+.rating-stars {
+  --ks-rating-chars: "★★★★★";
+
+  position: relative;
+  display: inline-block;
+  font-size: var(--ks-rating-size);
+  line-height: 1;
+  letter-spacing: var(--ks-rating-gap);
+
+  &::before,
+  &::after {
+    content: var(--ks-rating-chars);
+  }
+
+  &::before {
+    color: var(--ks-rating-empty);
+  }
+
+  &::after {
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 0;
+    color: var(--ks-rating-color);
+    inline-size: var(--ks-rating-value);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Interactive mode — radios-as-stars. Uses sibling selectors to "fill" stars
+// up to the hovered/checked one.
+// ----------------------------------------------------------------------------
+.rating-interactive {
+  // Reverse direction so `:hover ~ .rating-star` rules can fill BACKWARDS
+  // (selector targets stars before hovered). Visually same via RTL-safe direction.
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.rating-star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ks-rating-size);
+  block-size: var(--ks-rating-size);
+  font-size: var(--ks-rating-size);
+  color: var(--ks-rating-empty);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.12s ease, transform 0.12s ease;
+
+  > input {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  > span {
+    line-height: 1;
+    display: inline-block;
+  }
+
+  &:hover { transform: scale(1.08); }
+
+  // Focus ring when the hidden input is focused via keyboard.
+  &:has(input:focus-visible) {
+    outline: none;
+    box-shadow: var(--ks-rating-focus-ring);
+    border-radius: 0.25rem;
+  }
+}
+
+// When a radio is checked, colour it AND every previous sibling star.
+// Since we flex-row-reverse, "previous siblings" are visually higher values.
+.rating-interactive {
+  // Fill checked star + all following DOM siblings (= visually earlier stars).
+  .rating-star:has(input:checked),
+  .rating-star:has(input:checked) ~ .rating-star {
+    color: var(--ks-rating-color);
+  }
+
+  // Hover preview (doesn't change checked state).
+  &:hover .rating-star:hover,
+  &:hover .rating-star:hover ~ .rating-star {
+    color: var(--ks-rating-color);
+  }
+
+  // Disabled whole group.
+  &[aria-disabled="true"],
+  &:disabled {
+    pointer-events: none;
+
+    .rating-star { opacity: 0.55; transform: none; }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $value in $rating-sizes {
+  .rating-#{$size} { --ks-rating-size: #{$value}; }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants
+// ----------------------------------------------------------------------------
+@each $name, $color in $rating-colors {
+  .rating-#{$name} {
+    --ks-rating-color: #{$color};
+    --ks-rating-focus-ring: 0 0 0 3px #{rgba($color, 0.35)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .rating {
+  --ks-rating-empty: #374151;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .rating { --ks-rating-empty: #374151; }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .rating {
+  --ks-rating-color: #ffff00;
+  --ks-rating-empty: #333333;
+  --ks-rating-focus-ring: 0 0 0 3px #ffff00;
+}
+
+@media (forced-colors: active) {
+  .rating-stars::after,
+  .rating-interactive .rating-star:has(input:checked),
+  .rating-interactive .rating-star:has(input:checked) ~ .rating-star {
+    color: Highlight;
+  }
+  .rating-stars::before,
+  .rating-star { color: GrayText; }
+
+  .rating-star:has(input:focus-visible) {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .rating-star {
+    transition: color 0.1s ease;
+    &:hover { transform: none; }
+  }
+}

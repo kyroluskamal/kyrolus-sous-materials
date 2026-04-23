@@ -1,0 +1,107 @@
+// =============================================================================
+// DENSITY TOKENS (Phase 5)
+// -----------------------------------------------------------------------------
+// Global density multiplier that scales component paddings, row heights, and
+// gap sizes so the same component can render "compact" (data-table dense
+// mode) or "spacious" (marketing landing hero).
+//
+// Components opt-in by multiplying an intrinsic size by `var(--ks-density,1)`
+// — e.g. `block-size: calc(2.5rem * var(--ks-density))`. Existing components
+// that don't know about density keep working (fallback = 1).
+//
+// THREE LEVELS OF CONTROL:
+// ------------------------
+// 1. Global          : `:root { --ks-density: 0.75 }` (compact for the whole app)
+// 2. Per-region      : `<section data-density="compact">…</section>`
+// 3. Per-component   : `<button class="density-spacious">…</button>`
+//
+// VALUES:
+// -------
+//   compact      → 0.75   (Material "dense" — data grids, toolbars)
+//   comfortable  → 1      (default)
+//   spacious     → 1.25   (marketing pages, onboarding hero sections)
+//
+// Components that respect density (examples):
+//   - list-group row height
+//   - table cell padding
+//   - stepper marker size (via size map multiplication is the more common pattern)
+//
+// Consumers can wire their own components via the same var.
+// =============================================================================
+
+@use "sass:map";
+
+$ks-density-scales: (
+  "compact":     0.75,
+  "comfortable": 1,
+  "spacious":    1.25,
+) !default;
+
+// -----------------------------------------------------------------------------
+// Base default — `--ks-density` is 1 everywhere unless overridden.
+// -----------------------------------------------------------------------------
+:root {
+  --ks-density: 1;
+
+  // Derived radius / spacing tokens. Components can read any of these.
+  --ks-density-pad-y: calc(0.625rem * var(--ks-density));
+  --ks-density-pad-x: calc(0.875rem * var(--ks-density));
+  --ks-density-row-h: calc(2.5rem   * var(--ks-density));
+  --ks-density-gap:   calc(0.5rem   * var(--ks-density));
+  --ks-density-font:  calc(0.9375rem * var(--ks-density, 1));
+}
+
+// -----------------------------------------------------------------------------
+// Attribute-driven density (per-subtree).
+// -----------------------------------------------------------------------------
+@each $name, $scale in $ks-density-scales {
+  [data-density="#{$name}"] {
+    --ks-density: #{$scale};
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Utility classes — apply density to one element.
+// -----------------------------------------------------------------------------
+@each $name, $scale in $ks-density-scales {
+  .density-#{$name} {
+    --ks-density: #{$scale};
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Responsive density — at narrow viewports auto-compact, at large viewports
+// auto-spacious. Opt in with `[data-density="responsive"]` so it stays
+// explicit.
+// -----------------------------------------------------------------------------
+[data-density="responsive"] {
+  --ks-density: 1;
+
+  @media (max-width: 640px) {
+    --ks-density: 0.85;
+  }
+
+  @media (min-width: 1600px) {
+    --ks-density: 1.15;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Touch-target density — auto-upscale on coarse pointers (touch devices)
+// regardless of the user-chosen density. This ensures 44px minimum hit
+// targets. Opt in with `.density-touch-aware` or apply globally via
+// `[data-touch-aware]`.
+// -----------------------------------------------------------------------------
+.density-touch-aware,
+[data-touch-aware] {
+  @media (any-pointer: coarse) {
+    --ks-density: max(var(--ks-density, 1), 1.1);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// PRINT — force comfortable density so printed layouts aren't cramped.
+// -----------------------------------------------------------------------------
+@media print {
+  :root { --ks-density: 1; }
+}

@@ -1,0 +1,26 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/app",
+    "rootDir": "..",
+    "noPropertyAccessFromIndexSignature": false,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "../kyrolus-sous-materials/jit/src/browser.ts",
+    "../kyrolus-sous-materials/jit/src/compiler.ts",
+    "../kyrolus-sous-materials/jit/src/config.ts",
+    "../kyrolus-sous-materials/jit/src/parser.ts",
+    "../kyrolus-sous-materials/jit/src/variants.ts",
+    "../kyrolus-sous-materials/jit/src/types.ts",
+    "../kyrolus-sous-materials/jit/src/utilities/**/*.ts"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts"
+  ]
+}

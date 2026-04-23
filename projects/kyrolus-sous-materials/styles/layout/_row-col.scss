@@ -1,0 +1,163 @@
+// ============================================================================
+// BOOTSTRAP-COMPATIBLE ROW / COL FLEX GRID
+// Gives consumers coming from Bootstrap the familiar 12-column row/col API:
+//   .row                     — horizontal flex container with gutter support
+//   .col / .col-{1..12}      — base (xs) columns + auto-sizing .col
+//   .col-{bp}-{1..12|auto}   — responsive column sizes
+//   .offset-{bp}-{0..11}     — left margin offsets
+//   .order-{bp}-{first|last|0..12} — flex order
+//   .row-cols-{bp}-{1..6|auto} — equal-width auto-distribution
+//   .g-{0..5} / .gx-* / .gy-* — gutter helpers (in 0.25rem steps)
+// ============================================================================
+
+@use "sass:math";
+@use "../abstracts/variables" as *;
+
+$row-col-columns: 12 !default;
+$row-col-row-cols: 6 !default;
+
+$gutter-steps: (
+  0: 0,
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 1rem,
+  4: 1.5rem,
+  5: 3rem,
+);
+
+// ----------------------------------------------------------------------------
+// Base row + column definitions (xs / mobile-first).
+// ----------------------------------------------------------------------------
+.row {
+  --ks-gutter-x: 1.5rem;
+  --ks-gutter-y: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--ks-gutter-y));
+  margin-right: calc(-0.5 * var(--ks-gutter-x));
+  margin-left: calc(-0.5 * var(--ks-gutter-x));
+
+  > * {
+    box-sizing: border-box;
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+    padding-right: calc(var(--ks-gutter-x) * 0.5);
+    padding-left: calc(var(--ks-gutter-x) * 0.5);
+    margin-top: var(--ks-gutter-y);
+  }
+}
+
+// Base `.col` = fill remaining space
+.col {
+  flex: 1 0 0%;
+}
+
+// Base `.col-auto` = content-sized
+.col-auto {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+// Base `.col-{n}` fixed-width columns (xs)
+@for $i from 1 through $row-col-columns {
+  .col-#{$i} {
+    flex: 0 0 auto;
+    width: math.percentage(math.div($i, $row-col-columns));
+  }
+}
+
+// Base `.row-cols-*` — equal-width auto distribution (xs)
+.row-cols-auto > * {
+  flex: 0 0 auto;
+  width: auto;
+}
+@for $i from 1 through $row-col-row-cols {
+  .row-cols-#{$i} > * {
+    flex: 0 0 auto;
+    width: math.percentage(math.div(1, $i));
+  }
+}
+
+// Base offsets / orders (xs)
+@for $i from 0 through ($row-col-columns - 1) {
+  .offset-#{$i} {
+    margin-left: if($i == 0, 0, math.percentage(math.div($i, $row-col-columns)));
+  }
+}
+
+.order-first { order: -1; }
+.order-last { order: $row-col-columns + 1; }
+@for $i from 0 through $row-col-columns {
+  .order-#{$i} { order: $i; }
+}
+
+// ----------------------------------------------------------------------------
+// Gutter helpers — shared across all breakpoints.
+// ----------------------------------------------------------------------------
+@each $key, $value in $gutter-steps {
+  .g-#{$key},
+  .gx-#{$key} {
+    --ks-gutter-x: #{$value};
+  }
+  .g-#{$key},
+  .gy-#{$key} {
+    --ks-gutter-y: #{$value};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Responsive variants — for every breakpoint > xs, generate .col-{bp}-*,
+// .row-cols-{bp}-*, .offset-{bp}-*, .order-{bp}-*.
+// ----------------------------------------------------------------------------
+@each $bp-name, $bp-value in $breakpoints {
+  @if $bp-value > 0 {
+    @media (min-width: $bp-value) {
+      .col-#{$bp-name} { flex: 1 0 0%; }
+      .col-#{$bp-name}-auto {
+        flex: 0 0 auto;
+        width: auto;
+      }
+      @for $i from 1 through $row-col-columns {
+        .col-#{$bp-name}-#{$i} {
+          flex: 0 0 auto;
+          width: math.percentage(math.div($i, $row-col-columns));
+        }
+      }
+
+      .row-cols-#{$bp-name}-auto > * {
+        flex: 0 0 auto;
+        width: auto;
+      }
+      @for $i from 1 through $row-col-row-cols {
+        .row-cols-#{$bp-name}-#{$i} > * {
+          flex: 0 0 auto;
+          width: math.percentage(math.div(1, $i));
+        }
+      }
+
+      @for $i from 0 through ($row-col-columns - 1) {
+        .offset-#{$bp-name}-#{$i} {
+          margin-left: if($i == 0, 0, math.percentage(math.div($i, $row-col-columns)));
+        }
+      }
+
+      .order-#{$bp-name}-first { order: -1; }
+      .order-#{$bp-name}-last { order: $row-col-columns + 1; }
+      @for $i from 0 through $row-col-columns {
+        .order-#{$bp-name}-#{$i} { order: $i; }
+      }
+
+      @each $key, $value in $gutter-steps {
+        .g-#{$bp-name}-#{$key},
+        .gx-#{$bp-name}-#{$key} {
+          --ks-gutter-x: #{$value};
+        }
+        .g-#{$bp-name}-#{$key},
+        .gy-#{$bp-name}-#{$key} {
+          --ks-gutter-y: #{$value};
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+// ============================================================================
+// USER-VALIDATION UTILITIES
+// :user-valid and :user-invalid pseudo-classes
+// Browser Support: Chrome 119+, Firefox 88+, Safari 16.5+
+//
+// Difference from :valid / :invalid:
+//   :valid/:invalid fire on page load (empty required fields already invalid).
+//   :user-valid/:user-invalid fire only AFTER the user interacts with the
+//   field, which is what UIs actually want for error styling.
+// ============================================================================
+
+@supports selector(:user-valid) {
+  // --------------------------------------------------------------------------
+  // Default form-control validation styling. Opt-in via `.form-validate`
+  // on the form or a wrapper; child inputs light up after user input.
+  // --------------------------------------------------------------------------
+  .form-validate {
+    input, select, textarea {
+      &:user-valid {
+        border-color: var(--ks-valid-border, #22c55e);
+        box-shadow: 0 0 0 1px var(--ks-valid-border, #22c55e);
+      }
+      &:user-invalid {
+        border-color: var(--ks-invalid-border, #ef4444);
+        box-shadow: 0 0 0 1px var(--ks-invalid-border, #ef4444);
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // Standalone utilities — applied directly to the form control.
+  // --------------------------------------------------------------------------
+  .user-valid-ring:user-valid {
+    outline: 2px solid var(--ks-valid-border, #22c55e);
+    outline-offset: 2px;
+  }
+
+  .user-invalid-ring:user-invalid {
+    outline: 2px solid var(--ks-invalid-border, #ef4444);
+    outline-offset: 2px;
+  }
+
+  // --------------------------------------------------------------------------
+  // Sibling message reveal — hide validation message until the field is
+  // interacted with. Works with adjacent-sibling `<small class="validation-msg">`.
+  // --------------------------------------------------------------------------
+  .validation-msg {
+    display: none;
+  }
+
+  :user-invalid + .validation-msg,
+  :user-invalid ~ .validation-msg {
+    display: block;
+    color: var(--ks-invalid-border, #ef4444);
+  }
+
+  :user-valid + .validation-msg.success,
+  :user-valid ~ .validation-msg.success {
+    display: block;
+    color: var(--ks-valid-border, #22c55e);
+  }
+}

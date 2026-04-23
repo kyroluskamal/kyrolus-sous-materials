@@ -1,0 +1,257 @@
+// ============================================================================
+// AVATAR COMPONENT (Phase 4 P2)
+// ----------------------------------------------------------------------------
+// Circular image/initials/icon. Includes sizing, status dot, group stacking,
+// and a "placeholder" mode backed by CSS initials. Square variant for
+// card-style avatars.
+//
+// DOM (image):
+//   <span class="avatar avatar-md">
+//     <img class="avatar-img" src="..." alt="Name">
+//   </span>
+//
+// DOM (initials):
+//   <span class="avatar avatar-md avatar-primary">
+//     <span class="avatar-initials" aria-hidden="true">KS</span>
+//   </span>
+//
+// DOM (with status):
+//   <span class="avatar avatar-md">
+//     <img class="avatar-img" src="..." alt="Name">
+//     <span class="avatar-status avatar-status-online"
+//           aria-label="Online"></span>
+//   </span>
+//
+// DOM (group):
+//   <div class="avatar-group">
+//     <span class="avatar avatar-md">…</span>
+//     <span class="avatar avatar-md">…</span>
+//     <span class="avatar avatar-md avatar-placeholder">+3</span>
+//   </div>
+//
+// Variants:
+//   .avatar-xs / .avatar-sm / .avatar-md / .avatar-lg / .avatar-xl
+//   .avatar-{primary|secondary|tertiary|success|warning|danger|info|dark}
+//   .avatar-square / .avatar-rounded
+//   .avatar-bordered
+//   Status: .avatar-status-{online|offline|away|busy}
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$avatar-sizes: (
+  "xs": 1.5rem,
+  "sm": 2rem,
+  "md": 2.5rem,
+  "lg": 3.5rem,
+  "xl": 5rem,
+);
+
+$avatar-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+$avatar-statuses: (
+  "online":  $success-color,
+  "offline": #9ca3af,
+  "away":    $warning-color,
+  "busy":    $danger-color,
+);
+
+// ----------------------------------------------------------------------------
+// Base
+// ----------------------------------------------------------------------------
+.avatar {
+  --ks-avatar-size: 2.5rem;
+  --ks-avatar-radius: 50%;
+  --ks-avatar-bg: #e5e7eb;
+  --ks-avatar-color: #374151;
+  --ks-avatar-border: transparent;
+  --ks-avatar-border-width: 2px;
+  --ks-avatar-font-size: calc(var(--ks-avatar-size) * 0.4);
+  --ks-avatar-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ks-avatar-size);
+  block-size: var(--ks-avatar-size);
+  background: var(--ks-avatar-bg);
+  color: var(--ks-avatar-color);
+  border-radius: var(--ks-avatar-radius);
+  box-shadow: 0 0 0 var(--ks-avatar-border-width) var(--ks-avatar-border);
+  font-size: var(--ks-avatar-font-size);
+  font-weight: 600;
+  line-height: 1;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  vertical-align: middle;
+  user-select: none;
+
+  // Interactive avatars (buttons / links).
+  &:is(button, a) {
+    cursor: pointer;
+    border: 0;
+    text-decoration: none;
+
+    &:focus { outline: none; }
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 var(--ks-avatar-border-width) var(--ks-avatar-border), var(--ks-avatar-focus-ring);
+    }
+  }
+}
+
+.avatar-img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.avatar-initials {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.avatar-placeholder {
+  font-weight: 500;
+  font-size: calc(var(--ks-avatar-font-size) * 0.9);
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $value in $avatar-sizes {
+  .avatar-#{$size} { --ks-avatar-size: #{$value}; }
+}
+
+// ----------------------------------------------------------------------------
+// Shape
+// ----------------------------------------------------------------------------
+.avatar-square   { --ks-avatar-radius: 0.25rem; }
+.avatar-rounded  { --ks-avatar-radius: 0.5rem; }
+.avatar-bordered { --ks-avatar-border: #ffffff; }
+
+// ----------------------------------------------------------------------------
+// Color variants (for initials / placeholder)
+// ----------------------------------------------------------------------------
+@each $name, $color in $avatar-colors {
+  .avatar-#{$name} {
+    --ks-avatar-bg: #{color.scale($color, $lightness: 75%)};
+    --ks-avatar-color: #{color.scale($color, $lightness: -35%)};
+    --ks-avatar-focus-ring: 0 0 0 3px #{rgba($color, 0.35)};
+  }
+
+  .avatar-#{$name}.avatar-solid {
+    --ks-avatar-bg: #{$color};
+    --ks-avatar-color: #ffffff;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Status indicator
+// ----------------------------------------------------------------------------
+.avatar-status {
+  --ks-avatar-status-color: #9ca3af;
+  --ks-avatar-status-ring: #ffffff;
+
+  position: absolute;
+  inline-size: calc(var(--ks-avatar-size) * 0.28);
+  block-size: calc(var(--ks-avatar-size) * 0.28);
+  inset-block-end: 4%;
+  inset-inline-end: 4%;
+  background: var(--ks-avatar-status-color);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--ks-avatar-status-ring);
+}
+
+@each $name, $color in $avatar-statuses {
+  .avatar-status-#{$name} { --ks-avatar-status-color: #{$color}; }
+}
+
+// ----------------------------------------------------------------------------
+// Group — overlapping stack.
+// ----------------------------------------------------------------------------
+.avatar-group {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+
+  > .avatar {
+    --ks-avatar-border: #ffffff;
+    --ks-avatar-border-width: 2px;
+    margin-inline-start: calc(var(--ks-avatar-size) * -0.35);
+
+    &:first-child { margin-inline-start: 0; }
+
+    &:hover,
+    &:focus-visible { z-index: 1; }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .avatar {
+  --ks-avatar-bg: #374151;
+  --ks-avatar-color: #f3f4f6;
+}
+
+[data-theme="dark"] .avatar-status,
+[data-theme="dark"] .avatar-group > .avatar,
+[data-theme="dark"] .avatar-bordered {
+  --ks-avatar-status-ring: #1f2937;
+  --ks-avatar-border: #1f2937;
+}
+
+@each $name, $color in $avatar-colors {
+  [data-theme="dark"] .avatar-#{$name} {
+    --ks-avatar-bg: #{color.scale($color, $lightness: -45%, $saturation: -15%)};
+    --ks-avatar-color: #{color.scale($color, $lightness: 50%)};
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .avatar {
+    --ks-avatar-bg: #374151;
+    --ks-avatar-color: #f3f4f6;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .avatar {
+  --ks-avatar-bg: #000000;
+  --ks-avatar-color: #ffffff;
+  --ks-avatar-border: #ffffff;
+  --ks-avatar-border-width: 2px;
+  --ks-avatar-focus-ring: 0 0 0 3px #ffff00;
+}
+
+@media (forced-colors: active) {
+  .avatar {
+    forced-color-adjust: none;
+    background: ButtonFace;
+    color: ButtonText;
+    box-shadow: 0 0 0 2px ButtonText;
+  }
+
+  .avatar-status { background: Highlight; box-shadow: 0 0 0 2px Canvas; }
+
+  .avatar:is(button, a):focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+}

@@ -1,0 +1,270 @@
+// ============================================================================
+// SKELETON COMPONENT (Phase 3 P1)
+// ----------------------------------------------------------------------------
+// Loading placeholder. Mirrors the shape of the content that's coming so the
+// layout doesn't jump. Use inside an `[aria-busy="true"]` region — the
+// skeletons themselves are `aria-hidden` (decorative) because the busy flag
+// is what AT announces.
+//
+// DOM:
+//   <div aria-busy="true" aria-live="polite">
+//     <div class="skeleton skeleton-text skeleton-lines-3"></div>
+//     <div class="skeleton skeleton-circle skeleton-md"></div>
+//     <div class="skeleton skeleton-rect" style="--ks-skeleton-h: 12rem"></div>
+//   </div>
+//
+// Shape variants:
+//   .skeleton-text   — single text line (or .skeleton-lines-N for multi-line)
+//   .skeleton-circle — avatar / dot
+//   .skeleton-rect   — generic block (images, cards)
+//   .skeleton-button — pill-shaped button placeholder
+//   .skeleton-chip   — chip/badge placeholder
+//
+// Size (circle/button): .skeleton-sm / .skeleton-md / .skeleton-lg
+//
+// Animation:
+//   .skeleton-pulse  — opacity pulse (default)
+//   .skeleton-shimmer — moving gradient sweep
+//   .skeleton-wave   — slow wave
+//   .skeleton-static — no animation
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$skeleton-sizes: (
+  "sm": 1.5rem,
+  "md": 2.5rem,
+  "lg": 4rem,
+);
+
+$skeleton-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Base
+// ----------------------------------------------------------------------------
+.skeleton {
+  --ks-skeleton-bg: #e5e7eb;
+  --ks-skeleton-highlight: rgba(255, 255, 255, 0.55);
+  --ks-skeleton-radius: 0.375rem;
+  --ks-skeleton-h: 1em;
+  --ks-skeleton-w: 100%;
+  --ks-skeleton-duration: 1.6s;
+
+  display: block;
+  inline-size: var(--ks-skeleton-w);
+  block-size: var(--ks-skeleton-h);
+  background: var(--ks-skeleton-bg);
+  border-radius: var(--ks-skeleton-radius);
+  position: relative;
+  overflow: hidden;
+
+  // Default = pulse animation.
+  animation: ks-skeleton-pulse var(--ks-skeleton-duration) ease-in-out infinite;
+}
+
+// ----------------------------------------------------------------------------
+// Shape variants
+// ----------------------------------------------------------------------------
+.skeleton-text {
+  --ks-skeleton-h: 0.75em;
+  --ks-skeleton-radius: 0.25rem;
+  inline-size: 100%;
+  margin-block: 0.25em;
+
+  // Last line is usually shorter.
+  &:last-child { inline-size: 70%; }
+}
+
+// Multi-line helpers — generates N stacked lines using repeating linear-gradient.
+@for $lines from 2 through 6 {
+  .skeleton-lines-#{$lines} {
+    --ks-skeleton-h: calc((0.75em * #{$lines}) + (0.5em * #{$lines - 1}));
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        var(--ks-skeleton-bg) 0,
+        var(--ks-skeleton-bg) 0.75em,
+        transparent 0.75em,
+        transparent 1.25em
+      );
+  }
+}
+
+.skeleton-circle {
+  --ks-skeleton-h: 2.5rem;
+  --ks-skeleton-w: 2.5rem;
+  --ks-skeleton-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skeleton-rect {
+  --ks-skeleton-h: 8rem;
+  --ks-skeleton-radius: 0.5rem;
+}
+
+.skeleton-button {
+  --ks-skeleton-h: 2.5rem;
+  --ks-skeleton-w: 6rem;
+  --ks-skeleton-radius: 0.5rem;
+  display: inline-block;
+}
+
+.skeleton-chip {
+  --ks-skeleton-h: 1.5rem;
+  --ks-skeleton-w: 4rem;
+  --ks-skeleton-radius: 9999px;
+  display: inline-block;
+}
+
+// ----------------------------------------------------------------------------
+// Sizes (circle/button diameter)
+// ----------------------------------------------------------------------------
+@each $size, $value in $skeleton-sizes {
+  .skeleton-#{$size} {
+    --ks-skeleton-h: #{$value};
+
+    &.skeleton-circle { --ks-skeleton-w: #{$value}; }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color tints — tonal skeletons that match surrounding content.
+// ----------------------------------------------------------------------------
+@each $name, $color in $skeleton-colors {
+  .skeleton-#{$name} {
+    --ks-skeleton-bg: #{color.scale($color, $lightness: 82%)};
+    --ks-skeleton-highlight: #{rgba($color, 0.18)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Animations
+// ----------------------------------------------------------------------------
+@keyframes ks-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+@keyframes ks-skeleton-shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes ks-skeleton-wave {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-pulse {
+  animation: ks-skeleton-pulse var(--ks-skeleton-duration) ease-in-out infinite;
+
+  &::before { content: none; }
+}
+
+.skeleton-shimmer {
+  animation: none;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0,
+      var(--ks-skeleton-highlight) 50%,
+      transparent 100%
+    );
+    animation: ks-skeleton-shimmer var(--ks-skeleton-duration) linear infinite;
+  }
+}
+
+// RTL — reverse the shimmer sweep direction.
+[dir="rtl"] .skeleton-shimmer::before {
+  animation-direction: reverse;
+}
+
+.skeleton-wave {
+  animation: ks-skeleton-wave var(--ks-skeleton-duration) linear infinite;
+  background:
+    linear-gradient(
+      90deg,
+      var(--ks-skeleton-bg) 25%,
+      var(--ks-skeleton-highlight) 50%,
+      var(--ks-skeleton-bg) 75%
+    );
+  background-size: 200% 100%;
+}
+
+.skeleton-static { animation: none; }
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .skeleton {
+  --ks-skeleton-bg: #374151;
+  --ks-skeleton-highlight: rgba(255, 255, 255, 0.08);
+}
+
+@each $name, $color in $skeleton-colors {
+  [data-theme="dark"] .skeleton-#{$name} {
+    --ks-skeleton-bg: #{color.scale($color, $lightness: -45%, $saturation: -30%)};
+    --ks-skeleton-highlight: #{rgba($color, 0.25)};
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .skeleton {
+    --ks-skeleton-bg: #374151;
+    --ks-skeleton-highlight: rgba(255, 255, 255, 0.08);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .skeleton {
+  --ks-skeleton-bg: #333333;
+  --ks-skeleton-highlight: rgba(255, 255, 0, 0.35);
+}
+
+@media (forced-colors: active) {
+  .skeleton {
+    forced-color-adjust: none;
+    background: GrayText;
+
+    &::before { background: transparent; }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION — kill all shimmer/wave animations, keep a gentle pulse only.
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .skeleton,
+  .skeleton-pulse,
+  .skeleton-wave {
+    animation: none;
+    opacity: 0.8;
+  }
+
+  .skeleton-shimmer::before { animation: none; }
+}
+
+// ----------------------------------------------------------------------------
+// PRINT — hide skeletons; the real content (or lack of it) should print.
+// ----------------------------------------------------------------------------
+@media print {
+  .skeleton { display: none !important; }
+}

@@ -31,7 +31,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 // Configuration
-const DEFAULT_DIST_PATH = './dist/DemoApp/browser';
+const DEFAULT_DIST_PATH = './dist/ks-materials-docs/browser';
 const distPath = process.argv[2] || DEFAULT_DIST_PATH;
 const CLASS_PREFIX = process.env.KS_CLASS_PREFIX || '';
 

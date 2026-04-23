@@ -1,0 +1,51 @@
+// ============================================================================
+// TEXT-BOX UTILITIES
+// text-box-trim + text-box-edge for leading-trimmed typography
+// Browser Support: Safari 17+, Chrome 133+ (shorthand: text-box)
+// Removes the half-leading space above caps / below descenders so headings
+// and buttons can be optically aligned against borders, icons, and dividers.
+// ============================================================================
+
+@supports (text-box-trim: trim-both) {
+  // --------------------------------------------------------------------------
+  // text-box-trim — which edges to trim
+  // --------------------------------------------------------------------------
+  .leading-trim-none { text-box-trim: none; }
+  .leading-trim-start { text-box-trim: trim-start; }
+  .leading-trim-end { text-box-trim: trim-end; }
+  .leading-trim-both { text-box-trim: trim-both; }
+
+  // --------------------------------------------------------------------------
+  // text-box-edge — which metric to trim to
+  // --------------------------------------------------------------------------
+  .text-box-auto { text-box-edge: auto; }
+  .text-box-cap { text-box-edge: cap alphabetic; }
+  .text-box-ex { text-box-edge: ex alphabetic; }
+  .text-box-text { text-box-edge: text alphabetic; }
+  .text-box-ideographic { text-box-edge: ideographic; }
+  .text-box-ideographic-ink { text-box-edge: ideographic-ink; }
+
+  // --------------------------------------------------------------------------
+  // Shortcut shorthand (`text-box: <trim> <edge>`)
+  // Common patterns for optical alignment.
+  // --------------------------------------------------------------------------
+  .text-box-trim-cap {
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+  }
+  .text-box-trim-ex {
+    text-box-trim: trim-both;
+    text-box-edge: ex alphabetic;
+  }
+
+  // --------------------------------------------------------------------------
+  // Heading preset: optical alignment on all headings.
+  // Apply to a container to trim every descendant heading.
+  // --------------------------------------------------------------------------
+  .headings-trimmed {
+    h1, h2, h3, h4, h5, h6 {
+      text-box-trim: trim-both;
+      text-box-edge: cap alphabetic;
+    }
+  }
+}

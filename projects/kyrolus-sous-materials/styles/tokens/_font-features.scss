@@ -394,6 +394,62 @@
 }
 
 // =============================================================================
+// FONT-VARIATION-SETTINGS (Variable fonts — low-level axis control)
+// =============================================================================
+// Registered axes: wght, wdth, slnt, ital, opsz. Classes expose common stops
+// plus a CSS custom-property hook (`--ks-font-<axis>`) so consumers can
+// animate/tween axes without writing the full font-variation-settings string.
+
+:root {
+  --ks-font-wght: 400;
+  --ks-font-wdth: 100;
+  --ks-font-slnt: 0;
+  --ks-font-ital: 0;
+  --ks-font-opsz: 14;
+}
+
+/// Weight axis (100–900)
+@each $w in (100, 200, 300, 400, 500, 600, 700, 800, 900) {
+  .var-wght-#{$w} {
+    font-variation-settings: "wght" #{$w};
+  }
+}
+
+/// Width axis (percentage, 50–200)
+@each $w in (50, 75, 87, 100, 112, 125, 150, 200) {
+  .var-wdth-#{$w} {
+    font-variation-settings: "wdth" #{$w};
+  }
+}
+
+/// Slant axis (degrees, negative = right-lean)
+.var-slnt-0 { font-variation-settings: "slnt" 0; }
+.var-slnt-neg-5 { font-variation-settings: "slnt" -5; }
+.var-slnt-neg-10 { font-variation-settings: "slnt" -10; }
+.var-slnt-neg-15 { font-variation-settings: "slnt" -15; }
+
+/// Italic axis (0 or 1)
+.var-ital-0 { font-variation-settings: "ital" 0; }
+.var-ital-1 { font-variation-settings: "ital" 1; }
+
+/// Optical size axis (point sizes)
+@each $s in (8, 10, 12, 14, 18, 24, 36, 48, 72, 96, 144) {
+  .var-opsz-#{$s} {
+    font-variation-settings: "opsz" #{$s};
+  }
+}
+
+/// Custom-property driven — animate by updating the vars.
+.var-axes {
+  font-variation-settings:
+    "wght" var(--ks-font-wght),
+    "wdth" var(--ks-font-wdth),
+    "slnt" var(--ks-font-slnt),
+    "ital" var(--ks-font-ital),
+    "opsz" var(--ks-font-opsz);
+}
+
+// =============================================================================
 // FONT-SYNTHESIS
 // =============================================================================
 
@@ -416,6 +472,16 @@
 .synthesis-none {
   font-synthesis: none;
 }
+
+/// Fine-grained sub-property controls (Safari 16.4+, Chrome 97+, FF 111+)
+.synthesis-weight-auto { font-synthesis-weight: auto; }
+.synthesis-weight-none { font-synthesis-weight: none; }
+.synthesis-style-auto { font-synthesis-style: auto; }
+.synthesis-style-none { font-synthesis-style: none; }
+.synthesis-small-caps-auto { font-synthesis-small-caps: auto; }
+.synthesis-small-caps-none { font-synthesis-small-caps: none; }
+.synthesis-position-auto { font-synthesis-position: auto; }
+.synthesis-position-none { font-synthesis-position: none; }
 
 // =============================================================================
 // TEXT-RENDERING

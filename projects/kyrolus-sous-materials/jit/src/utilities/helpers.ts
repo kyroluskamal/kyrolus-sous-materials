@@ -8,7 +8,50 @@ export interface MatchInput {
   arbitrary: boolean;
   arbUtility?: string;
   arbValue?: string;
+  // Type hint from arbitrary value like `bg-[color:var(--x)]` or
+  // `bg-[length:200px]`. Undefined when the user didn't write a hint.
+  arbType?: string;
   theme: Theme;
+}
+
+// Recognised type hints for arbitrary values. If the user writes a prefix
+// that isn't in this set we leave arbValue untouched — treating unknown
+// prefixes as part of the value itself (e.g. `[grid-area:header]`).
+export const ARB_TYPE_HINTS = new Set([
+  "color",
+  "length",
+  "image",
+  "url",
+  "number",
+  "percentage",
+  "position",
+  "size",
+  "angle",
+  "string",
+]);
+
+export function splitArbType(value: string): { type?: string; value: string } {
+  const colon = value.indexOf(":");
+  if (colon <= 0) return { value: unescapeArbUnderscore(value) };
+  const prefix = value.slice(0, colon);
+  if (!ARB_TYPE_HINTS.has(prefix)) return { value: unescapeArbUnderscore(value) };
+  return { type: prefix, value: unescapeArbUnderscore(value.slice(colon + 1)) };
+}
+
+// Tailwind convention: underscores inside arbitrary values stand in for
+// spaces in the final CSS (space isn't legal inside a class token). A
+// literal underscore is escaped as `\_`.
+export function unescapeArbUnderscore(input: string): string {
+  const SENTINEL = "\0UNDERSCORE\0";
+  return input.replaceAll(String.raw`\_`, SENTINEL).replaceAll("_", " ").replaceAll(SENTINEL, "_");
+}
+
+// Returns true when a matcher is allowed to handle the current arbitrary
+// value given the user's type hint (or lack thereof). Matchers pass the
+// categories they own — e.g. a color matcher passes "color".
+export function matchesArbType(arbType: string | undefined, ...owned: string[]): boolean {
+  if (arbType === undefined) return true;
+  return owned.includes(arbType);
 }
 
 export type Matcher = (input: MatchInput) => CssDecl | null;

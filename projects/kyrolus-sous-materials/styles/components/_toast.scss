@@ -1,0 +1,316 @@
+// ============================================================================
+// TOAST COMPONENT (Phase 3 P1)
+// ----------------------------------------------------------------------------
+// Transient, non-modal notifications anchored to a corner of the viewport.
+// Individual toasts are `role="status"` (polite) or `role="alert"` (assertive);
+// the container uses `aria-live` + `aria-atomic` so AT reads them as they
+// appear. Enter/exit via `@starting-style` + `transition-behavior`.
+//
+// DOM:
+//   <div class="toast-region toast-region-bottom-end"
+//        aria-live="polite" aria-atomic="false">
+//     <div class="toast toast-success" role="status" data-state="open">
+//       <span class="toast-icon" aria-hidden="true">✓</span>
+//       <div class="toast-content">
+//         <strong class="toast-title">Saved</strong>
+//         <p class="toast-text">Your changes are live.</p>
+//       </div>
+//       <button class="toast-close" aria-label="Dismiss">✕</button>
+//     </div>
+//   </div>
+//
+// Variants:
+//   .toast-sm / .toast-md / .toast-lg
+//   .toast-{primary|secondary|tertiary|success|warning|danger|info|dark}
+//   .toast-solid / .toast-subtle (default) / .toast-outline
+//   Region placements: .toast-region-{top|bottom}-{start|center|end}
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$toast-sizes: (
+  "sm": (pad-y: 0.5rem,  pad-x: 0.75rem, font-size: 0.8125rem),
+  "md": (pad-y: 0.75rem, pad-x: 1rem,    font-size: 0.9375rem),
+  "lg": (pad-y: 1rem,    pad-x: 1.25rem, font-size: 1.0625rem),
+);
+
+$toast-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Region / viewport anchor
+// ----------------------------------------------------------------------------
+.toast-region {
+  position: fixed;
+  z-index: 1080;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  pointer-events: none; // individual toasts re-enable
+
+  inset-block-start: auto;
+  inset-inline-end: auto;
+
+  > .toast { pointer-events: auto; }
+}
+
+.toast-region-top-start    { inset-block-start: 0; inset-inline-start: 0; }
+.toast-region-top-center   { inset-block-start: 0; inset-inline: 0; align-items: center; }
+.toast-region-top-end      { inset-block-start: 0; inset-inline-end: 0; align-items: flex-end; }
+.toast-region-bottom-start { inset-block-end: 0; inset-inline-start: 0; }
+.toast-region-bottom-center{ inset-block-end: 0; inset-inline: 0; align-items: center; }
+.toast-region-bottom-end   { inset-block-end: 0; inset-inline-end: 0; align-items: flex-end; }
+
+// ----------------------------------------------------------------------------
+// Base toast
+// ----------------------------------------------------------------------------
+.toast {
+  --ks-toast-bg: #ffffff;
+  --ks-toast-color: #111827;
+  --ks-toast-border-color: #e5e7eb;
+  --ks-toast-accent: #{$info-color};
+  --ks-toast-pad-y: 0.75rem;
+  --ks-toast-pad-x: 1rem;
+  --ks-toast-radius: 0.5rem;
+  --ks-toast-gap: 0.75rem;
+  --ks-toast-font-size: 0.9375rem;
+  --ks-toast-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  --ks-toast-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+  --ks-toast-transition: opacity 0.2s ease, transform 0.2s ease;
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ks-toast-gap);
+  min-inline-size: 16rem;
+  max-inline-size: 28rem;
+  padding: var(--ks-toast-pad-y) var(--ks-toast-pad-x);
+  background: var(--ks-toast-bg);
+  color: var(--ks-toast-color);
+  border: 1px solid var(--ks-toast-border-color);
+  border-inline-start: 4px solid var(--ks-toast-accent);
+  border-radius: var(--ks-toast-radius);
+  box-shadow: var(--ks-toast-shadow);
+  font-size: var(--ks-toast-font-size);
+}
+
+.toast-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.5em;
+  block-size: 1.5em;
+  color: var(--ks-toast-accent);
+}
+
+.toast-content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-inline-size: 0;
+}
+
+.toast-title {
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.toast-text {
+  margin: 0;
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.toast-close {
+  flex-shrink: 0;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0.7;
+
+  &:hover { opacity: 1; background: rgba(0, 0, 0, 0.06); }
+  &:focus { outline: none; }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--ks-toast-focus-ring);
+  }
+}
+
+// Optional progress bar for auto-dismiss countdown.
+.toast-progress {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  block-size: 3px;
+  background: var(--ks-toast-accent);
+  transform-origin: left center;
+  animation: ks-toast-countdown var(--ks-toast-duration, 4s) linear forwards;
+}
+[dir="rtl"] .toast-progress { transform-origin: right center; }
+
+.toast-progress-host { position: relative; overflow: hidden; }
+
+@keyframes ks-toast-countdown {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $values in $toast-sizes {
+  .toast-#{$size} {
+    --ks-toast-pad-y: #{map.get($values, pad-y)};
+    --ks-toast-pad-x: #{map.get($values, pad-x)};
+    --ks-toast-font-size: #{map.get($values, font-size)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants
+// ----------------------------------------------------------------------------
+@each $name, $color in $toast-colors {
+  .toast-#{$name} {
+    --ks-toast-bg: #{color.scale($color, $lightness: 92%)};
+    --ks-toast-color: #{color.scale($color, $lightness: -55%)};
+    --ks-toast-border-color: #{color.scale($color, $lightness: 65%)};
+    --ks-toast-accent: #{$color};
+    --ks-toast-focus-ring: 0 0 0 3px #{rgba($color, 0.35)};
+  }
+
+  .toast-#{$name}.toast-solid {
+    --ks-toast-bg: #{$color};
+    --ks-toast-color: #ffffff;
+    --ks-toast-border-color: #{color.scale($color, $lightness: -10%)};
+    --ks-toast-accent: #ffffff;
+  }
+
+  .toast-#{$name}.toast-outline {
+    --ks-toast-bg: #ffffff;
+    --ks-toast-color: #{color.scale($color, $lightness: -35%)};
+    --ks-toast-border-color: #{$color};
+    --ks-toast-accent: #{$color};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// State-driven enter/exit animation.
+// ----------------------------------------------------------------------------
+@supports (transition-behavior: allow-discrete) {
+  .toast {
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      display 0.2s allow-discrete,
+      overlay 0.2s allow-discrete;
+  }
+
+  .toast[data-state="open"] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .toast[data-state="closing"] {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  @starting-style {
+    .toast[data-state="open"] {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+}
+
+.toast[data-state="closed"] { display: none; }
+
+// Top-anchored regions slide in from above.
+.toast-region-top-start .toast,
+.toast-region-top-center .toast,
+.toast-region-top-end .toast {
+  transform: translateY(-0.5rem);
+
+  &[data-state="open"] { transform: translateY(0); }
+  &[data-state="closing"] { transform: translateY(-0.5rem); }
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .toast {
+  --ks-toast-bg: #1f2937;
+  --ks-toast-color: #e5e7eb;
+  --ks-toast-border-color: #374151;
+  --ks-toast-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+@each $name, $color in $toast-colors {
+  [data-theme="dark"] .toast-#{$name} {
+    --ks-toast-bg: #{color.scale($color, $lightness: -55%, $saturation: -15%)};
+    --ks-toast-color: #{color.scale($color, $lightness: 60%)};
+    --ks-toast-border-color: #{color.scale($color, $lightness: -25%)};
+    --ks-toast-accent: #{color.scale($color, $lightness: 20%)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .toast {
+  --ks-toast-bg: #000000;
+  --ks-toast-color: #ffffff;
+  --ks-toast-border-color: #ffffff;
+  --ks-toast-accent: #ffff00;
+  --ks-toast-focus-ring: 0 0 0 3px #ffff00;
+}
+
+@media (forced-colors: active) {
+  .toast {
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+    border-inline-start-width: 4px;
+    box-shadow: none;
+  }
+
+  .toast-close:focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .toast { transition: opacity 0.1s ease; transform: none !important; }
+  .toast-progress { animation: none; }
+}
+
+// ----------------------------------------------------------------------------
+// PRINT — hide entirely (toasts are transient UI).
+// ----------------------------------------------------------------------------
+@media print {
+  .toast-region { display: none; }
+}

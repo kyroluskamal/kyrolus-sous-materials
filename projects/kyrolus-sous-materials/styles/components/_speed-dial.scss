@@ -1,0 +1,333 @@
+// ============================================================================
+// SPEED-DIAL COMPONENT (Phase 4 P2)
+// ----------------------------------------------------------------------------
+// Floating action button (FAB) that expands into a radial or linear menu of
+// sub-actions. Driven by `[aria-expanded]` / `[data-state]`. Uses
+// `popovertarget` where available and transforms for the fan-out animation.
+//
+// DOM:
+//   <div class="speed-dial speed-dial-up speed-dial-primary">
+//     <button class="speed-dial-trigger" aria-expanded="false"
+//             aria-controls="sd-menu" aria-label="Quick actions">
+//       <span class="speed-dial-icon" aria-hidden="true">+</span>
+//     </button>
+//     <ul class="speed-dial-menu" id="sd-menu" role="menu" data-state="closed">
+//       <li><button class="speed-dial-action" role="menuitem" aria-label="New">✎</button></li>
+//       <li><button class="speed-dial-action" role="menuitem" aria-label="Share">⤴</button></li>
+//       <li><button class="speed-dial-action" role="menuitem" aria-label="Delete">🗑</button></li>
+//     </ul>
+//   </div>
+//
+// Variants:
+//   Direction: .speed-dial-up / .speed-dial-down / .speed-dial-start / .speed-dial-end
+//   Layout:    .speed-dial-linear (default) / .speed-dial-radial / .speed-dial-arc
+//   Size:      .speed-dial-sm / .speed-dial-md / .speed-dial-lg
+//   Color:     .speed-dial-{primary|secondary|tertiary|success|warning|danger|info|dark}
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$speed-dial-sizes: (
+  "sm": (trigger: 2.75rem, action: 2.25rem, gap: 0.625rem, icon: 1rem),
+  "md": (trigger: 3.5rem,  action: 2.75rem, gap: 0.75rem,  icon: 1.25rem),
+  "lg": (trigger: 4.25rem, action: 3.25rem, gap: 0.875rem, icon: 1.5rem),
+);
+
+$speed-dial-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Container
+// ----------------------------------------------------------------------------
+.speed-dial {
+  --ks-sd-accent: #{$primary-color};
+  --ks-sd-fg: #ffffff;
+  --ks-sd-trigger-size: 3.5rem;
+  --ks-sd-action-size: 2.75rem;
+  --ks-sd-gap: 0.75rem;
+  --ks-sd-icon-size: 1.25rem;
+  --ks-sd-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --ks-sd-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+  --ks-sd-radius: 0.5rem;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1040;
+}
+
+// ----------------------------------------------------------------------------
+// Trigger (FAB)
+// ----------------------------------------------------------------------------
+.speed-dial-trigger {
+  inline-size: var(--ks-sd-trigger-size);
+  block-size: var(--ks-sd-trigger-size);
+  border-radius: 50%;
+  border: 0;
+  background: var(--ks-sd-accent);
+  color: var(--ks-sd-fg);
+  cursor: pointer;
+  box-shadow: var(--ks-sd-shadow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s ease;
+  position: relative;
+  z-index: 2;
+
+  &:hover { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28); }
+  &:focus { outline: none; }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--ks-sd-shadow), var(--ks-sd-focus-ring);
+  }
+
+  // When expanded, rotate the plus-icon 45deg to look like close.
+  &[aria-expanded="true"] .speed-dial-icon { transform: rotate(45deg); }
+}
+
+.speed-dial-icon {
+  font-size: var(--ks-sd-icon-size);
+  line-height: 1;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+}
+
+// ----------------------------------------------------------------------------
+// Menu (hidden by default; revealed via [aria-expanded=true] on trigger or
+// [data-state=open] on menu)
+// ----------------------------------------------------------------------------
+.speed-dial-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-end: 50%;
+  display: flex;
+  gap: var(--ks-sd-gap);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+
+  > li { display: inline-flex; }
+}
+
+// Menu becomes interactive when open.
+.speed-dial-trigger[aria-expanded="true"] + .speed-dial-menu,
+.speed-dial-menu[data-state="open"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+// Individual action.
+.speed-dial-action {
+  --ks-sd-action-bg: #ffffff;
+  --ks-sd-action-color: #111827;
+
+  inline-size: var(--ks-sd-action-size);
+  block-size: var(--ks-sd-action-size);
+  border-radius: 50%;
+  border: 0;
+  background: var(--ks-sd-action-bg);
+  color: var(--ks-sd-action-color);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--ks-sd-icon-size) * 0.9);
+  transition: transform 0.15s ease, background 0.15s ease;
+
+  &:hover { transform: scale(1.08); }
+  &:focus { outline: none; }
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18), var(--ks-sd-focus-ring);
+  }
+
+  &[disabled],
+  &[aria-disabled="true"] { opacity: 0.55; pointer-events: none; }
+}
+
+// ----------------------------------------------------------------------------
+// Direction modifiers — linear fan-out
+// ----------------------------------------------------------------------------
+.speed-dial-up .speed-dial-menu {
+  flex-direction: column-reverse;
+  inset-block-end: calc(var(--ks-sd-trigger-size) + var(--ks-sd-gap));
+  inset-block-start: auto;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+}
+
+.speed-dial-down .speed-dial-menu {
+  flex-direction: column;
+  inset-block-start: calc(var(--ks-sd-trigger-size) + var(--ks-sd-gap));
+  inset-block-end: auto;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+}
+
+.speed-dial-start .speed-dial-menu {
+  flex-direction: row-reverse;
+  inset-inline-end: calc(var(--ks-sd-trigger-size) + var(--ks-sd-gap));
+  inset-inline-start: auto;
+  inset-block-start: 50%;
+  translate: 0 -50%;
+}
+
+.speed-dial-end .speed-dial-menu {
+  flex-direction: row;
+  inset-inline-start: calc(var(--ks-sd-trigger-size) + var(--ks-sd-gap));
+  inset-inline-end: auto;
+  inset-block-start: 50%;
+  translate: 0 -50%;
+}
+
+// Actions transform-in from the trigger when menu opens.
+.speed-dial-menu > li {
+  transform: translate(0, 0) scale(0.4);
+  opacity: 0;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+}
+
+.speed-dial-trigger[aria-expanded="true"] + .speed-dial-menu > li,
+.speed-dial-menu[data-state="open"] > li {
+  transform: translate(0, 0) scale(1);
+  opacity: 1;
+
+  // Stagger the entrance for up to 6 children.
+  @for $i from 1 through 6 {
+    &:nth-child(#{$i}) { transition-delay: #{($i - 1) * 0.03}s; }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Radial layout — arrange actions on a circle around the trigger.
+// Uses each child's --ks-sd-angle (inline style) to place it.
+// ----------------------------------------------------------------------------
+.speed-dial-radial .speed-dial-menu,
+.speed-dial-arc .speed-dial-menu {
+  display: block;
+  inline-size: 0;
+  block-size: 0;
+  inset: 50%;
+  translate: -50% -50%;
+  pointer-events: none;
+
+  > li {
+    --ks-sd-angle: 0deg;
+    --ks-sd-radius: calc(var(--ks-sd-trigger-size) * 1.75);
+
+    position: absolute;
+    inset: 0;
+    inline-size: var(--ks-sd-action-size);
+    block-size: var(--ks-sd-action-size);
+    translate:
+      calc(cos(var(--ks-sd-angle)) * var(--ks-sd-radius) - 50%)
+      calc(sin(var(--ks-sd-angle)) * -1 * var(--ks-sd-radius) - 50%);
+    pointer-events: auto;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $values in $speed-dial-sizes {
+  .speed-dial-#{$size} {
+    --ks-sd-trigger-size: #{map.get($values, trigger)};
+    --ks-sd-action-size:  #{map.get($values, action)};
+    --ks-sd-gap:          #{map.get($values, gap)};
+    --ks-sd-icon-size:    #{map.get($values, icon)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants
+// ----------------------------------------------------------------------------
+@each $name, $color in $speed-dial-colors {
+  .speed-dial-#{$name} {
+    --ks-sd-accent: #{$color};
+    --ks-sd-focus-ring: 0 0 0 3px #{rgba($color, 0.35)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .speed-dial-action {
+  --ks-sd-action-bg: #1f2937;
+  --ks-sd-action-color: #f3f4f6;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .speed-dial-action {
+    --ks-sd-action-bg: #1f2937;
+    --ks-sd-action-color: #f3f4f6;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .speed-dial {
+  --ks-sd-accent: #ffff00;
+  --ks-sd-fg: #000000;
+  --ks-sd-focus-ring: 0 0 0 3px #ffff00;
+
+  .speed-dial-action {
+    --ks-sd-action-bg: #000000;
+    --ks-sd-action-color: #ffff00;
+    box-shadow: 0 0 0 2px #ffff00;
+  }
+}
+
+@media (forced-colors: active) {
+  .speed-dial-trigger,
+  .speed-dial-action {
+    forced-color-adjust: none;
+    background: ButtonFace;
+    color: ButtonText;
+    box-shadow: 0 0 0 2px ButtonText;
+  }
+  .speed-dial-trigger { background: Highlight; color: HighlightText; }
+
+  .speed-dial-trigger:focus-visible,
+  .speed-dial-action:focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .speed-dial-trigger,
+  .speed-dial-icon,
+  .speed-dial-action,
+  .speed-dial-menu,
+  .speed-dial-menu > li {
+    transition: opacity 0.1s ease;
+    transform: none !important;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// PRINT
+// ----------------------------------------------------------------------------
+@media print {
+  .speed-dial { display: none !important; }
+}

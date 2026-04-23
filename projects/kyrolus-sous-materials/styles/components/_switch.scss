@@ -1,0 +1,221 @@
+// ============================================================================
+// SWITCH / TOGGLE COMPONENT (Phase 2 P0)
+// ----------------------------------------------------------------------------
+// Styled <input type="checkbox" role="switch">. The native role="switch" gives
+// AT the correct announcement ("on/off") without extra ARIA scaffolding.
+//
+// DOM:
+//   <label class="switch">
+//     <input type="checkbox" role="switch" class="switch-input" />
+//     <span class="switch-track" aria-hidden="true">
+//       <span class="switch-thumb"></span>
+//     </span>
+//     <span class="switch-label">Enable notifications</span>
+//   </label>
+//
+// Variants:
+//   .switch-sm / .switch-md / .switch-lg
+//   .switch-{primary|secondary|tertiary|success|warning|danger|info|dark}
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$switch-sizes: (
+  "sm": (w: 1.875rem, h: 1rem,     thumb: 0.75rem),
+  "md": (w: 2.375rem, h: 1.25rem,  thumb: 1rem),
+  "lg": (w: 3rem,     h: 1.625rem, thumb: 1.375rem),
+);
+
+$switch-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Wrapper
+// ----------------------------------------------------------------------------
+.switch {
+  --ks-switch-w: 2.375rem;
+  --ks-switch-h: 1.25rem;
+  --ks-switch-thumb: 1rem;
+  --ks-switch-pad: 0.125rem;
+  --ks-switch-track-off: #cbd5e1;
+  --ks-switch-track-on: #{$primary-color};
+  --ks-switch-thumb-color: #ffffff;
+  --ks-switch-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+  --ks-switch-transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.15s ease;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+
+  &[aria-disabled="true"],
+  &:has(input:disabled) {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+.switch-label {
+  font-size: 0.9375rem;
+  line-height: 1.3;
+}
+
+// ----------------------------------------------------------------------------
+// Input — visually hidden but keyboard focusable; the visible track responds
+// to :checked / :focus-visible via sibling combinators.
+// ----------------------------------------------------------------------------
+.switch-input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+// ----------------------------------------------------------------------------
+// Track + thumb — we paint these with CSS only.
+// ----------------------------------------------------------------------------
+.switch-track {
+  display: inline-block;
+  position: relative;
+  inline-size: var(--ks-switch-w);
+  block-size: var(--ks-switch-h);
+  padding: var(--ks-switch-pad);
+  background: var(--ks-switch-track-off);
+  border-radius: 9999px;
+  transition: var(--ks-switch-transition);
+  flex-shrink: 0;
+}
+
+.switch-thumb {
+  display: block;
+  inline-size: var(--ks-switch-thumb);
+  block-size: var(--ks-switch-thumb);
+  background: var(--ks-switch-thumb-color);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease;
+}
+
+// Sibling state: when the input is :checked the following track moves the thumb.
+.switch-input:checked + .switch-track {
+  background: var(--ks-switch-track-on);
+
+  .switch-thumb {
+    // Move thumb by (track-width - thumb-width - 2 * pad)
+    transform: translateX(
+      calc(var(--ks-switch-w) - var(--ks-switch-thumb) - var(--ks-switch-pad) * 2)
+    );
+  }
+}
+
+.switch-input:focus-visible + .switch-track {
+  box-shadow: var(--ks-switch-focus-ring);
+}
+
+.switch-input:disabled + .switch-track {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $values in $switch-sizes {
+  .switch-#{$size} {
+    --ks-switch-w: #{map.get($values, w)};
+    --ks-switch-h: #{map.get($values, h)};
+    --ks-switch-thumb: #{map.get($values, thumb)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants
+// ----------------------------------------------------------------------------
+@each $name, $color in $switch-colors {
+  .switch-#{$name} {
+    --ks-switch-track-on: #{$color};
+    --ks-switch-focus-ring: 0 0 0 3px #{rgba($color, 0.35)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// RTL — flip the thumb travel direction.
+// ----------------------------------------------------------------------------
+[dir="rtl"] .switch-input:checked + .switch-track .switch-thumb {
+  transform: translateX(
+    calc((var(--ks-switch-w) - var(--ks-switch-thumb) - var(--ks-switch-pad) * 2) * -1)
+  );
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .switch {
+  --ks-switch-track-off: #4b5563;
+  --ks-switch-thumb-color: #f9fafb;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .switch {
+    --ks-switch-track-off: #4b5563;
+    --ks-switch-thumb-color: #f9fafb;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .switch {
+  --ks-switch-track-off: #ffffff;
+  --ks-switch-track-on: #ffff00;
+  --ks-switch-thumb-color: #000000;
+  --ks-switch-focus-ring: 0 0 0 3px #ffff00;
+}
+
+@media (forced-colors: active) {
+  .switch-track {
+    forced-color-adjust: none;
+    background: ButtonFace;
+    border: 1px solid ButtonText;
+  }
+  .switch-thumb { background: ButtonText; }
+
+  .switch-input:checked + .switch-track {
+    background: Highlight;
+    border-color: Highlight;
+    .switch-thumb { background: HighlightText; }
+  }
+
+  .switch-input:focus-visible + .switch-track {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .switch-track,
+  .switch-thumb {
+    transition: none;
+  }
+}

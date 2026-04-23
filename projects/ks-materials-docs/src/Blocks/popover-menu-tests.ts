@@ -5,7 +5,7 @@ import {
   MenuModule,
   PopoverMenuBlock,
   PopoverPlacement,
-} from 'Kyrolus-Sous-Materials';
+} from 'kyrolus-sous-materials';
 
 @Component({
   selector: 'app-popover-menu-tests',

@@ -1,0 +1,187 @@
+// =============================================================================
+// ks-define-theme() — SINGLE-CALL THEME FACADE (Phase 5)
+// -----------------------------------------------------------------------------
+// Material-/Primer-style facade: pass ONE config map and the mixin emits every
+// `--ks-*` custom property the library expects. Missing keys fall back to
+// the sensible defaults already shipped in `_theme.scss`. The facade is the
+// preferred public surface for teams that don't want to learn the full token
+// map.
+//
+// USAGE (Sass, at build-time):
+// ----------------------------
+// @use "kyrolus-sous-materials/styles/abstracts/define-theme" as *;
+//
+// :root {
+//   @include ks-define-theme((
+//     brand:     "acme",
+//     primary:   #1e40af,
+//     secondary: #10b981,
+//     accent:    #c026d3,
+//     success:   #059669,
+//     warning:   #d97706,
+//     danger:    #dc2626,
+//     info:      #0284c7,
+//     density:   comfortable,    // compact | comfortable | spacious
+//     radius:    0.625rem,       // base radius token
+//     font:      ("Inter", sans-serif),
+//     focus-ring: 3px solid rgba(30, 64, 175, 0.35),
+//   ));
+// }
+//
+// // Or, emit a named brand block reachable at runtime:
+// [data-brand="dark-lab"] {
+//   @include ks-define-theme((
+//     primary: #7c3aed,
+//     accent:  #22d3ee,
+//     density: compact,
+//   ));
+// }
+//
+// Every key is optional. `ks-define-theme()` is safe to call multiple times;
+// later calls override earlier ones because CSS custom properties cascade.
+// =============================================================================
+
+@use "sass:map";
+@use "sass:meta";
+@use "sass:string";
+@use "sass:color";
+@use "./variables" as *;
+
+// -----------------------------------------------------------------------------
+// Default config — every shipped component reads `--ks-*` values that fall
+// back to these. Consumer can override any subset.
+// -----------------------------------------------------------------------------
+$ks-theme-defaults: (
+  brand:       "default",
+  primary:     $primary-color,
+  secondary:   $secondary-color,
+  tertiary:    $tertiary,
+  accent:      $tertiary,
+  success:     $success-color,
+  warning:     $warning-color,
+  danger:      $danger-color,
+  info:        $info-color,
+  dark:        $dark-color,
+  radius:      0.5rem,
+  density:     comfortable,
+  font:        null,
+  focus-ring:  null,
+  surface:     #ffffff,
+  on-surface:  #111827,
+  text:        #111827,
+  text-muted:  #6b7280,
+  border:      #e5e7eb,
+);
+
+// -----------------------------------------------------------------------------
+// Density scale — multiplier for padding/height in components. Components that
+// opt into density read `calc(base * var(--ks-density))`.
+// -----------------------------------------------------------------------------
+$ks-density-scales: (
+  compact:      0.75,
+  comfortable:  1,
+  spacious:     1.25,
+);
+
+// -----------------------------------------------------------------------------
+// Helper: resolve a config map against defaults.
+// -----------------------------------------------------------------------------
+@function ks-resolve-theme($config) {
+  $resolved: $ks-theme-defaults;
+  @each $key, $value in $config {
+    $resolved: map.set($resolved, $key, $value);
+  }
+  @return $resolved;
+}
+
+// -----------------------------------------------------------------------------
+// Helper: derived tone from a brand colour — used for subtle surfaces,
+// hovers, active states.
+// -----------------------------------------------------------------------------
+@function ks-tone($color, $lightness) {
+  @return color.scale($color, $lightness: $lightness);
+}
+
+// -----------------------------------------------------------------------------
+// Emit a single color "family" as custom properties.
+// --ks-{name}       → base
+// --ks-{name}-hover → tonal hover
+// --ks-{name}-bg    → subtle tint (background)
+// --ks-{name}-fg    → foreground / on-color
+// --ks-{name}-ring  → focus-ring for this color
+// -----------------------------------------------------------------------------
+@mixin ks-emit-color-family($name, $color) {
+  --ks-#{$name}:        #{$color};
+  --ks-#{$name}-hover:  #{ks-tone($color, -10%)};
+  --ks-#{$name}-active: #{ks-tone($color, -20%)};
+  --ks-#{$name}-bg:     #{ks-tone($color, 85%)};
+  --ks-#{$name}-border: #{ks-tone($color, 60%)};
+  --ks-#{$name}-fg:     #ffffff;
+  --ks-#{$name}-ring:   0 0 0 3px #{rgba($color, 0.35)};
+}
+
+// -----------------------------------------------------------------------------
+// Main facade
+// -----------------------------------------------------------------------------
+@mixin ks-define-theme($config: ()) {
+  $c: ks-resolve-theme($config);
+
+  // Brand marker (readable at runtime via `getComputedStyle`).
+  --ks-brand: "#{map.get($c, brand)}";
+
+  // Semantic color families.
+  @include ks-emit-color-family("primary",   map.get($c, primary));
+  @include ks-emit-color-family("secondary", map.get($c, secondary));
+  @include ks-emit-color-family("tertiary",  map.get($c, tertiary));
+  @include ks-emit-color-family("accent",    map.get($c, accent));
+  @include ks-emit-color-family("success",   map.get($c, success));
+  @include ks-emit-color-family("warning",   map.get($c, warning));
+  @include ks-emit-color-family("danger",    map.get($c, danger));
+  @include ks-emit-color-family("info",      map.get($c, info));
+  @include ks-emit-color-family("dark",      map.get($c, dark));
+
+  // Warning foreground wants dark text, not white.
+  --ks-warning-fg: #111827;
+
+  // Surface + text tokens.
+  --ks-surface:    #{map.get($c, surface)};
+  --ks-on-surface: #{map.get($c, on-surface)};
+  --ks-text:       #{map.get($c, text)};
+  --ks-text-muted: #{map.get($c, text-muted)};
+  --ks-border:     #{map.get($c, border)};
+
+  // Radius token (components read `--ks-radius`).
+  --ks-radius: #{map.get($c, radius)};
+  --ks-radius-sm: calc(var(--ks-radius) * 0.5);
+  --ks-radius-lg: calc(var(--ks-radius) * 1.5);
+  --ks-radius-pill: 9999px;
+
+  // Density scale.
+  $density-key: map.get($c, density);
+  $density-val: map.get($ks-density-scales, $density-key);
+  @if $density-val == null { $density-val: 1; }
+  --ks-density: #{$density-val};
+
+  // Font stack (optional).
+  $font: map.get($c, font);
+  @if $font != null {
+    --ks-font-family: #{$font};
+  }
+
+  // Global focus ring (falls through to per-color ring otherwise).
+  $ring: map.get($c, focus-ring);
+  @if $ring != null {
+    --ks-focus-ring: #{$ring};
+  } @else {
+    --ks-focus-ring: var(--ks-primary-ring);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Convenience: read a key from a config map with fallback.
+// -----------------------------------------------------------------------------
+@function ks-theme($config, $key, $fallback: null) {
+  $v: map.get($config, $key);
+  @if $v == null { @return $fallback; }
+  @return $v;
+}

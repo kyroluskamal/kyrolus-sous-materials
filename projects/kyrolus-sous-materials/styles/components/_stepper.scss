@@ -1,0 +1,377 @@
+// ============================================================================
+// STEPPER COMPONENT (Phase 4 P2)
+// ----------------------------------------------------------------------------
+// Multi-step wizard / progress indicator. Items track `[data-state]`
+// (upcoming / current / completed / error) and `aria-current="step"`
+// flags the active one. Horizontal (default) or vertical.
+//
+// DOM:
+//   <ol class="stepper stepper-md" aria-label="Checkout">
+//     <li class="stepper-item" data-state="completed">
+//       <button class="stepper-trigger">
+//         <span class="stepper-marker" aria-hidden="true">1</span>
+//         <span class="stepper-content">
+//           <span class="stepper-title">Cart</span>
+//           <span class="stepper-desc">3 items</span>
+//         </span>
+//       </button>
+//     </li>
+//     <li class="stepper-item" data-state="current" aria-current="step">…</li>
+//     <li class="stepper-item" data-state="upcoming">…</li>
+//     <li class="stepper-item" data-state="error">…</li>
+//   </ol>
+//
+// Variants:
+//   .stepper-sm / .stepper-md / .stepper-lg
+//   .stepper-{primary|secondary|tertiary|success|warning|danger|info|dark}
+//   .stepper-vertical
+//   .stepper-numbered (default) / .stepper-dots / .stepper-outlined
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$stepper-sizes: (
+  "sm": (marker: 1.5rem,  font: 0.75rem,   title: 0.8125rem, desc: 0.75rem),
+  "md": (marker: 2rem,    font: 0.875rem,  title: 0.9375rem, desc: 0.8125rem),
+  "lg": (marker: 2.5rem,  font: 1rem,      title: 1.0625rem, desc: 0.875rem),
+);
+
+$stepper-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Base
+// ----------------------------------------------------------------------------
+.stepper {
+  --ks-stepper-accent: #{$primary-color};
+  --ks-stepper-line: #e5e7eb;
+  --ks-stepper-line-done: var(--ks-stepper-accent);
+  --ks-stepper-marker-bg: #ffffff;
+  --ks-stepper-marker-color: #6b7280;
+  --ks-stepper-marker-border: #e5e7eb;
+  --ks-stepper-title-color: #111827;
+  --ks-stepper-desc-color: #6b7280;
+  --ks-stepper-marker-size: 2rem;
+  --ks-stepper-font-size: 0.875rem;
+  --ks-stepper-title-size: 0.9375rem;
+  --ks-stepper-desc-size: 0.8125rem;
+  --ks-stepper-gap: 0.75rem;
+  --ks-stepper-error: #{$danger-color};
+  --ks-stepper-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+
+  display: flex;
+  align-items: flex-start;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: ks-stepper-counter;
+  gap: 0;
+}
+
+// ----------------------------------------------------------------------------
+// Item — each step is a list item; the connector line lives on ::before.
+// ----------------------------------------------------------------------------
+.stepper-item {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  counter-increment: ks-stepper-counter;
+  min-inline-size: 0;
+
+  // Connector line — lives on every item except the first (drawn to the left).
+  &:not(:first-child)::before {
+    content: "";
+    position: absolute;
+    inset-inline-end: 50%;
+    inset-block-start: calc(var(--ks-stepper-marker-size) / 2);
+    inline-size: 100%;
+    block-size: 2px;
+    background: var(--ks-stepper-line);
+    margin-inline-end: calc(var(--ks-stepper-marker-size) / 2);
+    z-index: 0;
+  }
+
+  // State-driven connector fill.
+  &[data-state="completed"] + .stepper-item::before,
+  &[data-state="current"]::before,
+  &[data-state="completed"]::before {
+    background: var(--ks-stepper-line-done);
+  }
+}
+
+// Trigger wraps marker + content and is focusable when rendered as <button>.
+.stepper-trigger {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ks-stepper-gap);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: center;
+  inline-size: 100%;
+
+  &:focus { outline: none; }
+  &:focus-visible {
+    outline: none;
+
+    .stepper-marker {
+      box-shadow: 0 0 0 2px var(--ks-stepper-marker-bg), var(--ks-stepper-focus-ring);
+    }
+  }
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Marker (numbered circle)
+// ----------------------------------------------------------------------------
+.stepper-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ks-stepper-marker-size);
+  block-size: var(--ks-stepper-marker-size);
+  border-radius: 50%;
+  background: var(--ks-stepper-marker-bg);
+  color: var(--ks-stepper-marker-color);
+  border: 2px solid var(--ks-stepper-marker-border);
+  font-size: var(--ks-stepper-font-size);
+  font-weight: 600;
+  line-height: 1;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+  // Auto-number if marker is empty (use CSS counter).
+  &:empty::before { content: counter(ks-stepper-counter); }
+}
+
+// ----------------------------------------------------------------------------
+// Content block
+// ----------------------------------------------------------------------------
+.stepper-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-inline-size: 0;
+  text-align: center;
+}
+
+.stepper-title {
+  font-size: var(--ks-stepper-title-size);
+  font-weight: 600;
+  color: var(--ks-stepper-title-color);
+  line-height: 1.25;
+}
+
+.stepper-desc {
+  font-size: var(--ks-stepper-desc-size);
+  color: var(--ks-stepper-desc-color);
+  line-height: 1.25;
+}
+
+// ----------------------------------------------------------------------------
+// States
+// ----------------------------------------------------------------------------
+.stepper-item {
+  &[data-state="completed"] {
+    .stepper-marker {
+      background: var(--ks-stepper-accent);
+      color: #ffffff;
+      border-color: var(--ks-stepper-accent);
+
+      // Checkmark replaces number.
+      &::before { content: "✓"; }
+    }
+  }
+
+  &[data-state="current"],
+  &[aria-current="step"] {
+    .stepper-marker {
+      background: var(--ks-stepper-marker-bg);
+      color: var(--ks-stepper-accent);
+      border-color: var(--ks-stepper-accent);
+      box-shadow: 0 0 0 4px #{rgba($primary-color, 0.15)};
+    }
+    .stepper-title { color: var(--ks-stepper-accent); }
+  }
+
+  &[data-state="error"] {
+    .stepper-marker {
+      background: var(--ks-stepper-error);
+      color: #ffffff;
+      border-color: var(--ks-stepper-error);
+
+      &::before { content: "!"; }
+    }
+    .stepper-title { color: var(--ks-stepper-error); }
+  }
+
+  &[data-state="upcoming"] {
+    .stepper-trigger { opacity: 0.85; }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $values in $stepper-sizes {
+  .stepper-#{$size} {
+    --ks-stepper-marker-size: #{map.get($values, marker)};
+    --ks-stepper-font-size:   #{map.get($values, font)};
+    --ks-stepper-title-size:  #{map.get($values, title)};
+    --ks-stepper-desc-size:   #{map.get($values, desc)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants
+// ----------------------------------------------------------------------------
+@each $name, $color in $stepper-colors {
+  .stepper-#{$name} {
+    --ks-stepper-accent: #{$color};
+    --ks-stepper-line-done: #{$color};
+    --ks-stepper-focus-ring: 0 0 0 3px #{rgba($color, 0.35)};
+
+    .stepper-item[data-state="current"] .stepper-marker,
+    .stepper-item[aria-current="step"] .stepper-marker {
+      box-shadow: 0 0 0 4px #{rgba($color, 0.15)};
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Shape variants
+// ----------------------------------------------------------------------------
+.stepper-dots .stepper-marker {
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  font-size: 0;
+  color: transparent;
+
+  &::before { content: none !important; }
+}
+
+.stepper-outlined .stepper-marker {
+  background: transparent !important;
+  color: var(--ks-stepper-accent) !important;
+}
+
+// ----------------------------------------------------------------------------
+// Vertical orientation
+// ----------------------------------------------------------------------------
+.stepper-vertical {
+  flex-direction: column;
+  align-items: stretch;
+
+  .stepper-item {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--ks-stepper-gap);
+    padding-block-end: 1.5rem;
+
+    &:last-child { padding-block-end: 0; }
+
+    // Connector becomes a vertical line.
+    &:not(:first-child)::before {
+      inline-size: 2px;
+      block-size: 100%;
+      inset-inline-start: calc(var(--ks-stepper-marker-size) / 2 - 1px);
+      inset-inline-end: auto;
+      inset-block-start: calc(var(--ks-stepper-marker-size) * -0.5);
+      margin-inline-end: 0;
+      margin-block-start: calc(var(--ks-stepper-marker-size) / 2);
+    }
+  }
+
+  .stepper-trigger {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: start;
+    inline-size: auto;
+  }
+
+  .stepper-content { text-align: start; align-items: flex-start; }
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .stepper {
+  --ks-stepper-line: #374151;
+  --ks-stepper-marker-bg: #1f2937;
+  --ks-stepper-marker-color: #9ca3af;
+  --ks-stepper-marker-border: #374151;
+  --ks-stepper-title-color: #f3f4f6;
+  --ks-stepper-desc-color: #9ca3af;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .stepper {
+    --ks-stepper-line: #374151;
+    --ks-stepper-marker-bg: #1f2937;
+    --ks-stepper-marker-color: #9ca3af;
+    --ks-stepper-marker-border: #374151;
+    --ks-stepper-title-color: #f3f4f6;
+    --ks-stepper-desc-color: #9ca3af;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .stepper {
+  --ks-stepper-accent: #ffff00;
+  --ks-stepper-line: #ffffff;
+  --ks-stepper-marker-bg: #000000;
+  --ks-stepper-marker-color: #ffffff;
+  --ks-stepper-marker-border: #ffffff;
+  --ks-stepper-title-color: #ffffff;
+  --ks-stepper-desc-color: #ffffff;
+  --ks-stepper-focus-ring: 0 0 0 3px #ffff00;
+}
+
+@media (forced-colors: active) {
+  .stepper-marker {
+    forced-color-adjust: none;
+    background: ButtonFace;
+    color: ButtonText;
+    border-color: ButtonText;
+  }
+  .stepper-item[data-state="completed"] .stepper-marker,
+  .stepper-item[data-state="current"] .stepper-marker,
+  .stepper-item[aria-current="step"] .stepper-marker {
+    background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+  }
+  .stepper-item::before { background: CanvasText !important; }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .stepper-marker { transition: none; }
+}

@@ -1,8 +1,8 @@
 module.exports = {
   content: [
     "projects/kyrolus-sous-materials/jit/__smoke__/**/*.html",
-    "projects/demo-app/src/**/*.html",
-    "projects/demo-app/src/**/*.ts",
+    "projects/ks-materials-docs/src/**/*.html",
+    "projects/ks-materials-docs/src/**/*.ts",
     "projects/kyrolus-sous-materials/src/**/*.html",
     "projects/kyrolus-sous-materials/src/**/*.ts",
   ],

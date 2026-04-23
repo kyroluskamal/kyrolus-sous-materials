@@ -14,4 +14,22 @@
   <div class="group"><span class="opacity-0 group-hover:opacity-100">peek</span></div>
   <div class="rtl:text-right ltr:text-left [dir=rtl]:block">direction</div>
   <button class="motion-safe:animate-pulse motion-reduce:animate-none">loading</button>
+  <!-- phase 1 new variants -->
+  <button class="not-disabled:bg-blue-500 not-first:mt-2">not-*</button>
+  <div class="*:p-2 **:text-gray-500">universal/descendant</div>
+  <input class="user-valid:border-green-500 user-invalid:border-red-500 aria-[sort=ascending]:font-bold">user-validation + aria-arbitrary</input>
+  <div class="data-[state=open]:bg-indigo-500 supports-[display:grid]:grid">data + supports</div>
+  <ul class="[&>li]:mt-2 nth-[3n+1]:bg-gray-50">arbitrary nth + arbitrary selector</ul>
+  <div class="group/sidebar"><span class="group-hover/sidebar:opacity-100">named group</span></div>
+  <div class="peer/email peer-checked/email:text-red-500">named peer</div>
+  <div class="group-[&:hover_.icon]:opacity-100">arbitrary group selector</div>
+  <div class="@[min-width:500px]:flex forced-colors:border-current">arbitrary container + forced-colors</div>
+  <div class="bg-(--brand-primary) text-(--brand-fg)">CSS-var shorthand</div>
+  <details class="details-content:p-4">native ::details-content</details>
+  <!-- typed arbitraries -->
+  <div class="bg-[color:var(--brand)] bg-[length:200px_100px] bg-[image:linear-gradient(red,blue)] bg-[position:center_top]">typed bg</div>
+  <span class="text-[color:var(--fg)] text-[length:18px]">typed text</span>
+  <span class="leading-[length:1.5rem] tracking-[length:0.05em]">typed leading/tracking</span>
+  <!-- style container queries -->
+  <div class="@[style(--theme:dark)]:text-white @[min-width:700px]:flex">style + size container</div>
 </div>

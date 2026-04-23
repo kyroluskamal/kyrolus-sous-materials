@@ -1,0 +1,225 @@
+// ============================================================================
+// CHECKBOX COMPONENT (Phase 2 P0)
+// ----------------------------------------------------------------------------
+// Styles the native <input type="checkbox"> directly — no wrapper hacks. Uses
+// `appearance: none` + custom mark so we keep keyboard/a11y semantics free.
+// Indeterminate via the :indeterminate pseudo-class.
+//
+// DOM:
+//   <label class="check">
+//     <input type="checkbox" class="check-input" />
+//     <span class="check-label">Accept terms</span>
+//   </label>
+//
+// Variants:
+//   .check-sm / .check-md / .check-lg
+//   .check-{primary|secondary|tertiary|success|warning|danger|info|dark}
+//   .check-rounded / .check-square (default)
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$check-sizes: (
+  "sm": 0.875rem,
+  "md": 1.125rem,
+  "lg": 1.375rem,
+);
+
+$check-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Wrapper label
+// ----------------------------------------------------------------------------
+.check {
+  --ks-check-size: 1.125rem;
+  --ks-check-bg: #ffffff;
+  --ks-check-border-color: #9ca3af;
+  --ks-check-checked-bg: #{$primary-color};
+  --ks-check-checked-border: #{$primary-color};
+  --ks-check-check-color: #ffffff;
+  --ks-check-radius: 0.25rem;
+  --ks-check-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+  --ks-check-transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.3;
+
+  &[aria-disabled="true"],
+  &:has(input:disabled) {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+.check-label {
+  font-size: 0.9375rem;
+}
+
+// ----------------------------------------------------------------------------
+// Input — appearance: none + custom paint.
+// ----------------------------------------------------------------------------
+.check-input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  inline-size: var(--ks-check-size);
+  block-size: var(--ks-check-size);
+  margin: 0;
+  background: var(--ks-check-bg);
+  border: 1.5px solid var(--ks-check-border-color);
+  border-radius: var(--ks-check-radius);
+  cursor: inherit;
+  position: relative;
+  flex-shrink: 0;
+  transition: var(--ks-check-transition);
+
+  &:hover:not(:disabled) {
+    border-color: var(--ks-check-checked-border);
+  }
+
+  &:focus { outline: none; }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--ks-check-focus-ring);
+  }
+
+  &:checked {
+    background-color: var(--ks-check-checked-bg);
+    border-color: var(--ks-check-checked-border);
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--ks-check-check-color);
+      clip-path: polygon(
+        14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0, 43% 62%
+      );
+    }
+  }
+
+  &:indeterminate {
+    background-color: var(--ks-check-checked-bg);
+    border-color: var(--ks-check-checked-border);
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 30% 18%;
+      background: var(--ks-check-check-color);
+      border-radius: 1px;
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $value in $check-sizes {
+  .check-#{$size} {
+    --ks-check-size: #{$value};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants
+// ----------------------------------------------------------------------------
+@each $name, $color in $check-colors {
+  .check-#{$name} {
+    --ks-check-checked-bg: #{$color};
+    --ks-check-checked-border: #{$color};
+    --ks-check-focus-ring: 0 0 0 3px #{rgba($color, 0.35)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Shape variants
+// ----------------------------------------------------------------------------
+.check-rounded { --ks-check-radius: 50%; }
+.check-square  { --ks-check-radius: 0.25rem; }
+
+// ----------------------------------------------------------------------------
+// Validation states — integrate with :user-valid / :user-invalid
+// ----------------------------------------------------------------------------
+@supports selector(:user-invalid) {
+  .check-input:user-invalid {
+    --ks-check-border-color: #{$danger-color};
+    --ks-check-focus-ring: 0 0 0 3px #{rgba($danger-color, 0.35)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .check {
+  --ks-check-bg: #1f2937;
+  --ks-check-border-color: #6b7280;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .check {
+    --ks-check-bg: #1f2937;
+    --ks-check-border-color: #6b7280;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .check {
+  --ks-check-bg: #000000;
+  --ks-check-border-color: #ffffff;
+  --ks-check-checked-bg: #ffff00;
+  --ks-check-checked-border: #ffff00;
+  --ks-check-check-color: #000000;
+  --ks-check-focus-ring: 0 0 0 3px #ffff00;
+}
+
+@media (forced-colors: active) {
+  .check-input[type="checkbox"] {
+    forced-color-adjust: none;
+    background: Canvas;
+    border-color: CanvasText;
+
+    &:checked,
+    &:indeterminate {
+      background: Highlight;
+      border-color: Highlight;
+
+      &::after { background: HighlightText; }
+    }
+
+    &:focus-visible {
+      outline: 3px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .check-input[type="checkbox"] { transition: none; }
+}

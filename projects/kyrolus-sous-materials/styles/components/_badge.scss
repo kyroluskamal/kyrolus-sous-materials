@@ -1,0 +1,239 @@
+// ============================================================================
+// BADGE COMPONENT (Phase 2 P0)
+// ----------------------------------------------------------------------------
+// Small pill-shaped label for counts, statuses, and tags. Can sit inline or
+// attach to a parent via `.badge-dot` + anchor positioning for notification
+// indicators.
+//
+// DOM:
+//   <span class="badge badge-success">Active</span>
+//   <span class="badge badge-primary badge-pill">99+</span>
+//   <button class="btn btn-primary">
+//     Inbox
+//     <span class="badge badge-danger badge-count">3</span>
+//   </button>
+//
+// Variants:
+//   .badge-sm / .badge-md / .badge-lg
+//   .badge-{primary|secondary|tertiary|success|warning|danger|info|dark}
+//   .badge-solid (default) / .badge-subtle / .badge-outline / .badge-dot
+//   .badge-pill / .badge-square
+//   .badge-count           — absolute-positioned counter on a parent
+// ============================================================================
+
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
+
+$badge-sizes: (
+  "sm": (pad-y: 0.125rem, pad-x: 0.375rem, font-size: 0.6875rem, radius: 0.25rem),
+  "md": (pad-y: 0.25rem,  pad-x: 0.5rem,   font-size: 0.75rem,   radius: 0.375rem),
+  "lg": (pad-y: 0.375rem, pad-x: 0.625rem, font-size: 0.875rem,  radius: 0.5rem),
+);
+
+$badge-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Base
+// ----------------------------------------------------------------------------
+.badge {
+  --ks-badge-bg: #{$primary-color};
+  --ks-badge-color: #ffffff;
+  --ks-badge-border-color: transparent;
+  --ks-badge-pad-y: 0.25rem;
+  --ks-badge-pad-x: 0.5rem;
+  --ks-badge-radius: 0.375rem;
+  --ks-badge-font-size: 0.75rem;
+  --ks-badge-font-weight: 600;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: var(--ks-badge-pad-y) var(--ks-badge-pad-x);
+  background-color: var(--ks-badge-bg);
+  color: var(--ks-badge-color);
+  border: 1px solid var(--ks-badge-border-color);
+  border-radius: var(--ks-badge-radius);
+  font-size: var(--ks-badge-font-size);
+  font-weight: var(--ks-badge-font-weight);
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: middle;
+  // Keep children from stretching the badge vertically.
+  min-block-size: 1em;
+}
+
+// ----------------------------------------------------------------------------
+// Sizes
+// ----------------------------------------------------------------------------
+@each $size, $values in $badge-sizes {
+  .badge-#{$size} {
+    --ks-badge-pad-y: #{map.get($values, pad-y)};
+    --ks-badge-pad-x: #{map.get($values, pad-x)};
+    --ks-badge-font-size: #{map.get($values, font-size)};
+    --ks-badge-radius: #{map.get($values, radius)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants (solid default + subtle + outline)
+// ----------------------------------------------------------------------------
+@each $name, $color in $badge-colors {
+  .badge-#{$name} {
+    --ks-badge-bg: #{$color};
+    --ks-badge-color: #ffffff;
+    --ks-badge-border-color: transparent;
+  }
+
+  .badge-#{$name}.badge-subtle {
+    --ks-badge-bg: #{color.scale($color, $lightness: 85%)};
+    --ks-badge-color: #{color.scale($color, $lightness: -45%)};
+    --ks-badge-border-color: #{color.scale($color, $lightness: 60%)};
+  }
+
+  .badge-#{$name}.badge-outline {
+    --ks-badge-bg: transparent;
+    --ks-badge-color: #{$color};
+    --ks-badge-border-color: #{$color};
+  }
+
+  .badge-#{$name}.badge-dot::before {
+    background-color: #{$color};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Shape modifiers
+// ----------------------------------------------------------------------------
+.badge-pill {
+  --ks-badge-radius: 9999px;
+  --ks-badge-pad-x: 0.75rem;
+}
+
+.badge-square {
+  --ks-badge-radius: 0;
+}
+
+// ----------------------------------------------------------------------------
+// Dot indicator — bullet before the label.
+// ----------------------------------------------------------------------------
+.badge-dot {
+  background: transparent !important;
+  color: inherit;
+  border: none;
+  padding-inline-start: 0;
+  gap: 0.5rem;
+
+  &::before {
+    content: "";
+    display: inline-block;
+    inline-size: 0.5em;
+    block-size: 0.5em;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Count badge (notification-style overlay on a parent).
+// Relies on CSS anchor positioning where available, falls back to absolute.
+// ----------------------------------------------------------------------------
+.badge-count {
+  position: absolute;
+  inset-block-start: -0.25rem;
+  inset-inline-end: -0.25rem;
+  min-inline-size: 1.25em;
+  padding: 0.125rem 0.375rem;
+  border-radius: 9999px;
+  font-size: 0.625rem;
+  box-shadow: 0 0 0 2px var(--ks-badge-count-ring, #ffffff);
+  z-index: 1;
+}
+
+// Parents can opt into `position: relative` via .badge-host if they don't
+// already have a positioned ancestor.
+.badge-host {
+  position: relative;
+}
+
+// ----------------------------------------------------------------------------
+// State selectors
+// ----------------------------------------------------------------------------
+.badge[aria-disabled="true"] {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.badge[data-state="new"] {
+  // Subtle pulse on newly-rendered badges.
+  animation: ks-badge-pulse 1.2s ease-out 1;
+}
+
+@keyframes ks-badge-pulse {
+  0%   { transform: scale(1);   box-shadow: 0 0 0 0 var(--ks-badge-bg); }
+  70%  { transform: scale(1.1); box-shadow: 0 0 0 6px transparent; }
+  100% { transform: scale(1);   box-shadow: 0 0 0 0 transparent; }
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+@each $name, $color in $badge-colors {
+  [data-theme="dark"] .badge-#{$name}.badge-subtle {
+    --ks-badge-bg: #{color.scale($color, $lightness: -55%, $saturation: -15%)};
+    --ks-badge-color: #{color.scale($color, $lightness: 55%)};
+    --ks-badge-border-color: #{color.scale($color, $lightness: -25%)};
+  }
+
+  [data-theme="dark"] .badge-#{$name}.badge-outline {
+    --ks-badge-color: #{color.scale($color, $lightness: 30%)};
+    --ks-badge-border-color: #{color.scale($color, $lightness: 20%)};
+  }
+}
+
+[data-theme="dark"] .badge-count {
+  --ks-badge-count-ring: #1f2937;
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .badge {
+  --ks-badge-bg: #ffff00;
+  --ks-badge-color: #000000;
+  --ks-badge-border-color: #ffffff;
+}
+
+@media (forced-colors: active) {
+  .badge {
+    background: ButtonFace;
+    color: ButtonText;
+    border: 1px solid ButtonText;
+    forced-color-adjust: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// RTL — count badge flips corner
+// ----------------------------------------------------------------------------
+// Logical props already handle this; nothing extra needed.
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .badge[data-state="new"] {
+    animation: none;
+  }
+}

@@ -2,6 +2,7 @@ import { parseCandidate } from "./parser";
 import type { Theme } from "./types";
 import { allMatchers } from "./utilities";
 import type { MatchInput } from "./utilities/helpers";
+import { splitArbType } from "./utilities/helpers";
 import { resolveVariant } from "./variants";
 
 export interface CompileInput {
@@ -35,62 +36,13 @@ export function compile(input: CompileInput): CompileResult {
 
   for (const raw of candidates) {
     sourceIndex++;
-    const candidate = parseCandidate(raw);
-    if (!candidate) continue;
-
-    const matchInput: MatchInput = {
-      name: candidate.arbitrary && candidate.utility
-        ? `${candidate.utility}-[${candidate.value}]`
-        : candidate.base.replace(/^-/, ""),
-      negative: candidate.negative,
-      arbitrary: candidate.arbitrary,
-      arbUtility: candidate.utility,
-      arbValue: candidate.value,
-      theme,
-    };
-
-    let decls: Record<string, string | number | undefined> | null = null;
-    for (const matcher of allMatchers) {
-      const result = matcher(matchInput);
-      if (result) {
-        decls = result;
-        break;
-      }
-    }
-    if (!decls) {
+    const rule = buildRule(raw, theme, darkMode, sourceIndex);
+    if (rule === "skip") continue;
+    if (rule === null) {
       unmatched.push(raw);
       continue;
     }
-
-    const resolvedVariants = [];
-    let ok = true;
-    for (const v of candidate.variants) {
-      const resolved = resolveVariant(v, theme, darkMode);
-      if (!resolved) {
-        ok = false;
-        break;
-      }
-      resolvedVariants.push(resolved);
-    }
-    if (!ok) {
-      unmatched.push(raw);
-      continue;
-    }
-
-    resolvedVariants.sort((a, b) => a.order - b.order);
-
-    let selector = `.${cssEscape(raw)}`;
-    const atRules: string[] = [];
-    let order = 0;
-
-    for (const v of resolvedVariants) {
-      const applied = v.apply(selector);
-      selector = applied.selector;
-      if (applied.atRule) atRules.push(applied.atRule);
-      order = Math.max(order, v.order);
-    }
-
-    rules.push({ selector, atRules, decls, order, sourceIndex });
+    rules.push(rule);
     matchedClasses.push(raw);
   }
 
@@ -103,6 +55,67 @@ export function compile(input: CompileInput): CompileResult {
     matchedClasses: Array.from(new Set(matchedClasses)).sort((a, b) => a.localeCompare(b)),
     unmatched,
   };
+}
+
+function buildRule(
+  raw: string,
+  theme: Theme,
+  darkMode: "class" | "dataAttribute",
+  sourceIndex: number,
+): Rule | null | "skip" {
+  const candidate = parseCandidate(raw);
+  if (!candidate) return "skip";
+
+  const decls = findDecls(candidate, theme);
+  if (!decls) return null;
+
+  const resolvedVariants: ReturnType<typeof resolveVariant>[] = [];
+  for (const v of candidate.variants) {
+    const resolved = resolveVariant(v, theme, darkMode);
+    if (!resolved) return null;
+    resolvedVariants.push(resolved);
+  }
+  resolvedVariants.sort((a, b) => a!.order - b!.order);
+
+  let selector = `.${cssEscape(raw)}`;
+  const atRules: string[] = [];
+  let order = 0;
+  for (const v of resolvedVariants) {
+    const applied = v!.apply(selector);
+    selector = applied.selector;
+    if (applied.atRule) atRules.push(applied.atRule);
+    order = Math.max(order, v!.order);
+  }
+
+  return { selector, atRules, decls, order, sourceIndex };
+}
+
+function findDecls(
+  candidate: ReturnType<typeof parseCandidate> & object,
+  theme: Theme,
+): Rule["decls"] | null {
+  const { type: arbType, value: arbValue } =
+    candidate.arbitrary && candidate.value !== undefined
+      ? splitArbType(candidate.value)
+      : { type: undefined, value: candidate.value };
+
+  const matchInput: MatchInput = {
+    name: candidate.arbitrary && candidate.utility
+      ? `${candidate.utility}-[${candidate.value}]`
+      : candidate.base.replace(/^-/, ""),
+    negative: candidate.negative,
+    arbitrary: candidate.arbitrary,
+    arbUtility: candidate.utility,
+    arbValue,
+    arbType,
+    theme,
+  };
+
+  for (const matcher of allMatchers) {
+    const result = matcher(matchInput);
+    if (result) return result;
+  }
+  return null;
 }
 
 function serialize(rules: Rule[], layer: string): string {

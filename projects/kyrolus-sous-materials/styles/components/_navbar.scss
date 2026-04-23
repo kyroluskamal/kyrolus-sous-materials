@@ -1,12 +1,382 @@
-// .navbar {
-//   background-color: $color-primary;
-//   padding: rem($spacing-unit * 2);
+// ============================================================================
+// NAVBAR COMPONENT (Phase 2 P0)
+// ----------------------------------------------------------------------------
+// Horizontal navigation bar with brand, nav links, nav actions, and a
+// collapsible mobile menu. Built around the native `<nav>` + `<ul>` model,
+// driven by `aria-current` + `aria-expanded` so JS only flips attributes.
+//
+// DOM pattern:
+//   <nav class="navbar navbar-md">
+//     <a class="navbar-brand" href="/">Brand</a>
+//     <button class="navbar-toggle" aria-expanded="false"
+//             aria-controls="mainNav">☰</button>
+//     <div class="navbar-collapse" id="mainNav">
+//       <ul class="navbar-nav">
+//         <li><a class="navbar-link" aria-current="page">Home</a></li>
+//         <li><a class="navbar-link">Docs</a></li>
+//       </ul>
+//       <div class="navbar-actions">…</div>
+//     </div>
+//   </nav>
+//
+// Variants:
+//   .navbar-sm / .navbar-md / .navbar-lg             Size scale
+//   .navbar-{primary|secondary|tertiary|success|
+//            warning|danger|info|dark}               Color variants
+//   .navbar-sticky / .navbar-fixed-top / .navbar-fixed-bottom
+// ============================================================================
 
-//   .navbar__menu {
-//     display: none;
+@use "sass:map";
+@use "sass:color";
+@use "../abstracts/variables" as *;
 
-//     @include respond-to(md) {
-//       display: flex;
-//     }
-//   }
-// }
+$navbar-sizes: (
+  "sm": (pad-y: 0.5rem,  pad-x: 0.75rem, font-size: 0.875rem, brand-size: 1rem),
+  "md": (pad-y: 0.75rem, pad-x: 1rem,    font-size: 1rem,     brand-size: 1.25rem),
+  "lg": (pad-y: 1rem,    pad-x: 1.25rem, font-size: 1.125rem, brand-size: 1.5rem),
+);
+
+$navbar-colors: (
+  "primary":   $primary-color,
+  "secondary": $secondary-color,
+  "tertiary":  $tertiary,
+  "success":   $success-color,
+  "warning":   $warning-color,
+  "danger":    $danger-color,
+  "info":      $info-color,
+  "dark":      $dark-color,
+);
+
+// ----------------------------------------------------------------------------
+// Base
+// ----------------------------------------------------------------------------
+.navbar {
+  --ks-navbar-bg: #ffffff;
+  --ks-navbar-color: #1f2937;
+  --ks-navbar-hover-bg: rgba(0, 0, 0, 0.04);
+  --ks-navbar-active-color: #{$primary-color};
+  --ks-navbar-border-color: #e5e7eb;
+  --ks-navbar-pad-y: 0.75rem;
+  --ks-navbar-pad-x: 1rem;
+  --ks-navbar-gap: 1rem;
+  --ks-navbar-font-size: 1rem;
+  --ks-navbar-brand-size: 1.25rem;
+  --ks-navbar-radius: 0.375rem;
+  --ks-navbar-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+  --ks-navbar-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --ks-navbar-transition: background-color 0.2s ease, color 0.2s ease;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ks-navbar-gap);
+  padding: var(--ks-navbar-pad-y) var(--ks-navbar-pad-x);
+  background-color: var(--ks-navbar-bg);
+  color: var(--ks-navbar-color);
+  border-block-end: 1px solid var(--ks-navbar-border-color);
+  box-shadow: var(--ks-navbar-shadow);
+  font-size: var(--ks-navbar-font-size);
+  transition: var(--ks-navbar-transition);
+  flex-wrap: wrap;
+}
+
+// ----------------------------------------------------------------------------
+// Brand
+// ----------------------------------------------------------------------------
+.navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--ks-navbar-brand-size);
+  font-weight: 700;
+  color: inherit;
+  text-decoration: none;
+  line-height: 1;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--ks-navbar-focus-ring);
+    border-radius: var(--ks-navbar-radius);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Collapse container — hidden until md by default; shown with aria-expanded.
+// ----------------------------------------------------------------------------
+.navbar-collapse {
+  display: flex;
+  align-items: center;
+  gap: var(--ks-navbar-gap);
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+// ----------------------------------------------------------------------------
+// Nav list + links
+// ----------------------------------------------------------------------------
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.navbar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--ks-navbar-radius);
+  color: inherit;
+  text-decoration: none;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: var(--ks-navbar-transition);
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--ks-navbar-hover-bg);
+  }
+
+  &:focus { outline: none; }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--ks-navbar-focus-ring);
+  }
+
+  // aria-current="page" is the semantic "active link" flag.
+  &[aria-current="page"],
+  &[aria-current="true"],
+  &.active {
+    color: var(--ks-navbar-active-color);
+    font-weight: 600;
+  }
+
+  &[aria-disabled="true"],
+  &:disabled {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+}
+
+.navbar-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-inline-start: auto;
+}
+
+// ----------------------------------------------------------------------------
+// Toggle (mobile hamburger)
+// ----------------------------------------------------------------------------
+.navbar-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  border: 1px solid var(--ks-navbar-border-color);
+  border-radius: var(--ks-navbar-radius);
+  cursor: pointer;
+  transition: var(--ks-navbar-transition);
+
+  &:hover { background-color: var(--ks-navbar-hover-bg); }
+  &:focus { outline: none; }
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--ks-navbar-focus-ring);
+  }
+
+  // The toggle is only meaningful below md — hide on wider viewports.
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+// Mobile collapse behavior driven by the button's aria-expanded.
+@media (max-width: 767.98px) {
+  .navbar {
+    align-items: stretch;
+    row-gap: 0.5rem;
+  }
+
+  .navbar-collapse {
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0.25rem;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.25s ease;
+  }
+
+  .navbar-toggle[aria-expanded="true"] + .navbar-collapse,
+  .navbar-collapse[data-state="open"] {
+    max-height: 60vh;
+    overflow: auto;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .navbar-link { inline-size: 100%; }
+
+  .navbar-actions {
+    margin-inline-start: 0;
+    justify-content: flex-start;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Size variants
+// ----------------------------------------------------------------------------
+@each $size, $values in $navbar-sizes {
+  .navbar-#{$size} {
+    --ks-navbar-pad-y: #{map.get($values, pad-y)};
+    --ks-navbar-pad-x: #{map.get($values, pad-x)};
+    --ks-navbar-font-size: #{map.get($values, font-size)};
+    --ks-navbar-brand-size: #{map.get($values, brand-size)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Color variants
+// ----------------------------------------------------------------------------
+@each $name, $color in $navbar-colors {
+  .navbar-#{$name} {
+    --ks-navbar-bg: #{$color};
+    --ks-navbar-color: #ffffff;
+    --ks-navbar-border-color: #{color.scale($color, $lightness: -10%)};
+    --ks-navbar-hover-bg: #{rgba(#ffffff, 0.15)};
+    --ks-navbar-active-color: #ffffff;
+    --ks-navbar-focus-ring: 0 0 0 3px #{rgba(#ffffff, 0.55)};
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Positioning modifiers
+// ----------------------------------------------------------------------------
+.navbar-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.navbar-fixed-top {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 1030;
+}
+
+.navbar-fixed-bottom {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  top: auto;
+  z-index: 1030;
+  border-block-start: 1px solid var(--ks-navbar-border-color);
+  border-block-end: none;
+}
+
+// ----------------------------------------------------------------------------
+// DARK MODE
+// ----------------------------------------------------------------------------
+[data-theme="dark"] .navbar {
+  --ks-navbar-bg: #111827;
+  --ks-navbar-color: #e5e7eb;
+  --ks-navbar-hover-bg: rgba(255, 255, 255, 0.06);
+  --ks-navbar-border-color: #1f2937;
+  --ks-navbar-active-color: #93c5fd;
+  --ks-navbar-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .navbar {
+    --ks-navbar-bg: #111827;
+    --ks-navbar-color: #e5e7eb;
+    --ks-navbar-hover-bg: rgba(255, 255, 255, 0.06);
+    --ks-navbar-border-color: #1f2937;
+    --ks-navbar-active-color: #93c5fd;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// HIGH-CONTRAST + forced-colors
+// ----------------------------------------------------------------------------
+[data-theme="high-contrast"] .navbar {
+  --ks-navbar-bg: #000000;
+  --ks-navbar-color: #ffffff;
+  --ks-navbar-border-color: #ffffff;
+  --ks-navbar-hover-bg: #ffffff;
+  --ks-navbar-active-color: #ffff00;
+  --ks-navbar-focus-ring: 0 0 0 3px #ffff00;
+}
+
+@media (forced-colors: active) {
+  .navbar {
+    background: Canvas;
+    color: CanvasText;
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+
+  .navbar-link[aria-current="page"],
+  .navbar-link.active {
+    color: Highlight;
+  }
+
+  .navbar-link:focus-visible,
+  .navbar-toggle:focus-visible,
+  .navbar-brand:focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// RTL — logical props handle most, but explicit flex-reverse for actions.
+// ----------------------------------------------------------------------------
+[dir="rtl"] .navbar-actions {
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+}
+
+// ----------------------------------------------------------------------------
+// REDUCED MOTION
+// ----------------------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .navbar,
+  .navbar-link,
+  .navbar-toggle,
+  .navbar-collapse {
+    transition: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// PRINT
+// ----------------------------------------------------------------------------
+@media print {
+  .navbar-sticky,
+  .navbar-fixed-top,
+  .navbar-fixed-bottom {
+    position: static;
+  }
+
+  .navbar-toggle { display: none; }
+  .navbar { box-shadow: none; }
+}

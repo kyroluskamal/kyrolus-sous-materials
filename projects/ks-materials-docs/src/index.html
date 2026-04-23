@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Kyrolus Sous Materials — Documentation</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An Angular + SCSS design system with a Tailwind-compatible JIT, 28+ components, runtime theming, and migration paths from Tailwind, Bootstrap, Angular Material, and PrimeNG.">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script>
+    (function () {
+      try {
+        var raw = localStorage.getItem('ks-docs-theme');
+        var s = raw ? JSON.parse(raw) : null;
+        var ds = document.documentElement.dataset;
+        var brand = (s && s.brand) || 'default';
+        var density = (s && s.density) || 'comfortable';
+        var mode = (s && s.mode) || 'system';
+        if (brand !== 'default') ds.brand = brand;
+        if (density !== 'comfortable') ds.density = density;
+        var resolved = mode;
+        if (mode === 'system') {
+          resolved = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        ds.theme = resolved;
+      } catch (err) {
+        console.debug('ks-docs-theme preload skipped', err);
+      }
+    })();
+  </script>
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>
