@@ -3,6 +3,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 
+// PurgeCSS 8 treats its `content`/`css` entries as globs and no longer
+// normalises Windows separators, so every path handed to it must use `/`.
+const toPosix = p => p.split(path.sep).join('/');
+
 function angularExtractor(content) {
   const classes = new Set();
 
@@ -85,8 +89,8 @@ async function run() {
   fs.writeFileSync(cssPath, css.trim());
 
   const results = await new PurgeCSS().purge({
-    content: [htmlPath, jsPath],
-    css: [cssPath],
+    content: [toPosix(htmlPath), toPosix(jsPath)],
+    css: [toPosix(cssPath)],
     safelist: {
       standard: ['dynamic-class'],
       deep: [/^hover:/, /^dark:/, /^group/],

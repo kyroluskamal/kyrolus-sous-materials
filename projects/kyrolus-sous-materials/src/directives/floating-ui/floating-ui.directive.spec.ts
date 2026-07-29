@@ -91,13 +91,12 @@ describe('1. FloatingUIDirective', () => {
   let floatEl: HTMLElement;
   let debugElement: DebugElement;
   let component: FloatingUIDirective;
+  class ResizeObserverMock {
+    observe = vi.fn();
+    unobserve = vi.fn();
+    disconnect = vi.fn();
+  }
   beforeAll(() => {
-    class ResizeObserverMock {
-      observe = vi.fn();
-      unobserve = vi.fn();
-      disconnect = vi.fn();
-    }
-
     // attach to global/window
     (globalThis as any).ResizeObserver = ResizeObserverMock;
     const testBed = getTestBed();
@@ -113,6 +112,9 @@ describe('1. FloatingUIDirective', () => {
   });
   afterEach(() => {
     vi.restoreAllMocks();
+    // Tests that swap in their own ResizeObserver must not leak it (and its
+    // recorded calls) into the next test.
+    (globalThis as any).ResizeObserver = ResizeObserverMock;
     TestBed.resetTestingModule();
   });
   beforeEach(async () => {
@@ -326,7 +328,8 @@ describe('1. FloatingUIDirective', () => {
   it('1.11. should create and observe with ResizeObserver if available', () => {
     const mockObserve = vi.fn();
     let callback!: () => void;
-    (globalThis as any).ResizeObserver = vi.fn().mockImplementation((cb) => {
+    // Must be a constructable function: the directive calls `new ResizeObserver(cb)`.
+    (globalThis as any).ResizeObserver = vi.fn(function (this: any, cb: any) {
       callback = cb;
       return {
         observe: mockObserve,
@@ -350,10 +353,12 @@ describe('1. FloatingUIDirective', () => {
 
   it('1.12. should disconnect ResizeObserver on destroy', () => {
     const mockDisconnect = vi.fn();
-    (globalThis as any).ResizeObserver = vi.fn().mockImplementation(() => ({
-      observe: vi.fn(),
-      disconnect: mockDisconnect,
-    }));
+    (globalThis as any).ResizeObserver = vi.fn(function (this: any) {
+      return {
+        observe: vi.fn(),
+        disconnect: mockDisconnect,
+      };
+    });
 
     const fixtureLocal = TestBed.createComponent(HostComponent);
     fixtureLocal.debugElement

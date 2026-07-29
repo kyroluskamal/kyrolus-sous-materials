@@ -2,7 +2,7 @@ import {
   DeviceBrowser,
   DeviceInfo,
   Bitness,
-} from 'projects/kyrolus-sous-materials/src/public-api';
+} from '../../../public-api';
 import {
   PRESET_Android,
   PRESET_ChromeOS_DESKTOP,

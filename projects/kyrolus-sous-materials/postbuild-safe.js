@@ -30,6 +30,10 @@ const { PurgeCSS } = require('purgecss');
 const fs = require('node:fs');
 const path = require('node:path');
 
+// PurgeCSS 8 treats its `content`/`css` entries as globs and no longer
+// normalises Windows separators, so every path handed to it must use `/`.
+const toPosix = p => p.split(path.sep).join('/');
+
 // Configuration
 const DEFAULT_DIST_PATH = './dist/ks-materials-docs/browser';
 const distPath = process.argv[2] || DEFAULT_DIST_PATH;
@@ -299,7 +303,7 @@ function getCssFiles(dir) {
   const files = fs.readdirSync(dir, { recursive: true });
   return files
     .filter(f => path.extname(f).toLowerCase() === '.css')
-    .map(f => path.join(dir, f));
+    .map(f => toPosix(path.join(dir, f)));
 }
 
 function getFileSizeKB(filepath) {
@@ -436,9 +440,9 @@ async function runSafePurgeCSS() {
 
   // Content files to scan
   const contentFiles = [
-    `${distPath}/**/*.html`,
-    `${distPath}/**/*.js`,
-    `${distPath}/**/*.mjs`,
+    `${toPosix(distPath)}/**/*.html`,
+    `${toPosix(distPath)}/**/*.js`,
+    `${toPosix(distPath)}/**/*.mjs`,
   ];
 
   try {
@@ -522,5 +526,7 @@ async function runSafePurgeCSS() {
   }
 }
 
-// Run the script
-await runSafePurgeCSS().catch(console.error);
+// Run the script. Deliberately not top-level `await`: this file is CommonJS
+// (it uses `require`), and mixing the two makes Node's module-format
+// detection fail with ERR_AMBIGUOUS_MODULE_SYNTAX.
+runSafePurgeCSS().catch(console.error);

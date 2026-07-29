@@ -5,7 +5,7 @@ import {
   DeviceInfo,
   DeviceOperatingSystem,
   DeviceType,
-} from 'projects/kyrolus-sous-materials/src/models/device-info';
+} from '../../../models/device-info';
 
 export type deviceInfoTests = {
   sectionNo: string;

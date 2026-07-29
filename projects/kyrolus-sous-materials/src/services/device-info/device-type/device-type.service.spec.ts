@@ -2,7 +2,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
-import { DeviceInfo } from 'projects/kyrolus-sous-materials/src/models/device-info';
+import { DeviceInfo } from '../../../models/device-info';
 import { DeviceInfoService } from '../device-info/device-info.service';
 import { DeviceTypeService } from './device-type.service';
 

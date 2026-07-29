@@ -1,7 +1,7 @@
 import {
   Bitness,
   DeviceOperatingSystem,
-} from 'projects/kyrolus-sous-materials/src/models/device-info';
+} from '../../../models/device-info';
 import { windowsTestCases } from './windows/windows-tests';
 import { androidCases } from './android/android-test';
 import {

@@ -13,13 +13,12 @@
     "node": ">=20.19.0"
   },
   "scripts": {
-    "build:tsc": "tsc -p tsconfig.json",
-    "prepare": "tsc -p tsconfig.json"
+    "build:tsc": "tsc -p tsconfig.json"
   },
   "peerDependencies": {
-    "@angular/build": ">=21.0.0"
+    "@angular/build": ">=22.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.17.19"
+    "@types/node": "^24.13.3"
   }
 }

@@ -1,5 +1,13 @@
 {
     "sarif-viewer.connectToGithubCodeScanning": "off",
-    "css.customData": ["projects/kyrolus-sous-materials/styles/intellisense/ks-css-data.json"]
+    "css.customData": [
+        "projects/kyrolus-sous-materials/styles/intellisense/ks-css-data.json"
+    ],
+    "cSpell.words": [
+        "fullhuman",
+        "kyrolus",
+        "packagr",
+        "postbuild"
+    ]
 
 }

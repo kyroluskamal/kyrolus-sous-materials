@@ -1,4 +1,4 @@
-import { DeviceBrowser } from "projects/kyrolus-sous-materials/src/models/models.exports";
+import { DeviceBrowser } from "../../../models/models.exports";
 
 export type Hints =
   | 'architecture'

@@ -44,7 +44,7 @@
             "tsConfig": "projects/kyrolus-sous-materials/tsconfig.spec.json",
             "runner": "vitest",
             "buildTarget": "::development",
-            "codeCoverage": true,
+            "coverage": true,
             "watch": true
           }
         }

@@ -1,12 +1,10 @@
 import {
   AfterViewInit,
   Component,
-  effect,
   HostBinding,
   inject,
   input,
   model,
-  output,
   ɵSafeValue,
 } from '@angular/core';
 import { SideBarPosition } from '../helpers/types';
@@ -63,10 +61,7 @@ export class SideNavComponent implements AfterViewInit {
   logo = input<string | ɵSafeValue>('');
   dashboardLayout = inject(DashboardLayoutComponent);
   //-------------------------Outputs-------------------------
-  openChange = output<boolean>();
-  effect = effect(() => {
-    this.openChange.emit(this.open());
-  });
+  // `open` is a model(), so Angular already exposes an `openChange` output for it.
   ngAfterViewInit(): void {
     if (!this.dashboardLayout) {
       throw new Error(
